@@ -1,0 +1,24 @@
+.calendar-margin {
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.task-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--secondColorPalete);
+  padding: 5px 10px;
+  margin: 10px;
+}
+
+.tasks-options-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-basis: 40px;
+}
+.check-task-status {
+  width: 12px;
+  height: 12px;
+}

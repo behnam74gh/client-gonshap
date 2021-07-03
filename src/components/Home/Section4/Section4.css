@@ -1,0 +1,118 @@
+#call_us {
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  flex-flow: row wrap;
+  padding: 8px 16px;
+  margin: 50px 0;
+  box-shadow: 0 3px 23px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.call_us_icon {
+  flex-basis: 25%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+.call_us_desc {
+  flex-basis: 50%;
+  font-size: 14px;
+}
+.call_us_phone_numbers_wrapper {
+  flex-basis: 25%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+.call_us_phone_numbers {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  color: var(--firstColorPalete);
+  margin: 5px 0;
+}
+.phone_icon {
+  font-size: 40px;
+  margin-right: 20px;
+}
+
+/* responsive */
+@media (max-width: 780px) {
+  #call_us {
+    min-height: 80px;
+    padding: 4px 16px;
+    margin: 15px 0;
+  }
+
+  .call_us_icon {
+    flex-basis: 15%;
+  }
+  .call_us_icon svg {
+    width: 50%;
+  }
+  .call_us_desc {
+    flex-basis: 60%;
+    font-size: 12px;
+  }
+  .call_us_desc h2 {
+    margin: 12px 0 8px;
+  }
+  .call_us_desc p {
+    margin: 5px 0;
+  }
+  .phone_icon {
+    font-size: 20px;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 450px) {
+  #call_us {
+    padding: 5px 0;
+    margin: 25px 0;
+  }
+  .call_us_icon {
+    flex-basis: 30%;
+    order: 2;
+    max-height: 50px;
+  }
+  .call_us_icon svg {
+    width: 30%;
+    max-height: 40px;
+    order: 1;
+  }
+  .call_us_desc {
+    flex-basis: 100%;
+    font-size: 9px;
+    padding: 0 3px;
+    text-align: center;
+  }
+  .call_us_desc h2 {
+    margin: 8px 0 4px;
+    font-size: 12px;
+  }
+  .call_us_phone_numbers_wrapper {
+    flex-basis: 70%;
+    max-height: 50px;
+    order: 3;
+    font-size: 8px;
+  }
+}
+@media (max-width: 320px) {
+  .call_us_icon {
+    flex-basis: 20%;
+  }
+  .call_us_phone_numbers_wrapper {
+    flex-basis: 80%;
+    font-size: 10px;
+  }
+  .phone_icon {
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  .call_us_icon svg {
+    width: 50%;
+  }
+}

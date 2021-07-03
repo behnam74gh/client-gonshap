@@ -1,0 +1,103 @@
+.ticket-img {
+  width: 100%;
+  height: 100%;
+  max-height: 80vh;
+}
+
+.delete_ticket_img {
+  position: absolute;
+  right: -30px;
+  top: -30px;
+}
+.delete_ticket_img svg {
+  font-size: 30px;
+}
+/* single-ticket */
+.ticket-wrapper {
+  width: 80%;
+  min-height: 100px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: var(--mainBoxShadow);
+  background-color: white;
+  margin: 20px 0;
+  overflow: hidden;
+}
+.ticket-titles-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.ticket-body-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+.ticket-body {
+  overflow: hidden;
+  padding: 10px;
+  width: 100%;
+}
+.ticket-body p {
+  padding: 10px;
+  font-size: 12px;
+  overflow: hidden;
+  text-align: right;
+}
+.ticket-image {
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* answer-ticket */
+.answer-wrapper {
+  background-color: rgb(213, 230, 243);
+  width: 90%;
+  min-height: 100px;
+  padding: 15px 10px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 20px auto;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+/* responsive */
+@media (max-width: 450px) {
+  .ticket-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+  }
+  .ticket-body {
+    padding: 0;
+  }
+  .ticket-body p {
+    padding: 5px 0;
+    font-size: 8px;
+    text-align: justify;
+  }
+  .answer-wrapper {
+    width: 100%;
+    padding: 8px;
+    border-radius: 2px;
+    margin: 10px auto 4px;
+  }
+  .answer-wrapper span {
+    font-size: 9px;
+    margin: 4px 0;
+  }
+  .ticket-titles-wrapper span {
+    font-size: 10px;
+  }
+  #user_dashboard h5 {
+    font-size: 10px;
+    margin: 15px 0 10px;
+  }
+  .ticket-image {
+    width: 100%;
+  }
+}

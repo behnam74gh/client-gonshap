@@ -1,0 +1,30 @@
+#sec15 {
+  width: 85.5%;
+  margin: 50px auto;
+  border: 1px solid #c6c6c6;
+  padding: 20px;
+}
+.carousel_brand_img_wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+.carousel_brand_img {
+  width: 100%;
+  height: auto;
+  max-width: 80px;
+}
+#sec15 .slick-track {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 450px) {
+  #sec15 {
+    margin: 10px auto;
+    padding: 10px 10px 0;
+  }
+  .carousel_brand_img {
+    max-width: 40px;
+  }
+}

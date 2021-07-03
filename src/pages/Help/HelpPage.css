@@ -1,0 +1,25 @@
+#help_page {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  overflow: hidden;
+}
+.help_description {
+  font-size: 14px;
+  text-align: justify;
+  white-space: initial;
+}
+.help_imgs_wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+@media (max-width: 450px) {
+  .help_description {
+    font-size: 12px;
+  }
+  .helpTitle {
+    font-size: 14px;
+  }
+}

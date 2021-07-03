@@ -1,0 +1,13 @@
+.help_img_wrapper {
+  display: flex;
+  flex-flow: column wrap;
+}
+.help_img {
+  width: 100%;
+  max-width: 150px;
+  margin: 3px 0;
+}
+.help_desc {
+  white-space: initial;
+  font-size: 12px;
+}

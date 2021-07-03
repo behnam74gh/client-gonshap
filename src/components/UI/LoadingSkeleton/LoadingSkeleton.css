@@ -1,0 +1,37 @@
+.cart_skeleton_wrapper {
+  display: flex;
+  flex-flow: column wrap;
+  margin: 10px 0;
+}
+.skeleton_header_wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+.circle_skeleton {
+  flex: 10%;
+}
+.row_skeleton {
+  flex: 90%;
+}
+.cart_skeleton {
+  flex: 100%;
+}
+
+@media (max-width: 780px) {
+  .circle_skeleton {
+    flex: 15%;
+  }
+  .row_skeleton {
+    flex: 85%;
+  }
+}
+
+@media (max-width: 300px) {
+  .circle_skeleton {
+    flex: 25%;
+  }
+  .row_skeleton {
+    flex: 75%;
+  }
+}

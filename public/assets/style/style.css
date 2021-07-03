@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "vazir";
+  src: url("../fonts/Vazir-FD.woff");
+}
+body {
+  font-family: "vazir" !important;
+}

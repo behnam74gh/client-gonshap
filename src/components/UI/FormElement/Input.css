@@ -1,0 +1,61 @@
+input {
+  width: 100%;
+  resize: vertical;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 8px 16px;
+  color: var(--firstColorPalete);
+  text-align: right;
+}
+input:focus {
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+}
+input::placeholder {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+input ~ p {
+  text-align: right;
+}
+textarea ~ p {
+  text-align: right;
+}
+textarea {
+  width: 100%;
+  border-radius: 4px;
+  margin: 10px 0;
+  resize: vertical;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  outline: 0;
+  color: var(--firstColorPalete);
+  padding: 8px 16px;
+  font-family: inherit;
+  text-align: right;
+}
+.wrong-data {
+  border-color: red;
+}
+.correct-data {
+  border-color: rgb(12, 190, 12);
+}
+.err-text {
+  font-size: 12px;
+  color: red;
+}
+
+@media (max-width: 450px) {
+  input,
+  textarea {
+    font-size: 10px;
+    margin: 4px 0;
+    padding: 5px 10px;
+  }
+  input::placeholder {
+    font-size: 10px;
+  }
+  .err-text {
+    font-size: 9px;
+  }
+}

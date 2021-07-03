@@ -1,0 +1,203 @@
+footer {
+  width: 100%;
+  margin: 30px auto 0;
+  padding: 30px 0 0;
+  background-color: var(--firstColorPalete);
+  color: #ffffff;
+}
+
+#sec_footer {
+  width: 85.5%;
+  margin: 0 auto;
+  min-height: 170px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  padding: 30px 0;
+}
+
+.about_us {
+  flex: 45%;
+  display: flex;
+  flex-flow: column wrap;
+  padding: 0 0 0 40px;
+}
+
+.call_us {
+  flex: 25%;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.nemads_wrapper {
+  flex: 30%;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+#sec_footer h4 {
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+.about_us_description {
+  font-size: 12px;
+  text-align: justify;
+  line-height: 2;
+  word-spacing: 1.3px;
+}
+.call_us_info_wrapper {
+  display: flex;
+  flex-flow: column wrap;
+}
+.call_us_info_box {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.company_social_icons {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+.footer_social_icon {
+  width: 100%;
+  height: auto;
+  max-width: 30px;
+  margin: 0 5px;
+}
+.footer_nemad_img {
+  width: 100%;
+  height: auto;
+  max-width: 60px;
+}
+
+.nemads {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+.footer_nemad_img {
+  width: 100%;
+  height: auto;
+  max-width: 80px;
+  object-fit: contain;
+}
+.protection {
+  width: 100%;
+  text-align: center;
+  background-color: #5f0084;
+  margin-top: 15px;
+  padding: 10px 0;
+}
+
+.arrow_up {
+  position: fixed;
+  left: 40px;
+  bottom: 35px;
+  background-color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  border: 1px solid #d6d6d6;
+}
+.arrow_up svg {
+  font-size: 40px;
+  color: #a8a8a8;
+}
+.arrow_up:hover {
+  box-shadow: 0 0px 14px var(--secondColorPalete);
+}
+@media (max-width: 780px) {
+  footer {
+    margin: 20px auto 0;
+    padding: 10px 0 0;
+  }
+
+  #sec_footer {
+    padding: 15px 0 10px;
+  }
+  .about_us {
+    flex: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  .call_us {
+    flex: 40%;
+  }
+
+  .nemads_wrapper {
+    flex: 60%;
+  }
+
+  .call_us_info_box {
+    margin: 5px 0;
+  }
+  .arrow_up {
+    left: 20px;
+    width: 40px;
+    height: 40px;
+  }
+  .arrow_up svg {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 450px) {
+  footer {
+    padding: 0;
+  }
+  .nemads_wrapper {
+    flex: 100%;
+  }
+  .call_us {
+    flex: 100%;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  .nemads {
+    margin-top: 15px;
+  }
+  .protection p {
+    font-size: 10px;
+  }
+  .protection strong {
+    margin: 0 3px;
+  }
+  #sec_footer h4 {
+    margin-bottom: 0;
+    font-size: 12px;
+  }
+  .about_us_description {
+    font-size: 10px;
+  }
+  .call_us_info_box span {
+    font-size: 12px;
+  }
+  .footer_nemad_img {
+    margin: 0 10px;
+  }
+  .arrow_up {
+    left: 10px;
+    width: 30px;
+    height: 30px;
+  }
+  .arrow_up svg {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  .call_us_info_box span:last-of-type {
+    font-size: 10px;
+  }
+}

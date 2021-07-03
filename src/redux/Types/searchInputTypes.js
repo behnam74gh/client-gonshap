@@ -1,0 +1,3 @@
+export const SEARCH_QUERY = "SEARCH_QUERY";
+export const SUBMIT_QUERY = "SUBMIT_QUERY";
+export const UNSUBMIT_QUERY = "UNSUBMIT_QUERY";

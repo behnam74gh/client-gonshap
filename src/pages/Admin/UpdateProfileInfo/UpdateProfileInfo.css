@@ -1,0 +1,26 @@
+.profile_img {
+  min-width: 200px;
+  max-width: 200px;
+  width: 100%;
+  max-height: 200px;
+  min-height: 200px;
+  height: 100%;
+  border-radius: 50%;
+}
+.edit-profile input:invalid,
+.edit-profile textarea:invalid {
+  border: red solid 1px;
+}
+.edit-profile input:valid,
+.edit-profile textarea:valid {
+  border: green solid 1px;
+}
+.delete_user_img {
+  position: absolute;
+  top: -5px;
+  right: 25px;
+}
+
+.delete_user_img svg {
+  font-size: 35px;
+}

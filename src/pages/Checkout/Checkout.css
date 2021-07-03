@@ -1,0 +1,122 @@
+#checkout_page {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  margin: 30px 0;
+}
+.user_checkout_info_wrapper {
+  flex-basis: 50%;
+  display: flex;
+  flex-flow: column wrap;
+}
+.checkout_info_wrapper {
+  flex-basis: 50%;
+  display: flex;
+  flex-flow: column wrap;
+}
+.items_price_wrapper {
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.checkout_item_price {
+  font-size: 14px;
+  margin: 5px 0;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.checkout_price {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  font-size: 12px;
+}
+.checkout_form_wrapper {
+  width: 80%;
+  margin: 10px 0 20px;
+}
+
+.applyed_discount_wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+}
+.finaly_price_after_discount {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #00db00;
+  font-size: 14px;
+  padding: 8px 16px;
+  margin: 5px 0;
+  border-radius: 4px;
+}
+
+.purchase_btns_wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkout_form_wrapper .button {
+  width: 50%;
+}
+.checkout_total_price {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 16px;
+  margin: 20px 0 0;
+}
+@media (max-width: 780px) {
+  #checkout_page {
+    margin: 20px 0;
+  }
+  .user_checkout_info_wrapper {
+    flex-basis: 100%;
+  }
+  .checkout_info_wrapper {
+    flex-basis: 100%;
+  }
+  .checkout_form_wrapper {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 450px) {
+  #checkout_page {
+    margin: 5px 0;
+  }
+  .purchase_btns_wrapper .button {
+    width: 40%;
+  }
+  .checkout_total_price .finaly_total_price_digit {
+    background-color: var(--firstColorPalete);
+    color: white;
+  }
+  .checkout_total_price strong {
+    font-size: 12px;
+  }
+  .checkout_info_wrapper h3 {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  .checkout_price {
+    font-size: 10px;
+  }
+  .checkout_price .table-img {
+    width: 25px;
+    height: 25px;
+  }
+  .checkout_price .mx-2 {
+    margin-right: 4px;
+    margin-left: 4px;
+  }
+}

@@ -1,0 +1,28 @@
+.brands_wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--secondColorPalete);
+  padding: 4px 12px;
+  margin: 15px 0;
+  color: var(--firstColorPalete);
+}
+.brand_img {
+  width: 100%;
+  max-width: 50px;
+}
+
+@media (max-width: 450px) {
+  .brands_wrapper {
+    padding: 4px 12px;
+    margin: 5px 0;
+  }
+  .brand_img {
+    width: 15%;
+    max-width: 30px;
+  }
+  .brands_wrapper span {
+    font-size: 12px;
+  }
+}

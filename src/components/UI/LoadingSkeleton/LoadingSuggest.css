@@ -1,0 +1,19 @@
+.suggest_skeleton_wrapper {
+  display: flex;
+  flex-flow: column wrap;
+  margin: 0 0 80px 0;
+}
+.author_skeleton {
+  align-self: center;
+  margin-bottom: 10px;
+}
+.author_name_skeleton {
+  margin: 5px auto;
+  align-self: center;
+}
+
+@media (max-width: 780px) {
+}
+
+@media (max-width: 300px) {
+}

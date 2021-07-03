@@ -1,0 +1,110 @@
+#compare_products {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  margin: 20px 0;
+}
+
+.product_compare_wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  padding: 20px 40px;
+  border: 1px solid rgb(219, 218, 218);
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+.compare_info_wrapper {
+  flex: 30%;
+  display: flex;
+  flex-flow: column wrap;
+}
+.compare_info_wrapper p {
+  margin: 4px 0;
+  font-size: 12px;
+}
+.compare_details_wrapper {
+  flex: 70%;
+  display: flex;
+  flex-flow: column wrap;
+}
+.compare_details_info {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 2px 0;
+}
+.compare_details_info p {
+  font-size: 10px;
+  margin: 0;
+}
+.compare_item_not_exist {
+  background-color: var(--secondColorPalete);
+  padding: 4px 18px;
+  border-radius: 4px;
+}
+.compare_detail_question {
+  flex: 30% 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #f7f5f5;
+  margin-left: 20px;
+  padding-right: 10px;
+}
+.compare_detail_answer {
+  flex: 65% 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #f7f5f5;
+  padding-right: 10px;
+}
+.compare_colors_wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  margin: 10px 0;
+}
+.compare_colors_wrapper span:not(:first-child) {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 2px;
+}
+
+/* responsive */
+@media (max-width: 780px) {
+  .product_compare_wrapper {
+    padding: 20px 10px;
+  }
+  .product_compare_wrapper p {
+    font-size: 10px;
+  }
+  .compare_detail_question {
+    flex: 35% 1;
+    margin-left: 10px;
+  }
+  .compare_detail_answer {
+    flex: 60% 1;
+  }
+}
+
+@media (max-width: 450px) {
+  #compare_products h4 {
+    font-size: 10px;
+  }
+  #compare_products h4 > strong {
+    margin-right: 2px;
+    margin-left: 2px;
+  }
+  .compare_info_wrapper {
+    flex: 100%;
+  }
+  .compare_detail_question {
+    padding-right: 2px;
+  }
+  .compare_detail_answer {
+    padding-right: 2px;
+  }
+}

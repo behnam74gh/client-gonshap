@@ -1,0 +1,132 @@
+#sec10 {
+  display: flex;
+  flex-flow: column wrap;
+  margin: 0 0 80px 0;
+}
+#sec10 h2 {
+  text-align: center;
+  color: var(--thirdColorPalete);
+  margin-bottom: 40px;
+}
+/* review slider */
+.review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 15px 30px;
+  background-color: white;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+}
+.img-container {
+  position: relative;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  background-color: rgb(108, 142, 245);
+}
+.person-img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin-left: -8px;
+  margin-top: 3px;
+}
+.quote-icon {
+  background-color: rgb(108, 142, 245);
+  border-radius: 50%;
+  padding: 10px 10px 2px;
+  color: white;
+  position: absolute;
+  top: 15px;
+  left: -12px;
+}
+.author {
+  font-weight: 700;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.info {
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+  color: rgb(62, 91, 92);
+  text-align: justify;
+}
+.button-container {
+  margin: 10px 0;
+}
+.button-container button {
+  background-color: transparent;
+  color: rgb(100, 137, 250);
+  border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+  padding: 6px 6px 3px;
+  margin: 0 4px;
+  font-size: 20px;
+}
+.button-container button:hover {
+  border: 1px solid rgb(100, 137, 250);
+}
+.button-container button:active {
+  border: 1px solid rgb(4, 26, 94);
+}
+
+@media (max-width: 450px) {
+  #sec10 {
+    margin: 0 0 30px 0;
+  }
+  #sec10 h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  .review {
+    padding: 15px 25px 5px;
+  }
+  .author {
+    margin-top: 16px;
+    margin-bottom: 2px;
+    font-size: 12px;
+  }
+  .info {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  .img-container,
+  .person-img {
+    width: 80px;
+    height: 80px;
+  }
+  .quote-icon {
+    padding: 0px 8px 0px;
+    top: 6px;
+    left: -10px;
+  }
+  .quote-icon svg {
+    font-size: 8px;
+  }
+  .button-container {
+    margin: 5px 0;
+  }
+  .button-container button {
+    padding: 0px 5px 0px;
+  }
+  .button-container button svg {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  #sec10 h2 {
+    font-size: 16px;
+  }
+  .review {
+    padding: 10px 15px 5px;
+  }
+  .info {
+    font-size: 10px;
+    margin-top: 5px;
+  }
+}

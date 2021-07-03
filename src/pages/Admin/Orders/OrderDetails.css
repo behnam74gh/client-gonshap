@@ -1,0 +1,96 @@
+.admin_dashboard_order_details_wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  background-color: white;
+  padding: 30px 40px;
+  box-shadow: 0 2px 17px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+.current_order_details_wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  margin: 0 0 30px;
+}
+.order_buyer_info_wrapper,
+.order_status_wrapper {
+  flex-basis: 50%;
+  display: flex;
+  flex-flow: column wrap;
+  padding: 10px 0 10px 30px;
+  font-size: 12px;
+}
+.order_status_wrapper {
+  padding: 10px 30px 10px 0;
+}
+.dashboard_order_info_box {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.buyer_img {
+  width: 100%;
+  height: auto;
+  max-width: 80px;
+  max-height: 80px;
+  border-radius: 50%;
+}
+.admin_dashboard_order_btns_wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.print_btn_wrapper,
+.pdf_btn_wrapper {
+  flex-basis: 50%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.print_btn_wrapper button,
+.pdf_btn_wrapper button {
+  width: 60%;
+}
+
+@media (max-width: 780px) {
+  .admin_dashboard_order_details_wrapper {
+    padding: 25px;
+  }
+  .order_buyer_info_wrapper,
+  .order_status_wrapper {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 450px) {
+  .admin_dashboard_order_details_wrapper {
+    padding: 20px 8px;
+  }
+  .admin_dashboard_order_details_wrapper h5 {
+    font-size: 12px;
+  }
+  .order_buyer_info_wrapper,
+  .order_status_wrapper {
+    flex-basis: 100%;
+    padding: 10px 0;
+  }
+  .buyer_img {
+    max-width: 50px;
+    max-height: 50px;
+  }
+  .print_btn_wrapper button,
+  .pdf_btn_wrapper button {
+    width: 95%;
+    font-size: 9px;
+    border-radius: 2px;
+  }
+}

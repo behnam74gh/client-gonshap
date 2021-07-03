@@ -1,0 +1,68 @@
+.image-upload-wrapper {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.image-upload {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+.image-upload__preview {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+}
+.image-upload__preview img {
+  width: 80px;
+}
+.preview_img_wrapper {
+  position: relative;
+  margin: 5px 10px;
+}
+.delete_img {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  cursor: pointer;
+}
+.delete_img:hover svg {
+  font-size: 20px;
+  transition: all 0.3s ease-in-out;
+}
+.delete_img svg {
+  color: #000;
+}
+.color_wrapper {
+  position: relative;
+  margin: 5px;
+  flex-basis: 20%;
+  font-size: 10px;
+  text-align: center;
+  padding: 4px 0;
+  border-radius: 4px;
+  color: #ffffff;
+}
+.delete_color {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+}
+.products_active_colors {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+.products_active_colors span {
+  width: 12px;
+  height: 12px;
+  margin: 1px 2px;
+  border-radius: 50%;
+}
+@media (max-width: 450px) {
+  .color_wrapper {
+    flex-basis: 100%;
+    font-size: 8px;
+    border-radius: 2px;
+    padding: 2px 0;
+  }
+}

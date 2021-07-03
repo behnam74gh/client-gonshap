@@ -1,0 +1,14 @@
+.subcategory-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+.subcategory {
+  margin: 4px 8px;
+  flex: 1 1 300px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  background-color: var(--secondColorPalete);
+  padding: 4px 10px;
+}

@@ -1,0 +1,8 @@
+.order_select {
+  border: none;
+  border-bottom: 1px solid var(--firstColorPalete);
+  border-radius: unset;
+  margin: 0;
+  padding: 2px 4px;
+  font-size: 11px;
+}

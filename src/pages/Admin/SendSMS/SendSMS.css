@@ -1,0 +1,35 @@
+.contacts-wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.contact-wrapper {
+  position: relative;
+  border-radius: 4px;
+  background-color: var(--secondColorPalete);
+  color: white;
+  font-size: 12px;
+  padding: 6px 3px;
+  margin: 2px 6px;
+}
+
+.delete-contact {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  color: black;
+}
+
+.message-content {
+  font-size: 14px;
+  background-color: white;
+  border-radius: 4px;
+  padding: 25px 15px;
+  line-height: 1.5;
+  box-shadow: var(--mainBoxShadow);
+  color: rgb(66, 65, 65);
+  text-align: right;
+}
