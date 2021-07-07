@@ -13,13 +13,14 @@ import {
   VALIDATOR_PASSWORD,
   VALIDATOR_AUTHNUMBER,
 } from "../../util/validators";
-import "./ForgotPassword.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import "./ForgotPassword.css";
+import "./Register.css";
 
 const ForgotPassword = ({ history }) => {
-  const [phoneNumIsValid, setPhoneNumIsValid] = useState(false);
+  const [phoneNumIsValid, setPhoneNumIsValid] = useState(true);
   const [allowToReqAuthcode, setAllowToReqAuthcode] = useState(false);
   const [authCodeIsValid, setAuthCodeIsValid] = useState(false);
   const [authCodeMessage, setAuthCodeMessage] = useState({
@@ -34,6 +35,7 @@ const ForgotPassword = ({ history }) => {
     message: "",
   });
   const [nPLoading, setNPLoading] = useState(false);
+  const [count, setCount] = useState(180);
 
   const [expired, setExpired] = useState(true);
   const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
@@ -67,11 +69,14 @@ const ForgotPassword = ({ history }) => {
   }, [history, userInfo]);
 
   useEffect(() => {
-    setInterval(() => {
-      if (!allowToReqAuthcode) setAllowToReqAuthcode(true);
-    }, 300000);
-    return () => clearInterval();
-  }, [allowToReqAuthcode]);
+    const interval = setInterval(() => {
+      setCount((currentCount) => --currentCount);
+    }, 1000);
+
+    count === 0 && setAllowToReqAuthcode(true);
+
+    return () => clearInterval(interval);
+  }, [count]);
 
   const sendPhoneNumberHandler = (e) => {
     e.preventDefault();
@@ -111,7 +116,6 @@ const ForgotPassword = ({ history }) => {
           phoneNumber: formState.inputs.phoneNumber.value,
         })
         .then((response) => {
-          // console.log(response);
           if (response.data.success) {
             setAAuthLoading(false);
             toast.success(response.data.message);
@@ -122,16 +126,14 @@ const ForgotPassword = ({ history }) => {
         .catch((err) => {
           setAAuthLoading(false);
           if (typeof err.response.data.message === "object") {
-            toast.error(err.response.data.message[0]);
+            toast.warning(err.response.data.message[0]);
           } else {
-            toast.error(err.response.data.message);
+            toast.warning(err.response.data.message);
           }
         });
     } else {
       setAAuthLoading(false);
-      toast.warning(
-        "کاربر گرامی؛ در هر 5 دقیقه فقط یکبار میتوانید مجددا درخواست کد تایید کنید"
-      );
+      toast.warning("کد تایید ارسال شده است");
     }
   };
 
@@ -276,18 +278,25 @@ const ForgotPassword = ({ history }) => {
             >
               {!aLoading ? "ثبت" : <VscLoading className="loader" />}
             </Button>
-            <Button
-              type="button"
-              style={{ width: "140px" }}
-              disabled={authCodeIsValid || !allowToReqAuthcode}
-              onClick={sendAuthCodeAgainHandler}
-            >
-              {!aAuthLoading ? (
-                "درخواست کد تایید"
-              ) : (
-                <VscLoading className="loader" />
-              )}
-            </Button>
+            {allowToReqAuthcode ? (
+              <Button
+                type="button"
+                style={{ width: "140px" }}
+                disabled={authCodeIsValid || !allowToReqAuthcode}
+                onClick={sendAuthCodeAgainHandler}
+              >
+                {!aAuthLoading ? (
+                  "درخواست کد تایید"
+                ) : (
+                  <VscLoading className="loader" />
+                )}
+              </Button>
+            ) : (
+              new Date(count * 1000 - 30 * 60 * 1000).toLocaleTimeString("fa", {
+                minute: "numeric",
+                second: "numeric",
+              })
+            )}
             {!authCodeMessage.success && authCodeMessage.message.length > 0 && (
               <p className="warning-message">{authCodeMessage.message}</p>
             )}

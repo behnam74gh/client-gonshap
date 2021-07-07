@@ -12,6 +12,8 @@ import {
   UPDATE_DASHBOARD_IMAGE,
   USER_SIGNIN_SUCCESS,
 } from "../../../redux/Types/authTypes";
+import "../../../components/UI/FormElement/ImageUpload.css";
+import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
 
 const UpdateProfileInfo = ({ history }) => {
@@ -142,13 +144,8 @@ const UpdateProfileInfo = ({ history }) => {
           if (response.data.success) {
             toast.success(response.data.message);
 
-            const {
-              firstName,
-              isAdmin,
-              refreshToken,
-              userId,
-              usersImage,
-            } = userInfo;
+            const { firstName, isAdmin, refreshToken, userId, usersImage } =
+              userInfo;
 
             setExpired(true);
             dispatch({

@@ -36,6 +36,7 @@ const Register = ({ history }) => {
   const [aAuthLoading, setAAuthLoading] = useState(false);
   const [registerErrMessage, setRegisterErrMessage] = useState("");
   const [expired, setExpired] = useState(true);
+  const [count, setCount] = useState(180);
 
   const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
@@ -76,11 +77,14 @@ const Register = ({ history }) => {
   }, [history, userInfo]);
 
   useEffect(() => {
-    setInterval(() => {
-      if (!allowToReqAuthcode) setAllowToReqAuthcode(true);
-    }, 300000);
-    return () => clearInterval();
-  }, [allowToReqAuthcode]);
+    const interval = setInterval(() => {
+      setCount((currentCount) => --currentCount);
+    }, 1000);
+
+    count === 0 && setAllowToReqAuthcode(true);
+
+    return () => clearInterval(interval);
+  }, [count]);
 
   const sendPhoneNumberHandler = (e) => {
     e.preventDefault();
@@ -154,6 +158,7 @@ const Register = ({ history }) => {
         .then((response) => {
           if (response.data.success) {
             setAAuthLoading(false);
+            setCount(180);
             toast.success(response.data.message);
             setAllowToReqAuthcode(false);
           }
@@ -161,16 +166,14 @@ const Register = ({ history }) => {
         .catch((err) => {
           setAAuthLoading(false);
           if (typeof err.response.data.message === "object") {
-            toast.error(err.response.data.message[0]);
+            toast.warning(err.response.data.message[0]);
           } else {
-            toast.error(err.response.data.message);
+            toast.warning(err.response.data.message);
           }
         });
     } else {
       setAAuthLoading(false);
-      toast.warning(
-        "کاربر گرامی؛ در هر 5 دقیقه فقط یکبار میتوانید مجددا درخواست کد تایید کنید"
-      );
+      toast.warning("کد تایید ارسال شده است");
     }
   };
 
@@ -194,13 +197,8 @@ const Register = ({ history }) => {
   const submitRegisterInfo = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const {
-      firstName,
-      lastName,
-      phoneNumber,
-      password,
-      repeatPassword,
-    } = formState.inputs;
+    const { firstName, lastName, phoneNumber, password, repeatPassword } =
+      formState.inputs;
     if (repeatPassword.value === password.value) {
       axios
         .post("/register", {
@@ -288,18 +286,25 @@ const Register = ({ history }) => {
             >
               {!aLoading ? "ثبت" : <VscLoading className="loader" />}
             </Button>
-            <Button
-              type="button"
-              style={{ width: "140px" }}
-              disabled={authCodeIsValid || !allowToReqAuthcode}
-              onClick={sendAuthCodeAgainHandler}
-            >
-              {!aAuthLoading ? (
-                "درخواست کد تایید"
-              ) : (
-                <VscLoading className="loader" />
-              )}
-            </Button>
+            {allowToReqAuthcode ? (
+              <Button
+                type="button"
+                style={{ width: "140px" }}
+                disabled={authCodeIsValid || !allowToReqAuthcode}
+                onClick={sendAuthCodeAgainHandler}
+              >
+                {!aAuthLoading ? (
+                  "درخواست کد تایید"
+                ) : (
+                  <VscLoading className="loader" />
+                )}
+              </Button>
+            ) : (
+              new Date(count * 1000 - 30 * 60 * 1000).toLocaleTimeString("fa", {
+                minute: "numeric",
+                second: "numeric",
+              })
+            )}
           </div>
           {authCodeMessage.message.length > 0 && (
             <p className="warning-message">{authCodeMessage.message}</p>
