@@ -14,7 +14,7 @@
   overflow: hidden;
   display: flex;
   flex-flow: column wrap;
-  align-self: end;
+  align-self: flex-start;
 }
 .attribute_box {
   margin: 2px 0;

@@ -15,6 +15,7 @@ import Section11 from "../../components/Home/Section11/Section11";
 import Section12 from "../../components/Home/Section12/Section12";
 import Section13 from "../../components/Home/Section13/Section13";
 import Section14 from "../../components/Home/Section14/Section14";
+import "../Supplier/SupplierIntroduce.css";
 import "./Home.css";
 
 const Home = () => {

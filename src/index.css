@@ -82,6 +82,10 @@ ul {
   width: 20% !important;
 }
 
+.h-50 {
+  height: 50vh !important;
+}
+
 .text-center {
   text-align: center !important;
 }
@@ -259,7 +263,7 @@ ul {
 }
 .tooltip {
   position: relative;
-  display: inline-block;
+  display: block;
 }
 .tooltip .tooltip_text {
   visibility: hidden;

@@ -20,7 +20,7 @@ import "./ForgotPassword.css";
 import "./Register.css";
 
 const ForgotPassword = ({ history }) => {
-  const [phoneNumIsValid, setPhoneNumIsValid] = useState(true);
+  const [phoneNumIsValid, setPhoneNumIsValid] = useState(false);
   const [allowToReqAuthcode, setAllowToReqAuthcode] = useState(false);
   const [authCodeIsValid, setAuthCodeIsValid] = useState(false);
   const [authCodeMessage, setAuthCodeMessage] = useState({

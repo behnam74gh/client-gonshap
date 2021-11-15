@@ -45,19 +45,3 @@ export const useForm = (initialInputState, initialFormValidation) => {
 
   return [formState, inputHandler];
 };
-
-// ---------------------------------------------------------------------
-
-// case "SET_DATA":
-//   return {
-//     inputs: action.inputs,
-//     isValid: action.formIsValid,
-//   };
-
-// const setFormData = useCallback((inputData, formValidation) => {
-//   dispatch({
-//     type: "SET_DATA",
-//     inputs: inputData,
-//     formIsValid: formValidation,
-//   });
-// }, []);

@@ -130,15 +130,8 @@ const ShopPage = () => {
       setOpenMobileFiltering(false);
     }
     if (localStorage.getItem("gonshapSearchConfig")) {
-      const {
-        level,
-        order,
-        category,
-        subcategory,
-        brand,
-        stars,
-        prices,
-      } = JSON.parse(localStorage.getItem("gonshapSearchConfig"));
+      const { level, order, category, subcategory, brand, stars, prices } =
+        JSON.parse(localStorage.getItem("gonshapSearchConfig"));
       if (level === 1) {
         setShowSub(true);
         setActiveCategory(category);
@@ -517,9 +510,11 @@ const ShopPage = () => {
             />
           ))
         ) : (
-          <p className="info-message w-100 text-center">
-            براساس این جستوجو محصولی یافت نشد!
-          </p>
+          <div className="d-flex-center-center w-100 h-50">
+            <p className="text-center w-100 font-sm">
+              براساس این جستوجو محصولی یافت نشد!
+            </p>
+          </div>
         )}
       </div>
       {productsLength > perPage && (

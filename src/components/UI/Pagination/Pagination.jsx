@@ -73,6 +73,7 @@ const Pagination = ({
           JSON.stringify(number)
         );
       }
+      window.scrollTo(0, 0);
     }
   };
 
@@ -99,6 +100,7 @@ const Pagination = ({
                 page === 1 ? JSON.stringify(page) : JSON.stringify(page - 1)
               );
             }
+            window.scrollTo(0, 0);
           }}
           disabled={page === 1 ? true : false}
         >
@@ -148,6 +150,7 @@ const Pagination = ({
                   : JSON.stringify(page + 1)
               );
             }
+            window.scrollTo(0, 0);
           }}
         >
           <RiArrowRightSLine className="text-blue font-md" />

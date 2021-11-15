@@ -84,9 +84,3 @@
     padding: 4px 0;
   }
 }
-
-@media (max-width: 360px) {
-  .list_of_products {
-    width: 95%;
-  }
-}
