@@ -48,7 +48,7 @@ const CarouselUpdate = ({ history, match }) => {
 
   useEffect(() => {
     axios
-      .get(`/supplier/${slug}`)
+      .get(`/current-supplier/${slug}`)
       .then((response) => {
         const {
           title,
@@ -134,12 +134,14 @@ const CarouselUpdate = ({ history, match }) => {
       longitude,
       latitude,
       description,
+      phoneNumber
     } = values;
 
     const formData = new FormData();
 
     formData.append("title", title);
     formData.append("storePhoneNumber", storePhoneNumber);
+    formData.append("phoneNumber", phoneNumber);
     formData.append("backupFor", backupFor);
     formData.append("address", address);
     formData.append("longitude", longitude);

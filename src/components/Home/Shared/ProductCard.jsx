@@ -99,21 +99,23 @@ const ProductCard = ({ product, showSold, showReviews }) => {
   return (
     <div className="product_wrapper">
       <Link to={`/product/details/${_id}`} className="product_img_box">
-        <img
-          src={
-            photos.length > 0
-              ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${photos[0]}`
-              : `${defPic}`
-          }
-          alt={title}
-        />
+        <figure className="figure_img">
+          <img
+            src={
+              photos.length > 0
+                ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${photos[0]}`
+                : `${defPic}`
+            }
+            alt={title}
+          />
+        </figure>
       </Link>
       <div className="product_info_box">
         <Link to={`/product/details/${_id}`}>
-          <h3 className="my-0">{title}</h3>
+          <h3 className={`${showReviews || showSold ? "has_Second_att" : "my-0"}`}>{title}</h3>
         </Link>
 
-        <div className="font-sm mt-2">
+        <div className="font-sm mt-2" style={{textAlign: (showReviews || showSold) && "center"}}>
           {finallyPrice.toLocaleString("fa")}
           <span className="mx-1">تومان</span>
         </div>
@@ -130,7 +132,7 @@ const ProductCard = ({ product, showSold, showReviews }) => {
           )}
         </div>
       </div>
-      {discount > 20 && (
+      {discount > 5 && (
         <div className="special_discount">
           <div className="discount_shape">
             <span>
@@ -160,7 +162,7 @@ const ProductCard = ({ product, showSold, showReviews }) => {
         </span>
         <Link to={`/compares/${_id}`} className="tooltip text-purple">
           <span className="tooltip_text">افزودن جهت مقایسه</span>
-          <IoIosGitCompare />
+          <IoIosGitCompare style={{fontSize: "18px"}} />
         </Link>
         <span className="tooltip" onClick={addToFavoritesHandler}>
           <span className="tooltip_text">علاقه مندی ها</span>

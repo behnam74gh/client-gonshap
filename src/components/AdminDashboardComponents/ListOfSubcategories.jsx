@@ -8,6 +8,7 @@ const ListOfSubcategories = ({
   subcategories,
   removeSubCategory,
   categories,
+  role
 }) => {
   const [currentSubs, setCurrentSubs] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -44,7 +45,7 @@ const ListOfSubcategories = ({
         <div className="table-wrapper">
           <table>
             <thead>
-              <tr
+            {role === 1 && <tr
                 className="heading-table"
                 style={{
                   backgroundColor: "var(--firstColorPalete)",
@@ -70,7 +71,7 @@ const ListOfSubcategories = ({
                 <th colSpan="3">
                   <LocalSearch keyword={keyword} setKeyword={setKeyword} />
                 </th>
-              </tr>
+              </tr>}
               <tr
                 className="heading-table"
                 style={{
@@ -81,7 +82,7 @@ const ListOfSubcategories = ({
                 <th className="th-titles">نام برچسب</th>
                 <th className="th-titles">دسته بندی</th>
                 <th className="th-titles">ویرایش</th>
-                <th className="th-titles">حذف</th>
+                {role === 1 && <th className="th-titles">حذف</th>}
               </tr>
             </thead>
             <tbody>
@@ -94,20 +95,20 @@ const ListOfSubcategories = ({
                     </td>
                     <td className="font-sm">
                       <Link
-                        to={`/admin/dashboard/subcategory/${s.slug}`}
+                        to={`/${role === 2 ? 'store-admin' :"admin"}/dashboard/subcategory/${s.slug}`}
                         className="d-flex-center-center"
                       >
                         <MdEdit className="text-blue font-md" />
                       </Link>
                     </td>
-                    <td className="font-sm">
+                    {role === 1 && <td className="font-sm">
                       <span
                         className="d-flex-center-center"
                         onClick={() => removeSubCategory(s.slug)}
                       >
                         <MdDelete className="text-red" />
                       </span>
-                    </td>
+                    </td>}
                   </tr>
                 ))}
             </tbody>

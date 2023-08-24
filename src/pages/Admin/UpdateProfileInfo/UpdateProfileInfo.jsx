@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import { useDispatch, useSelector } from "react-redux";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
@@ -17,7 +17,7 @@ import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
 
 const UpdateProfileInfo = ({ history }) => {
-  const [expired, setExpired] = useState(true);
+  const [expired, setExpired] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [oldPhoto, setOldPhoto] = useState("");
@@ -32,7 +32,7 @@ const UpdateProfileInfo = ({ history }) => {
   const { userInfo: oldUserInfo } = useSelector((state) => state.userSignin);
   const dispatch = useDispatch();
 
-  const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
+  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   useEffect(() => {
     setLoading(true);
@@ -133,7 +133,6 @@ const UpdateProfileInfo = ({ history }) => {
     formData.append("oldPhoto", oldPhoto);
     formData.append("deletedPhoto", deletedPhoto);
     formData.append("photo", file);
-
     setLoading(true);
     if (!expired) {
       axios
@@ -214,7 +213,7 @@ const UpdateProfileInfo = ({ history }) => {
           <input
             ref={filePickerRef}
             type="file"
-            accept=".jpg,.png,.jpeg"
+            accept=".jpg,.png,.jpeg,.jfif"
             hidden
             onChange={pickedHandler}
           />
@@ -278,20 +277,19 @@ const UpdateProfileInfo = ({ history }) => {
           title="لطفا فقط از حروف فارسی استفاده کنید، آدرس باید بین 15 تا 300 حرف باشد"
         ></textarea>
         <label className="auth-label">تصاویر مرتبط را انتخاب کنید : </label>
-        <ReCAPTCHA
+        {/* <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           theme="dark"
           hl="fa"
           className="recaptcha"
-        />
+        /> */}
         <Button
           type="submit"
           disabled={
             values.address.length < 15 ||
             values.firstName.length < 2 ||
             values.lastName.length < 3 ||
-            expired ||
             loading
           }
         >

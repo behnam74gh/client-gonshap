@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import Invoice from "../../../../components/PdfFiles/Invoice";
+// import { PDFDownloadLink } from "@react-pdf/renderer";
+// import Invoice from "../../../../components/PdfFiles/Invoice";
 import defPic from "../../../../assets/images/def.jpg";
 import "./SingleOrder.css";
 
@@ -10,23 +10,9 @@ const SingleOrder = ({ order }) => {
     <div className="single_order_wrapper">
       <div className="order_details_wrapper">
         <span>
-          نوع سفارش :
-          <strong>
-            {order.paymentMethod === "COD"
-              ? "پرداخت در محل"
-              : "پرداخت اینترنتی"}
-          </strong>
-        </span>
-        <span>
           هزینه نهایی سفارش :
           <strong className="bg-blue text-white">
             {order.paymentInfo.amount.toLocaleString("fa")} تومان
-          </strong>
-        </span>
-        <span>
-          تخفیف داده شده :
-          <strong>
-            {order.paymentInfo.discountAmount.toLocaleString("fa")} تومان
           </strong>
         </span>
         <span>
@@ -100,9 +86,9 @@ const SingleOrder = ({ order }) => {
             </strong>
           </span>
         )}
-        <span>
+        {/* <span>
           کد رهگیری سفارش :<strong>{order._id}</strong>
-        </span>
+        </span> */}
 
         <span>
           تاریخ سفارش :
@@ -175,12 +161,12 @@ const SingleOrder = ({ order }) => {
         </table>
       </div>
       <div className="pdf_download_wrapper">
-        <PDFDownloadLink
+        {/* <PDFDownloadLink
           document={<Invoice order={order} />}
           fileName="order.pdf"
         >
           دانلود فایل PDF
-        </PDFDownloadLink>
+        </PDFDownloadLink> */}
       </div>
     </div>
   );

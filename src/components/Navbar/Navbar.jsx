@@ -37,7 +37,7 @@ const Navbar = (props) => {
   return (
     <header className="c-navbar" id="header">
       <div className="header-wrapper" onMouseOver={subMenuHandler}>
-        <Link to="/">
+        <Link to="/" className='logo_Img'>
           {props.companyInfo.logo && props.companyInfo.logo.length > 0 ? (
             <img
               src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${props.companyInfo.logo}`}
@@ -63,9 +63,9 @@ const Navbar = (props) => {
                   <div className="wrapper-dropdown">
                     <Link
                       to={
-                        userInfo.isAdmin
+                        userInfo.role === 1
                           ? "/admin/dashboard"
-                          : "/user/dashboard"
+                          : userInfo.role === 2 ? "/store-admin/dashboard" : "/user/dashboard"
                       }
                     >
                       <MdDashboard />
@@ -101,15 +101,15 @@ const Navbar = (props) => {
             </li>
           </ul>
 
-          <Link to="/register" className="auth-btn">
+          {!userInfo && <Link to="/register" className="auth-btn">
             ثبت نام
             <AiOutlineUser style={{ marginRight: "5px" }} />
-          </Link>
+          </Link>}
 
-          <Link to="/signin" className="auth-btn">
+          {!userInfo && <Link to="/signin" className="auth-btn">
             ورود
             <RiLogoutBoxLine style={{ marginRight: "5px" }} />
-          </Link>
+          </Link>}
         </div>
       </div>
 

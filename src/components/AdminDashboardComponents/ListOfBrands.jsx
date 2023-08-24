@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import LocalSearch from "../UI/FormElement/LocalSearch";
 import defPic from "../../assets/images/def.jpg";
 
-const ListOfBrands = ({ brands, categories }) => {
+const ListOfBrands = ({ brands, categories,role }) => {
   const [keywordSearch, setKeywordSearch] = useState(true);
   const [activeCategory, setActiveCategory] = useState("none");
   const [sortedBrands, setSortedBrands] = useState([]);
@@ -37,7 +37,7 @@ const ListOfBrands = ({ brands, categories }) => {
       <div className="table-wrapper mt-3">
         <table>
           <thead>
-            <tr
+            {role === 1 && <tr
               className="heading-table"
               style={{
                 backgroundColor: "var(--firstColorPalete)",
@@ -71,7 +71,7 @@ const ListOfBrands = ({ brands, categories }) => {
                     ))}
                 </select>
               </th>
-            </tr>
+            </tr>}
             <tr
               className="heading-table"
               style={{
@@ -103,7 +103,7 @@ const ListOfBrands = ({ brands, categories }) => {
                   </td>
                   <td>
                     <Link
-                      to={`/admin/dashboard/brand-update/${b._id}`}
+                      to={`/${role === 2 ? "store-admin" : "admin"}/dashboard/brand-update/${b._id}`}
                       className="d-flex-center-center"
                     >
                       <MdEdit className="text-blue" />

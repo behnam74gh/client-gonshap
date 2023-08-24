@@ -1,22 +1,19 @@
-import React,{useState} from "react";
-import Notices1 from "./Notices1";
-import AreaChartComponent from "./AreaChart";
-import PieChartComponent from "./PieChart";
+import React,{useState} from 'react'
+import AreaChartComponent from '../../Admin/AdminDashboardHome/AreaChart'
+import Notices1 from '../../Admin/AdminDashboardHome/Notices1';
 
-const AdminDashboardHome = () => {
+const StoreDashboardHome = () => {
   const [date, setDate] = useState(new Date());
 
   const setParticularDateHandler = (date) => {
     setDate(date)
   }
-
   return (
     <div className="admin-panel-wrapper">
       <Notices1 date={date} setParticularDateHandler={setParticularDateHandler} />
       <AreaChartComponent date={date} />
-      <PieChartComponent />
     </div>
-  );
-};
+  )
+}
 
-export default AdminDashboardHome;
+export default StoreDashboardHome

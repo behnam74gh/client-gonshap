@@ -5,112 +5,25 @@
   padding-top: 26px;
 }
 
-.active_coupon_wrapper {
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--thirdColorPalete);
-  color: white;
-  position: relative;
-}
-
-.active_coupon_description {
-  margin: 0;
-  padding: 14px 10px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.coupon_code {
-  background-color: var(--secondColorPalete);
-  color: var(--firstColorPalete);
-  padding: 6px 10px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  text-align: center;
-  margin-right: 5px;
-}
-
-.close_coupon {
-  position: absolute;
-  left: 20px;
-  top: 13px;
-  border: 1px solid white;
-  border-radius: 3px;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  padding: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.close_coupon:hover {
-  color: var(--secondColorPalete);
-  border-color: var(--secondColorPalete);
-}
-
-@media (max-width: 1060px) {
-  .active_coupon_description {
-    padding: 14px 5px;
-    font-size: 12px;
+@media (min-width: 1600px) {
+  .main-body {
+    width: 75% !important;
+    margin: 0 auto;
+    height: 100%;
+    padding-top: 26px;
   }
 }
 
-@media (max-width: 770px) {
+ @media (max-width: 450px) {
   .main-body {
+    /* width: 90% !important; */
     padding-top: 0;
   }
-  .active_coupon_description {
-    padding: 14px 0;
-    font-size: 10px;
-  }
-  .active_coupon_description .mx-1 {
-    margin-right: 2px;
-    margin-left: 2px;
-  }
-  .coupon_code {
-    padding: 5px;
-    border-radius: 2px;
-    margin-right: 2px;
-  }
-  .close_coupon {
-    left: 10px;
-    top: 10px;
-    padding: 2px;
+} 
+
+@media (max-width: 335px) {
+  .main-body {
+    width: 84% !important;
   }
 }
 
-@media (max-width: 450px) {
-  .active_coupon_description {
-    width: 75%;
-    text-align: justify;
-    line-height: 2.5;
-    padding: 10px 0;
-  }
-  .coupon_code {
-    padding: 5px 10px;
-    margin-right: 5px;
-  }
-  .close_coupon {
-    left: 0%;
-    top: 50%;
-    transform: translate(40%, -50%);
-    padding: 3px;
-  }
-}
-@media (max-width: 320px) {
-  .active_coupon_description {
-    width: 90%;
-    line-height: 2.5;
-  }
-  .close_coupon {
-    left: 0%;
-    top: 50%;
-    transform: translate(40%, 50%);
-    padding: 3px;
-  }
-}

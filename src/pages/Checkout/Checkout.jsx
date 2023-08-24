@@ -6,15 +6,15 @@ import CheckoutHistory from "./CheckoutHistory";
 import { useSelector } from "react-redux";
 import "./Checkout.css";
 
-const Checkout = () => {
+const Checkout = ({history}) => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [errorText, setErrorText] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
-  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [addressSaved, setAddressSaved] = useState(false);
+  const [categories,setCategories] = useState([])
 
-  const { cart, userSignin, CODelivery, coupon } = useSelector((state) => ({
+  const { cart, userSignin } = useSelector((state) => ({
     ...state,
   }));
 
@@ -22,31 +22,36 @@ const Checkout = () => {
   const { userInfo } = userSignin;
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get("/read/user/cart")
-      .then((response) => {
-        setLoading(false);
-        const {
-          success,
-          products,
-          cartTotal,
-          totalAfterDiscount,
-        } = response.data;
-        if (success) {
-          setProducts(products);
-          setTotalPrice(cartTotal);
-          setTotalAfterDiscount(totalAfterDiscount);
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        if (err.response) {
-          setErrorText(err.response.data.message);
-        }
-      });
-  }, []);
-
+    const {from} = history.location.state
+    if(from === '/cart'){
+      setLoading(true);
+      axios
+        .get("/read/user/cart")
+        .then((response) => {
+          setLoading(false);
+          const {
+            success,
+            products,
+            cartTotal,
+            categories,
+          } = response.data;
+          if (success) {
+            setProducts(products);
+            setTotalPrice(cartTotal);
+            setCategories(categories)
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          if (err.response) {
+            setErrorText(err.response.data.message);
+          }
+        });
+    }else{
+      history.push('/')
+    }
+  }, [history]);
+  
   return (
     <section id="checkout_page">
       {loading ? (
@@ -62,8 +67,8 @@ const Checkout = () => {
               cartItems={cartItems}
               userInfo={userInfo}
               setAddressSaved={setAddressSaved}
-              setTotalAfterDiscount={setTotalAfterDiscount}
-              totalAfterDiscount={totalAfterDiscount}
+              addressSaved={addressSaved}
+              categoriesLength={categories.length}
             />
           </div>
           {products.length > 0 && (
@@ -74,9 +79,6 @@ const Checkout = () => {
                 cartItems={cartItems}
                 userInfo={userInfo}
                 addressSaved={addressSaved}
-                totalAfterDiscount={totalAfterDiscount}
-                CODelivery={CODelivery}
-                coupon={coupon}
               />
             </div>
           )}

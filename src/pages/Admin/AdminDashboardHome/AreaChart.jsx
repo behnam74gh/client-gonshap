@@ -10,14 +10,17 @@ import {
 } from "recharts";
 import { VscLoading } from "react-icons/vsc";
 import axios from "../../../util/axios";
+import { useSelector } from "react-redux";
 import "./AreaChart.css";
 
-const AreaChartComponent = () => {
+const AreaChartComponent = ({date}) => {
   const [loading, setLoading] = useState(false);
   const [orderDays, setOrderDays] = useState([]);
   const [errorText, setErrorText] = useState("");
   const [mobileScreen, setMobileScreen] = useState();
 
+  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin)
+ 
   useEffect(() => {
     if (window.innerWidth < 450) {
       setMobileScreen(window.innerWidth);
@@ -27,7 +30,7 @@ const AreaChartComponent = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("/orders/per-day/area-chart")
+      .post("/orders/per-day/area-chart",{category: role === 2 ? supplierFor : null,dateValue: date})
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -41,7 +44,7 @@ const AreaChartComponent = () => {
           setErrorText(err.response.data.message);
         }
       });
-  }, []);
+  }, [date,role,supplierFor]);
 
   return (
     <div className="w-100">
@@ -112,6 +115,7 @@ const AreaChartComponent = () => {
 };
 
 function CustomTooltip({ active, payload }) {
+  
   if (active && payload[0]) {
     const date = new Date(payload[0].payload.date);
 

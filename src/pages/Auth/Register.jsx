@@ -35,20 +35,20 @@ const Register = ({ history }) => {
   const [allowToReqAuthcode, setAllowToReqAuthcode] = useState(false);
   const [aAuthLoading, setAAuthLoading] = useState(false);
   const [registerErrMessage, setRegisterErrMessage] = useState("");
-  const [expired, setExpired] = useState(true);
+  const [expired, setExpired] = useState(false);
   const [count, setCount] = useState(180);
 
-  const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
+  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   const [formState, inputHandler] = useForm(
     {
       phoneNumber: {
         value: "",
-        isValid: false,
+        isValid: true,
       },
       authCode: {
         value: "",
-        isValid: false,
+        isValid: true,
       },
       firstName: {
         value: "",
@@ -88,33 +88,35 @@ const Register = ({ history }) => {
 
   const sendPhoneNumberHandler = (e) => {
     e.preventDefault();
-    setPLoading(true);
+    // setPLoading(true);
+    setAuthCodeIsValid(true)
+    setPhoneNumIsValid(true)
 
-    axios
-      .post("/check-phone-number", {
-        phoneNumber: formState.inputs.phoneNumber.value,
-      })
-      .then((response) => {
-        if (response.data.success) {
-          setPLoading(false);
-          toast.success(response.data.message);
-          setPhoneNumIsValid(true);
-        }
-      })
-      .catch((err) => {
-        setPLoading(false);
-        if (typeof err.response.data.message === "object") {
-          setPhoneNumberMessage({
-            success: err.response.data.success,
-            message: err.response.data.message[0],
-          });
-        } else {
-          setPhoneNumberMessage({
-            success: err.response.data.success,
-            message: err.response.data.message,
-          });
-        }
-      });
+    // axios
+    //   .post("/check-phone-number", {
+    //     phoneNumber: formState.inputs.phoneNumber.value,
+    //   })
+    //   .then((response) => {
+    //     if (response.data.success) {
+    //       setPLoading(false);
+    //       toast.success(response.data.message);
+    //       setPhoneNumIsValid(true);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setPLoading(false);
+    //     if (typeof err.response.data.message === "object") {
+    //       setPhoneNumberMessage({
+    //         success: err.response.data.success,
+    //         message: err.response.data.message[0],
+    //       });
+    //     } else {
+    //       setPhoneNumberMessage({
+    //         success: err.response.data.success,
+    //         message: err.response.data.message,
+    //       });
+    //     }
+    //   });
   };
 
   const checkValidity = (e) => {
@@ -237,7 +239,7 @@ const Register = ({ history }) => {
             id="phoneNumber"
             element="input"
             type="text"
-            placeholder="مثال: 09117025683"
+            placeholder="مثال: 5683***0911"
             onInput={inputHandler}
             disabled={phoneNumIsValid}
             focusHandler={() =>
@@ -277,7 +279,7 @@ const Register = ({ history }) => {
               setAuthCodeMessage({ success: false, message: "" })
             }
             validators={[VALIDATOR_AUTHNUMBER()]}
-            errorText="کد تایید بین 6 تا 7 عدد میباشد!"
+            errorText="کد تایید صحیح نمی باشد!"
           />
           <div className="auth-code-wrapper">
             <Button
@@ -370,20 +372,19 @@ const Register = ({ history }) => {
             validators={[VALIDATOR_PASSWORD()]}
             errorText="دقیقا همان رمز را تکرارکنید!"
           />
-          <ReCAPTCHA
-            sitekey={reCaptchaSiteKey}
-            onChange={changeRecaptchaHandler}
-            theme="dark"
-            hl="fa"
-            className="recaptcha"
-          />
+        {/* <ReCAPTCHA
+          sitekey={reCaptchaSiteKey}
+          onChange={changeRecaptchaHandler}
+          theme="dark"
+          hl="fa"
+          className="recaptcha"
+        /> */}
           <Button
             type="submit"
             disabled={
               !formState.isValid ||
               formState.inputs.password.value !==
-                formState.inputs.repeatPassword.value ||
-              expired
+                formState.inputs.repeatPassword.value 
             }
           >
             {!loading ? "ثبت" : <VscLoading className="loader" />}

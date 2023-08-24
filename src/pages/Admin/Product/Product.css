@@ -58,6 +58,24 @@
   margin: 1px 2px;
   border-radius: 50%;
 }
+.details_wrapper{
+  border: 1px solid var(--firstColorPalete);
+  padding: 15px;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 4px;
+}
+.detail{
+  background-color: #ffffff;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: var(--thirdColorPalete);
+  position: relative;
+}
+
 @media (max-width: 450px) {
   .color_wrapper {
     flex-basis: 100%;

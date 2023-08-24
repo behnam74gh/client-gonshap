@@ -463,10 +463,10 @@ const AdvertiseCreate = ({ history }) => {
           onInput={inputHandler}
           validators={[
             VALIDATOR_MAXLENGTH(10000),
-            VALIDATOR_MINLENGTH(1000),
+            VALIDATOR_MINLENGTH(100),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،بین 1000 تا 10000 حرف میتوانید وارد کنید"
+          errorText="از علامت ها و عملگر ها استفاده نکنید،بین 100 تا 10000 حرف میتوانید وارد کنید"
         />
         <Button
           type="submit"

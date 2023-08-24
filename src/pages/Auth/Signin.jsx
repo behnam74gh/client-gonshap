@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../components/UI/FormElement/Input";
 import Button from "../../components/UI/FormElement/Button";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import { VscLoading } from "react-icons/vsc";
 import {
   VALIDATOR_MAXLENGTH,
@@ -27,7 +27,7 @@ const Signin = ({ history, location }) => {
   const [error, setError] = useState("");
 
   const [expired, setExpired] = useState(false); //must be true-for developing => i set it to false
-  const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
+  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   const dispatch = useDispatch();
 
@@ -65,6 +65,8 @@ const Signin = ({ history, location }) => {
     } else {
       if (userInfo.isAdmin) {
         history.push("/admin/dashboard");
+      } else if (userInfo.role === 2) {
+        history.push('/store-admin/dashboard')
       } else {
         history.push("/user/dashboard");
       }
@@ -104,11 +106,11 @@ const Signin = ({ history, location }) => {
           const { success, message, userInfo, remindMe } = response.data;
           if (success) {
             isAdminBasedRedirect(userInfo);
-            const { firstName, isAdmin, refreshToken, userId } = userInfo;
+            const { firstName, isAdmin,role, refreshToken, userId,supplierFor } = userInfo;
 
             dispatch({
               type: USER_SIGNIN_SUCCESS,
-              payload: { firstName, isAdmin, refreshToken, userId },
+              payload: { firstName, isAdmin,role,supplierFor, refreshToken, userId },
             });
             if (remindMe) {
               localStorage.setItem(
@@ -116,6 +118,8 @@ const Signin = ({ history, location }) => {
                 JSON.stringify({
                   firstName,
                   isAdmin,
+                  role,
+                  supplierFor,
                   refreshToken,
                   userId,
                 })
@@ -154,7 +158,7 @@ const Signin = ({ history, location }) => {
           id="phoneNumber"
           element="input"
           type="text"
-          placeholder="مثال: 09117025683"
+          placeholder="مثال: 5683***0911"
           onInput={inputHandler}
           validators={[
             VALIDATOR_REQUIRE(),
@@ -182,14 +186,14 @@ const Signin = ({ history, location }) => {
           مرا به خاطر بسپار
           <input type="checkbox" onChange={() => setRemindMe(!remindMe)} />
         </label>
-        <ReCAPTCHA
+        {/* <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           hl="fa"
           className="recaptcha"
           theme="dark"
-        />
-        <Button type="submit" disabled={!formState.isValid || expired}>
+        /> */}
+        <Button type="submit" disabled={!formState.isValid}>
           {!loading ? "ورود" : <VscLoading className="loader" />}
         </Button>
         {error && <p className="warning-message">{error}</p>}

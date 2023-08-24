@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { Calendar, DateObject } from "react-multi-date-picker";
 import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 import axios from "../../../util/axios";
 import { useForm } from "../../../util/hooks/formHook";
 import {
@@ -19,6 +19,8 @@ const ToDoCreate = () => {
   const [reRenderParent, setReRenderParent] = useState(true);
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState();
+
+  const {userInfo : {role}} = useSelector(state => state.userSignin)
 
   const [formState, inputHandler] = useForm(
     {
@@ -102,7 +104,7 @@ const ToDoCreate = () => {
             </Button>
           </div>
         </form>
-        <Link className="font-sm text-blue" to="/admin/dashboard/todo">
+        <Link className="font-sm text-blue" to={`/${role === 2 ? "store-admin" : "admin"}/dashboard/todo`}>
           برو به لیست یادداشت ها
         </Link>
       </div>

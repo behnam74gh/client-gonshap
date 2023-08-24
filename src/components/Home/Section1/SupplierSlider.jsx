@@ -16,7 +16,8 @@ const SupplierSlider = () => {
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
-          setSuppliers(response.data.allSuppliers);
+          const activeSuppliers = response.data.allSuppliers.filter(s => !s.isBan)
+          setSuppliers(activeSuppliers);
           setErrorText("");
         }
       })

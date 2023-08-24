@@ -15,9 +15,16 @@
   justify-content: center;
   align-items: center;
 }
+.call_us_icon svg {
+  width: 80px;
+  height: 80px;
+}
 .call_us_desc {
   flex-basis: 50%;
   font-size: 14px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
 }
 .call_us_phone_numbers_wrapper {
   flex-basis: 25%;
@@ -39,10 +46,29 @@
 }
 
 /* responsive */
+@media (max-width: 920px) {
+  #call_us{
+    padding: 6px 0;
+  }
+  .call_us_icon {
+    flex-basis: 15%;
+  }
+  .call_us_desc{
+    flex-basis: 60%;
+    font-size: 12px;
+  }
+  .call_us_phone_numbers{
+    flex-basis: 20%;
+  }
+  .call_us_icon svg {
+    width: 60px;
+    height: 60px;
+  }
+}
 @media (max-width: 780px) {
   #call_us {
     min-height: 80px;
-    padding: 4px 16px;
+    padding: 4px 0;
     margin: 15px 0;
   }
 
@@ -50,14 +76,11 @@
     flex-basis: 15%;
   }
   .call_us_icon svg {
-    width: 50%;
+    width: 40px;
+    height: 40px;
   }
   .call_us_desc {
     flex-basis: 60%;
-    font-size: 12px;
-  }
-  .call_us_desc h2 {
-    margin: 12px 0 8px;
   }
   .call_us_desc p {
     margin: 5px 0;
@@ -68,7 +91,7 @@
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 650px) {
   #call_us {
     padding: 5px 0;
     margin: 25px 0;

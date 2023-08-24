@@ -55,7 +55,7 @@ const UserInfo = () => {
             <h6 className="user_dashboard_status">
               وضعیت:
               <strong className="text-blue mx-1">
-                {user.isBanned ? "فعال" : "مسدود"}
+                {!user.isBanned ? "فعال" : "مسدود"}
               </strong>
             </h6>
           </div>

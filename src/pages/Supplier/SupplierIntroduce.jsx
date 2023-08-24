@@ -94,15 +94,15 @@ const SupplierIntroduce = ({ match }) => {
                 <span>{supplier.title}</span>
               </div>
               <div className="info_box">
-                <strong>مالکِ فروشگاه :</strong>
+                <strong>مالک :</strong>
                 <span>{supplier.owner}</span>
               </div>
               <div className="info_box">
-                <strong>شماره تماسِ فروشگاه :</strong>
+                <strong>شماره تماس :</strong>
                 <span>{supplier.storePhoneNumber}</span>
               </div>
               <div className="info_box">
-                <strong>آدرسِ فروشگاه :</strong>
+                <strong>آدرس :</strong>
                 <span>{supplier.address}</span>
               </div>
             </div>

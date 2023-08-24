@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { useForm } from "../../../util/hooks/formHook";
 import axios from "../../../util/axios";
+import { useSelector } from "react-redux";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_MAXLENGTH,
@@ -39,6 +40,8 @@ const Brands = () => {
     false
   );
 
+  const {userInfo: {role, supplierFor}} = useSelector(state => state.userSignin)
+  
   const loadAllCategories = () => {
     axios
       .get("/get-all-categories")
@@ -58,7 +61,12 @@ const Brands = () => {
       .get("/get-all-brands")
       .then((response) => {
         if (response.data.success) {
-          setBrands(response.data.brands);
+          if(role === 2){
+            const currentBrands = response.data.brands.filter((b) => b.backupFor._id === supplierFor);
+            setBrands(currentBrands)
+          }else{
+            setBrands(response.data.brands);
+          }
         }
       })
       .catch((err) => {
@@ -78,6 +86,12 @@ const Brands = () => {
     loadAllCategories();
     loadAllBrands();
   }, []);
+
+  useEffect(() => {
+    if(role === 2){
+      setCategoryHandler(supplierFor)
+    }
+  },[role,supplierFor])
 
   //image-picker-codes
   const filePickerRef = useRef();
@@ -159,8 +173,8 @@ const Brands = () => {
     const formData = new FormData();
 
     formData.append("brandName", formState.inputs.brandName.value);
-    formData.append("parents", parents);
-    formData.append("backupFor", activeCategory);
+    formData.append("parents",  parents);
+    formData.append("backupFor",role === 1 ? activeCategory : supplierFor);
 
     formData.append("photo", file);
 
@@ -219,10 +233,10 @@ const Brands = () => {
                 ]}
                 errorText="از علامت ها و عملگرها استفاده نکنید، میتوانید از 2 تا 30 حرف وارد کنید!"
               />
-              <label className="auth-label" htmlFor="category">
+              {role === 1 && <label className="auth-label" htmlFor="category">
                 دسته بندی :
-              </label>
-              <select
+              </label>}
+              {role === 1 && <select
                 value={activeCategory}
                 id="category"
                 onChange={(e) => setCategoryHandler(e.target.value)}
@@ -234,7 +248,7 @@ const Brands = () => {
                       {c.name}
                     </option>
                   ))}
-              </select>
+              </select>}
               {showSub && (
                 <label className="auth-label" htmlFor="subcategory">
                   برچسب :
@@ -303,8 +317,8 @@ const Brands = () => {
                 disabled={
                   !formState.inputs.brandName.isValid ||
                   file === undefined ||
-                  !parents.length ||
-                  !activeCategory.length
+                  !parents.length
+                  // !activeCategory.length
                 }
               >
                 {!loading ? "ثبت" : <VscLoading className="loader" />}
@@ -314,7 +328,7 @@ const Brands = () => {
           <hr />
         </React.Fragment>
       )}
-      <ListOfBrands brands={brands} categories={categories} />
+      <ListOfBrands brands={brands} categories={categories} role={role} />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { searchReducer } from "./searchReducer";
 import { shopReducer } from "./shopReducers";
 import { couponReducer } from "./couponReducers";
 import { CODReducer } from "./CODRedusers";
+import { isMobileReducer } from "./isMobileReduser";
 
 const rootReducer = combineReducers({
   userSignin: userSigninReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   shopConfig: shopReducer,
   coupon: couponReducer,
   CODelivery: CODReducer,
+  isMobile: isMobileReducer
 });
 
 export default rootReducer;

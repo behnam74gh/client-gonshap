@@ -117,7 +117,8 @@ const ShopPage = () => {
       .get("/get-all-categories")
       .then((response) => {
         if (response.data.success) {
-          setCategories(response.data.categories);
+          const activeCategories = response.data.categories.filter(c => c.storeProvider !== null)
+          setCategories(activeCategories);
         }
       })
       .catch((err) => {

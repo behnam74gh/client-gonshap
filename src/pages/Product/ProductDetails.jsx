@@ -229,7 +229,7 @@ const ProductDetails = ({
         <hr className="my-1" />
         <div className="product_info_wrapper">
           <div className="info_wrapper">
-            <span className="question_info">پایین ترین نرخ قیمت بازار : </span>
+            <span className="question_info">قیمت بازار : </span>
             <strong className="answer_info text-silver">
               <del className="mx-1">{price.toLocaleString("fa-IR")}</del>
               تومان
@@ -242,7 +242,7 @@ const ProductDetails = ({
             </strong>
           </div>
           <div className="info_wrapper text-purple">
-            <strong className="question_info">قیمت نهاییِ گُنشاپ : </strong>
+            <strong className="question_info">قیمت نهایی بازارک : </strong>
             <strong className="answer_info">
               <strong className="mx-1">
                 {finallyPrice.toLocaleString("fa-IR")}
@@ -256,13 +256,13 @@ const ProductDetails = ({
 
               <span className="answer_info">
                 <span className="compare_item_not_exist">
-                  محصول از رده خارج شده است
+                  محصول ارائه نمیشود
                 </span>
               </span>
             </div>
           )}
           <div className="info_wrapper">
-            <span className="question_info">موجودی : </span>
+            <span className="question_info">تعداد موجودی : </span>
             {countInStock > 0 ? (
               <strong className="answer_info text-purple">
                 <strong className="mx-1">{countInStock}</strong>عدد
@@ -280,7 +280,7 @@ const ProductDetails = ({
             </span>
           </div>
           <div className="info_wrapper">
-            <span className="question_info">تعدادِ فروش : </span>
+            <span className="question_info">تعداد فروش : </span>
             <strong className="answer_info text-purple">
               <strong className="mx-1">{sold}</strong>عدد
             </strong>
@@ -301,7 +301,7 @@ const ProductDetails = ({
             </div>
           </div>
           <div className="info_wrapper_Attr">
-            <strong className="my-1">برترین ویژگی هایِ محصول: </strong>
+            <strong className="my-1">ویژگی های محصول: </strong>
             <ul className="attr_wrapper">
               <li>{attr1}</li>
               <li>{attr2}</li>
@@ -326,8 +326,9 @@ const ProductDetails = ({
           <div className="products_icon_wrapper">
             <div className="cart_btn_wrapper">
               <button
-                className="d-flex-center-center"
+                className={`d-flex-center-center ${!sell && "disabledBtn"}`}
                 onClick={addToCartHandler}
+                disabled={!sell}
               >
                 {inCart ? "حذف از سبد خرید" : "افزودن به سبد خرید"}
                 {inCart ? (
@@ -359,8 +360,9 @@ const ProductDetails = ({
             </div>
             <div className="favorite_btn_wrapper">
               <button
-                className="d-flex-center-center"
+                className={`d-flex-center-center ${!sell && "disabledBtn"}`}
                 onClick={addToFavoritesHandler}
+                disabled={!sell}
               >
                 علاقه مندی
                 {inFavorites ? (

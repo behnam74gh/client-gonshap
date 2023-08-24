@@ -44,7 +44,7 @@ const Location = () => {
     },
     storePhoneNumber2: {
       value: "",
-      isValid: false,
+      isValid: true,
     },
     longitude: {
       value: "",
@@ -56,13 +56,25 @@ const Location = () => {
     },
     instagramId: {
       value: "",
-      isValid: true,
+      isValid: false,
     },
     telegramId: {
       value: "",
-      isValid: true,
+      isValid: false,
     },
     whatsupId: {
+      value: "",
+      isValid: false,
+    },
+    signENemad: {
+      value: "",
+      isValid: true,
+    },
+    signUnion: {
+      value: "",
+      isValid: true,
+    },
+    signMedia: {
       value: "",
       isValid: true,
     },
@@ -158,6 +170,9 @@ const Location = () => {
     formData.append("instagramId", formState.inputs.instagramId.value);
     formData.append("telegramId", formState.inputs.telegramId.value);
     formData.append("whatsupId", formState.inputs.whatsupId.value);
+    formData.append("signENemad", formState.inputs.signENemad.value);
+    formData.append("signUnion", formState.inputs.signUnion.value);
+    formData.append("signMedia", formState.inputs.signMedia.value);
     formData.append("aboutUs", formState.inputs.aboutUs.value);
     formData.append("address", formState.inputs.address.value);
 
@@ -218,7 +233,7 @@ const Location = () => {
                     >
                       <TiDelete />
                     </span>
-                    <img src={url} alt="preview" className="ticket-img" />
+                    <img src={url} alt="preview" style={{width: "100%"}} className="ticket-img" />
                   </div>
                 )}
               </div>
@@ -338,6 +353,39 @@ const Location = () => {
                   VALIDATOR_SPECIAL_CHARACTERS(),
                 ]}
                 errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 4 تا 70 حرف وارد کنید!"
+              />
+              <label className="auth-label">آدرس نماد الکترونیک :</label>
+              <Input
+                id="signENemad"
+                element="input"
+                type="text"
+                onInput={inputHandler}
+                validators={[
+                  VALIDATOR_MAXLENGTH(150),
+                ]}
+                errorText='لینک بسیار طولانی است'
+              />
+              <label className="auth-label">آدرس صنفی :</label>
+              <Input
+                id="signUnion"
+                element="input"
+                type="text"
+                onInput={inputHandler}
+                validators={[
+                  VALIDATOR_MAXLENGTH(150),
+                ]}
+                errorText='لینک بسیار طولانی است'
+              />
+              <label className="auth-label">آدرس رسانه دیجیتال :</label>
+              <Input
+                id="signMedia"
+                element="input"
+                type="text"
+                onInput={inputHandler}
+                validators={[
+                  VALIDATOR_MAXLENGTH(150),
+                ]}
+                errorText='لینک بسیار طولانی است'
               />
               <Input
                 id="aboutUs"

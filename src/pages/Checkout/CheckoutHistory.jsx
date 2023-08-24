@@ -5,20 +5,14 @@ import { useDispatch } from "react-redux";
 import { resetCart } from "../../redux/Actions/cartActions";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
-import { COUPON_APPLIED } from "../../redux/Types/couponTypes";
-import { COD } from "../../redux/Types/CODTypes";
 import { VscLoading } from "react-icons/vsc";
 import defPic from "../../assets/images/def.jpg";
 
 const CheckoutHistory = ({
   products,
   totalPrice,
-  cartItems,
   userInfo,
   addressSaved,
-  totalAfterDiscount,
-  CODelivery,
-  coupon,
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -42,47 +36,18 @@ const CheckoutHistory = ({
       });
   };
 
-  const purchaseCODOrderHandler = () => {
-    setLoading(true);
-    axios
-      .post("/create/user-order/cod", {
-        COD: CODelivery,
-        couponApplied: coupon,
-      })
-      .then((response) => {
-        setLoading(false);
-        if (response.data.success) {
-          emptyCartHandler();
-          dispatch({ type: COUPON_APPLIED, payload: false });
-          dispatch({ type: COD, payload: false });
-          toast.success(response.data.message);
-          setTimeout(() => {
-            history.push("/user/dashboard");
-          }, 300);
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        if (typeof err.response.data.message === "object") {
-          setErrorText(err.response.data.message[0]);
-        } else {
-          setErrorText(err.response.data.message);
-        }
-      });
-  };
-
   const purchaseOrderHandler = () => {
     setLoading(true);
     axios
-      .post("/create/user-order", {
-        couponApplied: coupon,
-      })
+      .post("/create/user-order")
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
           emptyCartHandler();
-          dispatch({ type: COUPON_APPLIED, payload: false });
           toast.success(response.data.message);
+          setTimeout(() => {
+            history.push("/user/dashboard");
+           }, 300);
         }
       })
       .catch((err) => {
@@ -111,6 +76,7 @@ const CheckoutHistory = ({
                   {(item.price * item.count).toLocaleString("fa")}
                 </strong>
                 تومان
+                ، از فروشگاه {item.category.name}
               </div>
               <img
                 className="table-img"
@@ -124,7 +90,7 @@ const CheckoutHistory = ({
             </div>
           ))}
         <div className="checkout_total_price">
-          <strong>مجموع قیمت :</strong>
+          <strong>مجموع هزینه سفارش :</strong>
           <span className="finaly_total_price_digit">
             {totalPrice && totalPrice.toLocaleString("fa")}
           </span>
@@ -132,51 +98,15 @@ const CheckoutHistory = ({
         </div>
       </div>
       <hr className="my-2" />
-      {totalAfterDiscount > 0 && (
-        <div className="applyed_discount_wrapper">
-          <span className="font-sm">کد تخفیف اعمال شد :</span>
-          <div className="finaly_price_after_discount">
-            <span className="ml-2 font-sm">مبلغ نهایی :</span>
-            <strong className="mr-2">
-              {totalAfterDiscount.toLocaleString("fa")} تومان
-            </strong>
-          </div>
-        </div>
-      )}
-      <p className="info-message">
-        نوع پرداخت :{" "}
-        <strong className="mr-2">
-          {CODelivery ? "پرداخت در محل" : "پرداخت اینترنتی"}
-        </strong>
-      </p>
       <div className="purchase_btns_wrapper">
-        {CODelivery ? (
-          <Button
-            type="button"
-            disabled={
-              !userInfo || !addressSaved || !totalPrice || totalPrice === 0
-            }
-            onClick={purchaseCODOrderHandler}
-          >
-            {loading ? <VscLoading className="loader" /> : "ثبت سفارش"}
-          </Button>
-        ) : (
-          <Button
-            type="button"
-            disabled={
-              !userInfo || !addressSaved || !totalPrice || totalPrice === 0
-            }
-            onClick={purchaseOrderHandler}
-          >
-            {loading ? <VscLoading className="loader" /> : "ثبت سفارش"}
-          </Button>
-        )}
         <Button
           type="button"
-          disabled={!cartItems.length || !userInfo}
-          onClick={emptyCartHandler}
+          disabled={
+            !userInfo || !addressSaved || !totalPrice || totalPrice === 0
+          }
+          onClick={purchaseOrderHandler}
         >
-          خالی کردن سبد
+          {loading ? <VscLoading className="loader" /> : "ثبت سفارش"}
         </Button>
       </div>
       {errorText.length > 0 && <p className="warning-message">{errorText}</p>}

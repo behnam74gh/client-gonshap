@@ -19,9 +19,6 @@ const Section5 = () => {
 
   useEffect(() => {
     const bodyWidth = window.innerWidth;
-    if (bodyWidth < 450) {
-      setNumberOfSlides(1);
-    }
     setLoading(true);
     axios
       .post("/find/products/by-category-and/order", {
@@ -33,19 +30,30 @@ const Section5 = () => {
         if (response.data.success) {
           const { foundedProducts } = response.data;
           const produtsLength = foundedProducts.length;
-          if (bodyWidth > 1060 && produtsLength >= 4) {
+          if (bodyWidth > 1350 && produtsLength >= 4) {
             setNumberOfSlides(4);
-          } else if (bodyWidth > 1060 && produtsLength < 4) {
+          } else if (bodyWidth > 1350 && produtsLength < 4) {
             setNumberOfSlides(produtsLength);
-          } else if (bodyWidth < 1060 && bodyWidth > 450 && produtsLength > 1) {
-            setNumberOfSlides(2);
-          } else if (bodyWidth < 450 && produtsLength >= 4) {
+          } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
+            setNumberOfSlides(3);
           } else if (
-            bodyWidth < 1060 &&
+            bodyWidth < 1350 &&
+            bodyWidth > 910 &&
+            produtsLength === 1
+          ) {
+            setNumberOfSlides(1);
+          }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
+            setNumberOfSlides(2);
+          } else if (
+            bodyWidth < 910 &&
             bodyWidth > 450 &&
             produtsLength === 1
           ) {
             setNumberOfSlides(1);
+          }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
+            setNumberOfSlides(2)
+          }else{
+            setNumberOfSlides(1)
           }
           setProducts(foundedProducts);
           setErrorText("");
@@ -73,7 +81,7 @@ const Section5 = () => {
 
   return (
     <section className="list_of_products">
-      <h1 className="column_item">تخفیف های ویژه</h1>
+      <h1 className="column_item singleTitle">تخفیف های ویژه</h1>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (
@@ -91,7 +99,7 @@ const Section5 = () => {
       ) : (
         <p className="warning-message">محصولی وجود ندارد!</p>
       )}
-      <div className="column_item">
+      {products.length > 0 && <div className="column_item">
         <Link
           to="/shop"
           onClick={() =>
@@ -108,7 +116,7 @@ const Section5 = () => {
             <VscArrowLeft className="mr-1" />
           </span>
         </Link>
-      </div>
+      </div>}
     </section>
   );
 };

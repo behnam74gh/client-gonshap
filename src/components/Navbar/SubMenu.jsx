@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import "./SubMenu.css";
 import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
 
-const SubMenu = ({ showCoupon }) => {
+const SubMenu = () => {
   const [activeCategoryName, setActiveCategoryName] = useState("لوازم خانگی");
   const [subMenuImage, setSubMenuImage] = useState();
   const [activeSubs, setActiveSubs] = useState([]);
@@ -33,11 +33,11 @@ const SubMenu = ({ showCoupon }) => {
     const subMenu = subMenuContainer.current;
     const { centerNavItem } = location;
     subMenu.style.left = `${centerNavItem - 80}px`;
-    showCoupon ? (subMenu.style.top = "185px") : (subMenu.style.top = "135px");
     setSubMenuImage(image);
-  }, [location, image, showCoupon]);
+  }, [location, image]);
 
   const displaySubCategories = (categoryName, _id) => {
+    setActiveSubs([])
     setActiveCategoryName(categoryName);
 
     const subs = subcategories.filter((s) => s.parent === _id);

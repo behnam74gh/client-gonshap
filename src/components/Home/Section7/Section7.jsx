@@ -27,8 +27,9 @@ const Section7 = () => {
         if (response.data.success) {
           const { categories } = response.data;
           if (categories && categories.length > 0) {
-            setCategories(categories);
-            setActiveCategory(categories[0]._id);
+            const activeCategories = categories.filter(c => c.storeProvider !== null)
+            setCategories(activeCategories);
+            setActiveCategory(activeCategories[0]._id);
             setCategoryErrorText("");
           }
         }
@@ -45,9 +46,6 @@ const Section7 = () => {
       return;
     }
     const bodyWidth = window.innerWidth;
-    if (bodyWidth < 450) {
-      setNumberOfSlides(1);
-    }
     setLoading(true);
     axios
       .post("/find/products/by-category-and/order", {
@@ -59,19 +57,30 @@ const Section7 = () => {
         if (response.data.success) {
           const { foundedProducts } = response.data;
           const produtsLength = foundedProducts.length;
-          if (bodyWidth > 1060 && produtsLength >= 4) {
+          if (bodyWidth > 1350 && produtsLength >= 4) {
             setNumberOfSlides(4);
-          } else if (bodyWidth > 1060 && produtsLength < 4) {
+          } else if (bodyWidth > 1350 && produtsLength < 4) {
             setNumberOfSlides(produtsLength);
-          } else if (bodyWidth < 1060 && bodyWidth > 450 && produtsLength > 1) {
-            setNumberOfSlides(2);
-          } else if (bodyWidth < 450 && produtsLength >= 4) {
+          } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
+            setNumberOfSlides(3);
           } else if (
-            bodyWidth < 1060 &&
+            bodyWidth < 1350 &&
+            bodyWidth > 910 &&
+            produtsLength === 1
+          ) {
+            setNumberOfSlides(1);
+          }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
+            setNumberOfSlides(2);
+          } else if (
+            bodyWidth < 910 &&
             bodyWidth > 450 &&
             produtsLength === 1
           ) {
             setNumberOfSlides(1);
+          }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
+            setNumberOfSlides(2)
+          }else{
+            setNumberOfSlides(1)
           }
           setProducts(foundedProducts);
           setErrorText("");
@@ -103,35 +112,15 @@ const Section7 = () => {
 
   return (
     <section className="list_of_products">
-      <h1 className="column_item">پرفروشترین محصولات</h1>
 
       <div className="column_item">
+        <h1>پرفروشترین محصولات :</h1>
         {categoryErrorText.length > 0 && (
           <p className="warning-message">{categoryErrorText}</p>
         )}
-        {categories &&
-          categories.length > 0 &&
-          categories.map((c, i) => (
-            <label
-              key={i}
-              htmlFor={c._id}
-              className={
-                activeCategory === c._id
-                  ? "label_category active_category"
-                  : "label_category"
-              }
-            >
-              <input
-                id={c._id}
-                name="category"
-                type="radio"
-                hidden
-                value={c._id}
-                onChange={() => changeCategoryHandler(c._id)}
-              />
-              {c.name}
-            </label>
-          ))}
+        <select className="categories_wrapper_select" onChange={(e) => changeCategoryHandler(e.target.value)}>
+          {categories?.length > 0 && categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+        </select>
       </div>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
@@ -155,7 +144,7 @@ const Section7 = () => {
       ) : (
         <p className="warning-message">محصولی وجود ندارد!</p>
       )}
-      <div className="column_item">
+      {products.length > 0 && <div className="column_item">
         <Link
           to="/shop"
           onClick={() =>
@@ -173,7 +162,7 @@ const Section7 = () => {
             <VscArrowLeft className="mr-1" />
           </span>
         </Link>
-      </div>
+      </div>}
     </section>
   );
 };

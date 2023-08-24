@@ -5,6 +5,7 @@ import { GoPlus } from "react-icons/go";
 import { VscLoading } from "react-icons/vsc";
 import { MdDelete } from "react-icons/md";
 import { Calendar, DateObject } from "react-multi-date-picker";
+import { useSelector } from "react-redux";
 import axios from "../../../util/axios";
 import "./ToDo.css";
 
@@ -13,6 +14,8 @@ const ToDoList = () => {
   const [errorText, setErrorText] = useState("");
   const [tasks, setTasks] = useState([]);
   const [todaysDate, setTodaysDate] = useState(new Date());
+
+  const {userInfo : {role}} = useSelector(state => state.userSignin)
 
   useEffect(() => {
     setLoading(true);
@@ -77,7 +80,7 @@ const ToDoList = () => {
 
   return (
     <div className="admin-panel-wrapper">
-      <Link to="/admin/dashboard/create-todo" className="create-new-slide-link">
+      <Link to={`/${role === 2 ? "store-admin" : "admin"}/dashboard/create-todo`} className="create-new-slide-link">
         <span className="sidebar-text-link">ایجاد یادداشت</span>
         <GoPlus />
       </Link>

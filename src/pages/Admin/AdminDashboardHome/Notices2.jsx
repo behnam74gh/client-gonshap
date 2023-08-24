@@ -14,7 +14,7 @@ const Notices2 = () => {
 
   const loadNewOrdersCount = () =>
     axios
-      .get("/new-orders/count")
+      .post("/new-orders/count",{category: null})
       .then((response) => {
         if (response.data.success) {
           setNewOrdersCount(response.data.count);

@@ -14,7 +14,7 @@ instance.interceptors.request.use((config) => {
     userInfo && userInfo.refreshToken ? userInfo.refreshToken : null;
 
   config.headers["authorization"] = `bearer ${RToken}`;
-
+  
   return config;
 });
 
@@ -32,6 +32,8 @@ instance.interceptors.response.use(
         firstName,
         userId,
         isAdmin,
+        role,
+        supplierFor,
         refreshToken: oldRefreshToken,
       } = localStorage.getItem("gonshapUserInfo")
         ? JSON.parse(localStorage.getItem("gonshapUserInfo"))
@@ -40,7 +42,7 @@ instance.interceptors.response.use(
       if (firstName.length > 0 && oldRefreshToken.length > 0) {
         localStorage.setItem(
           "gonshapUserInfo",
-          JSON.stringify({ firstName,userId, isAdmin, refreshToken })
+          JSON.stringify({ firstName,userId,role,supplierFor, isAdmin, refreshToken })
         );
       }
       return response;
@@ -71,6 +73,8 @@ instance.interceptors.response.use(
         firstName,
         userId,
         isAdmin,
+        role,
+        supplierFor,
         refreshToken: oldRefreshToken,
       } = localStorage.getItem("gonshapUserInfo")
         ? JSON.parse(localStorage.getItem("gonshapUserInfo"))
@@ -83,7 +87,7 @@ instance.interceptors.response.use(
       ) {
         localStorage.setItem(
           "gonshapUserInfo",
-          JSON.stringify({ firstName, isAdmin, refreshToken, userId })
+          JSON.stringify({ firstName, isAdmin,role,supplierFor, refreshToken, userId })
         );
       }
       throw error;

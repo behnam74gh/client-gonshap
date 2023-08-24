@@ -2,6 +2,7 @@
   width: 100%;
   display: flex;
   flex-flow: column wrap;
+  margin: 10px 0;
 }
 .temporary_questions_wrapper {
   width: 100%;
@@ -13,7 +14,6 @@
   width: 70%;
   display: flex;
   flex-flow: column wrap;
-  min-height: 350px;
 }
 
 .accordion_item {
@@ -108,7 +108,6 @@
 @media (max-width: 450px) {
   .accordion {
     width: 100%;
-    min-height: 140px;
   }
   #sec12 h2 {
     font-size: 12px;

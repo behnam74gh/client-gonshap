@@ -1,13 +1,14 @@
 .product_wrapper {
   min-width: 270px;
   max-width: 400px;
-  margin: 20px 10px;
   display: flex;
   flex-flow: column wrap;
   height: 100%;
   border: 1px solid #dfd2d2;
   border-radius: 5px;
   position: relative;
+  min-height: 380px;
+  justify-content: flex-end;
 }
 /* .product_wrapper:hover {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -24,12 +25,23 @@
   overflow: hidden;
   padding: 50px 20px;
 }
+.figure_img {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  overflow: hidden;
+}
 .product_img_box img {
   width: 100%;
   max-width: 200px;
-  height: 100%;
+  height: auto;
   max-height: 200px;
   transition: all 0.3s ease-in-out;
+  object-fit: cover;
 }
 .product_info_box {
   flex-basis: 30%;
@@ -108,7 +120,7 @@
 .products_sold_count {
   position: absolute;
   left: 19%;
-  bottom: 38.5%;
+  top: 50%;
   transform: translateY(110%);
   min-width: 50px;
   min-height: 50px;
@@ -171,26 +183,41 @@
   margin: 2px;
   color: var(--firstColorPalete);
 }
+
+.has_Second_att{
+  margin-top: 25px !important;
+  text-align: center;
+}
+
 @media (max-width: 450px) {
   .product_wrapper {
-    min-width: 240px;
+    min-width: 140px;
+    min-height: 220px;
   }
   .product_img_box {
-    padding: 35px 10px 20px;
+    padding: 20px 5px;
+  }
+  .figure_img{
+    height: 120px;
   }
   .product_img_box img {
-    max-width: 150px;
-    max-height: 150px;
+    max-width: 120px;
+    max-height: 120px;
   }
   .product_info_box {
-    padding: 10px;
+    padding: 0 5px;
   }
   .product_info_box h3 {
-    font-size: 14px;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+  .product_info_box div.mt-2 {
     margin-top: 5px;
   }
   .show_ratings_wrapper {
     margin: 0;
+    padding: 5px 0 0;
   }
   .product_info_box p,
   .product_info_box span {
@@ -205,16 +232,25 @@
   }
   .products_sold_count,
   .products_count {
-    transform: translateY(92%);
+    transform: translateY(55%);
     min-width: 35px;
     min-height: 35px;
   }
   .products_sold_count {
-    left: 17%;
+    left: 75%;
   }
   .products_sold_count span,
   .products_count span {
     font-size: 8px !important;
+  }
+}
+@media (max-width: 370px) {
+  .product_wrapper {
+    min-width: 130px;
+    min-height: 200px;
+  }
+  .shop_products_wrapper{
+    gap: 40px 5px;
   }
 }
 @media (max-width: 300px) {

@@ -4,6 +4,7 @@ import { VscLoading } from "react-icons/vsc";
 import { toast } from "react-toastify";
 import axios from "../../../util/axios";
 import Button from "../../../components/UI/FormElement/Button";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IoArrowUndoCircle } from "react-icons/io5";
 
@@ -21,6 +22,8 @@ const BrandUpdate = ({ match, history }) => {
     parents: [],
     backupFor: {},
   });
+
+  const {userInfo: {role, supplierFor}} = useSelector(state => state.userSignin)
 
   const { id } = match.params;
 
@@ -153,7 +156,7 @@ const BrandUpdate = ({ match, history }) => {
 
     formData.append("newBrandName", values.brandName);
     formData.append("parents", values.parents);
-    formData.append("backupFor", values.backupFor);
+    formData.append("backupFor", role === 1 ?  values.backupFor  : supplierFor);
 
     formData.append("oldPhoto", oldPhoto);
     formData.append("deletedPhoto", deletedPhoto);
@@ -209,10 +212,10 @@ const BrandUpdate = ({ match, history }) => {
           type="text"
           onChange={(e) => setValues({ ...values, brandName: e.target.value })}
         />
-        <label className="auth-label" htmlFor="category">
+        {role === 1 && <label className="auth-label" htmlFor="category">
           دسته بندی :
-        </label>
-        <select
+        </label>}
+        {role === 1 && <select
           value={values.backupFor}
           id="category"
           onChange={(e) => setCategoryHandler(e.target.value)}
@@ -224,7 +227,7 @@ const BrandUpdate = ({ match, history }) => {
                 {c.name}
               </option>
             ))}
-        </select>
+        </select>}
         <label className="auth-label" htmlFor="subcategory">
           برچسب :
         </label>

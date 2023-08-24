@@ -4,7 +4,7 @@ const GonshapAttribute = () => {
   return (
     <div id="gonshap_attribute">
       <div className="attribute_box">
-        <span>ارسال رایگان</span>
+        <span>ارسال سریع</span>
         <div className="svg_attribute">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +162,7 @@ const GonshapAttribute = () => {
         </div>
       </div>
       <div className="attribute_box">
-        <span>پرداخت در محل</span>
+        <span>پرداخت با هماهنگی</span>
         <div className="svg_attribute">
           <svg
             xmlns="http://www.w3.org/2000/svg"

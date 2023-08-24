@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import Button from "../../../components/UI/FormElement/Button";
 import "../UpdateProfileInfo/UpdateProfileInfo.css";
 
 const AdminUpdatesUser = ({ match, history }) => {
-  const [expired, setExpired] = useState(true);
+  const [expired, setExpired] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [oldPhoto, setOldPhoto] = useState("");
@@ -22,10 +22,11 @@ const AdminUpdatesUser = ({ match, history }) => {
     address: "",
     isBanned: "",
     isAdmin: false,
+    role: 3
   });
   const { id } = match.params;
 
-  const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
+  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   useEffect(() => {
     setLoading(true);
@@ -41,6 +42,7 @@ const AdminUpdatesUser = ({ match, history }) => {
             address: thisUser.address ? thisUser.address : "",
             isBanned: thisUser.isBanned,
             isAdmin: thisUser.isAdmin,
+            role: thisUser.role
           });
           thisUser.image ? setOldPhoto(thisUser.image) : setOldPhoto("");
           setErrorText("");
@@ -56,20 +58,20 @@ const AdminUpdatesUser = ({ match, history }) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const changeRecaptchaHandler = (value) => {
-    if (value !== null) {
-      axios
-        .post("/recaptcha", { securityToken: value })
-        .then((res) => {
-          if (res.data.success) {
-            setExpired(false);
-          }
-        })
-        .catch((err) => {
-          toast.warning(err.response);
-        });
-    }
-  };
+  // const changeRecaptchaHandler = (value) => {
+  //   if (value !== null) {
+  //     axios
+  //       .post("/recaptcha", { securityToken: value })
+  //       .then((res) => {
+  //         if (res.data.success) {
+  //           setExpired(false);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         toast.warning(err.response);
+  //       });
+  //   }
+  // };
 
   const deleteOldImageHandler = () => {
     if (oldPhoto.length > 0) {
@@ -92,6 +94,7 @@ const AdminUpdatesUser = ({ match, history }) => {
           lastName: values.lastName,
           address: values.address,
           isBanned: values.isBanned,
+          role: Number(values.role),
           oldPhoto,
           deletedPhoto,
         })
@@ -176,24 +179,36 @@ const AdminUpdatesUser = ({ match, history }) => {
           onChange={(e) => changeInputHandler(e)}
           title="لطفا فقط از حروف فارسی استفاده کنید، آدرس باید بین 15 تا 300 حرف باشد"
         ></textarea>
-        <label className="auth-label">وضعیت فعالیت :</label>
-        <select
+        {values.role !== 1 && <label className="auth-label">وضعیت فعالیت :</label>}
+        {values.role !== 1 && <select
           name="isBanned"
           value={values.isBanned}
           onChange={(e) => changeInputHandler(e)}
         >
           <option value={false}>فعال</option>
           <option value={true}>مسدود</option>
-        </select>
+        </select>}
+
+        {values.role !== 1 && <label className="auth-label">نوع دسترسی :</label>}
+        {values.role !== 1 && <select
+          name="role"
+          value={values.role}
+          onChange={(e) => changeInputHandler(e)}
+        >
+          <option value={1} disabled={true}>مدیریت اصلی</option>
+          <option value={2}>مدیر فروشگاه</option>
+          <option value={3}>کاربر عادی</option>
+        </select>}
+
         <label className="auth-label">تصاویر مرتبط را انتخاب کنید : </label>
-        <ReCAPTCHA
+        {/* <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           hl="fa"
           className="recaptcha"
           theme="dark"
-        />
-        <Button type="submit" disabled={expired || loading}>
+        /> */}
+        <Button type="submit" disabled={loading}>
           {!loading ? "ثبت" : <VscLoading className="loader" />}
         </Button>
       </form>

@@ -4,6 +4,7 @@ import { VscLoading } from "react-icons/vsc";
 
 import { useForm } from "../../../util/hooks/formHook";
 import axios from "../../../util/axios";
+import { useSelector } from "react-redux";
 import {
   VALIDATOR_PERSIAN_ALPHABET,
   VALIDATOR_MINLENGTH,
@@ -29,6 +30,8 @@ const SubCategory = () => {
     },
     false
   );
+  
+  const {userInfo : {role, supplierFor}} = useSelector(state => state.userSignin)
 
   const loadAllCategories = () => {
     axios
@@ -47,7 +50,12 @@ const SubCategory = () => {
     axios
       .get("/get-all-subcategories")
       .then((response) => {
-        setSubcategories(response.data.subcategories);
+        if(role === 2 && supplierFor){
+          const newSubs = response.data.subcategories.filter((s) => s.parent === supplierFor);
+          setSubcategories(newSubs);
+        }else{
+          setSubcategories(response.data.subcategories);
+        }
       })
       .catch((err) => {
         if (err.response) {
@@ -66,7 +74,7 @@ const SubCategory = () => {
     setLoading(true);
     axios
       .post("/create-subcategory", {
-        parent: category,
+        parent: role === 1 ? category : supplierFor,
         subcategoryName: formState.inputs.subcategoryName.value,
       })
       .then((response) => {
@@ -108,10 +116,10 @@ const SubCategory = () => {
     <div className="admin-panel-wrapper">
       <h4>ایجاد برچسب</h4>
       <form className="auth-form" onSubmit={submitHandler}>
-        <label className="auth-label" htmlFor="category">
+        {role === 1 && <label className="auth-label" htmlFor="category">
           دسته بندی :
-        </label>
-        <select id="category" onChange={(e) => setCategory(e.target.value)}>
+        </label>}
+        {role === 1 && <select id="category" onChange={(e) => setCategory(e.target.value)}>
           <option>انتخاب دسته بندی</option>
           {categories.length > 0 &&
             categories.map((c, i) => (
@@ -119,7 +127,7 @@ const SubCategory = () => {
                 {c.name}
               </option>
             ))}
-        </select>
+        </select>}
         <label className="auth-label" htmlFor="subcategoryName">
           برچسب :
         </label>
@@ -148,6 +156,7 @@ const SubCategory = () => {
         subcategories={subcategories}
         removeSubCategory={removeSubCategoryHandler}
         categories={categories}
+        role={role}
       />
     </div>
   );

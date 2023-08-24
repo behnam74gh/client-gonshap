@@ -10,6 +10,7 @@ import AdminRoute from "./util/routes/AdminRoute";
 import UserRoute from "./util/routes/UserRoute";
 import { withErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./pages/ErrorFallback.jsx";
+import StoreAdminRoute from "./util/routes/StoreAdminRoute";
 
 const Layout = lazy(() => import("./layout/Layout"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -18,6 +19,9 @@ const Register = lazy(() => import("./pages/Auth/Register"));
 const AdminDashboard = lazy(() =>
   import("./pages/Admin/AdminDashboard/AdminDashboard")
 );
+
+const StoreAdminDashboard = lazy(() => import('./pages/StoreAdmin/StoreAdminDashboard'))
+
 const UserDashboard = lazy(() =>
   import("./pages/User/UserDashboard/UserDashboard")
 );
@@ -54,6 +58,7 @@ const LazyLoad = () => {
 };
 
 const App = () => {
+ 
   return (
     <Suspense fallback={<LazyLoad />}>
       <Layout>
@@ -75,6 +80,7 @@ const App = () => {
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/help/:id" component={HelpPage} />
           <AdminRoute path="/admin/dashboard" component={AdminDashboard} />
+          <StoreAdminRoute path='/store-admin/dashboard' component={StoreAdminDashboard} />
           <UserRoute path="/user/dashboard" component={UserDashboard} />
           <UserRoute path="/checkout" component={Checkout} />
           <Route component={NotFound} />

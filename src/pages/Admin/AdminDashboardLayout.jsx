@@ -8,7 +8,7 @@ import {
   FaCommentMedical,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { MdDashboard, MdLabel, MdCardGiftcard } from "react-icons/md";
+import { MdDashboard, MdLabel } from "react-icons/md";
 import { IoCreateOutline, IoHelp } from "react-icons/io5";
 import { RiTodoLine, RiLockPasswordFill } from "react-icons/ri";
 import { BiCarousel } from "react-icons/bi";
@@ -85,7 +85,7 @@ const AdminDashboardLayout = ({ children }) => {
         setActiveRoute("اسلایدشو");
         break;
       case "/admin/dashboard/create-carousel":
-        setActiveRoute("اسلایدشو");
+        setActiveRoute("فروشگاه");
         break;
       case "/admin/dashboard/todo":
         setActiveRoute("یادداشت ها");
@@ -98,9 +98,6 @@ const AdminDashboardLayout = ({ children }) => {
         break;
       case "/admin/dashboard/suggests":
         setActiveRoute("پیشنهادها");
-        break;
-      case "/admin/dashboard/coupons":
-        setActiveRoute("تخفیف ها");
         break;
       case "/admin/dashboard/orders":
         setActiveRoute("سفارش ها");
@@ -241,7 +238,7 @@ const AdminDashboardLayout = ({ children }) => {
             >
               <Link to="/admin/dashboard/carousel">
                 <BiCarousel />
-                <span className="sidebar-text-link">اسلایدشو</span>
+                <span className="sidebar-text-link">فروشگاه</span>
               </Link>
             </li>
             <li
@@ -251,15 +248,6 @@ const AdminDashboardLayout = ({ children }) => {
               <Link to="/admin/dashboard/ads">
                 <HiSpeakerphone />
                 <span className="sidebar-text-link">تبلیغات</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => setActiveRoute("تخفیف ها")}
-              className={activeRoute === "تخفیف ها" ? "active" : ""}
-            >
-              <Link to="/admin/dashboard/coupons">
-                <MdCardGiftcard />
-                <span className="sidebar-text-link">تخفیف ها</span>
               </Link>
             </li>
             <li

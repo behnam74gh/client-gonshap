@@ -20,30 +20,33 @@ const Footer = ({ companyInfo }) => {
     instagramId,
     telegramId,
     whatsupId,
+    signENemad,
+    signMedia,
+    signUnion
   } = companyInfo;
 
   return (
     <footer>
       <section id="sec_footer">
-        <div className="about_us">
+        {aboutUs?.length > 0 && <div className="about_us">
           <h4>درباره ما</h4>
           <p className="about_us_description">{aboutUs}</p>
-        </div>
+        </div>}
         <div className="call_us">
           <h4>تماس با ما</h4>
           <div className="call_us_info_wrapper">
-            <div className="call_us_info_box">
+            {storePhoneNumber1 && <div className="call_us_info_box">
               <FiPhoneCall className="text-red font-md" />
               <span>{storePhoneNumber1}</span>
-            </div>
-            <div className="call_us_info_box">
+            </div>}
+           {storePhoneNumber2 && <div className="call_us_info_box">
               <FiPhoneCall className="text-red font-md" />
               <span>{storePhoneNumber2}</span>
-            </div>
-            <div className="call_us_info_box">
+            </div>}
+            {address?.length > 0 && <div className="call_us_info_box">
               <HiLocationMarker className="text-blue font-md" />
               <span className="font-sm">{address}</span>
-            </div>
+            </div>}
           </div>
           <span className="font-sm my-2">مارادنبال کنید در :</span>
           <div className="company_social_icons">
@@ -91,9 +94,9 @@ const Footer = ({ companyInfo }) => {
         <div className="nemads_wrapper">
           <h4>نماد اعتماد الکترونیک و اعتبار</h4>
           <div className="nemads">
-            <img src={Nemad1} alt="nemad_1" className="footer_nemad_img" />
-            <img src={Nemad2} alt="nemad_2" className="footer_nemad_img" />
-            <img src={Nemad3} alt="nemad_3" className="footer_nemad_img" />
+           {signENemad?.length > 0 && <a href={`https://www.${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
+           {signUnion?.length > 0 && <a href={`https://www.${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
+           {signMedia?.length > 0 && <a href={`https://www.${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
           </div>
         </div>
       </section>

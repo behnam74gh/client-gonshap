@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Drawer from "../components/Navbar/Drawer";
-import { FaTimes } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import Navbar from "../components/Navbar/Navbar";
 import SubMenu from "../components/Navbar/SubMenu";
@@ -18,8 +17,6 @@ const Layout = (props) => {
   const [subcategories, setSubcategories] = useState([]);
   const [helps, setHelps] = useState([]);
   const [companyInfo, setCompanyInfo] = useState({});
-  const [activeCoupon, setActiveCoupon] = useState({});
-  const [showCoupon, setShowCoupon] = useState(false);
 
   const dispatch = useDispatch();
   const { isSubmenuOpen } = useSelector((state) => state.subMenu);
@@ -38,7 +35,8 @@ const Layout = (props) => {
     axios
       .get("/get-all-categories")
       .then((response) => {
-        setCategories(response.data.categories);
+        const activeCategories = response.data.categories.filter(c => c.storeProvider !== null)
+        setCategories(activeCategories);
       })
       .catch((err) => {
         if (err.response) {
@@ -74,21 +72,6 @@ const Layout = (props) => {
       });
   };
 
-  const loadActiveCoupon = () =>
-    axios
-      .get("/read/active-coupon")
-      .then((response) => {
-        if (response.data.success) {
-          setActiveCoupon(response.data.activeCoupon);
-          setShowCoupon(true);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response.data.message);
-        }
-      });
-
   const loadAllHelps = () =>
     axios
       .get("/fetch/list-of-helps")
@@ -107,9 +90,11 @@ const Layout = (props) => {
     loadCompanyInfo();
     loadAllCategories();
     loadAllSubcategories();
-    loadActiveCoupon();
     loadAllHelps();
-  }, []);
+    if(window.innerWidth < 450){
+      dispatch({type: "ISMOBILE",payload: true})
+    }
+  }, [dispatch]);
 
   const { pathname } = useLocation();
   useEffect(() => {
@@ -118,32 +103,6 @@ const Layout = (props) => {
 
   return (
     <React.Fragment>
-      {activeCoupon && activeCoupon.name && showCoupon && (
-        <div className="active_coupon_wrapper">
-          <span className="close_coupon" onClick={() => setShowCoupon(false)}>
-            <FaTimes />
-          </span>
-          <p className="active_coupon_description">
-            گُنشاپی عزیز ، به مناسبت{" "}
-            <strong className="mx-1 text-orange">{activeCoupon.reason}</strong>{" "}
-            تخفیفی با مبلغ{" "}
-            <strong className="mx-1 text-orange">
-              {activeCoupon.couponPrice.toLocaleString("fa")}
-            </strong>
-            تومان ، تا تاریخ{" "}
-            <strong className="mx-1 text-orange">
-              {activeCoupon.expiryDate &&
-                new Date(activeCoupon.expiryDate).toLocaleDateString("fa")}
-            </strong>{" "}
-            به تعداد{" "}
-            <strong className="mx-1 text-orange">
-              {activeCoupon.couponCount}
-            </strong>{" "}
-            نفر ، گذاشته شد. کد تخفیف :{" "}
-            <strong className="coupon_code">{activeCoupon.name}</strong>
-          </p>
-        </div>
-      )}
       <Navbar
         toggleDrawer={openDrawerHandler}
         categories={categories}
@@ -160,7 +119,7 @@ const Layout = (props) => {
         companyInfo={companyInfo}
         helps={helps}
       />
-      <SubMenu showCoupon={showCoupon} />
+      <SubMenu />
       <Backdrop show={isSubmenuOpen} onMouseOver={subMenuHandler} />
       <main className="main-body" onMouseOver={subMenuHandler}>
         {props.children}

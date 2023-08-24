@@ -27,6 +27,8 @@ export const userSigninReducer = (state = initialState, action) => {
           isAdmin: action.payload.isAdmin,
           refreshToken: action.payload.refreshToken,
           userId: action.payload.userId,
+          role: action.payload.role,
+          supplierFor: action.payload.supplierFor
         },
       };
     case USER_SIGNIN_FAIL:

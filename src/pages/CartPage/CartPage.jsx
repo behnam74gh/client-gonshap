@@ -74,7 +74,7 @@ const CartPage = () => {
           <div className="deprecated_second_wrapper">
             <div className="deprecated_item">
               <h6 className="deprecated_header">
-                این محصولات دیگر ارائه نمیشوند :
+                این محصولات به دلیل  ارائه نشدن از سبد شما حذف شدند :
               </h6>
             </div>
             {deprecatedItems &&

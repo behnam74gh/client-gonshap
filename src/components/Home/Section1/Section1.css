@@ -152,16 +152,42 @@
     height: 40px;
   }
 }
+@media (max-width: 920px) {
+  #gonshap_attribute {
+    min-height: 120px;
+    padding: 5px;
+  }
+  .attribute_box {
+    margin: 2px 0;
+  }
+  .attribute_box span {
+    font-size: 10px;
+  }
+  .attribute_box .svg_attribute {
+    width: 40px;
+  }
+}
 @media (max-width: 770px) {
   #gonshap_attribute {
-    flex-basis: 40%;
+    flex-basis: 30%;
   }
 
   #supplier_wrapper {
-    flex-basis: 60%;
+    flex-basis: 70%;
   }
 }
-
+@media (max-width: 550px) {
+  .attribute_box .svg_attribute {
+    width: 25px;
+    height: 30px;
+  }
+  .supplier_img {
+    max-height: 180px;
+  }
+  .attribute_box span {
+    font-size: 9px;
+  }
+}
 @media (max-width: 450px) {
   #sec1 {
     margin: 15px 0 0;

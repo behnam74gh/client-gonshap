@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { VscLoading } from "react-icons/vsc";
 import { RiSearchLine } from "react-icons/ri";
 import { MdRemoveRedEye } from "react-icons/md";
@@ -22,14 +23,15 @@ const Orders = () => {
     activeOrderStatus: "0",
     activeDeliveryStatus: "none",
     activePaymentStatus: "none",
-    activePaymentType: "none",
     date: [],
   });
   const [perPage, setPerPage] = useState(50);
   const [queryPhoneNumber, setQueryPhoneNumber] = useState("");
   const [queryOrderId, setQueryOrderId] = useState("");
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(null);
 
+  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin)
+  
   useEffect(() => {
     setLoading(true);
 
@@ -44,9 +46,6 @@ const Orders = () => {
         break;
       case "isPaid":
         value = orderConfig.activePaymentStatus;
-        break;
-      case "paymentMethod":
-        value = orderConfig.activePaymentType;
         break;
       case "phoneNumber":
         value = orderConfig.userPhoneNumber;
@@ -66,6 +65,7 @@ const Orders = () => {
         value,
         page,
         perPage,
+        supplierFor: role === 2 ? supplierFor : null
       })
       .then((response) => {
         setLoading(false);
@@ -84,7 +84,7 @@ const Orders = () => {
           setErrorText(err.response.data.message);
         }
       });
-  }, [orderConfig, page, perPage]);
+  }, [orderConfig, page, perPage,role,supplierFor]);
 
   const setOrderStatusConfigHandler = (e) => {
     if (e === "none") {
@@ -101,6 +101,7 @@ const Orders = () => {
     setPage(1);
     setQueryPhoneNumber("");
     setQueryOrderId("");
+    setDate(null)
   };
 
   const setDeliveryStatusConfigHandler = (e) => {
@@ -118,6 +119,7 @@ const Orders = () => {
     setPage(1);
     setQueryPhoneNumber("");
     setQueryOrderId("");
+    setDate(null)
   };
 
   const setIsPaidConfigHandler = (e) => {
@@ -135,23 +137,7 @@ const Orders = () => {
     setPage(1);
     setQueryPhoneNumber("");
     setQueryOrderId("");
-  };
-
-  const setPaymentTypeConfigHandler = (e) => {
-    if (e === "none") {
-      return;
-    }
-    setOrderConfig({
-      config: "paymentMethod",
-      activeOrderStatus: "none",
-      activePaymentStatus: "none",
-      activeDeliveryStatus: "none",
-      date: null,
-      activePaymentType: e,
-    });
-    setPage(1);
-    setQueryPhoneNumber("");
-    setQueryOrderId("");
+    setDate(null)
   };
 
   const searchOrdersByPhoneNumber = () => {
@@ -166,6 +152,7 @@ const Orders = () => {
     });
     setPage(1);
     setQueryOrderId("");
+    setDate(null)
   };
 
   const searchOrdersById = () => {
@@ -180,6 +167,7 @@ const Orders = () => {
     });
     setPage(1);
     setQueryPhoneNumber("");
+    setDate(null)
   };
 
   // change-Order-Status
@@ -206,6 +194,7 @@ const Orders = () => {
   const setDateHandler = (value) => {
     if (value instanceof DateObject) value = value.toDate();
     setDate(value);
+    if(date === null) return
 
     setOrderConfig({
       config: "date",
@@ -216,6 +205,10 @@ const Orders = () => {
       orderId: "none",
       date: value,
     });
+
+    setPage(1);
+    setQueryPhoneNumber("");
+    setQueryOrderId("");
   };
 
   return (
@@ -234,7 +227,7 @@ const Orders = () => {
                   color: "white",
                 }}
               >
-                <th colSpan="2">
+                <th colSpan="3">
                   <select
                     value={orderConfig.activeOrderStatus}
                     onChange={(e) =>
@@ -263,19 +256,7 @@ const Orders = () => {
                     <option value="3">برگشتی ها</option>
                   </select>
                 </th>
-                <th colSpan="2">
-                  <select
-                    value={orderConfig.activePaymentType}
-                    onChange={(e) =>
-                      setPaymentTypeConfigHandler(e.target.value)
-                    }
-                  >
-                    <option value="none">نوع پرداخت:</option>
-                    <option value="COD">در محل</option>
-                    <option value="INTERNET">اینترنتی</option>
-                  </select>
-                </th>
-                <th colSpan="5">
+                <th colSpan="6">
                   <div className="dashboard-search">
                     <input
                       type="search"
@@ -306,17 +287,18 @@ const Orders = () => {
                   </select>
                 </th>
 
-                <th colSpan="3">
+                <th colSpan="2">
                   <DatePicker
                     value={date}
                     onChange={setDateHandler}
+                    placeholder="جستوجو بر اساس تاریخ"
                     calendar="persian"
                     locale="fa"
                     calendarPosition="bottom-right"
-                    style={{ height: "40px" }}
+                    style={{ height: "40px" }}         
                   />
                 </th>
-                <th colSpan="5">
+                <th colSpan="6">
                   <div className="dashboard-search">
                     <input
                       type="search"
@@ -345,7 +327,6 @@ const Orders = () => {
                 <th className="th-titles">تاریخ سفارش</th>
                 <th className="th-titles">وضعیت ارسال</th>
                 <th className="th-titles">وضعیت پرداخت</th>
-                <th className="th-titles">نوع پرداخت</th>
                 <th className="th-titles">مشاهده/ویرایش</th>
               </tr>
             </thead>
@@ -368,12 +349,13 @@ const Orders = () => {
                       </div>
                     </td>
                     <td className="font-sm">
-                      <Link
+                      {role === 1 && <Link
                         to={`/admin/dashboard/user/${order.orderedBy}`}
                         className="text-blue"
                       >
                         {order.shippingAddress.fullName}
-                      </Link>
+                      </Link>}
+                      {role === 2 && order.shippingAddress.fullName}
                     </td>
                     <td className="font-sm">
                       {order.shippingAddress.phoneNumber}
@@ -439,11 +421,8 @@ const Orders = () => {
                         <option value={false}>پرداخت نشد</option>
                       </select>
                     </td>
-                    <td className="font-sm">
-                      {order.paymentMethod === "COD" ? "در محل" : "اینترنتی"}
-                    </td>
                     <td>
-                      <Link to={`/admin/dashboard/order/${order._id}`}>
+                      <Link to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/order/${order._id}`}>
                         <MdRemoveRedEye className="font-md text-blue" />
                       </Link>
                     </td>

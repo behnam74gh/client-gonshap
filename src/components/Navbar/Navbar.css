@@ -188,6 +188,16 @@
 .rah-hint {
   padding-right: 4px !important;
 }
+
+@media (min-width: 1600px) {
+  .desktop-only {
+    width: 75%;
+  }
+  .header-wrapper {
+    width: 75%;
+  }
+}
+
 @media (max-width: 1390px) {
   .search_input_wrapper {
     flex-basis: 80%;
@@ -202,75 +212,88 @@
   }
 }
 @media (max-width: 768px) {
+  .c-navbar {
+    justify-content: center;
+    height: auto;
+    overflow: hidden;
+    padding: 10px 0 15px;
+  }
   .header-wrapper {
-    justify-content: space-evenly;
-    margin: 5px auto 0;
+    justify-content: flex-end;
+    margin: 0 auto;
   }
   .search_input_wrapper {
     flex-basis: 75%;
     padding-right: 5px;
   }
   .search-input {
-    position: absolute;
-    top: 60px;
-    left: 215px;
+    margin-left: 0;
+    order: 3;
+    width: 70%;
   }
-  .c-navbar {
-    justify-content: space-between;
+  .header-feature{
+    order: 2;
   }
+  .logo_Img{
+    order: 1;
+    margin-left: auto;
+    display: flex;
+  }
+
   .logo,
   .company_logo_navbar {
     margin-left: 40px;
   }
   .toggle-btn {
     display: block;
-    align-self: flex-start;
-    margin-right: 160px;
+    align-self: center;
+    position: absolute;
+    top: 100px;
+    right: 50px;
   }
   .desktop-only {
     display: none;
   }
 }
 @media (max-width: 600px) {
-  .header-wrapper {
-    margin: 0 auto;
-    width: 100%;
+ 
+}
+@media (max-width: 450px) {
+  .header-feature ul li > a {
+    margin: 0 2px;
   }
-  .toggle-btn {
-    margin-right: 15px;
+  .logo,
+  .company_logo_navbar {
+    width: 60px;
   }
-  .search-input input {
-    padding-right: 10px;
-  }
-  .search-input {
-    width: 65%;
-    left: 125px;
-  }
-  .logo {
-    margin-left: 15px;
+  .search-icon {
     font-size: 20px;
   }
-  .company_logo_navbar {
-    margin-left: 15px;
-    width: 50px;
+  .auth-dropdown{
+    top: 15px;
+  }
+  .auth-dropdown a {
+    padding: 5px 0;
+  }
+  .toggle-btn {
+    top: 85px;
+    right: 25px;
   }
 }
 @media (max-width: 376px) {
-  .header-wrapper {
-    width: 100%;
-    margin: 13px auto 0;
+
+  .logo,
+  .company_logo_navbar {
+    width: 50px;
   }
   .toggle-btn {
-    margin-right: 10px;
+    top: 75px;
+    right: 20px;
   }
-  .search-input {
-    width: 70%;
-    left: 90px;
+  .c-navbar{
+    padding: 10px 0 20px;
   }
-  .logo {
-    margin-left: 15px;
-    font-size: 20px;
-  }
+
   .auth-btn {
     padding: 2px 4px;
     margin-right: 8px;
@@ -278,38 +301,7 @@
   }
 }
 @media (max-width: 290px) {
-  .header-feature {
-    position: absolute;
-    top: 65px;
-    left: 10px;
-  }
-  .header-wrapper {
-    margin: 7px auto 0;
-  }
-  .toggle-btn {
-    margin-right: 0;
-    margin-bottom: 7px;
-  }
-  .search-input {
-    top: 10px;
-    width: 65%;
-    height: 30px;
-    left: 80px;
-  }
-  .search-input input {
-    height: 30px;
-    font-size: 9px !important;
-  }
-  .search-input input::placeholder {
-    font-size: 9px;
-  }
-  .logo {
-    margin-left: 205px;
-    font-size: 18px;
-  }
-  .company_logo_navbar {
-    margin-left: 205px;
-  }
+  
   .wrapper-dropdown {
     width: 130px;
   }

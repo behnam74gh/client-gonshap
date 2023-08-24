@@ -6,6 +6,7 @@ import { HiBadgeCheck } from "react-icons/hi";
 import { TiDelete } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
+import { useSelector } from "react-redux";
 
 import axios from "../../../util/axios";
 import Pagination from "../../../components/UI/Pagination/Pagination";
@@ -16,12 +17,14 @@ const Products = () => {
   const [otherFilterings, setOtherFilterings] = useState(false);
   const [productsLength, setProductsLength] = useState();
   const [page, setPage] = useState(1);
-  const [orderConfig, setOrderConfig] = useState("1");
+  const {userInfo : {role,supplierFor}} = useSelector((state) => state.userSignin)
+  const [orderConfig, setOrderConfig] = useState(role === 1 ?"1": "none");
   const [activeCategory, setActiveCategory] = useState("none");
   const [activeSubcategory, setActiveSubcategory] = useState("none");
   const [activeBrand, setActiveBrand] = useState("none");
   const [activeSell, setActiveSell] = useState("none");
   const [activeCount, setActiveCount] = useState("none");
+  const [reRender,setReRender] = useState(false)
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [perPage, setPerPage] = useState(50);
@@ -32,7 +35,7 @@ const Products = () => {
   const [oPage, setOPage] = useState(1);
   const [activeFilterConfig, setActiveFilterConfig] = useState("none");
   const [errorText, setErrorText] = useState("");
-
+  
   const getProductsLength = () =>
     axios
       .get("/products/length")
@@ -114,6 +117,9 @@ const Products = () => {
   }, [page, perPage, orderConfig]);
 
   const loadAllCategories = () => {
+    if(role === 2){
+      return
+    }
     axios
       .get("/get-all-categories")
       .then((response) => {
@@ -126,10 +132,15 @@ const Products = () => {
       });
   };
   const loadAllSubcategories = () => {
-    axios
+      axios
       .get("/get-all-subcategories")
       .then((response) => {
-        setSubcategories(response.data.subcategories);
+        if(role === 2 && supplierFor){
+            const newSubs = response.data.subcategories.filter((s) => s.parent === supplierFor);
+            setSubcategories(newSubs);
+        }else{
+          setSubcategories(response.data.subcategories);
+        }
       })
       .catch((err) => {
         if (err.response) {
@@ -143,7 +154,12 @@ const Products = () => {
       .get("/get-all-brands")
       .then((response) => {
         if (response.data.success) {
-          setBrands(response.data.brands);
+          if(role === 2 && supplierFor){
+            const particularBrands = response.data.brands.filter((c) => c.backupFor._id === supplierFor);
+            setBrands(particularBrands)
+          }else{
+            setBrands(response.data.brands);
+          }
         }
       })
       .catch((err) => {
@@ -232,9 +248,20 @@ const Products = () => {
         }
       });
   };
+//for storeAdmin
+ useEffect(() => {
+  const isStoreAdmin = role === 2 && supplierFor !== null
+    if(isStoreAdmin || (isStoreAdmin && reRender)){
+      searchProductsByCategory(supplierFor)
+    }
+    setReRender(false)
+  },[reRender])
 
   const searchProductsBySubcategory = (e) => {
     if (e === "none") {
+      if(role === 2){
+        setReRender(true)
+      }
       return;
     }
 
@@ -268,6 +295,7 @@ const Products = () => {
         }
       });
   };
+ 
 
   const searchProductsByBrand = (e) => {
     if (e === "none") {
@@ -325,8 +353,10 @@ const Products = () => {
 
     setActiveSell(e);
 
+    const config = role === 2 ? {sell: e,supplierFor:  supplierFor} : {sell: e}
+
     axios
-      .post("/products/search/filters", { sell: e })
+      .post("/products/search/filters", config)
       .then((response) => {
         if (response.data.success) {
           setProducts(response.data.products);
@@ -366,10 +396,10 @@ const Products = () => {
 
     switch (e) {
       case "1":
-        counts = [0, 6];
+        counts = [0, 5];
         break;
       case "2":
-        counts = [6, 20];
+        counts = [5, 20];
         break;
       case "3":
         counts = [20, 100];
@@ -377,9 +407,10 @@ const Products = () => {
       default:
         return;
     }
+    const config = role === 2 ? {countInStock: counts,supplierFor:  supplierFor} : {countInStock: counts}
 
     axios
-      .post("/products/search/filters", { countInStock: counts })
+      .post("/products/search/filters", config)
       .then((response) => {
         if (response.data.success) {
           setProducts(response.data.products);
@@ -535,7 +566,7 @@ const Products = () => {
         <div className="table-wrapper">
           <table>
             <thead className="heading-table">
-              <tr>
+              {role === 1 && <tr>
                 <th colSpan="4">
                   <select
                     value={orderConfig}
@@ -565,36 +596,15 @@ const Products = () => {
                     </span>
                   </div>
                 </th>
-              </tr>
+              </tr>}
               <tr
                 style={{
                   backgroundColor: "var(--firstColorPalete)",
                   color: "white",
                 }}
               >
-                <th colSpan="3">
-                  <select
-                    value={activeFilterConfig}
-                    onChange={(e) =>
-                      setActiveFilterConfigHandler(e.target.value)
-                    }
-                  >
-                    <option value="none" className="text-white bg-orange">
-                      ⬆⬇ فیلترینگ براساس (اختصاصی):
-                    </option>
-                    <option value="newest">جدیدترین ها</option>
-                    <option value="oldest">قدیمی ترین ها</option>
-                    <option value="moreSold">بیشترین فروش</option>
-                    <option value="lessSold">کمترین فروش</option>
-                    <option value="moreDiscount">بیشترین تخفیف</option>
-                    <option value="lessDiscount">کمترین تخفیف</option>
-                    <option value="moreCountInStock">بیشترین موجودی</option>
-                    <option value="lessCountInStock">کمترین موجودی</option>
-                    <option value="haveSell">ارائه میشود</option>
-                    <option value="haveNotSell">ارائه نمیشود</option>
-                  </select>
-                </th>
-                <th colSpan="2">
+                
+                {role === 1 && <th colSpan="2">
                   <select
                     value={activeCategory}
                     onChange={(e) => searchProductsByCategory(e.target.value)}
@@ -607,15 +617,15 @@ const Products = () => {
                         </option>
                       ))}
                   </select>
-                </th>
-                <th colSpan="2">
+                </th>}
+                <th colSpan={role === 1 ? "2" : "4"}>
                   <select
                     value={activeSubcategory}
                     onChange={(e) =>
                       searchProductsBySubcategory(e.target.value)
                     }
                   >
-                    <option value="none">برچسب</option>
+                    <option value="none">برچسب (همه)</option>
                     {subcategories.length > 0 &&
                       subcategories.map((s, i) => (
                         <option key={i} value={s._id}>
@@ -661,6 +671,28 @@ const Products = () => {
                     <option value="3">20 به بالا</option>
                   </select>
                 </th>
+                <th colSpan="3">
+                  <select
+                    value={activeFilterConfig}
+                    onChange={(e) =>
+                      setActiveFilterConfigHandler(e.target.value)
+                    }
+                  >
+                    <option value="none" disabled className="text-white bg-orange">
+                      ⬆⬇ مرتب سازی محصولات به دست آمده براساس:
+                    </option>
+                    <option value="newest">جدیدترین ها</option>
+                    <option value="oldest">قدیمی ترین ها</option>
+                    <option value="moreSold">بیشترین فروش</option>
+                    <option value="lessSold">کمترین فروش</option>
+                    <option value="moreDiscount">بیشترین تخفیف</option>
+                    <option value="lessDiscount">کمترین تخفیف</option>
+                    <option value="moreCountInStock">بیشترین موجودی</option>
+                    <option value="lessCountInStock">کمترین موجودی</option>
+                    <option value="haveSell">ارائه میشود</option>
+                    <option value="haveNotSell">ارائه نمیشود</option>
+                  </select>
+                </th>
               </tr>
               <tr
                 style={{
@@ -681,7 +713,7 @@ const Products = () => {
                 <th className="th-titles">تعداد</th>
                 <th className="th-titles">رنگ ها</th>
                 <th className="th-titles">ویرایش</th>
-                <th className="th-titles">حذف</th>
+                <th className="th-titles">فعالیت</th>
               </tr>
             </thead>
             <tbody>
@@ -757,7 +789,7 @@ const Products = () => {
                     </td>
                     <td>
                       <Link
-                        to={`/admin/dashboard/product/${p.slug}`}
+                        to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/product/${p.slug}`}
                         className="d-flex-center-center"
                       >
                         <MdEdit className="text-blue" />

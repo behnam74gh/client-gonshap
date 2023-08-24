@@ -39,6 +39,8 @@
   align-items: flex-start;
   padding: 10px;
   font-size: 12px;
+  overflow: auto;
+  max-height: 300px;
 }
 
 .submenu-col-1 {
@@ -73,10 +75,12 @@
 figure.submenu-col-3 {
   all: unset;
   padding-top: 7px;
+  align-self: center;
 }
 .submenu-col-3 img {
   max-width: 150px;
   width: 100%;
+  object-fit: contain;
 }
 
 .activeCategory {
@@ -104,7 +108,24 @@ figure.submenu-col-3 {
 
 @media (max-width: 1060px) {
   .submenu {
-    width: 45%;
-    transform: translateX(-35%);
+    width: 50%;
+    transform: translateX(-25%);
+  }
+  .submenu-col-3 img {
+    max-width: 100px;
+  }
+  .submenu-col-1{
+    padding: 5px 0;
+  }
+  .submenu-col-1 h5 {
+    margin: 0px 0px 5px;
+  }
+  .submenu-col-1 ul li{
+    font-size: 10px;
+    padding: 3px 0;
+  }
+  .subcategorylink{
+    padding: 2px 0;
+    margin: 2px;
   }
 }

@@ -83,7 +83,7 @@ const Section10 = () => {
             <h4 className="author">
               {activeSuggest.writerName && activeSuggest.writerName.length > 0
                 ? activeSuggest.writerName
-                : "-"}
+                : "شخص ناشناس"} میگوید :
             </h4>
             <p className="info">{activeSuggest.content}</p>
             <div className="button-container">

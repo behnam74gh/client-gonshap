@@ -36,7 +36,7 @@ const Product = ({ match }) => {
 
   const loadCurrentProduct = useCallback(() => {
     const bodyWidth = window.innerWidth;
-    if (bodyWidth < 450) {
+    if (bodyWidth < 321) {
       setSecondNumberOfSlides(1);
     }
     axios
@@ -46,19 +46,30 @@ const Product = ({ match }) => {
         if (response.data.success) {
           setProduct(response.data.thisProduct);
           const produtsLength = response.data.releatedProducts.length;
-          if (bodyWidth > 1060 && produtsLength >= 4) {
+          if (bodyWidth > 1350 && produtsLength >= 4) {
             setSecondNumberOfSlides(4);
-          } else if (bodyWidth > 1060 && produtsLength < 4) {
+          } else if (bodyWidth > 1350 && produtsLength < 4) {
             setSecondNumberOfSlides(produtsLength);
-          } else if (bodyWidth < 1060 && bodyWidth > 450 && produtsLength > 1) {
-            setSecondNumberOfSlides(2);
-          } else if (bodyWidth < 450 && produtsLength >= 4) {
+          } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
+            setSecondNumberOfSlides(3);
           } else if (
-            bodyWidth < 1060 &&
+            bodyWidth < 1350 &&
+            bodyWidth > 910 &&
+            produtsLength === 1
+          ) {
+            setSecondNumberOfSlides(1);
+          }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
+            setSecondNumberOfSlides(2);
+          } else if (
+            bodyWidth < 910 &&
             bodyWidth > 450 &&
             produtsLength === 1
           ) {
             setSecondNumberOfSlides(1);
+          }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
+            setSecondNumberOfSlides(2)
+          }else{
+            setSecondNumberOfSlides(1)
           }
           setReleatedProducts(response.data.releatedProducts);
           setErrorText("");
@@ -98,9 +109,6 @@ const Product = ({ match }) => {
   useEffect(() => {
     if (userInfo && userInfo.userId && userInfo.userId.length > 0) {
       const bodyWidth = window.innerWidth;
-      if (bodyWidth < 450) {
-        setNumberOfSlides(1);
-      }
       setRecentLoading(true);
       axios
         .put(`/current-user/recent-views/upgrade/${userInfo.userId}`, {
@@ -114,23 +122,30 @@ const Product = ({ match }) => {
           );
           if (success) {
             const produtsLength = activeRecentViewsProducts.length;
-            if (bodyWidth > 1060 && produtsLength >= 4) {
+            if (bodyWidth > 1350 && produtsLength >= 4) {
               setNumberOfSlides(4);
-            } else if (bodyWidth > 1060 && produtsLength < 4) {
+            } else if (bodyWidth > 1350 && produtsLength < 4) {
               setNumberOfSlides(produtsLength);
+            } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
+              setNumberOfSlides(3);
             } else if (
-              bodyWidth < 1060 &&
-              bodyWidth > 450 &&
-              produtsLength > 1
+              bodyWidth < 1350 &&
+              bodyWidth > 910 &&
+              produtsLength === 1
             ) {
+              setNumberOfSlides(1);
+            }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
               setNumberOfSlides(2);
-            } else if (bodyWidth < 450 && produtsLength >= 4) {
             } else if (
-              bodyWidth < 1060 &&
+              bodyWidth < 910 &&
               bodyWidth > 450 &&
               produtsLength === 1
             ) {
               setNumberOfSlides(1);
+            }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
+              setNumberOfSlides(2)
+            }else{
+              setNumberOfSlides(1)
             }
             setRecentViews(activeRecentViewsProducts);
             setRecentViewsError("");
@@ -191,7 +206,7 @@ const Product = ({ match }) => {
       existRatingObject && setStarValue({ star: existRatingObject.star });
     }
   }, [product, userInfo]);
-
+  
   return (
     <section id="product_details">
       {loading ? (
@@ -216,6 +231,7 @@ const Product = ({ match }) => {
               commentList={commentList}
               productId={productId}
               commentsError={commentsError}
+              productDetails={product.details}
             />
             <div className="list_of_products">
               {recentViewserror.length > 0 ? (

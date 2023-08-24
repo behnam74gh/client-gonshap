@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { VscLoading } from "react-icons/vsc";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
@@ -11,6 +12,8 @@ const SubCategoryUpdate = ({ history, match }) => {
   const [category, setCategory] = useState();
   const [subcategory, setSubcategory] = useState("");
   const [categories, setCategories] = useState([]);
+
+  const {userInfo : {role, supplierFor}} = useSelector(state => state.userSignin)
 
   const { slug } = match.params;
 
@@ -51,7 +54,7 @@ const SubCategoryUpdate = ({ history, match }) => {
     axios
       .put(`/subcategory/${slug}`, {
         newSubcategoryName: subcategory,
-        parent: category,
+        parent: role === 1 ? category : supplierFor,
       })
       .then((response) => {
         if (response.data.success) {
@@ -74,10 +77,10 @@ const SubCategoryUpdate = ({ history, match }) => {
     <div className="admin-panel-wrapper">
       <h4>ویرایش برچسب</h4>
       <form className="auth-form" onSubmit={submitHandler}>
-        <label className="auth-label" htmlFor="category">
+        {role === 1 && <label className="auth-label" htmlFor="category">
           دسته بندی :
-        </label>
-        <select
+        </label>}
+       {role === 1 && <select
           id="category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
@@ -89,7 +92,7 @@ const SubCategoryUpdate = ({ history, match }) => {
                 {c.name}
               </option>
             ))}
-        </select>
+        </select>}
         <label className="auth-label" htmlFor="subcategoryName">
           برچسب :
         </label>

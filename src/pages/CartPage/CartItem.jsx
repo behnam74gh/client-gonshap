@@ -175,6 +175,13 @@ const CartItem = ({ product }) => {
       </div>
       <div className="item_price_wrapper">
         <div className="cart_item_price_wrapper">
+          <span>قیمت کالا :</span>
+          <strong className="cart_item_price_after_discount">
+            {product.price.toLocaleString("fa")}
+          </strong>
+          <span className="font-sm">تومان</span>
+        </div>
+        <div className="cart_item_price_wrapper">
           <span>تخفیف داده شده :</span>
           <strong className="cart_item_price_after_discount">
             {(

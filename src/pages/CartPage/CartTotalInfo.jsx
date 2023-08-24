@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCard";
 import axios from "../../util/axios.js";
-import { COD } from "../../redux/Types/CODTypes";
 import "../Admin/CommentsList/CommentsList.css";
 
 const CartTotalInfo = () => {
@@ -17,7 +16,6 @@ const CartTotalInfo = () => {
   const { userInfo } = userSignin;
 
   const history = useHistory();
-  const dispatch = useDispatch();
 
   const purchaseCheckoutHandler = () => {
     let activeCartItems = [];
@@ -36,8 +34,8 @@ const CartTotalInfo = () => {
       item.colors ? item.colors.length < item.count : item
     );
 
-    if (colorNeededItem) {
-      return toast.warning("رنگ کالا را مشخص نکردید");
+    if (colorNeededItem || activeCartItems.length < 1) {
+      return colorNeededItem ? toast.warning("رنگ کالا را مشخص نکردید") : toast.warning('ثبت نشد، محصول موجود نمی باشد');
     } else {
       setLoading2(true);
 
@@ -57,64 +55,17 @@ const CartTotalInfo = () => {
                 }`
               );
             }
-            history.push("/checkout");
+            history.push({
+              pathname: "/checkout",
+              state: {
+                from: `/cart`,
+              },
+            });
           }
         })
         .catch((err) => {
           if (err.response) {
             setLoading2(false);
-            toast.warning(err.response.data.message);
-          }
-        });
-    }
-  };
-
-  const purchaseCashOnDeliveryHandler = () => {
-    let activeCartItems = [];
-    let notExistItemsLength = 0;
-
-    cartItems.forEach((item) => {
-      const product = cartItemsInfo.find((p) => p._id === item.id);
-      if (product.countInStock < 1) {
-        notExistItemsLength += 1;
-      } else {
-        activeCartItems.push(item);
-      }
-    });
-
-    let colorNeededItem = activeCartItems.find((item) =>
-      item.colors ? item.colors.length < item.count : item
-    );
-
-    if (colorNeededItem) {
-      return toast.warning("رنگ کالا را مشخص نکردید");
-    } else {
-      setLoading2(true);
-
-      axios
-        .post("/save/user-cart", { cartItems: activeCartItems })
-        .then((response) => {
-          if (response.data.success) {
-            setLoading2(false);
-            if (activeCartItems.length < cartItems.length) {
-              toast.info(
-                `${
-                  notExistItemsLength > 1 ? "محصولاتی" : "محصولی"
-                } که ناموجود ${
-                  notExistItemsLength > 1 ? "بودند" : "بود"
-                } در سبد شما محاسبه ${
-                  notExistItemsLength > 1 ? "نشدند!" : "نشد!"
-                }`
-              );
-            }
-            dispatch({ type: COD, payload: true });
-            history.push("/checkout");
-          }
-        })
-        .catch((err) => {
-          if (err.response) {
-            setLoading2(false);
-            dispatch({ type: COD, payload: false });
             toast.warning(err.response.data.message);
           }
         });
@@ -168,7 +119,7 @@ const CartTotalInfo = () => {
         </div>
       )}
       <hr className="my-2" />
-      {cartItems.length > 0 && (
+      {!userInfo && (
         <strong className="w-100 font-sm text-center">
           جهت اقدام به خرید ابتدا وارد حساب کاربری خود شوید!
         </strong>
@@ -185,7 +136,7 @@ const CartTotalInfo = () => {
               {loading2 ? (
                 <VscLoading className="loader my-2" />
               ) : (
-                "پرداخت اینترنتی"
+                "ثبت سفارش"
               )}
             </button>
           ) : (
@@ -203,20 +154,6 @@ const CartTotalInfo = () => {
               }
             >
               ورود به حساب جهت خرید
-            </button>
-          )}
-          {userInfo && userInfo.refreshToken && (
-            <button
-              type="button"
-              disabled={!cartItems.length}
-              onClick={purchaseCashOnDeliveryHandler}
-              className="modal_btn bg-orange w-45 p-0"
-            >
-              {loading2 ? (
-                <VscLoading className="loader my-2" />
-              ) : (
-                "پرداخت در محل"
-              )}
             </button>
           )}
         </div>

@@ -1,10 +1,26 @@
-.favorites_page {
+#favorites_page {
   position: relative;
 }
 .my_favorites_wrapper {
   display: flex;
   flex-flow: row wrap;
+  gap: 40px 20px;
   justify-content: center;
   align-items: center;
   margin-bottom: 40px;
+  overflow: hidden;
+  padding-top: 20px;
+}
+
+@media (max-width: 450px) {
+  .my_favorites_wrapper {
+    justify-content: space-evenly;
+    gap: 40px 10px;
+  }
+  #favorites_page h2 {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
 }

@@ -4,28 +4,24 @@ import Input from "../../components/UI/FormElement/Input";
 import Button from "../../components/UI/FormElement/Button";
 import { useForm } from "../../util/hooks/formHook";
 import axios from "../../util/axios";
+import { toast } from "react-toastify";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_MAXLENGTH,
   VALIDATOR_SPECIAL_CHARACTERS,
-  VALIDATOR_ENGLISH_NUMERIC,
 } from "../../util/validators";
-import { useDispatch } from "react-redux";
-import { COUPON_APPLIED } from "../../redux/Types/couponTypes";
 
 const CheckoutForms = ({
   cartItems,
   userInfo,
   setAddressSaved,
-  setTotalAfterDiscount,
-  totalAfterDiscount,
+  addressSaved,
+  categoriesLength
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [couponLoading, setCouponLoading] = useState(false);
-  const [couponErrorText, setCouponErrorText] = useState("");
-  const [couponSuccessMessage, setCouponSuccessMessage] = useState("");
+  const [address, setAddress] = useState("");
 
   const [formState, inputHandler] = useForm(
     {
@@ -33,27 +29,23 @@ const CheckoutForms = ({
         value: "",
         isValid: false,
       },
-      couponName: {
-        value: "",
-        isValid: false,
-      },
     },
     false
   );
-
-  const dispatch = useDispatch();
 
   const setAddressToDBHandler = (e) => {
     e.preventDefault();
     setLoading(true);
     setSuccessMessage("");
     axios
-      .post("/save/user/address", { address: formState.inputs.address.value })
+      .put("/save/user/address", { address: formState.inputs.address.value })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
           setSuccessMessage(response.data.message);
+          setAddress(formState.inputs.address.value);
           setAddressSaved(true);
+          address.length > 0 ? toast.success("آدرس شما تغییر کرد") : toast.success(response.data.message)
         }
       })
       .catch((err) => {
@@ -66,37 +58,13 @@ const CheckoutForms = ({
       });
   };
 
-  const applyDiscountCouponHandler = (e) => {
-    e.preventDefault();
-    setCouponLoading(true);
-    axios
-      .post("/apply-coupon/user/cart", {
-        couponName: formState.inputs.couponName.value,
-      })
-      .then((response) => {
-        setCouponLoading(false);
-        if (response.data.success) {
-          setCouponSuccessMessage(response.data.message);
-          setTotalAfterDiscount(response.data.totalAfterDiscount);
-          dispatch({ type: COUPON_APPLIED, payload: true });
-        }
-      })
-      .catch((err) => {
-        setCouponLoading(false);
-        dispatch({ type: COUPON_APPLIED, payload: false });
-        if (typeof err.response.data.message === "object") {
-          setCouponErrorText(err.response.data.message[0]);
-        } else {
-          setCouponErrorText(err.response.data.message);
-        }
-      });
-  };
-
+  const isSame = formState.inputs.address.value === address
+  
   return (
     <React.Fragment>
       <div className="checkout_form_wrapper">
         <form onSubmit={setAddressToDBHandler}>
-          <label className="auth-label">آدرس خود را وارد کنید :</label>
+          <label className="auth-label">{successMessage.length > 0 ? "آدرس را میتوانید تغییر دهید" : "آدرس خود را وارد کنید"} :</label>
           <Input
             id="address"
             element="input"
@@ -106,7 +74,7 @@ const CheckoutForms = ({
               setSuccessMessage("");
               setErrorText("");
             }}
-            placeholder="مثال : گنبد - خیابان مختوم- کوچه پنجم - پلاک 81"
+            placeholder="جهت ارسال کالا"
             validators={[
               VALIDATOR_MAXLENGTH(300),
               VALIDATOR_MINLENGTH(10),
@@ -120,7 +88,7 @@ const CheckoutForms = ({
               !userInfo ||
               !cartItems.length ||
               loading ||
-              !formState.inputs.address.isValid
+              !formState.inputs.address.isValid || successMessage.length > 0 || isSame
             }
           >
             {!loading ? "ثبت آدرس" : <VscLoading className="loader" />}
@@ -129,57 +97,18 @@ const CheckoutForms = ({
         {errorText.length > 0 ? (
           <p className="warning-message">{errorText}</p>
         ) : (
-          successMessage.length > 0 && (
-            <p className="success-message">آدرس شما با موفقیت ثبت شد</p>
+          addressSaved && (
+            <p className="attentionNote">آدرس شما : {address}</p>
           )
         )}
       </div>
-      <div className="checkout_form_wrapper">
-        <form onSubmit={applyDiscountCouponHandler}>
-          <label className="auth-label">
-            کد تخفیف را وارد کنید (اگر دارید) :
-          </label>
-          <Input
-            id="couponName"
-            element="input"
-            type="text"
-            onInput={inputHandler}
-            focusHandler={() => setCouponErrorText("")}
-            disabled={couponSuccessMessage.length > 0 || totalAfterDiscount > 0}
-            validators={[
-              VALIDATOR_MAXLENGTH(20),
-              VALIDATOR_MINLENGTH(6),
-              VALIDATOR_ENGLISH_NUMERIC(),
-            ]}
-            errorText="با حروف انگلیسی وارد کنید و از علامت ها و عملگرها استفاده نکنید؛ میتوانید از 6 تا 20 حرف وارد کنید!"
-          />
-          <Button
-            type="submit"
-            disabled={
-              !userInfo ||
-              !cartItems.length ||
-              loading ||
-              !formState.inputs.couponName.isValid ||
-              couponSuccessMessage.length > 0 ||
-              totalAfterDiscount > 0
-            }
-          >
-            {!couponLoading ? (
-              "اعمالِ کد تخفیف"
-            ) : (
-              <VscLoading className="loader" />
-            )}
-          </Button>
-        </form>
-        {couponErrorText.length > 0 ? (
-          <p className="warning-message">{couponErrorText}</p>
-        ) : (
-          couponSuccessMessage.length > 0 && (
-            <p className="success-message">{couponSuccessMessage}</p>
-          )
-        )}
-      </div>
+
+     {categoriesLength > 1 && <div>
+        <strong className="warningNote">لطفا توجه داشته باشید که :</strong>
+        <p className="attentionNote">فاکتور خرید هر فروشگاه، به طور جداگانه به پنل کاربری شما ارسال خواهد شد</p>
+      </div>}
     </React.Fragment>
+
   );
 };
 

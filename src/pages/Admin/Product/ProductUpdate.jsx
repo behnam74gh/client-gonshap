@@ -4,6 +4,7 @@ import { TiDelete } from "react-icons/ti";
 import { VscLoading } from "react-icons/vsc";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
@@ -23,6 +24,9 @@ const oldStates = {
   sell: "",
   discount: "none",
   finallyPrice: "",
+  question: "",
+  answer: "",
+  details: []
 };
 
 const ProductUpdate = ({ history }) => {
@@ -42,6 +46,8 @@ const ProductUpdate = ({ history }) => {
   const [showSub, setShowSub] = useState(false);
   const [showBrand, setShowBrand] = useState(false);
 
+  const {userInfo : {role}} = useSelector(state => state.userSignin)
+  
   const { slug } = useParams();
 
   useEffect(() => {
@@ -55,6 +61,7 @@ const ProductUpdate = ({ history }) => {
           attr1,
           attr2,
           attr3,
+          details,
           brand,
           category,
           subcategory,
@@ -81,6 +88,7 @@ const ProductUpdate = ({ history }) => {
             category,
             subcategory,
             description,
+            details,
             sell,
             finallyPrice,
             discount,
@@ -124,11 +132,13 @@ const ProductUpdate = ({ history }) => {
         }
       });
   };
-
+  
   useEffect(() => {
-    loadAllCategories();
+    if(role === 1){
+      loadAllCategories();
+    }
     loadAllColors();
-  }, []);
+  }, [role]);
 
   //image-picker-codes
   const filePickerRef = useRef();
@@ -256,6 +266,17 @@ const ProductUpdate = ({ history }) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const appendDetailHandler = () => {
+    const newDetails = [...values.details, {question:values.question,answer: values.answer}]
+    setValues({...values, details: newDetails})
+  }
+
+  const deleteDetailHandler = (index) => {
+    const oldDetails = values.details
+    const newDetails = oldDetails.filter((item,i) => i !== index)
+    setValues({...values, details: newDetails})
+  }
+
   const submitHandler = (e) => {
     e.preventDefault();
     const activeColors = colors;
@@ -276,6 +297,7 @@ const ProductUpdate = ({ history }) => {
     formData.append("subcategory", values.subcategory);
     formData.append("sell", values.sell);
     formData.append("brand", values.brand);
+    formData.append("details", JSON.stringify(values.details))
 
     formData.append("colors", finallyColors);
     formData.append("deletedPhotos", deletedPhotos);
@@ -379,10 +401,10 @@ const ProductUpdate = ({ history }) => {
           type="text"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label" htmlFor="category">
+        {role === 1 && <label className="auth-label" htmlFor="category">
           دسته بندی :
-        </label>
-        <select
+        </label>}
+        {role === 1 && <select
           name="category"
           value={values.category}
           onChange={(e) => setCategoryHandler(e.target.value)}
@@ -394,7 +416,7 @@ const ProductUpdate = ({ history }) => {
                 {c.name}
               </option>
             ))}
-        </select>
+        </select>}
 
         {showSub && (
           <label className="auth-label" htmlFor="subcategory">
@@ -542,17 +564,40 @@ const ProductUpdate = ({ history }) => {
           type="text"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label">
-          ابتدا توضیحات ؛ سپس مشخصات ( هرکدام را با (-) جدا کنید و سوال و جواب
-          را با (؟) جدا کنید)
-        </label>
+        <label className="auth-label">توضیحات :</label>
         <textarea
           type="text"
           name="description"
           value={values.description}
-          rows="16"
+          rows="10"
           onChange={(e) => changeInputHandler(e)}
         ></textarea>
+
+          <label className="auth-label">ویژگی های محصول :</label>
+          <input
+          name="question"
+          value={values.question}
+          type="text"
+          onChange={(e) => changeInputHandler(e)}
+          placeholder="بخش اول"
+        />
+        <input
+          name="answer"
+          value={values.answer}
+          type="text"
+          onChange={(e) => changeInputHandler(e)}
+          placeholder="بخش دوم"
+        />
+          <Button type="button" 
+            disabled={!values.answer || !values.question}
+            onClick={appendDetailHandler}
+          >
+              {!loading ? "افزودن" : <VscLoading className="loader" />}
+          </Button>
+
+          {values.details?.length > 0 && <div className="details_wrapper">
+            {values.details.map((detail,i) => <div className="detail" key={i}><span>{detail.question}؟ {detail.answer}</span><span className="delete_img" onClick={() => deleteDetailHandler(i)}><TiDelete /></span></div>)}
+          </div>}
         <Button type="submit">
           {!loading ? "ثبت" : <VscLoading className="loader" />}
         </Button>

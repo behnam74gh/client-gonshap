@@ -1,27 +1,27 @@
 #sec6 {
   width: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
+  margin: 35px 0;
 }
 
 #sec6 .advertise1 {
   flex-basis: 33.33%;
-  padding: 35px 0 35px 30px;
+  padding: 0 0 0 30px;
 }
 #sec6 .advertise2 {
   flex-basis: 33.33%;
-  padding: 35px 25px 35px;
+  padding: 0 25px 0;
 }
 #sec6 .advertise3 {
   flex-basis: 33.33%;
-  padding: 35px 30px 35px 0;
+  padding: 0 30px 0 0;
 }
 #sec6 img {
   box-shadow: 0 3px 20px rgb(0, 0, 0, 0.05);
   border-radius: 10px;
   width: 100%;
-  max-height: 180px;
-  height: auto;
+  height: 160px;
 }
 #sec6 img:hover {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);

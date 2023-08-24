@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
+import { useSelector } from "react-redux";
 
 import { useForm } from "../../../util/hooks/formHook";
 import axios from "../../../util/axios";
@@ -31,6 +32,7 @@ const ProductCreate = () => {
     sell: null,
     discount: "none",
     finallyPrice: "",
+    details: []
   });
   const [showSub, setShowSub] = useState(false);
   const [showBrand, setShowBrand] = useState(false);
@@ -71,13 +73,41 @@ const ProductCreate = () => {
         value: "",
         isValid: false,
       },
+      question: {
+        value: "",
+        isValid: false
+      },
+      answer: {
+        value: "",
+        isValid: false
+      }
     },
     false
   );
 
+  const {userInfo : {role,supplierFor}} = useSelector(state => state.userSignin)
+    
   useEffect(() => {
     setReRenderParent(true);
   }, [reRenderParent]);
+
+  const currentCategorysSubsHandler = () => {
+    setValues({...values,category: supplierFor})
+    axios
+      .get(`/category/subs/${supplierFor}`)
+      .then((response) => {
+          if (response.data.success) {
+            setSubcategories(response.data.subcategories);
+            setShowBrand(false);
+            setShowSub(true);
+          }
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.error(err.response.data.message);
+        }
+      });
+  }
 
   const loadAllCategories = () => {
     axios
@@ -92,7 +122,7 @@ const ProductCreate = () => {
         }
       });
   };
-
+  
   const loadAllColors = () => {
     axios
       .get("/get-all-colors")
@@ -110,8 +140,13 @@ const ProductCreate = () => {
   };
 
   useEffect(() => {
-    loadAllCategories();
-    loadAllColors();
+    if(role === 2){
+      currentCategorysSubsHandler()
+      loadAllColors();
+    }else{
+      loadAllCategories();
+      loadAllColors();
+    }
   }, []);
 
   //image-picker-codes
@@ -233,6 +268,17 @@ const ProductCreate = () => {
     setShowFinallyPrice(true);
   };
 
+  const appendDetailHandler = () => {
+    const newDetails = [...values.details, {question: formState.inputs.question.value,answer: formState.inputs.answer.value}]
+    setValues({...values, details: newDetails})
+  }
+
+  const deleteDetailHandler = (index) => {
+    const oldDetails = values.details
+    const newDetails = oldDetails.filter((item,i) => i !== index)
+    setValues({...values, details: newDetails})
+  }
+
   //create-product-submit
   const submitHandler = (e) => {
     e.preventDefault();
@@ -257,7 +303,7 @@ const ProductCreate = () => {
     formData.append("sell", values.sell);
     formData.append("brand", values.brand);
     formData.append("colors", finallyColors);
-
+    formData.append("details", JSON.stringify(values.details))
     let filesLength = files.length;
 
     for (let i = 0; i < filesLength; i++) {
@@ -349,10 +395,10 @@ const ProductCreate = () => {
             ]}
             errorText="ازعلامتها و عملگرها استفاده نکنید,میتوانید از 3 تا 30 حرف وارد کنید!"
           />
-          <label className="auth-label" htmlFor="category">
+          {role === 1 && <label className="auth-label" htmlFor="category">
             دسته بندی :
-          </label>
-          <select id="category" onChange={setCategoryHandler}>
+          </label>}
+          {role === 1 && <select id="category" onChange={setCategoryHandler}>
             <option value="none">دسته بندی را انتخاب کنید</option>
             {categories.length > 0 &&
               categories.map((c, i) => (
@@ -360,7 +406,7 @@ const ProductCreate = () => {
                   {c.name}
                 </option>
               ))}
-          </select>
+          </select>}
           {showSub && (
             <label className="auth-label" htmlFor="subcategory">
               برچسب :
@@ -515,7 +561,7 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
-              VALIDATOR_MINLENGTH(10),
+              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
             errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
@@ -529,7 +575,7 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
-              VALIDATOR_MINLENGTH(10),
+              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
             errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
@@ -543,30 +589,64 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
-              VALIDATOR_MINLENGTH(10),
+              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
             errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
           />
-          <label className="auth-label">
-            ابتدا توضیحات ؛ سپس مشخصات ( هرکدام را با (-) جدا کنید و سوال و جواب
-            را با (؟) جدا کنید)
-          </label>
+          <label className="auth-label">توضیحات :</label>
           <Input
             id="description"
             element="textarea"
             type="text"
             placeholder="توضیحات"
             onInput={inputHandler}
-            rows={16}
+            rows={10}
             validators={[
-              VALIDATOR_MAXLENGTH(10000),
-              VALIDATOR_MINLENGTH(50),
+              VALIDATOR_MAXLENGTH(1000),
+              VALIDATOR_MINLENGTH(10),
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید, بین 50 تا 10000 حرف میتوانید وارد کنید"
+            errorText="ازعلامتها و عملگرها استفاده نکنید, بین 10 تا 1000 حرف میتوانید وارد کنید"
           />
-          <Button type="submit" disabled={!formState.isValid}>
+          <label className="auth-label">ویژگی های محصول :</label>
+          <Input
+            id="question"
+            element="input"
+            type="text"
+            placeholder="بخش اول"
+            onInput={inputHandler}
+            validators={[
+              VALIDATOR_MAXLENGTH(100),
+              VALIDATOR_MINLENGTH(3),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+            errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 100 حرف وارد کنید!"
+          />
+          <Input
+            id="answer"
+            element="input"
+            type="text"
+            placeholder="بخش دوم"
+            onInput={inputHandler}
+            validators={[
+              VALIDATOR_MAXLENGTH(100),
+              VALIDATOR_MINLENGTH(3),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+            errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 100 حرف وارد کنید!"
+          />
+          <Button type="button" 
+            disabled={!formState.inputs.answer.isValid || !formState.inputs.question.isValid}
+            onClick={appendDetailHandler}
+          >
+              {!loading ? "افزودن" : <VscLoading className="loader" />}
+          </Button>
+
+          {values.details?.length > 0 && <div className="details_wrapper">
+            {values.details.map((detail,i) => <div className="detail" key={i}><span>{detail.question}؟ {detail.answer}</span><span className="delete_img" onClick={() => deleteDetailHandler(i)}><TiDelete /></span></div>)}
+          </div>}
+          <Button type="submit" disabled={!formState.inputs.description.isValid}>
             {!loading ? "ثبت" : <VscLoading className="loader" />}
           </Button>
         </form>

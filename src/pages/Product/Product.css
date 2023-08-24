@@ -9,6 +9,9 @@
   font-size: 14px;
   line-height: 2;
   text-align: justify;
+  width: 100%;
+  overflow: hidden;
+  word-break: break-all;
 }
 .details_info_wrapper {
   display: flex;
@@ -46,6 +49,8 @@
 /* comment_attributes */
 .comment_attributes {
   margin: 15px 0;
+  width: 100%;
+  overflow: hidden;
 }
 
 @media (max-width: 780px) {
@@ -77,5 +82,8 @@
   }
   .details_info p {
     font-size: 8px;
+  }
+  .comment_attributes {
+    margin: 0 0 20px;
   }
 }

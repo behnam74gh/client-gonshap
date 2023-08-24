@@ -5,6 +5,7 @@ import "../Product/Products.css";
 import "../Carousel/Carousels.css";
 import "../../Supplier/SupplierIntroduce.css";
 import "../../../components/UI/FormElement/ImageUpload.css";
+import "../../../components/UI/FormElement/Input.css"
 
 const AdminDashboardLayout = lazy(() => import("../AdminDashboardLayout"));
 const AdminDashboardHome = lazy(() =>
@@ -31,7 +32,6 @@ const CarouselUpdate = lazy(() => import("../Carousel/CarouselUpdate"));
 const Ads = lazy(() => import("../Ads/Ads"));
 const AdvertiseCreate = lazy(() => import("../Ads/AdvertiseCreate"));
 const AdvertiseUpdate = lazy(() => import("../Ads/AdvertiseUpdate"));
-const Coupons = lazy(() => import("../Coupons/Coupons"));
 const Orders = lazy(() => import("../Orders/Orders"));
 const OrderDetails = lazy(() => import("../Orders/OrderDetails"));
 const Tickets = lazy(() => import("../Ticket/Tickets"));
@@ -128,8 +128,6 @@ const AdminDashboard = ({ history }) => {
             path="/admin/dashboard/advertise-update/:slug"
             component={AdvertiseUpdate}
           />
-          <AdminRoute path="/admin/dashboard/coupons" component={Coupons} />
-
           <AdminRoute path="/admin/dashboard/orders" component={Orders} />
           <AdminRoute
             path="/admin/dashboard/order/:id"

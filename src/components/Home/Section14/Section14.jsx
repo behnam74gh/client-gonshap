@@ -86,35 +86,35 @@ const Section14 = () => {
 
   return (
     <section id="sec14">
-      <div className="company_location">
-        {coordinates.latitude && (
-          <MapContainer
-            center={[coordinates.latitude, coordinates.longitude]}
-            zoom={16}
-            scrollWheelZoom={false}
-            className="map_supp"
-          >
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={[coordinates.latitude, coordinates.longitude]}>
-              <Popup>{companyInfo.companyTitle}</Popup>
-            </Marker>
-          </MapContainer>
+        {(coordinates.latitude !== null && coordinates.longitude !== null) && (
+          <div className="company_location">
+              <MapContainer
+                center={[coordinates.latitude, coordinates.longitude]}
+                zoom={16}
+                scrollWheelZoom={false}
+                className="map_supp"
+              >
+                <TileLayer
+                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[coordinates.latitude, coordinates.longitude]}>
+                  <Popup>{companyInfo.companyTitle}</Popup>
+                </Marker>
+              </MapContainer>
+          </div>
         )}
-      </div>
       <div className="suggestion_wrapper">
         {reRenderForm && (
           <form className="auth-form" onSubmit={submitHandler}>
             <label className="auth-label">
-              شماره تلفن :<span className="need_to_fill">*</span>
+              شماره تلفن همراه :<span className="need_to_fill">*</span>
             </label>
             <Input
               id="phoneNumber"
               element="input"
               type="text"
-              placeholder="مثال: 09117025683"
+              placeholder="مثال: 5683***0911"
               onInput={inputHandler}
               validators={[
                 VALIDATOR_PHONENUMBER(),

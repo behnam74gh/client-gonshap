@@ -222,6 +222,10 @@ svg.hovered path.star {
   color: var(--firstColorPalete);
   cursor: pointer;
 }
+.disabledBtn {
+  cursor: not-allowed !important;
+}
+
 /* responsive */
 @media (max-width: 1060px) {
   .product_images {
@@ -296,14 +300,19 @@ svg.hovered path.star {
 
 @media (max-width: 450px) {
   #product_details {
-    padding: 0 10px;
+    padding: 0;
   }
   .product_info,
   .product_images {
     flex: 100%;
     width: 100%;
   }
-
+  .product_info_wrapper .info_wrapper {
+    height: 22px;
+  }
+  .product_details_wrapper{
+    margin: 0;
+  }
   #product_details .carousel_img {
     padding: 15px 0px 60px;
   }

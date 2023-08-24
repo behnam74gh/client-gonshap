@@ -3,10 +3,13 @@ import { GoPlus } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
 import axios from "../../../util/axios";
+import {RiDeleteBin2Fill} from 'react-icons/ri'
 import { MdDelete, MdEdit } from "react-icons/md";
 import defPic from "../../../assets/images/def.jpg";
 import { toast } from "react-toastify";
 import "./Carousels.css";
+import { HiBadgeCheck } from "react-icons/hi";
+import { TiDelete } from "react-icons/ti";
 
 const Carousels = () => {
   const [suppliers, setSuppliers] = useState([]);
@@ -38,14 +41,15 @@ const Carousels = () => {
     getAllSuppliers();
   }, [getAllSuppliers]);
 
-  const removeSupplierHandler = (slug, owner, backupFor) => {
+  const toggleSupplierActivityHandler = (s) => {
+   const { owner, backupFor,_id,phoneNumber,isBan} = s 
     if (
       window.confirm(
-        `میخواهید تامین کننده محصولات  "${owner}"  را که پشتیبانی محصولات  "${backupFor}"  را انجام میدهد،حذف کنید؟`
+        `میخواهید فروشگاه شخص  "${owner}"  را که پشتیبانی محصولات  "${backupFor.name}"  را انجام میدهد،"${isBan ? "فعال" : "غیرفعال"}" کنید؟`
       )
     ) {
       axios
-        .delete(`/supplier/delete/${slug}`)
+        .put(`/supplier/toggle-supplier-activity`,{id: _id,isBan: !s.isBan,phoneNumber})
         .then((response) => {
           if (response.data.success) {
             toast.success(response.data.message);
@@ -57,7 +61,7 @@ const Carousels = () => {
         });
     }
   };
-
+console.log(suppliers);
   return (
     <div className="admin-panel-wrapper">
       <Link
@@ -82,15 +86,14 @@ const Carousels = () => {
                 <tr className="heading-table">
                   <th className="th-titles">تصویر</th>
                   <th className="th-titles">عنوان فروشگاه</th>
+                  <th className="th-titles">عکس مالک</th>
                   <th className="th-titles">مالک</th>
                   <th className="th-titles">شماره تلفن مالک</th>
                   <th className="th-titles">پشتیبانی محصولات</th>
                   <th className="th-titles">تلفن ثابت</th>
                   <th className="th-titles">آدرس</th>
-                  <th className="th-titles">longitude</th>
-                  <th className="th-titles">latitude</th>
                   <th className="th-titles">ویرایش</th>
-                  <th className="th-titles">حذف</th>
+                  <th className="th-titles">فعالیت</th>
                 </tr>
               </thead>
               <tbody>
@@ -111,13 +114,25 @@ const Carousels = () => {
                         </div>
                       </td>
                       <td className="font-sm">{s.title}</td>
+                      <td className="font-sm">
+                        <div className="d-flex-center-center">
+                            <img
+                              className="table-img"
+                              style={{borderRadius: "50%"}}
+                              src={
+                                !s.photos.length
+                                  ? `${defPic}`
+                                  : `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${s.ownerImage}`
+                              }
+                              alt={s.title}
+                            />
+                          </div>  
+                      </td>
                       <td className="font-sm">{s.owner}</td>
                       <td className="font-sm">{s.phoneNumber}</td>
                       <td className="font-sm">{s.backupFor.name}</td>
                       <td className="font-sm">{s.storePhoneNumber}</td>
                       <td className="font-sm">{s.address}</td>
-                      <td className="font-sm">{s.longitude}</td>
-                      <td className="font-sm">{s.latitude}</td>
                       <td>
                         <Link
                           to={`/admin/dashboard/carousel-update/${s.slug}`}
@@ -127,14 +142,22 @@ const Carousels = () => {
                         </Link>
                       </td>
                       <td>
-                        <span
+                        {s.isBan ? <span
                           className="d-flex-center-center"
                           onClick={() =>
-                            removeSupplierHandler(s.slug, s.owner, s.backupFor)
+                            toggleSupplierActivityHandler(s)
                           }
                         >
-                          <MdDelete className="text-red" />
-                        </span>
+                          <TiDelete className="text-red" />
+                        </span> : <span
+                          className="d-flex-center-center"
+                          onClick={() =>
+                            toggleSupplierActivityHandler(s)
+                          }
+                        >
+                          <HiBadgeCheck className="text-green" />
+                        </span>}
+                        
                       </td>
                     </tr>
                   ))}

@@ -225,7 +225,7 @@ const ForgotPassword = ({ history }) => {
             id="phoneNumber"
             element="input"
             type="text"
-            placeholder="مثال: 09117025683"
+            placeholder="مثال: 5683***0911"
             onInput={inputHandler}
             disabled={phoneNumIsValid}
             focusHandler={() =>
@@ -269,7 +269,7 @@ const ForgotPassword = ({ history }) => {
             onInput={inputHandler}
             disabled={authCodeIsValid}
             validators={[VALIDATOR_AUTHNUMBER()]}
-            errorText="کد تایید بین 6 تا 7 عدد میباشد!"
+            errorText="کد تایید صحیح نمی باشد!"
           />
           <div className="auth-code-wrapper">
             <Button

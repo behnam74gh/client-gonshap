@@ -8,7 +8,7 @@ import { MdRemoveRedEye } from "react-icons/md";
 import Pagination from "../../../components/UI/Pagination/Pagination";
 import { toast } from "react-toastify";
 import Modal from "../../../components/UI/Modal/Modal";
-import "./Suggests.css";
+import "../CommentsList/CommentsList.css";
 
 const Suggests = () => {
   const [loading, setLoading] = useState(false);
@@ -203,7 +203,7 @@ const Suggests = () => {
       ) : (
         <p className="mt-0">
           تعداد
-          <strong className="text-blue mx-2">{suggestsLength}</strong> پیغام
+          <strong className="text-blue mx-2">{suggestsLength}</strong> پیغام جدید
           {visited === false && " جدید "} وجود دارد!
         </p>
       )}
