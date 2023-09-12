@@ -1,8 +1,9 @@
 .comment_box_wrapper {
   width: 100%;
   max-height: 550px;
-  padding: 0 5px;
+  padding: 0 15px;
   overflow-y: auto;
+  border: 1px solid #bbb2b2;
 }
 /* scrollbar-comment_box */
 .comment_box_wrapper::-webkit-scrollbar-track {
@@ -16,18 +17,7 @@
 .comment_wrapper {
   position: relative;
 }
-.boughted {
-  position: absolute;
-  right: 0;
-  top: 20px;
-  color: red;
-  font-weight: 900;
-  border: 3px solid red;
-  padding: 4px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  transform: rotate(45deg);
-}
+
 .single_comment_wrapper {
   display: flex;
   flex-flow: row wrap;
@@ -179,13 +169,5 @@
   .writer_photo_wrapper img {
     max-width: 30px;
     max-height: 30px;
-  }
-  .boughted {
-    right: 0;
-    top: 6px;
-    border-width: 2px;
-    padding: 0px 2px;
-    font-size: 10px;
-    transform: rotate(45deg);
   }
 }

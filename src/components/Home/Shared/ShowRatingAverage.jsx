@@ -1,9 +1,7 @@
 import React from "react";
 import StarRating from "react-star-ratings";
-import { useSelector } from "react-redux";
 
 export const ShowRatingAverage = (p) => {
-  const {isMobile} = useSelector(state => state)
   
   if (p && p.ratings) {
     let ratingsArray = p && p.ratings;
@@ -24,8 +22,8 @@ export const ShowRatingAverage = (p) => {
           <StarRating
             rating={result}
             starRatedColor="var(--secondColorPalete)"
-            starDimension={isMobile ? "14px" : "20px"}
-            starSpacing={isMobile ? "0" : "2px"}
+            starDimension={"18px"}
+            starSpacing={"2px"}
             isSelectable={false}
           />
         </span>

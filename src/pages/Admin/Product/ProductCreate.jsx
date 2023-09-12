@@ -552,12 +552,11 @@ const ProductCreate = () => {
               ))}
             </div>
           )}
-          <label className="auth-label">مشخصات-1 :</label>
           <Input
             id="attr1"
             element="input"
             type="text"
-            placeholder="دارای 2 سال گارانتی"
+            placeholder="مشخصات-1 :"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
@@ -566,12 +565,11 @@ const ProductCreate = () => {
             ]}
             errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
           />
-          <label className="auth-label">مشخصات-2 :</label>
           <Input
             id="attr2"
             element="input"
             type="text"
-            placeholder="اندروید 10"
+            placeholder="مشخصات-2 :"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
@@ -580,12 +578,11 @@ const ProductCreate = () => {
             ]}
             errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
           />
-          <label className="auth-label">مشخصات-3 :</label>
           <Input
             id="attr3"
             element="input"
             type="text"
-            placeholder="صفحه لمسی و حرارتی"
+            placeholder="مشخصات-3 :"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),

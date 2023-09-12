@@ -11,11 +11,12 @@ import { toast } from "react-toastify";
 import { CLOSE_STAR_RATING_MODAL } from "../../redux/Types/ratingModalType";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
 import "../../components/Home/Section3/Section3.css";
+import { db } from "../../util/indexedDB";
 import "./Product.css";
 
 const Product = ({ match }) => {
   const [loading, setLoading] = useState(false);
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState(null);
   const [errorText, setErrorText] = useState("");
   const [recentViewserror, setRecentViewsError] = useState("");
   const [commentsError, setCommentsError] = useState("");
@@ -85,11 +86,20 @@ const Product = ({ match }) => {
 
   useEffect(() => {
     setLoading(true);
-    loadCurrentProduct();
-  }, [loadCurrentProduct]);
+    if(navigator.onLine){
+      loadCurrentProduct();
+    }else{
+      setLoading(false)
+      db.productDetailes.toArray().then(items => {
+        setProduct(items[0])
+      })
+    }
+  }, [loadCurrentProduct,productId]);
+
 
   useEffect(() => {
-    axios
+    if(navigator.onLine){
+      axios
       .post("/get-all-comments/current-product", { productId })
       .then((res) => {
         if (res.data.success) {
@@ -104,6 +114,14 @@ const Product = ({ match }) => {
           setCommentsError(err.response.data.message);
         }
       });
+    }
+
+      return () => {
+        setStarValue({
+          star: 0,
+          productId: "",
+        })
+      }
   }, [productId]);
 
   useEffect(() => {

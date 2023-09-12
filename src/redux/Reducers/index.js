@@ -9,6 +9,7 @@ import { shopReducer } from "./shopReducers";
 import { couponReducer } from "./couponReducers";
 import { CODReducer } from "./CODRedusers";
 import { isMobileReducer } from "./isMobileReduser";
+import { isOnlineReducer } from "./isOnlineReducer";
 
 const rootReducer = combineReducers({
   userSignin: userSigninReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   shopConfig: shopReducer,
   coupon: couponReducer,
   CODelivery: CODReducer,
-  isMobile: isMobileReducer
+  isMobile: isMobileReducer,
+  isOnline: isOnlineReducer,
 });
 
 export default rootReducer;

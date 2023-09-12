@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="گنشاپ یک فروشگاه اینترنتی جهت فروش لوازم خانگی و لوازم الکترونیکی و لوازم الکتریکی و لوازم چوبی میباشد که در جهت کمک به مردم به منظور خرید ارزانتر وآسانتر با امکان تحویل رایگان درب منزل شروع به خدمات رسانی به مردم شریف استان گلستان کرده است."
+      content="بازارک یک فروشگاه اینترنتی جهت فروش لوازم خانگی و لوازم الکترونیکی و لوازم الکتریکی و لوازم چوبی میباشد که در جهت کمک به مردم به منظور خرید ارزانتر وآسانتر با امکان تحویل رایگان درب منزل شروع به خدمات رسانی به مردم شریف استان گلستان کرده است."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
@@ -30,9 +30,47 @@
     />
     <link rel="stylesheet" href="./assets/style/style.css" />
     <title>GonshAp</title>
+    <style>
+      #internet_access {
+        display: none;
+        width: 100%;
+        height: auto;
+        text-align: center;
+        background-color: #FFD200;
+        color: #6A0093;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        padding: 5px 0;
+        font-size: 14px;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="internet_access">شما آفلاین هستید، اتصال اینترنت خود را بررسی کنید</div>
     <div id="root"></div>
+    <script type="text/javascript">
+      let internetAccessTag = document.getElementById("internet_access")
+
+      window.addEventListener('load', () => {
+        if(!navigator.onLine){
+        internetAccessTag.style.display = 'block'
+        }else{
+          internetAccessTag.style.display = 'none'
+        }
+      })
+      window.addEventListener('online', () => {
+        internetAccessTag.style.display = 'none'
+      })
+      window.addEventListener('offline', () => {
+        internetAccessTag.style.display = 'block';
+      })
+
+      // if('serviceWorker' in navigator){
+      //   navigator.serviceWorker.register('%PUBLIC_URL%/sw.js')
+      // }
+    </script>
   </body>
 </html>

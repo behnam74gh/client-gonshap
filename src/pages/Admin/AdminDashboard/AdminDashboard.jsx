@@ -149,7 +149,7 @@ const AdminDashboard = ({ history }) => {
           <AdminRoute path="/admin/dashboard/many" component={SendManySMS} />
           <AdminRoute path="/admin/dashboard/to-all" component={SendToAllSMS} />
           <AdminRoute path="/admin/dashboard/sms/:id" component={SMSDetails} />
-
+          
           <AdminRoute path="/admin/dashboard/suggests" component={Suggests} />
           <AdminRoute path="/admin/dashboard/todo" component={ToDoList} />
           <AdminRoute

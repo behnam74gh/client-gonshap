@@ -17,7 +17,7 @@ const SubMenu = () => {
   );
 
   const { image, categories, subcategories, order } = navItem;
-
+    
   const subMenuContainer = useRef(null);
 
   useEffect(() => {

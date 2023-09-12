@@ -106,11 +106,11 @@ const Signin = ({ history, location }) => {
           const { success, message, userInfo, remindMe } = response.data;
           if (success) {
             isAdminBasedRedirect(userInfo);
-            const { firstName, isAdmin,role, refreshToken, userId,supplierFor } = userInfo;
+            const { firstName, isAdmin,role,isBan, refreshToken, userId,supplierFor } = userInfo;
 
             dispatch({
               type: USER_SIGNIN_SUCCESS,
-              payload: { firstName, isAdmin,role,supplierFor, refreshToken, userId },
+              payload: { firstName, isAdmin,role,isBan,supplierFor, refreshToken, userId },
             });
             if (remindMe) {
               localStorage.setItem(
@@ -119,6 +119,7 @@ const Signin = ({ history, location }) => {
                   firstName,
                   isAdmin,
                   role,
+                  isBan,
                   supplierFor,
                   refreshToken,
                   userId,

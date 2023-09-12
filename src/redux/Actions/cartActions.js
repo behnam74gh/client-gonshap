@@ -10,6 +10,7 @@ import {
   DELETE_DEPRECATED_ITEM,
   SET_COLORS,
 } from "../Types/cartTypes";
+import { db } from "../../util/indexedDB";
 import axios from "../../util/axios";
 
 export const addToCart = (productId) => (dispatch, getState) => {
@@ -116,6 +117,9 @@ export const upgradeCartItems = () => async (dispatch, getState) => {
           type: UPGRADE_CART_ITEMS,
           payload: { upgratedCartItems },
         });
+
+        db.cartItemsInfo.clear()
+        db.cartItemsInfo.bulkPut(upgratedCartItems)
 
         if (deprecatedItems.length > 0) {
           let copyOfCartItems = cartItems;

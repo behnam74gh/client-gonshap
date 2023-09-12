@@ -7,6 +7,7 @@ import {
   DELETE_DEPRECATED_FAVORITES_ITEM,
 } from "../Types/favoriteTypes";
 import axios from "../../util/axios";
+import { db } from "../../util/indexedDB";
 
 export const addToFavorites = (productId) => (dispatch, getState) => {
   const favoriteItems = getState().favorites.favoriteItems.slice();
@@ -71,6 +72,9 @@ export const upgradeFavoriteItems = () => async (dispatch, getState) => {
           type: UPGRADE_FAVORITES,
           payload: { upgratedCartItems },
         });
+
+        db.favoriteItems.clear()
+        db.favoriteItems.bulkPut(upgratedCartItems)
 
         if (deprecatedItems.length > 0) {
           let copyOfFavoriteItems = favoriteItems;

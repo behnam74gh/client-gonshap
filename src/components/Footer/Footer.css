@@ -116,6 +116,24 @@ footer {
 .arrow_up:hover {
   box-shadow: 0 0px 14px var(--secondColorPalete);
 }
+.install_app{
+  position: fixed;
+  right: 30px;
+  bottom: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.install_app svg {
+  cursor: pointer;
+  width: 80%;
+  height: auto;
+}
 @media (max-width: 780px) {
   footer {
     margin: 20px auto 0;

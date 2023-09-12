@@ -72,7 +72,7 @@ const Comments = (props) => {
         <form className="auth-form" onSubmit={submitCommentHandler}>
           <label className="auth-label">
             لطفا نظر خود را ثبت کنید :
-            <span className="text-mute">( ابتدا وارد حسابتان شوید )</span>
+            {!userInfo && <span className="text-mute">( ابتدا وارد حسابتان شوید )</span>}
           </label>
           <Input
             id="commentContent"
@@ -94,7 +94,7 @@ const Comments = (props) => {
               !formState.inputs.commentContent.isValid ||
               loading ||
               userInfo === null ||
-              userInfo === undefined
+              userInfo === undefined || userInfo.isBan
             }
           >
             {loading ? (
@@ -114,9 +114,9 @@ const Comments = (props) => {
       </p>
       {props.commentList && props.commentList.length > 0 ? (
         props.commentList.map(
-          (comment, index) =>
+          (comment) =>
             !comment.responseTo && (
-              <React.Fragment key={index}>
+              <React.Fragment key={comment._id}>
                 <SingleComment comment={comment} />
                 <RepleyComments
                   postId={props.postId}

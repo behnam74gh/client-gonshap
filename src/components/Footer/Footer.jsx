@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { FiPhoneCall } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import { HiLocationMarker } from "react-icons/hi";
+import { MdOutlinePhonelinkSetup} from 'react-icons/md'
 import InstagramLogo from "../../assets/images/instalogo.png";
 import TelegramLogo from "../../assets/images/telegram_PNG11.png";
 import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
@@ -11,6 +12,8 @@ import Nemad3 from "../../assets/images/nemad-logo-3.png";
 import "./Footer.css";
 
 const Footer = ({ companyInfo }) => {
+  const [deferredPrompt,setDeferredPrompt] = useState(null);
+
   const {
     companyTitle,
     aboutUs,
@@ -24,6 +27,25 @@ const Footer = ({ companyInfo }) => {
     signMedia,
     signUnion
   } = companyInfo;
+  
+  useLayoutEffect(() => {
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault()
+      setDeferredPrompt(e)
+    })
+  }, [])
+  
+  const installBannerHandler = () => {
+    if(deferredPrompt !== null){
+      deferredPrompt.prompt().then(result => {
+        if(result.outcome === "accepted"){
+          setDeferredPrompt(null)
+        }
+      })
+    }else{
+      return
+    }
+  }
 
   return (
     <footer>
@@ -105,6 +127,12 @@ const Footer = ({ companyInfo }) => {
         <a href="#header" className="arrow_up">
           <IoIosArrowUp />
         </a>
+      </div>
+
+      <div className="pos-rel">
+        <span className="install_app" onClick={installBannerHandler}>
+           <MdOutlinePhonelinkSetup color="var(--firstColorPalete)" />
+        </span>
       </div>
 
       <div className="protection">

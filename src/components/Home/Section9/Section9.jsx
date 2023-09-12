@@ -5,8 +5,9 @@ import Slider from "react-slick";
 import ProductCard from "../Shared/ProductCard";
 import LoadingSkeletonCard from "../Shared/LoadingSkeletonCard";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { searchByUserFilter } from "../../../redux/Actions/shopActions";
+import { db } from "../../../util/indexedDB";
 import "../Section3/Section3.css";
 
 const Section9 = () => {
@@ -15,6 +16,7 @@ const Section9 = () => {
   const [errorText, setErrorText] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(4);
 
+  const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,15 +59,27 @@ const Section9 = () => {
           }
           setProducts(foundedProducts);
           setErrorText("");
+
+          db.reviewedProducts.clear()
+          db.reviewedProducts.bulkPut(foundedProducts)
+
         }
       })
       .catch((err) => {
-        if (typeof err.response.data.message === "object") {
-          setErrorText(err.response.data.message[0]);
-          setProducts([]);
-        } else {
-          setErrorText(err.response.data.message);
-        }
+        setLoading(false)
+        db.reviewedProducts.toArray()
+        .then(items => {
+          if(items?.length > 0){
+            setProducts(items)
+          }else{
+            if (typeof err.response.data.message === "object") {
+              setErrorText(err.response.data.message[0]);
+              setProducts([]);
+              } else {
+                setErrorText(err.response.data.message);
+              }
+          }
+        })
       });
   }, []);
 
@@ -104,7 +118,7 @@ const Section9 = () => {
       ) : (
         <p className="warning-message">محصولی وجود ندارد!</p>
       )}
-      {products.length > 0 && <div className="column_item">
+      {(isOnline && products.length > 0) && <div className="column_item">
         <Link
           to={`/shop?all-discounts`}
           onClick={() =>

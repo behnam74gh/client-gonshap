@@ -3,6 +3,7 @@ import { FaChevronLeft, FaChevronRight, FaQuoteRight } from "react-icons/fa";
 import axios from "../../../util/axios";
 import LoadingSuggest from "../../UI/LoadingSkeleton/LoadingSuggest";
 import defPic from "../../../assets/images/pro-8.png";
+import { db } from "../../../util/indexedDB";
 import "./Section10.css";
 
 const Section10 = () => {
@@ -13,14 +14,18 @@ const Section10 = () => {
   const [activeSuggest, setActiveSuggest] = useState({});
 
   useEffect(() => {
-    setLoading(true);
-    axios
+    if(navigator.onLine){
+      setLoading(true);
+      axios
       .get("/fetch/best-suggests")
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
           setBestSuggests(response.data.suggests);
           setErrorText("");
+
+          db.suggests.clear()
+          db.suggests.bulkPut(response.data.suggests)
         }
       })
       .catch((err) => {
@@ -29,6 +34,14 @@ const Section10 = () => {
           setErrorText(err.response.data.message);
         }
       });
+    }else{
+      db.suggests.toArray().then(items => {
+        if(items.length > 0){
+          setBestSuggests(items)
+          setErrorText("")
+        }
+      })
+    }
   }, []);
 
   useEffect(() => {

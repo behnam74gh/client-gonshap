@@ -39,9 +39,9 @@ const RepleyComments = (props) => {
           className="count_of_replye_comments"
           onClick={() => setOpenRepleyComments(!openRepleyComments)}
         >
-          تعداد
-          <strong className="mx-2 text-purple">{childCommentNumber}</strong>نظر
-          دیگر را مشاهده کنید
+          {openRepleyComments ? "بستن" : "مشاهده"}
+          <strong className="mx-2 text-purple">{childCommentNumber}</strong>پاسخ
+             
         </p>
       )}
       {openRepleyComments && renderRepleyComments(props.parentCommentId)}

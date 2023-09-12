@@ -11,6 +11,7 @@ import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCar
 import Pagination from "../../components/UI/Pagination/Pagination";
 import Section6 from "../../components/Home/Section6/Section6";
 import { toast } from "react-toastify";
+import { db } from "../../util/indexedDB";
 import InputRange from "react-input-range-rtl";
 import "react-input-range-rtl/lib/css/index.css";
 import "./ShopPage.css";
@@ -102,6 +103,9 @@ const ShopPage = () => {
           setProducts(foundedProducts);
           setProductsLength(allCount);
           setErrorText("");
+
+          db.shopPage.clear()
+          db.shopPage.bulkPut(foundedProducts)
         }
       })
       .catch((err) => {
@@ -162,10 +166,16 @@ const ShopPage = () => {
   }, []);
 
   useEffect(() => {
-    if (text) {
-      searchProductsByTextQuery();
-    } else {
-      searchProductsBySearchConfig();
+    if(navigator.onLine){
+      if (text) {
+        searchProductsByTextQuery();
+      } else {
+        searchProductsBySearchConfig();
+      }
+    }else{
+      db.shopPage.toArray().then(items => {
+        setProducts(items)
+      })
     }
   }, [searchProductsByTextQuery, searchProductsBySearchConfig, text]);
 
@@ -370,7 +380,7 @@ const ShopPage = () => {
 
   return (
     <section id="shop_page">
-      <div className="filtering_wrapper">
+      {navigator.onLine && <div className="filtering_wrapper">
         <div className="base_filtering_wrapper">
           <span
             className="filter_btn"
@@ -489,7 +499,7 @@ const ShopPage = () => {
             )}
           </div>
         </div>
-      </div>
+      </div>}
       <div className="shop_products_wrapper">
         {loading ? (
           <LoadingSkeletonCard count={16} />

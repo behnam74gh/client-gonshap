@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import axios from "../../../util/axios";
 import LoadingSkeleton from "../../UI/LoadingSkeleton/LoadingSkeleton";
+import { db } from "../../../util/indexedDB";
 
 const SupplierSlider = () => {
   const [loading, setLoading] = useState(false);
@@ -19,10 +20,16 @@ const SupplierSlider = () => {
           const activeSuppliers = response.data.allSuppliers.filter(s => !s.isBan)
           setSuppliers(activeSuppliers);
           setErrorText("");
+
+          db.supplierList.clear()
+          db.supplierList.bulkPut(activeSuppliers)
         }
       })
       .catch((err) => {
         setLoading(false);
+        db.supplierList.toArray().then(items => {
+          setSuppliers(items)
+        })
         if (err.response) {
           setErrorText(err.response.data.message);
         }

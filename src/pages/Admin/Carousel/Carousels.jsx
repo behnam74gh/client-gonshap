@@ -3,8 +3,7 @@ import { GoPlus } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
 import axios from "../../../util/axios";
-import {RiDeleteBin2Fill} from 'react-icons/ri'
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import defPic from "../../../assets/images/def.jpg";
 import { toast } from "react-toastify";
 import "./Carousels.css";

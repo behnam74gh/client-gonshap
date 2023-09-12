@@ -16,7 +16,7 @@ import "./Navbar.css";
 const Navbar = (props) => {
   const dispatch = useDispatch();
 
-  const { subMenu, userSignin, cart, favorites } = useSelector((state) => ({
+  const { subMenu, userSignin, cart, favorites,isOnline } = useSelector((state) => ({
     ...state,
   }));
 
@@ -53,7 +53,7 @@ const Navbar = (props) => {
         </div>
         <div className="header-feature">
           <ul>
-            {userInfo && userInfo.refreshToken ? (
+            {userInfo && isOnline && userInfo.refreshToken ? (
               <li className="logged-user">
                 {userInfo.firstName}
                 <MdKeyboardArrowDown
@@ -81,7 +81,7 @@ const Navbar = (props) => {
             ) : null}
             <li>
               <Link to="/cart" className="tooltip">
-                <span className="tooltip_text">سبدِ خرید</span>
+                <span className="tooltip_text">سبد خرید</span>
                 <span className="cart-badge">
                   {" "}
                   {cartItems && cartItems.length}
@@ -101,12 +101,12 @@ const Navbar = (props) => {
             </li>
           </ul>
 
-          {!userInfo && <Link to="/register" className="auth-btn">
+          {(!userInfo && isOnline) && <Link to="/register" className="auth-btn">
             ثبت نام
             <AiOutlineUser style={{ marginRight: "5px" }} />
           </Link>}
 
-          {!userInfo && <Link to="/signin" className="auth-btn">
+          {(!userInfo && isOnline) && <Link to="/signin" className="auth-btn">
             ورود
             <RiLogoutBoxLine style={{ marginRight: "5px" }} />
           </Link>}

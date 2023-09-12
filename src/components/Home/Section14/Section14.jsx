@@ -12,6 +12,8 @@ import {
 } from "../../../util/validators";
 import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
+import { useSelector } from "react-redux";
+import { db } from "../../../util/indexedDB";
 import "./Section14.css";
 
 const Section14 = () => {
@@ -22,6 +24,7 @@ const Section14 = () => {
     longitude: null,
   });
   const [reRenderForm, setReRenderForm] = useState(true);
+  const isOnline = useSelector((state) => state.isOnline)
 
   const [formState, inputHandler] = useForm({
     phoneNumber: {
@@ -35,11 +38,13 @@ const Section14 = () => {
   });
 
   useEffect(() => {
-    axios
+    if(navigator.onLine){
+      axios
       .get("/read/company-info")
       .then((response) => {
         if (response.data.success) {
           setCompanyInfo(response.data.companyInfo);
+          
           setCoordinates({
             latitude: response.data.companyInfo.latitude,
             longitude: response.data.companyInfo.longitude,
@@ -51,6 +56,18 @@ const Section14 = () => {
           console.log(err.response.data.message);
         }
       });
+    }else{
+      db.companyInformation.toArray().then(items => {
+        if(items.length > 0){
+          setCompanyInfo(items[0])
+          setCoordinates({
+            latitude: items[0].latitude,
+            longitude: items[0].longitude,
+          });
+        }
+      })
+    }
+
   }, []);
 
   useEffect(() => {
@@ -61,6 +78,12 @@ const Section14 = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+
+    if(!isOnline){
+      toast.warning('شما به اینترنت دسترسی ندارید')
+      return
+    }
+    
     setLoading(true);
     axios
       .post("/create/user-suggest", {

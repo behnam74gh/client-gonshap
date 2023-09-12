@@ -5,6 +5,7 @@ import defPic from "../../assets/images/pro-8.png";
 import LikeDislike from "./LikeDislike";
 import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
+import { BsFillCartCheckFill } from "react-icons/bs";
 import Button from "../UI/FormElement/Button";
 import Input from "../UI/FormElement/Input";
 import { useForm } from "../../util/hooks/formHook";
@@ -38,6 +39,10 @@ const SingleComment = ({ comment }) => {
     }
   }, [reRenderComponent]);
 
+  const toggleFormToAnswerHandler = () => {
+    setShowForm(!showForm)
+  }
+
   const submitCommentHandler = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,7 +74,6 @@ const SingleComment = ({ comment }) => {
 
   return (
     <div className="comment_wrapper">
-      {comment.isBought && <span className="boughted">خریدار</span>}
       <div className="single_comment_wrapper">
         <div className="writer_photo_wrapper">
           <img
@@ -85,9 +89,11 @@ const SingleComment = ({ comment }) => {
 
         <div className="comment_content_wrapper">
           <div>
-            <span>
-              <strong className="text-mute mx-1">{`${writer.firstName} ${writer.lastName}`}</strong>
-              :
+            <span className="d-flex-center-center">
+              <strong className="text-mute mx-1">
+                {`${writer.firstName} ${writer.lastName}`}
+              </strong>
+              {comment.isBought && <BsFillCartCheckFill style={{cursor: "auto"}} color="var(--thirdColorPalete)" />}
             </span>
             <span className="font-sm">
               تاریخ ثبت نظر :{" "}
@@ -99,8 +105,8 @@ const SingleComment = ({ comment }) => {
           <p className="comment_content">{content}</p>
           <div className="like_dislike_wrapper">
             <LikeDislike commentId={_id} />
-            <span onClick={() => setShowForm(!showForm)} className="reply_btn">
-              پاسخ دادن
+            <span onClick={toggleFormToAnswerHandler} className="reply_btn">
+              {showForm ? "انصراف" : "پاسخ دادن"}
             </span>
           </div>
         </div>
@@ -128,13 +134,13 @@ const SingleComment = ({ comment }) => {
               !formState.inputs.repleyComment.isValid ||
               loading ||
               userInfo === null ||
-              userInfo === undefined
+              userInfo === undefined || userInfo.isBan
             }
           >
             {loading ? (
               <VscLoading className="loader" />
             ) : userInfo && userInfo.refreshToken ? (
-              "ثبت پارسخ"
+              "ثبت پاسخ"
             ) : (
               "ابتدا وارد شوید"
             )}

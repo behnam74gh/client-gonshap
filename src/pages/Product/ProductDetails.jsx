@@ -54,7 +54,7 @@ const ProductDetails = ({
   } = product;
 
   const dispatch = useDispatch();
-  const { userSignin, ratingModal, cart, favorites } = useSelector((state) => ({
+  const { userSignin, ratingModal, cart, favorites,isOnline } = useSelector((state) => ({
     ...state,
   }));
   const history = useHistory();
@@ -187,10 +187,10 @@ const ProductDetails = ({
             ) : (
               <p className="font-sm">امتیازی داده نشده است</p>
             )}
-            <Link to={`/compares/${_id}`} className="compare_icon tooltip">
+            {isOnline &&<Link to={`/compares/${_id}`} className="compare_icon tooltip">
               <span className="tooltip_text">مقایسه</span>
               <IoIosGitCompare />
-            </Link>
+            </Link>}
           </div>
         </div>
 
@@ -308,7 +308,7 @@ const ProductDetails = ({
               <li className="font-sm">{attr3}</li>
             </ul>
           </div>
-          <div className="info_wrapper">
+          {isOnline && <div className="info_wrapper">
             <span className="question_info text-purple">
               <MdLabel className="font-md ml-1" />
               برچسب :
@@ -322,7 +322,7 @@ const ProductDetails = ({
                 {subcategory.name}
               </Link>
             </span>
-          </div>
+          </div>}
           <div className="products_icon_wrapper">
             <div className="cart_btn_wrapper">
               <button
@@ -338,12 +338,12 @@ const ProductDetails = ({
                 )}
               </button>
             </div>
-            <div className="rating_btn_wrapper">
+            {isOnline && <div className="rating_btn_wrapper">
               <button
                 className="d-flex-center-center tooltip"
                 onClick={ratingModalHandler}
               >
-                {!userInfo && (
+                {(!userInfo || userInfo === null) && (
                   <span
                     className="tooltip_text"
                     style={{
@@ -357,7 +357,7 @@ const ProductDetails = ({
                 امتیاز دهید
                 <IoIosStar className="mx-2 font-md" />
               </button>
-            </div>
+            </div>}
             <div className="favorite_btn_wrapper">
               <button
                 className={`d-flex-center-center ${!sell && "disabledBtn"}`}

@@ -327,7 +327,7 @@ const Orders = () => {
                 <th className="th-titles">تاریخ سفارش</th>
                 <th className="th-titles">وضعیت ارسال</th>
                 <th className="th-titles">وضعیت پرداخت</th>
-                <th className="th-titles">مشاهده/ویرایش</th>
+                <th className="th-titles">مشاهده</th>
               </tr>
             </thead>
             <tbody>

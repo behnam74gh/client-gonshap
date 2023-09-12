@@ -8,10 +8,17 @@ import defPic from "../../assets/images/def.jpg";
 import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCard";
 import Section11 from "../../components/Home/Section11/Section11";
 import Section5 from "../../components/Home/Section5/Section5";
+import { db } from "../../util/indexedDB";
+import {ReactComponent as EmptyFavoriteSvg} from '../../assets/images/empty_favorites.svg'
 import "./MyFavoritePage.css";
 
 const MyFavoritePage = () => {
   const [showDeprecatedItems, setShowDeprecatedItems] = useState(false);
+  const [oldFavoriteItemsInfo,setOldFavoriteItemsInfo] = useState([])
+
+  const {favorites,isOnline} = useSelector((state) => ({...state}))
+
+  const dispatch = useDispatch();
 
   const {
     favoriteItems,
@@ -19,12 +26,21 @@ const MyFavoritePage = () => {
     errorText,
     favoriteItemsInfo,
     deprecatedFavoriteItems,
-  } = useSelector((state) => state.favorites);
-  const dispatch = useDispatch();
+  } = favorites;
 
   useEffect(() => {
-    dispatch(upgradeFavoriteItems());
-  }, [dispatch]);
+    if (isOnline && navigator.onLine){
+      dispatch(upgradeFavoriteItems());
+    }else{
+      db.favoriteItems.toArray()
+      .then(items => {
+        if(items?.length > 0){
+          setOldFavoriteItemsInfo(items)
+        }
+      })
+    }
+   
+  }, [dispatch,isOnline]);
 
   useEffect(() => {
     if (deprecatedFavoriteItems && deprecatedFavoriteItems.length > 0) {
@@ -34,19 +50,25 @@ const MyFavoritePage = () => {
 
   const closeDeprecatedItemsHandler = () => setShowDeprecatedItems(false);
 
+  const activeFavoriteItems = favoriteItemsInfo?.length === favoriteItems.length ? favoriteItemsInfo : oldFavoriteItemsInfo?.length === favoriteItems.length ? oldFavoriteItemsInfo : [];
   return (
     <section id="favorites_page">
       <h2 className="text-purple">صفحه علاقه مندی های من</h2>
-
+      <div className="w-100 d-flex-center-center">
+        {favoriteItems?.length < 1 && <EmptyFavoriteSvg style={{maxWidth: "250px"}} />}
+      </div>
+      {favoriteItems?.length > 0 ?
+        <span style={{display: "block"}} className="info-message">شما تعداد {favoriteItems.length} محصول را پسندیده اید</span> :
+        <span style={{display: "block"}} className="warning-message">شما محصولی را پسند نکرده اید</span>
+      }
       <div className="my_favorites_wrapper">
         {loading ? (
           <LoadingSkeletonCard count={favoriteItems.length} />
         ) : errorText.length > 0 ? (
           <p className="warning-message">{errorText}</p>
         ) : (
-          favoriteItemsInfo &&
-          favoriteItemsInfo.length > 0 &&
-          favoriteItemsInfo.map((item, i) => (
+          activeFavoriteItems?.length > 0 &&
+          activeFavoriteItems.map((item, i) => (
             <ProductCard key={i} product={item} loading={loading} />
           ))
         )}

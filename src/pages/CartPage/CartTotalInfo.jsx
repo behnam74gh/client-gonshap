@@ -7,12 +7,12 @@ import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCar
 import axios from "../../util/axios.js";
 import "../Admin/CommentsList/CommentsList.css";
 
-const CartTotalInfo = () => {
+const CartTotalInfo = ({cartItemsInfo}) => {
   const [loading2, setLoading2] = useState(false);
 
-  const { cart, userSignin } = useSelector((state) => ({ ...state }));
+  const { cart, userSignin,isOnline } = useSelector((state) => ({ ...state }));
 
-  const { cartItems, cartItemsInfo, loading } = cart;
+  const { cartItems, loading } = cart;
   const { userInfo } = userSignin;
 
   const history = useHistory();
@@ -129,7 +129,7 @@ const CartTotalInfo = () => {
           {userInfo && userInfo.refreshToken ? (
             <button
               type="button"
-              disabled={!cartItems.length}
+              disabled={!cartItems.length || userInfo.isBan}
               onClick={purchaseCheckoutHandler}
               className="modal_btn bg-purple w-45 p-0"
             >
@@ -142,7 +142,7 @@ const CartTotalInfo = () => {
           ) : (
             <button
               type="button"
-              disabled={!cartItems.length}
+              disabled={!cartItems.length || !isOnline}
               className="modal_btn bg-purple w-100 py-3"
               onClick={() =>
                 history.push({

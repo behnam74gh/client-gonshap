@@ -13,6 +13,7 @@ import {
   removeFromFavorites,
 } from "../../../redux/Actions/favoriteActions";
 import { toast } from "react-toastify";
+import { db } from "../../../util/indexedDB";
 import "./ProductCard.css";
 
 const ProductCard = ({ product, showSold, showReviews }) => {
@@ -96,9 +97,14 @@ const ProductCard = ({ product, showSold, showReviews }) => {
     }
   };
 
+  const cacheProductDetailsHandler = () => {
+     db.productDetailes.clear()
+     db.productDetailes.add(product)
+  }
+
   return (
     <div className="product_wrapper">
-      <Link to={`/product/details/${_id}`} className="product_img_box">
+      <Link to={`/product/details/${_id}`} onClick={cacheProductDetailsHandler} className="product_img_box">
         <figure className="figure_img">
           <img
             src={
@@ -111,7 +117,7 @@ const ProductCard = ({ product, showSold, showReviews }) => {
         </figure>
       </Link>
       <div className="product_info_box">
-        <Link to={`/product/details/${_id}`}>
+        <Link to={`/product/details/${_id}`} onClick={cacheProductDetailsHandler}>
           <h3 className={`${showReviews || showSold ? "has_Second_att" : "my-0"}`}>{title}</h3>
         </Link>
 

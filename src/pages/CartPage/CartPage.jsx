@@ -9,11 +9,16 @@ import Backdrop from "../../components/UI/Backdrop/Backdrop";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
 import Section5 from "../../components/Home/Section5/Section5";
 import Section8 from "../../components/Home/Section8/Section8";
+import { db } from "../../util/indexedDB";
+import { ReactComponent as EmptyCartSvg } from '../../assets/images/empty_cart.svg'
 import "./CartPage.css";
 
 const CartPage = () => {
   const [showDeprecatedItems, setShowDeprecatedItems] = useState(false);
-  const { cart } = useSelector((state) => ({ ...state }));
+  const [oldCartItemsInfo,setOldCartItemsInfo] = useState([])
+
+  const { cart,isOnline } = useSelector((state) => ({ ...state }));
+
   const dispatch = useDispatch();
 
   const {
@@ -25,8 +30,17 @@ const CartPage = () => {
   } = cart;
 
   useEffect(() => {
-    dispatch(upgradeCartItems());
-  }, [dispatch]);
+    if (isOnline && navigator.onLine){
+      dispatch(upgradeCartItems());
+    }else{
+      db.cartItemsInfo.toArray()
+      .then(items => {
+        if(items?.length > 0){
+          setOldCartItemsInfo(items)
+        }
+      })
+    }
+  }, [dispatch,isOnline]);
 
   useEffect(() => {
     if (deprecatedItems && deprecatedItems.length > 0) {
@@ -53,17 +67,20 @@ const CartPage = () => {
           ) : errorText && errorText.length > 0 ? (
             <p className="warning-message">{errorText}</p>
           ) : cartItems && cartItems.length > 0 ? (
-            <CartItems cartItems={cartItemsInfo} />
+            <CartItems cartItems={isOnline ? cartItemsInfo : oldCartItemsInfo} />
           ) : (
-            <p className="warning-message">سبد خرید شما خالی است</p>
+            <div className="empty_cart_wrapper">
+              <EmptyCartSvg />
+              <p className="warning-message w-100">سبد خرید شما خالی است</p>
+            </div>
           )}
         </div>
-        <div className="cart_details_wrapper">
+       {(cartItemsInfo || oldCartItemsInfo).length > 0 && <div className="cart_details_wrapper">
           <div className="text-mute">
             <h2>خلاصه سفارش</h2>
           </div>
-          <CartTotalInfo />
-        </div>
+          <CartTotalInfo cartItemsInfo={isOnline ? cartItemsInfo : oldCartItemsInfo} />
+        </div>}
       </div>
       <Backdrop
         show={showDeprecatedItems}

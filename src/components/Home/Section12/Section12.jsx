@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaCircle, FaPlus, FaMinus } from "react-icons/fa";
 import axios from "../../../util/axios";
+import { db } from "../../../util/indexedDB";
 import "./Section12.css";
 
 const Section12 = () => {
@@ -9,17 +10,29 @@ const Section12 = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios
+    if(navigator.onLine){
+      axios
       .get("/get-all-faqs")
       .then((response) => {
         setFaqs(response.data.allFaqs);
         setActiveAccItem(response.data.allFaqs[0]._id);
+
+        db.faq.clear()
+        db.faq.bulkPut(response.data.allFaqs)
       })
       .catch((err) => {
         if (err.response) {
           setError(err.response.data.message);
         }
       });
+    }else{
+      db.faq.toArray().then(items => {
+        if(items.length > 0){
+          setFaqs(items)
+          setActiveAccItem(items[0]._id);
+        }
+      })
+    }
   }, []);
 
   const setActiveItemHandler = (id) => {

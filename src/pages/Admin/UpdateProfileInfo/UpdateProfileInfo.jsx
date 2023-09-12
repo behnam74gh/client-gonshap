@@ -143,7 +143,7 @@ const UpdateProfileInfo = ({ history }) => {
           if (response.data.success) {
             toast.success(response.data.message);
 
-            const { firstName, isAdmin, refreshToken, userId, usersImage } =
+            const { firstName, isAdmin,role,isBan,supplierFor, refreshToken, userId, usersImage } =
               userInfo;
 
             setExpired(true);
@@ -151,7 +151,7 @@ const UpdateProfileInfo = ({ history }) => {
               type: USER_SIGNIN_SUCCESS,
               payload: {
                 firstName,
-                isAdmin,
+                isAdmin,role,isBan,supplierFor,
                 refreshToken:
                   refreshToken && refreshToken.length > 0
                     ? refreshToken
@@ -164,7 +164,7 @@ const UpdateProfileInfo = ({ history }) => {
                 "gonshapUserInfo",
                 JSON.stringify({
                   firstName,
-                  isAdmin,
+                  isAdmin,role,isBan,supplierFor,
                   refreshToken:
                     refreshToken && refreshToken.length > 0
                       ? refreshToken

@@ -366,7 +366,11 @@ select {
   box-shadow: var(--mainBoxShadow);
   background-color: white;
   border-radius: 4px;
-  padding: 15px 30px;
+  padding: 5px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 20%;
 }
 .pos-rel {
   position: relative;

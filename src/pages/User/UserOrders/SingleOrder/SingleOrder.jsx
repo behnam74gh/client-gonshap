@@ -16,6 +16,10 @@ const SingleOrder = ({ order }) => {
           </strong>
         </span>
         <span>
+          تاریخ سفارش :
+          <strong>{new Date(order.createdAt).toLocaleDateString("fa")}</strong>
+        </span>
+        <span>
           وضعیت سفارش:{" "}
           <strong
             className={
@@ -78,6 +82,7 @@ const SingleOrder = ({ order }) => {
               : "برگشت داده شد"}
           </strong>
         </span>
+
         {order.deliveredAt && (
           <span>
             تاریخ تحویل :
@@ -86,13 +91,8 @@ const SingleOrder = ({ order }) => {
             </strong>
           </span>
         )}
-        {/* <span>
-          کد رهگیری سفارش :<strong>{order._id}</strong>
-        </span> */}
-
         <span>
-          تاریخ سفارش :
-          <strong>{new Date(order.createdAt).toLocaleDateString("fa")}</strong>
+          کد رهگیری سفارش :<strong>{order._id}</strong>
         </span>
       </div>
       <div className="order_table">

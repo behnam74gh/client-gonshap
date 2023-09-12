@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import axios from "../../util/axios";
+import { db } from "../../util/indexedDB";
 import "./Brands.css";
 
 const Brands = () => {
@@ -14,11 +15,15 @@ const Brands = () => {
     } else if (window.innerWidth < 800) {
       setNumberOfSlides(6);
     }
-    axios
+
+    if (navigator.onLine){
+      axios
       .get("/get-all-brands")
       .then((response) => {
         if (response.data.success) {
           setBrands(response.data.brands);
+          db.brands.clear()
+          db.brands.bulkPut(response.data.brands)
         }
       })
       .catch((err) => {
@@ -26,6 +31,14 @@ const Brands = () => {
           setErrorText(err.response.data.message);
         }
       });
+    }else{
+      db.brands.toArray().then(items => {
+        if(items.length > 0){
+          setBrands(items)
+        }
+      })
+    }
+
   }, []);
 
   const setting = {

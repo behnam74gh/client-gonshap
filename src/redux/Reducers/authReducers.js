@@ -28,6 +28,7 @@ export const userSigninReducer = (state = initialState, action) => {
           refreshToken: action.payload.refreshToken,
           userId: action.payload.userId,
           role: action.payload.role,
+          isBan: action.payload.isBan,
           supplierFor: action.payload.supplierFor
         },
       };

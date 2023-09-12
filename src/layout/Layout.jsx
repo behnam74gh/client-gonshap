@@ -9,6 +9,7 @@ import axios from "../util/axios";
 import Footer from "../components/Footer/Footer";
 import Brands from "../components/Brands/Brands";
 import Backdrop from "../components/UI/Backdrop/Backdrop";
+import { db } from "../util/indexedDB";
 import "./Layout.css";
 
 const Layout = (props) => {
@@ -37,6 +38,9 @@ const Layout = (props) => {
       .then((response) => {
         const activeCategories = response.data.categories.filter(c => c.storeProvider !== null)
         setCategories(activeCategories);
+
+        db.activeCategories.clear()
+        db.activeCategories.bulkPut(activeCategories)
       })
       .catch((err) => {
         if (err.response) {
@@ -49,6 +53,9 @@ const Layout = (props) => {
       .get("/get-all-subcategories")
       .then((response) => {
         setSubcategories(response.data.subcategories);
+
+        db.subCategories.clear()
+        db.subCategories.bulkPut(response.data.subcategories)
       })
       .catch((err) => {
         if (err.response) {
@@ -63,6 +70,9 @@ const Layout = (props) => {
       .then((response) => {
         if (response.data.success) {
           setCompanyInfo(response.data.companyInfo);
+
+          db.companyInformation.clear()
+          db.companyInformation.add(response.data.companyInfo)
         }
       })
       .catch((err) => {
@@ -78,6 +88,9 @@ const Layout = (props) => {
       .then((response) => {
         if (response.data.success) {
           setHelps(response.data.helps);
+
+          db.helps.clear()
+          db.helps.bulkPut(response.data.helps)
         }
       })
       .catch((err) => {
@@ -87,16 +100,44 @@ const Layout = (props) => {
       });
 
   useEffect(() => {
-    loadCompanyInfo();
-    loadAllCategories();
-    loadAllSubcategories();
-    loadAllHelps();
+    if(navigator.onLine){
+      loadCompanyInfo();
+      loadAllCategories();
+      loadAllSubcategories();
+      loadAllHelps();
+    }else{
+      db.companyInformation.toArray().then(items => {
+        if(items.length > 0) {
+          setCompanyInfo(items[0])
+        }
+      })
+      db.activeCategories.toArray().then(items => {
+        if(items.length > 0) {
+          setCategories(items)
+        }
+      })
+      db.subCategories.toArray().then(items => {
+        if(items.length > 0) {
+          setSubcategories(items)
+        }
+      })
+      db.helps.toArray().then(items => {
+        if(items.length > 0) {
+          setHelps(items)
+        }
+      })
+    }
+
     if(window.innerWidth < 450){
       dispatch({type: "ISMOBILE",payload: true})
     }
   }, [dispatch]);
-
+  
   const { pathname } = useLocation();
+  useEffect(() => {
+    dispatch({type: "ISONLINE",payload: navigator.onLine})
+  }, [dispatch,pathname])
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);

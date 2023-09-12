@@ -14,8 +14,8 @@ const SearchInput = () => {
   const [productsName, setProductsName] = useState([]);
   const [showSuggests, setShowSuggests] = useState(false);
 
-  const { text } = useSelector((state) => state.search);
-
+  const { search: {text},isOnline } = useSelector((state) => ({...state}));
+  
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -46,11 +46,15 @@ const SearchInput = () => {
   };
 
   const submitSearchKeywordHandler = () => {
+    if (!isOnline){
+      toast.warning('شما به اینترنت دسترسی ندارید')
+      return
+    }
     if (text.length > 2) {
       dispatch({ type: SUBMIT_QUERY });
       history.push("/shop");
     } else {
-      toast.info("متنی برای جستوجو وجود ندارد");
+      toast.info("محصولی بااین نام وجود ندارد");
     }
   };
 

@@ -16,7 +16,7 @@
   width: 100%;
   display: flex;
   flex-flow: row wrap;
-  min-height: 500px;
+  min-height: 400px;
   margin-bottom: 80px;
 }
 .cart_items_wrapper {
@@ -29,6 +29,18 @@
   display: flex;
   flex-flow: column wrap;
   padding: 5px 20px 5px 0;
+}
+
+.empty_cart_wrapper{
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  width: 100%;
+}
+
+.empty_cart_wrapper svg {
+  max-width: 250px;
+  max-height: 250px;
 }
 
 /* total_price */
