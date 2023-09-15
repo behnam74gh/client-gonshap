@@ -60,7 +60,7 @@ const Carousels = () => {
         });
     }
   };
-console.log(suppliers);
+
   return (
     <div className="admin-panel-wrapper">
       <Link

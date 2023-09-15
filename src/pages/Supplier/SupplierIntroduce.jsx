@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { VscLoading } from "react-icons/vsc";
 import axios from "../../util/axios";
+import { Helmet } from "react-helmet";
 import SupplierProducts from "./SupplierProducts";
 import Section13 from "../../components/Home/Section13/Section13";
 import defPic from "../../assets/images/pro-8.png";
@@ -59,6 +60,10 @@ const SupplierIntroduce = ({ match }) => {
 
   return (
     <div id="supplier_page">
+      <Helmet>
+        <title>{`فروشگاه ${supplier?.title}`}</title>
+        <meta name="description" content={supplier?.description} />
+      </Helmet>
       {loading ? (
         <div className="w-100 d-flex-center-center mt-3">
           <VscLoading className="loader" />

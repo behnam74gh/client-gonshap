@@ -10,8 +10,9 @@ import Section2 from "../../components/Home/Section2/Section2";
 import { toast } from "react-toastify";
 import { CLOSE_STAR_RATING_MODAL } from "../../redux/Types/ratingModalType";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
-import "../../components/Home/Section3/Section3.css";
 import { db } from "../../util/indexedDB";
+import {Helmet} from 'react-helmet'
+import "../../components/Home/Section3/Section3.css";
 import "./Product.css";
 
 const Product = ({ match }) => {
@@ -227,6 +228,10 @@ const Product = ({ match }) => {
   
   return (
     <section id="product_details">
+      <Helmet>
+        <title>{product?.title}</title>
+        <meta name="description" content={product?.description} />
+      </Helmet>
       {loading ? (
         <React.Fragment>
           <LoadingSkeleton />

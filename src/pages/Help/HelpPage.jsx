@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../util/axios";
 import LoadingSuggest from "../../components/UI/LoadingSkeleton/LoadingSuggest";
+import { Helmet } from "react-helmet";
 import "./HelpPage.css";
 
 const HelpPage = ({ match }) => {
@@ -30,6 +31,9 @@ const HelpPage = ({ match }) => {
 
   return (
     <section id="help_page">
+      <Helmet>
+        <title>صفحه راهنما</title>
+      </Helmet>
       {loading ? (
         <LoadingSuggest />
       ) : errorText.length > 0 ? (
@@ -49,7 +53,7 @@ const HelpPage = ({ match }) => {
                       key={i}
                       src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${photo}`}
                       alt={help.title}
-                      className="mb-3 w-100"
+                      className="mb-3"
                     />
                   </React.Fragment>
                 ))}

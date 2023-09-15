@@ -10,6 +10,7 @@ import Pagination from "../../../components/UI/Pagination/Pagination";
 import { toast } from "react-toastify";
 import { DateObject } from "react-multi-date-picker";
 import DatePicker from "react-multi-date-picker";
+import {db} from '../../../util/indexedDB'
 import "./Orders.css";
 
 const Orders = () => {
@@ -17,21 +18,42 @@ const Orders = () => {
   const [ordersLength, setOrdersLength] = useState();
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
-  const [page, setPage] = useState(1);
-  const [orderConfig, setOrderConfig] = useState({
+  const [page, setPage] = useState(JSON.parse(localStorage.getItem("orderConfig-page")) ||1);
+  const [suppliers, setSuppliers] = useState([]);
+  const [orderConfig, setOrderConfig] = useState(
+    JSON.parse(localStorage.getItem("orderConfig-dash")) ||
+    {
+    currentSupplier: "All",
     config: "orderStatus",
     activeOrderStatus: "0",
     activeDeliveryStatus: "none",
     activePaymentStatus: "none",
-    date: [],
+    phoneNumber: "",
+    orderId: ""
   });
   const [perPage, setPerPage] = useState(50);
   const [queryPhoneNumber, setQueryPhoneNumber] = useState("");
   const [queryOrderId, setQueryOrderId] = useState("");
-  const [date, setDate] = useState(null);
+  const [dates, setDates] = useState(
+    JSON.parse(localStorage.getItem("orderConfig-date-dash")) ||
+  []);
 
   const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin)
   
+  useEffect(() => {
+    db.supplierList.toArray().then(items => {
+      setSuppliers(items)
+    })
+
+    return () => {
+      if(!window.location.href.includes('/order/')){
+        localStorage.removeItem("orderConfig-dash")
+        localStorage.removeItem("orderConfig-page")
+        localStorage.removeItem("orderConfig-date-dash")
+      }
+    }
+  }, [])
+
   useEffect(() => {
     setLoading(true);
 
@@ -48,13 +70,13 @@ const Orders = () => {
         value = orderConfig.activePaymentStatus;
         break;
       case "phoneNumber":
-        value = orderConfig.userPhoneNumber;
+        value = orderConfig.phoneNumber;
         break;
       case "orderId":
         value = orderConfig.orderId;
         break;
       case "date":
-        value = orderConfig.date;
+        value = dates;
         break;
       default:
         return (value = orderConfig.activeOrderStatus);
@@ -65,7 +87,8 @@ const Orders = () => {
         value,
         page,
         perPage,
-        supplierFor: role === 2 ? supplierFor : null
+        dates: orderConfig.config !== 'date' && dates.length > 1 ? dates : null,
+        supplierFor: role === 2 ? supplierFor : orderConfig.currentSupplier
       })
       .then((response) => {
         setLoading(false);
@@ -74,6 +97,8 @@ const Orders = () => {
           setOrders(orders);
           setOrdersLength(allCount);
           setErrorText("");
+          localStorage.setItem('orderConfig-dash',JSON.stringify(orderConfig))
+          localStorage.setItem('orderConfig-page',JSON.stringify(page))
         }
       })
       .catch((err) => {
@@ -84,24 +109,42 @@ const Orders = () => {
           setErrorText(err.response.data.message);
         }
       });
-  }, [orderConfig, page, perPage,role,supplierFor]);
+  }, [orderConfig, page, perPage,role,supplierFor,dates]);
+
+  const setCurrentSupplierHandler = (e) => {
+    if (e === "none") {
+      return;
+    }
+    const isQuery = ['orderId','phoneNumber'].includes(orderConfig.config)
+    setOrderConfig({
+      ...orderConfig,
+      ...(isQuery && {config : "orderStatus"}),
+      ...(isQuery && {activeOrderStatus : "0"}),
+      ...(isQuery && {phoneNumber : ""}),
+      ...(isQuery && {orderId : ""}),
+      currentSupplier: e,
+    })
+    setPage(1);
+    setQueryPhoneNumber("");
+    setQueryOrderId("");
+  }
 
   const setOrderStatusConfigHandler = (e) => {
     if (e === "none") {
       return;
     }
     setOrderConfig({
+      ...orderConfig,
       config: "orderStatus",
       activeDeliveryStatus: "none",
       activePaymentStatus: "none",
-      activePaymentType: "none",
-      date: null,
       activeOrderStatus: e,
+      phoneNumber: "",
+      orderId: ""
     });
     setPage(1);
     setQueryPhoneNumber("");
     setQueryOrderId("");
-    setDate(null)
   };
 
   const setDeliveryStatusConfigHandler = (e) => {
@@ -109,17 +152,17 @@ const Orders = () => {
       return;
     }
     setOrderConfig({
+      ...orderConfig,
       config: "deliveryStatus",
       activeOrderStatus: "none",
       activePaymentStatus: "none",
-      activePaymentType: "none",
-      date: null,
       activeDeliveryStatus: e,
+      phoneNumber: "",
+      orderId: ""
     });
     setPage(1);
     setQueryPhoneNumber("");
     setQueryOrderId("");
-    setDate(null)
   };
 
   const setIsPaidConfigHandler = (e) => {
@@ -127,47 +170,47 @@ const Orders = () => {
       return;
     }
     setOrderConfig({
+      ...orderConfig,
       config: "isPaid",
       activeOrderStatus: "none",
-      activePaymentType: "none",
       activeDeliveryStatus: "none",
-      date: null,
       activePaymentStatus: e,
+      phoneNumber: "",
+      orderId: ""
     });
     setPage(1);
     setQueryPhoneNumber("");
     setQueryOrderId("");
-    setDate(null)
   };
 
   const searchOrdersByPhoneNumber = () => {
     setOrderConfig({
+      currentSupplier: "All",
       config: "phoneNumber",
       activeOrderStatus: "none",
       activePaymentStatus: "none",
       activeDeliveryStatus: "none",
-      activePaymentType: "none",
-      date: null,
-      userPhoneNumber: queryPhoneNumber,
+      phoneNumber: queryPhoneNumber,
+      orderId: ""
     });
     setPage(1);
     setQueryOrderId("");
-    setDate(null)
+    setDates([])
   };
 
   const searchOrdersById = () => {
     setOrderConfig({
+      currentSupplier: "All",
       config: "orderId",
       activeOrderStatus: "none",
       activePaymentStatus: "none",
       activeDeliveryStatus: "none",
-      activePaymentType: "none",
-      date: null,
-      orderId: queryOrderId,
+      phoneNumber: "",
+      orderId: queryOrderId
     });
     setPage(1);
     setQueryPhoneNumber("");
-    setDate(null)
+    setDates([])
   };
 
   // change-Order-Status
@@ -192,23 +235,30 @@ const Orders = () => {
   };
 
   const setDateHandler = (value) => {
-    if (value instanceof DateObject) value = value.toDate();
-    setDate(value);
-    if(date === null) return
+    if(value.length > 1) {
+      let dates = value.map((date) =>
+      date instanceof DateObject ? date.toDate() : date
+      );
+  
+      setDates(dates);
 
-    setOrderConfig({
-      config: "date",
-      activeOrderStatus: "none",
-      activePaymentStatus: "none",
-      activeDeliveryStatus: "none",
-      activePaymentType: "none",
-      orderId: "none",
-      date: value,
-    });
+      setOrderConfig({
+        ...orderConfig,
+        config: "date",
+        activeOrderStatus: "none",
+        activePaymentStatus: "none",
+        activeDeliveryStatus: "none",
+        phoneNumber: "",
+        orderId: ""
+      });
 
-    setPage(1);
-    setQueryPhoneNumber("");
-    setQueryOrderId("");
+      setPage(1);
+      setQueryPhoneNumber("");
+      setQueryOrderId("");
+      localStorage.setItem('orderConfig-date-dash',JSON.stringify(dates))
+    }else{
+      return
+    }
   };
 
   return (
@@ -227,7 +277,25 @@ const Orders = () => {
                   color: "white",
                 }}
               >
-                <th colSpan="3">
+                {role === 1 && <th colSpan="2">
+                  <select
+                    value={orderConfig.currentSupplier}
+                    onChange={(e) =>
+                      setCurrentSupplierHandler(e.target.value)
+                    }
+                  >
+                    <option value="none">عنوان فروشگاه :</option>
+                    <option value="All">همه سفارش ها</option>
+                    {suppliers?.length > 0 && suppliers.map(item => {
+                      return (
+                        <option key={item._id} value={item.backupFor._id}>
+                          {item.title}
+                        </option>
+                      )
+                    })}
+                  </select>
+                </th>}
+                <th colSpan={role === 2 ? "3" : "2"}>
                   <select
                     value={orderConfig.activeOrderStatus}
                     onChange={(e) =>
@@ -242,21 +310,19 @@ const Orders = () => {
                     <option value="4">رد شده ها</option>
                   </select>
                 </th>
-                <th colSpan="2">
-                  <select
-                    value={orderConfig.activeDeliveryStatus}
-                    onChange={(e) =>
-                      setDeliveryStatusConfigHandler(e.target.value)
-                    }
-                  >
-                    <option value="none">وضعیت ارسال:</option>
-                    <option value="0">ارسال نشده ها</option>
-                    <option value="1">ارسال شده ها</option>
-                    <option value="2">تحویلی ها</option>
-                    <option value="3">برگشتی ها</option>
-                  </select>
+                <th colSpan={role === 2 ? "2" : "1"}>
+                  <DatePicker
+                    value={dates}
+                    onChange={setDateHandler}
+                    placeholder="جستوجو بر اساس تاریخ"
+                    calendar="persian"
+                    range
+                    locale="fa"
+                    calendarPosition="bottom-right"
+                    style={{ height: "40px" }}         
+                  />
                 </th>
-                <th colSpan="6">
+                <th colSpan="5">
                   <div className="dashboard-search">
                     <input
                       type="search"
@@ -286,19 +352,21 @@ const Orders = () => {
                     <option value={false}>پرداخت نشده ها</option>
                   </select>
                 </th>
-
                 <th colSpan="2">
-                  <DatePicker
-                    value={date}
-                    onChange={setDateHandler}
-                    placeholder="جستوجو بر اساس تاریخ"
-                    calendar="persian"
-                    locale="fa"
-                    calendarPosition="bottom-right"
-                    style={{ height: "40px" }}         
-                  />
+                  <select
+                    value={orderConfig.activeDeliveryStatus}
+                    onChange={(e) =>
+                      setDeliveryStatusConfigHandler(e.target.value)
+                    }
+                  >
+                    <option value="none">وضعیت ارسال:</option>
+                    <option value="0">ارسال نشده ها</option>
+                    <option value="1">ارسال شده ها</option>
+                    <option value="2">تحویلی ها</option>
+                    <option value="3">برگشتی ها</option>
+                  </select>
                 </th>
-                <th colSpan="6">
+                <th colSpan="5">
                   <div className="dashboard-search">
                     <input
                       type="search"

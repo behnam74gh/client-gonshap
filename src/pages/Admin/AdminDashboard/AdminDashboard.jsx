@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, lazy } from "react";
 import { Link, Switch } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import AdminRoute from "../../../util/routes/AdminRoute";
 import "../Product/Products.css";
 import "../Carousel/Carousels.css";
@@ -66,6 +67,9 @@ const AdminDashboard = ({ history }) => {
 
   return (
     <React.Fragment>
+      <Helmet>
+        <title>بازارک</title>
+      </Helmet>
       <Link to="/admin/dashboard/home" ref={dashHomeLinkRef} />
       <AdminDashboardLayout>
         <Switch>
@@ -78,11 +82,12 @@ const AdminDashboard = ({ history }) => {
             path="/admin/dashboard/user/:id"
             component={AdminUpdatesUser}
           />
+          <AdminRoute path="/admin/dashboard/products" component={Products} />
+          
           <AdminRoute
             path="/admin/dashboard/create-product"
             component={ProductCreate}
           />
-          <AdminRoute path="/admin/dashboard/products" component={Products} />
           <AdminRoute
             path="/admin/dashboard/product/:slug"
             component={ProductUpdate}

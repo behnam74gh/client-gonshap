@@ -13,6 +13,7 @@ import Section6 from "../../components/Home/Section6/Section6";
 import { toast } from "react-toastify";
 import { db } from "../../util/indexedDB";
 import InputRange from "react-input-range-rtl";
+import { Helmet } from "react-helmet";
 import "react-input-range-rtl/lib/css/index.css";
 import "./ShopPage.css";
 
@@ -24,8 +25,8 @@ const ShopPage = () => {
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("gonshapPageNumber")) || 1
   );
-  const [perPage, setPerPage] = useState(16);
-  const [activeOrder, setActiveOrder] = useState("none");
+  const [perPage, setPerPage] = useState(20);
+  const [activeOrder, setActiveOrder] = useState("createdAt");
   const [activeCategory, setActiveCategory] = useState("none");
   const [activeSubcategory, setActiveSubcategory] = useState("none");
   const [activeBrand, setActiveBrand] = useState("none");
@@ -34,10 +35,9 @@ const ShopPage = () => {
   const [showSub, setShowSub] = useState(false);
   const [brands, setBrands] = useState([]);
   const [showBrand, setShowBrand] = useState(false);
-  const [activeStar, setActiveStar] = useState("none");
   const [rangeValues, setRangeValues] = useState({
-    min: 90,
-    max: 9000,
+    min: 10,
+    max: 5000,
   });
   const [openMobileFiltering, setOpenMobileFiltering] = useState(true);
 
@@ -54,7 +54,6 @@ const ShopPage = () => {
       setActiveOrder("none");
       setActiveCategory("none");
       setActiveSubcategory("none");
-      setActiveStar("none");
       setActiveBrand("none");
       setLoading(true);
       axios
@@ -110,6 +109,7 @@ const ShopPage = () => {
       })
       .catch((err) => {
         setLoading(false);
+        setProducts([])
         if (err.response) {
           setErrorText(err.response.data.message);
         }
@@ -131,12 +131,14 @@ const ShopPage = () => {
         }
       });
 
-    if (window.innerWidth < 780) {
-      setOpenMobileFiltering(false);
-    }
     if (localStorage.getItem("gonshapSearchConfig")) {
-      const { level, order, category, subcategory, brand, stars, prices } =
+      if (window.innerWidth < 780) {
+        setOpenMobileFiltering(true);
+      }
+
+      const { level, order, category, subcategory, brand, prices,lastConfig } =
         JSON.parse(localStorage.getItem("gonshapSearchConfig"));
+        
       if (level === 1) {
         setShowSub(true);
         setActiveCategory(category);
@@ -154,10 +156,34 @@ const ShopPage = () => {
         setActiveSubcategory(subcategory);
         fetchBrandsByParentHandler(subcategory);
         setActiveBrand(brand);
-      } else if (level === 5) {
-        setActiveStar(stars);
       } else if (level === 6) {
         setRangeValues(prices);
+        
+        if(lastConfig.level === 1){
+          setShowSub(true);
+          setActiveCategory(lastConfig.category);
+          setActiveSubcategory(lastConfig.subcategory);
+          fetchSubsByParentHandler(lastConfig.category);
+          fetchBrandsByParentHandler(lastConfig.subcategory);
+        }  
+        if(lastConfig.level === 2) {
+          setActiveCategory(lastConfig.category);
+          fetchSubsByParentHandler(lastConfig.category)
+        }
+        if(lastConfig.level === 3) {
+          setActiveOrder(lastConfig.order);
+        }
+        if(lastConfig.level === 4){
+          setActiveCategory(lastConfig.category);
+          fetchSubsByParentHandler(lastConfig.category);
+          setActiveSubcategory(lastConfig.subcategory);
+          fetchBrandsByParentHandler(lastConfig.subcategory);
+          setActiveBrand(lastConfig.brand);
+        }
+      }
+    }else{
+      if (window.innerWidth < 780) {
+        setOpenMobileFiltering(false);
       }
     }
     if (window.innerWidth < 450) {
@@ -181,8 +207,10 @@ const ShopPage = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(deleteSearchConfig());
-      dispatch({ type: UNSUBMIT_QUERY });
+      if(!window.location.href.includes('/product/details/')){
+        dispatch(deleteSearchConfig());
+        dispatch({ type: UNSUBMIT_QUERY });
+      }
     };
   }, [dispatch]);
 
@@ -204,12 +232,14 @@ const ShopPage = () => {
   };
 
   const subcategoryFilteringHandler = (e, parent) => {
-    setActiveStar("none");
+    if (e === "none") {
+      return
+    }
     setActiveBrand("none");
     setActiveOrder("none");
     setRangeValues({
-      min: 90,
-      max: 9000,
+      min: 10,
+      max: 5000,
     });
 
     dispatch({ type: UNSUBMIT_QUERY });
@@ -219,7 +249,6 @@ const ShopPage = () => {
       searchByUserFilter({
         level: 1,
         subcategory: e,
-        order: "createdAt",
         category: parent,
       })
     );
@@ -245,12 +274,14 @@ const ShopPage = () => {
       });
 
   const categoryFilteringHandler = (e) => {
+    if (e === "none") {
+      return
+    }
     setActiveCategory(e);
     setActiveSubcategory("none");
-    setActiveStar("none");
     setActiveOrder("none");
     setRangeValues({
-      min: 90,
+      min: 10,
       max: 9000,
     });
 
@@ -272,18 +303,16 @@ const ShopPage = () => {
   //base filtering with level = 3
   const baseFilteringHandler = (e) => {
     if (e === "none") {
-      setActiveOrder(e);
       return;
     }
-    setActiveStar("none");
     setActiveCategory("none");
     setActiveSubcategory("none");
     setActiveBrand("none");
     setShowSub(false);
     setShowBrand(false);
     setRangeValues({
-      min: 90,
-      max: 9000,
+      min: 10,
+      max: 5000,
     });
 
     dispatch({ type: UNSUBMIT_QUERY });
@@ -302,11 +331,13 @@ const ShopPage = () => {
   //filtering by brand level = 4
 
   const brandFilteringHandler = (e) => {
-    setActiveStar("none");
+    if (e === "none") {
+      return
+    }
     setActiveOrder("none");
     setRangeValues({
-      min: 90,
-      max: 9000,
+      min: 10,
+      max: 5000,
     });
 
     dispatch({ type: UNSUBMIT_QUERY });
@@ -317,7 +348,6 @@ const ShopPage = () => {
         level: 4,
         brand: e,
         subcategory: activeSubcategory,
-        order: "createdAt",
         category: activeCategory,
       })
     );
@@ -325,52 +355,14 @@ const ShopPage = () => {
     localStorage.removeItem("gonshapPageNumber");
   };
 
-  //filtering by star-ratings level = 5
-  const starRatingFilteringHandler = (e) => {
-    if (e === "none") {
-      return setActiveStar(e);
-    }
-    setActiveOrder("none");
-    setActiveCategory("none");
-    setActiveSubcategory("none");
-    setActiveBrand("none");
-    setShowSub(false);
-    setShowBrand(false);
-    setRangeValues({
-      min: 90,
-      max: 9000,
-    });
-
-    dispatch({ type: UNSUBMIT_QUERY });
-
-    setActiveStar(e);
-
-    dispatch(
-      searchByUserFilter({
-        level: 5,
-        stars: Number(e),
-      })
-    );
-    setPage(1);
-    localStorage.removeItem("gonshapPageNumber");
-  };
-
   const priceFilteringHandler = () => {
-    setActiveOrder("none");
-    setActiveCategory("none");
-    setActiveSubcategory("none");
-    setActiveBrand("none");
-    setActiveStar("none");
-    setShowSub(false);
-    setShowBrand(false);
-
     dispatch({ type: UNSUBMIT_QUERY });
 
     dispatch(
       searchByUserFilter({
         level: 6,
         prices: rangeValues,
-        order: "sold",
+        lastConfig: searchConfig?.level !== 6 ? searchConfig : searchConfig.lastConfig,
       })
     );
 
@@ -380,6 +372,9 @@ const ShopPage = () => {
 
   return (
     <section id="shop_page">
+      <Helmet>
+        <title>ویترین محصولات</title>
+      </Helmet>
       {navigator.onLine && <div className="filtering_wrapper">
         <div className="base_filtering_wrapper">
           <span
@@ -400,6 +395,7 @@ const ShopPage = () => {
             <option value="reviewsCount">پربازدیدترین محصولات</option>
           </select>
         </div>
+
         <div
           className="desktop_only_filtering"
           style={{ display: openMobileFiltering ? "flex" : "none" }}
@@ -409,8 +405,8 @@ const ShopPage = () => {
             <div className="range_slider">
               <InputRange
                 maxValue={99999}
-                minValue={9}
-                step={5}
+                minValue={10}
+                step={1}
                 direction="rtl"
                 draggableTrack={false}
                 onChange={(value) => {
@@ -431,19 +427,6 @@ const ShopPage = () => {
             >
               ثبت
             </button>
-          </div>
-          <div className="rating_filtering_wrapper">
-            <select
-              value={activeStar}
-              onChange={(e) => starRatingFilteringHandler(e.target.value)}
-            >
-              <option value="none">امتیاز :</option>
-              <option value="1">⭐ </option>
-              <option value="2">⭐⭐</option>
-              <option value="3">⭐⭐⭐</option>
-              <option value="4">⭐⭐⭐⭐</option>
-              <option value="5">⭐⭐⭐⭐⭐</option>
-            </select>
           </div>
           <div className="multi_filtering_wrapper">
             <div className="category_filtering_wrapper">
@@ -511,10 +494,10 @@ const ShopPage = () => {
               key={i}
               product={product}
               showSold={
-                searchConfig && searchConfig.order === "sold" ? true : false
+                (searchConfig?.order || searchConfig?.lastConfig?.order) === "sold" ? true : false
               }
               showReviews={
-                searchConfig && searchConfig.order === "reviewsCount"
+                (searchConfig?.order || searchConfig?.lastConfig?.order) === "reviewsCount"
                   ? true
                   : false
               }

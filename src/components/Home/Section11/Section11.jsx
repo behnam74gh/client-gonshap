@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../../util/axios";
 import { db } from "../../../util/indexedDB";
 import SingleAd from "../../UI/Ad/SingleAd";
-import "../Section2/Section2.css";
+import "./Section11.css";
 
 const Section11 = () => {
   const [ads, setAds] = useState([]);
@@ -30,7 +30,7 @@ const Section11 = () => {
   }, []);
 
   return (
-    <section id="sec2">
+    <section id="sec11">
       {ads && ads.length > 0 && (
         <React.Fragment>
           {ads[0]?.owner?.length > 0 && (

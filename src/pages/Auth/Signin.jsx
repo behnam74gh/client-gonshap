@@ -20,6 +20,7 @@ import {
   USER_SIGNIN_SUCCESS,
 } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 import "./Signin.css";
 
 const Signin = ({ history, location }) => {
@@ -142,6 +143,9 @@ const Signin = ({ history, location }) => {
 
   return (
     <div className="auth-section">
+      <Helmet>
+        <title>صفحه ورود</title>
+      </Helmet>
       {registered && (
         <h3 className="success-message">
           تبریک میگم! شما عضو خانواده گُنشاپ شدید.

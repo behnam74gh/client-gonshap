@@ -1,12 +1,8 @@
-#sec10 {
+.suggests_wrapper {
+  width: 75%;
+  margin: 0 auto;
   display: flex;
   flex-flow: column wrap;
-  margin: 0 0 80px 0;
-}
-#sec10 h2 {
-  text-align: center;
-  color: var(--thirdColorPalete);
-  margin-bottom: 40px;
 }
 /* review slider */
 .review {
@@ -53,6 +49,11 @@
   text-align: center;
   color: rgb(62, 91, 92);
   text-align: justify;
+  word-break: break-all;
+  height: 150px;
+  overflow-y: auto;
+  word-spacing: 1px;
+  line-height: 25px;
 }
 .button-container {
   margin: 10px 0;
@@ -75,13 +76,6 @@
 }
 
 @media (max-width: 450px) {
-  #sec10 {
-    margin: 0 0 30px 0;
-  }
-  #sec10 h2 {
-    margin-bottom: 20px;
-    font-size: 18px;
-  }
   .review {
     padding: 15px 25px 5px;
   }
@@ -119,9 +113,6 @@
 }
 
 @media (max-width: 320px) {
-  #sec10 h2 {
-    font-size: 16px;
-  }
   .review {
     padding: 10px 15px 5px;
   }

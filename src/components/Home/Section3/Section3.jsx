@@ -105,6 +105,7 @@ const Section3 = () => {
       })
       .catch((err) => {
         setLoading(false)
+        setProducts([])
         if (typeof err.response.data.message === "object") {
           setErrorText(err.response.data.message[0]);
           setProducts([]);
@@ -117,7 +118,7 @@ const Section3 = () => {
   const changeCategoryHandler = (id) => {
     setActiveCategory(id);
   };
-
+console.log(numberOfSlides);
   const setting = {
     dots: false,
     infinite: true,
@@ -154,7 +155,7 @@ const Section3 = () => {
           ))}
         </Slider>
       ) : (
-        <p className="warning-message">محصولی وجود ندارد!</p>
+        <p className="warning-message">محصولی یافت نشد!</p>
       )}
       {(isOnline && products.length > 0) && <div className="column_item">
         <Link

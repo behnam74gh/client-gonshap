@@ -1,16 +1,14 @@
 import React from "react";
-import GonshapAttribute from "./GonshapAttribute";
 import SupplierSlider from "./SupplierSlider";
-import { useSelector } from "react-redux";
+import Section2 from '../Section2/Section2'
 import "./Section1.css";
 
 const Section1 = () => {
-  const {isMobile} = useSelector(state => state)
 
   return (
     <section id="sec1">
       <SupplierSlider />
-      {!isMobile && <GonshapAttribute />}
+      <Section2 />
     </section>
   );
 };

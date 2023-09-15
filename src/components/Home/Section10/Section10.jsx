@@ -69,48 +69,47 @@ const Section10 = () => {
   };
 
   return (
-    <section id="sec10">
-      <h2>مردم چه می گویند</h2>
-      {loading ? (
-        <LoadingSuggest />
-      ) : errorText.length > 0 ? (
-        <p className="info-message">{errorText}</p>
-      ) : (
-        bestSuggests.length > 0 && (
-          <article className="review">
-            <div className="img-container">
-              <img
-                src={
-                  activeSuggest.writerImage &&
-                  activeSuggest.writerImage.length > 0
-                    ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${activeSuggest.writerImage}`
-                    : defPic
-                }
-                alt={`تصویر ${activeSuggest.writerName}`}
-                className="person-img"
-              />
-              <span className="quote-icon">
-                <FaQuoteRight />
-              </span>
-            </div>
-            <h4 className="author">
-              {activeSuggest.writerName && activeSuggest.writerName.length > 0
-                ? activeSuggest.writerName
-                : "شخص ناشناس"} میگوید :
-            </h4>
-            <p className="info">{activeSuggest.content}</p>
-            <div className="button-container">
-              <button onClick={nextSuggestHandler}>
-                <FaChevronRight />
-              </button>
-              <button onClick={prevSuggestHandler}>
-                <FaChevronLeft />
-              </button>
-            </div>
-          </article>
-        )
-      )}
-    </section>
+      <section className="suggests_wrapper">
+        {loading ? (
+          <LoadingSuggest />
+        ) : errorText.length > 0 ? (
+          <p className="info-message">{errorText}</p>
+        ) : (
+          bestSuggests.length > 0 && (
+            <article className="review">
+              <div className="img-container">
+                <img
+                  src={
+                    activeSuggest.writerImage &&
+                    activeSuggest.writerImage.length > 0
+                      ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${activeSuggest.writerImage}`
+                      : defPic
+                  }
+                  alt={`تصویر ${activeSuggest.writerName}`}
+                  className="person-img"
+                />
+                <span className="quote-icon">
+                  <FaQuoteRight />
+                </span>
+              </div>
+              <h4 className="author">
+                {activeSuggest.writerName && activeSuggest.writerName.length > 0
+                  ? activeSuggest.writerName
+                  : "شخص ناشناس"} میگوید :
+              </h4>
+              <p className="info">{activeSuggest.content}</p>
+              <div className="button-container">
+                <button onClick={nextSuggestHandler}>
+                  <FaChevronRight />
+                </button>
+                <button onClick={prevSuggestHandler}>
+                  <FaChevronLeft />
+                </button>
+              </div>
+            </article>
+          )
+        )}
+      </section>
   );
 };
 

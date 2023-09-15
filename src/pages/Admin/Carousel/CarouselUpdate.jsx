@@ -88,6 +88,15 @@ const CarouselUpdate = ({ history, match }) => {
     filePickerRef.current.click();
   };
   const pickedHandler = (e) => {
+    let longSizes = [...e.target.files].filter(file => file.size > 600000);
+    if(e.target.files.length + files.length + oldPhotos.length > 6){
+      toast.warning('بیشتر از 6 عکس نمی توانید انتخاب کنید')
+      return;
+    }
+    if(longSizes.length > 0){
+      toast.warning('سایز عکس بیشتر از 600 کیلوبایت است')
+      return;
+    }
     if (e.target.files) {
       setFiles([...files, ...e.target.files]);
     }

@@ -119,6 +119,9 @@
   .comment_content {
     font-size: 10px;
   }
+  .comment_box_wrapper p:last-child{
+    width: 100%;
+  }
 }
 @media (max-width: 450px) {
   .comment_box_wrapper::-webkit-scrollbar {

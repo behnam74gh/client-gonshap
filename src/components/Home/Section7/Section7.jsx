@@ -106,6 +106,7 @@ const Section7 = () => {
       })
       .catch((err) => {
         setLoading(false)
+        setProducts([])
         if (typeof err.response.data.message === "object") {
           setErrorText(err.response.data.message[0]);
           setProducts([]);
@@ -161,7 +162,7 @@ const Section7 = () => {
           ))}
         </Slider>
       ) : (
-        <p className="warning-message">محصولی وجود ندارد!</p>
+        <p className="warning-message">محصولی یافت نشد!</p>
       )}
       {(isOnline && products.length > 0) && <div className="column_item">
         <Link

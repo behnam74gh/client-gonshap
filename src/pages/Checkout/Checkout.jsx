@@ -4,6 +4,7 @@ import axios from "../../util/axios";
 import CheckoutForms from "./CheckoutForms";
 import CheckoutHistory from "./CheckoutHistory";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 import "./Checkout.css";
 
 const Checkout = ({history}) => {
@@ -54,6 +55,9 @@ const Checkout = ({history}) => {
   
   return (
     <section id="checkout_page">
+      <Helmet>
+        <title>صفحه تایید سفارش</title>
+      </Helmet>
       {loading ? (
         <div className="d-flex-center-center w-100">
           <VscLoading className="loader" />

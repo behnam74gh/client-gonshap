@@ -1,5 +1,6 @@
 import React,{useEffect,useRef,lazy} from 'react'
 import {Switch,Link} from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import StoreAdminRoute from '../../util/routes/StoreAdminRoute'
 import '../Admin/Product/Products.css'
 
@@ -34,6 +35,9 @@ const StoreAdminDashboard = ({history}) => {
     
   return (
     <React.Fragment>
+      <Helmet>
+        <title>بازارک</title>
+      </Helmet>
         <Link to='/store-admin/dashboard/home' ref={dashboardHomeLionkref} />
 
         <StoreAdminDashboardLayout>

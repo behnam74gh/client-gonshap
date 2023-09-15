@@ -9,6 +9,7 @@ import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCar
 import Section11 from "../../components/Home/Section11/Section11";
 import Section5 from "../../components/Home/Section5/Section5";
 import { db } from "../../util/indexedDB";
+import { Helmet } from "react-helmet";
 import {ReactComponent as EmptyFavoriteSvg} from '../../assets/images/empty_favorites.svg'
 import "./MyFavoritePage.css";
 
@@ -53,7 +54,10 @@ const MyFavoritePage = () => {
   const activeFavoriteItems = favoriteItemsInfo?.length === favoriteItems.length ? favoriteItemsInfo : oldFavoriteItemsInfo?.length === favoriteItems.length ? oldFavoriteItemsInfo : [];
   return (
     <section id="favorites_page">
-      <h2 className="text-purple">صفحه علاقه مندی های من</h2>
+      <Helmet>
+        <title>مورد پسند های من</title>
+      </Helmet>
+      <h2 className="text-purple">مورد پسندهای من</h2>
       <div className="w-100 d-flex-center-center">
         {favoriteItems?.length < 1 && <EmptyFavoriteSvg style={{maxWidth: "250px"}} />}
       </div>

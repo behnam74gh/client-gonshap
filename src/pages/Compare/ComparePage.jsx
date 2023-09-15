@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
 import axios from "../../util/axios";
+import { Helmet } from "react-helmet";
 import "./ComparePage.css";
 
 const ComparePage = ({ match }) => {
@@ -47,6 +48,9 @@ const ComparePage = ({ match }) => {
 
   return (
     <section id="compare_products">
+      <Helmet>
+        <title>مقایسه محصولات</title>
+      </Helmet>
       {currentProduct && currentProduct._id.length > 0 && (
         <h4>
           مقایسه و بررسی دقیق تر{" "}

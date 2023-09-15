@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 import "./ForgotPassword.css";
 import "./Register.css";
 
@@ -215,6 +216,9 @@ const ForgotPassword = ({ history }) => {
 
   return (
     <div className="auth-section">
+      <Helmet>
+        <title>بازگرداندن رمز عبور</title>
+      </Helmet>
       {!authCodeIsValid && !phoneNumIsValid && (
         <form className="auth-form" onSubmit={sendPhoneNumberHandler}>
           <h5 className="register_heading">

@@ -155,11 +155,21 @@ const ProductCreate = () => {
     filePickerRef.current.click();
   };
   const pickedHandler = (e) => {
-    if (e.target.files) {
+    let longSizes = [...e.target.files].filter(file => file.size > 500000);
+    if(e.target.files.length + files.length > 5){
+      toast.warning('بیشتر از 5 عکس نمی توانید انتخاب کنید')
+      return;
+    }
+    if(longSizes.length > 0){
+      toast.warning('سایز عکس بیشتر از 500 کیلوبایت است')
+      return;
+    }
+    if (e.target.files.length > 0) {
       setFiles([...files, ...e.target.files]);
     }
     setFileUrls([...e.target.files]);
   };
+  
   const setFileUrls = (files) => {
     const turnedUrls = files.map((file) => URL.createObjectURL(file));
     setUrls([...urls, ...turnedUrls]);

@@ -16,6 +16,7 @@ import {
 } from "../../util/validators";
 import { useForm } from "../../util/hooks/formHook";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 import "./Register.css";
 
 const Register = ({ history }) => {
@@ -228,6 +229,9 @@ const Register = ({ history }) => {
 
   return (
     <div className="auth-section">
+      <Helmet>
+        <title>صفحه ثبت نام</title>
+      </Helmet>
       {!phoneNumIsValid && (
         <form className="auth-form" onSubmit={sendPhoneNumberHandler}>
           <h5 className="register_heading">

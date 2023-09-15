@@ -1,0 +1,93 @@
+#secAdvantage {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+  background-color: rgb(240, 234, 234);
+  padding: 15px 0;
+}
+.advantage_wrapper {
+  flex-basis: 20%;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+.advantage {
+  font-size: 12px;
+}
+.svg_advantage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0 20px;
+  width: 100%;
+  height: 55px;
+}
+.svg_advantage svg {
+  width: 50px;
+  height: 50px;
+}
+
+@media (max-width: 1060px) {
+  .advantage {
+    font-size: 10px;
+  }
+  .svg_advantage{
+    gap: 0 15px;
+    height: 40px;
+  }
+  .svg_advantage svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 860px) {
+  .svg_advantage{
+    gap: 0;
+    justify-content: space-around;
+    height: 30px;
+  }
+  .svg_advantage svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+@media (max-width: 560px) {
+  #secAdvantage{
+    padding: 10px 0;
+    margin: 5px 0;
+  }
+  .advantage {
+    font-size: 8px;
+  }
+  .svg_advantage{
+    gap: 0;
+    justify-content: space-evenly;
+    height: 10px;
+  }
+  .svg_advantage svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media (max-width: 450px) {
+  .svg_advantage{
+    height: auto;
+    flex-flow: column;
+    gap: 5px 0;
+  }
+  #secAdvantage{
+    margin: 0 0 10px 0;
+  }
+  .advantage {
+    font-size: 6px;
+    order: 2;
+  }
+  .svg_advantage svg {
+    width: 15px;
+    height: 15px;
+  }
+}

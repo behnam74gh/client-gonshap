@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./SectionAdvantage.css";
 
 const SectionAdvantage = () => {
-  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    if (window.innerWidth < 450) {
-      setIsMobile(true);
-    }
-  }, []);
-  return (
-    isMobile && (
+ 
+  return ( 
       <section id="secAdvantage">
         <div className="advantage_wrapper">
           <div className="svg_advantage">
+            <span className="advantage">ارسال سریع</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="83.815"
@@ -101,10 +96,10 @@ const SectionAdvantage = () => {
               </g>
             </svg>
           </div>
-          <span className="advantage">ارسال رایگان</span>
         </div>
         <div className="advantage_wrapper">
           <div className="svg_advantage">
+            <span className="advantage">پرداخت با هماهنگی</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="68.714"
@@ -171,10 +166,10 @@ const SectionAdvantage = () => {
               </g>
             </svg>
           </div>
-          <span className="advantage">پرداخت در محل</span>
         </div>
         <div className="advantage_wrapper">
           <div className="svg_advantage">
+            <span className="advantage">ضمانت اصل بودن کالا</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="48.295"
@@ -238,10 +233,47 @@ const SectionAdvantage = () => {
               </g>
             </svg>
           </div>
-          <span className="advantage">ضمانت اصل بودن کالا</span>
         </div>
         <div className="advantage_wrapper">
           <div className="svg_advantage">
+            <span className="advantage">تضمین بهترین قیمت</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="151.78"
+              height="140.64"
+              viewBox="0 0 151.78 140.64"
+            >
+              <g id="bestPrice" transform="translate(123.693 53.822)">
+                <path
+                  id="Path_546"
+                  data-name="Path 546"
+                  d="M125.675,0H85.5A22.909,22.909,0,0,0,69.853,5.988L6.48,64.583a19.369,19.369,0,0,0,0,28.908l40.175,37.16a23.4,23.4,0,0,0,31.268,0l63.384-58.595a19.562,19.562,0,0,0,6.477-14.467V20.442C147.77,9.158,137.88.013,125.675,0Zm-3.752,30.744a7.127,7.127,0,0,1-7.389-6.832,7.412,7.412,0,0,1,14.778,0A7.127,7.127,0,0,1,121.923,30.744Z"
+                  transform="translate(-121.697 -51.822)"
+                  fill="#f3f3f3"
+                  stroke="#434a54"
+                  strokeWidth="4"
+                />
+                <path
+                  id="Path_547"
+                  data-name="Path 547"
+                  d="M167.614,165.7,143.5,144.244a14.219,14.219,0,0,0-18.456,0l-31.589,28.1h0a10.747,10.747,0,0,0,0,16.42l24.116,21.456a14.219,14.219,0,0,0,18.456,0l31.589-28.1A10.747,10.747,0,0,0,167.614,165.7Z"
+                  transform="translate(-189.553 -149.95)"
+                  fill="#ffd200"
+                />
+                <path
+                  id="Path_548"
+                  data-name="Path 548"
+                  d="M207.772,232.583c.885.944.885,1.574.032,2.493l-1.325,1.4a11.2,11.2,0,0,1,1.346,10.325c-.416,1.47-1.122,1.744-2.533,1.127l-3.206-1.3c-1.249-.513-1.538-1.1-1.122-2.566a4.912,4.912,0,0,0-1.378-5.436c-2.276-2.43-3.719-2.94-5.1-1.47-1.181,1.259-.3,3.179,1.924,6.088a33.824,33.824,0,0,1,3.046,4.549,9.832,9.832,0,0,1,.995,2.635,8.657,8.657,0,0,1-2.6,8.5c-3.43,3.658-8.046,3.778-12.76.337l-1.378,1.47c-.886.944-1.476.944-2.361,0l-2.438-2.6a1.536,1.536,0,0,1,0-2.518l1.313-1.4c-2.657-3.866-3.141-7.728-1.505-11.591a1.692,1.692,0,0,1,2.595-.922l2.952,1.508c1.281.63,1.541,1.3,1.024,2.736-.8,1.949-.257,3.9,1.57,5.849,2.438,2.6,4.33,3.179,5.709,1.712,1.281-1.366.449-3.148-1.83-6.123a23.133,23.133,0,0,1-3.4-5.666,8.85,8.85,0,0,1-.868-3.318,9.509,9.509,0,0,1,2.757-6.837c3.368-3.589,7.825-3.755,12.441-.2l1.316-1.4c.865-.922,1.476-.888,2.341.038Z"
+                  transform="translate(-252.171 -217.995)"
+                  fill="#434a54"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div className="advantage_wrapper">
+          <div className="svg_advantage">
+            <span className="advantage"> 7روز ضمانت بازگشت</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="83.554"
@@ -289,10 +321,8 @@ const SectionAdvantage = () => {
               </g>
             </svg>
           </div>
-          <span className="advantage"> 7روز ضمانت بازگشت</span>
         </div>
       </section>
-    )
   );
 };
 

@@ -303,9 +303,9 @@ const ProductDetails = ({
           <div className="info_wrapper_Attr">
             <strong className="my-1">ویژگی های محصول: </strong>
             <ul className="attr_wrapper">
-              <li>{attr1}</li>
-              <li>{attr2}</li>
-              <li className="font-sm">{attr3}</li>
+              {attr1?.length > 0 && <li className="font-sm">{attr1}</li>}
+              {attr2?.length > 0 && <li className="font-sm">{attr2}</li>}
+              {attr3?.length > 0 && <li className="font-sm">{attr3}</li>}
             </ul>
           </div>
           {isOnline && <div className="info_wrapper">

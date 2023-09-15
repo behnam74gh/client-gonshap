@@ -93,6 +93,15 @@ const AdvertiseCreate = ({ history }) => {
     filePickerRef.current.click();
   };
   const pickedHandler = (e) => {
+    let longSizes = [...e.target.files].filter(file => file.size > 3000000);
+    if(e.target.files.length + files.length > 5){
+      toast.warning('بیشتر از 5 عکس نمی توانید انتخاب کنید')
+      return;
+    }
+    if(longSizes.length > 0){
+      toast.warning('سایز عکس بیشتر از 3 مگابایت است')
+      return;
+    }
     if (e.target.files) {
       setFiles([...files, ...e.target.files]);
     }

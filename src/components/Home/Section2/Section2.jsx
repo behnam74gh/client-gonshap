@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../../util/axios";
 import { db } from "../../../util/indexedDB";
 import SingleAd from "../../UI/Ad/SingleAd";
-import "./Section2.css";
+import "../Section1/Section1.css";
 
 const Section2 = () => {
   const [ads, setAds] = useState([]);

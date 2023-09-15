@@ -131,7 +131,7 @@ const CreateTicket = ({ history }) => {
 
   return (
     <div className="admin-panel-wrapper">
-      <p className="info-message">
+      <p className="info-message" style={{width: "80%"}}>
         <strong>ارسال تیکت پشتیبانی : </strong>
         در صورت لزوم میتوانید یک عکس را ضمیمه تیکت قرار دهید، حد اکثر تا
         <strong className="text-blue mx-1">72 ساعت</strong> آینده به تیکت شما

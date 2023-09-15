@@ -10,6 +10,7 @@ import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton
 import Section5 from "../../components/Home/Section5/Section5";
 import Section8 from "../../components/Home/Section8/Section8";
 import { db } from "../../util/indexedDB";
+import { Helmet } from "react-helmet";
 import { ReactComponent as EmptyCartSvg } from '../../assets/images/empty_cart.svg'
 import "./CartPage.css";
 
@@ -52,6 +53,9 @@ const CartPage = () => {
 
   return (
     <section id="cart_page">
+      <Helmet>
+        <title>سبد خرید</title>
+      </Helmet>
       <div className="cart_wrapper">
         <div className="cart_items_wrapper">
           <h2 className="text-mute">

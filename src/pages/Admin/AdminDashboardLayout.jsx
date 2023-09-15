@@ -6,7 +6,7 @@ import {
   FaLayerGroup,
   FaRegComments,
   FaCommentMedical,
-  FaSignOutAlt,
+  FaSignOutAlt
 } from "react-icons/fa";
 import { MdDashboard, MdLabel } from "react-icons/md";
 import { IoCreateOutline, IoHelp } from "react-icons/io5";
@@ -188,51 +188,6 @@ const AdminDashboardLayout = ({ children }) => {
               </Link>
             </li>
             <li
-              onClick={() => setActiveRoute("ایجاد محصول")}
-              className={activeRoute === "ایجاد محصول" ? "active" : ""}
-            >
-              <Link to="/admin/dashboard/create-product">
-                <IoCreateOutline />
-                <span className="sidebar-text-link">ایجاد محصول</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => setActiveRoute("دسته بندی ها")}
-              className={activeRoute === "دسته بندی ها" ? "active" : ""}
-            >
-              <Link to="/admin/dashboard/categories">
-                <FaLayerGroup />
-                <span className="sidebar-text-link">دسته بندی ها</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => setActiveRoute("برچسب ها")}
-              className={activeRoute === "برچسب ها" ? "active" : ""}
-            >
-              <Link to="/admin/dashboard/subcategories">
-                <MdLabel />
-                <span className="sidebar-text-link">برچسب ها</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => setActiveRoute("برند ها")}
-              className={activeRoute === "برند ها" ? "active" : ""}
-            >
-              <Link to="/admin/dashboard/brands">
-                <SiBrandfolder />
-                <span className="sidebar-text-link">برند ها</span>
-              </Link>
-            </li>
-            <li
-              onClick={() => setActiveRoute("رنگ ها")}
-              className={activeRoute === "رنگ ها" ? "active" : ""}
-            >
-              <Link to="/admin/dashboard/colors">
-                <IoColorPaletteSharp />
-                <span className="sidebar-text-link">رنگ ها</span>
-              </Link>
-            </li>
-            <li
               onClick={() => setActiveRoute("اسلایدشو")}
               className={activeRoute === "اسلایدشو" ? "active" : ""}
             >
@@ -257,6 +212,15 @@ const AdminDashboardLayout = ({ children }) => {
               <Link to="/admin/dashboard/orders">
                 <BsCardChecklist />
                 <span className="sidebar-text-link">سفارش ها</span>
+              </Link>
+            </li>
+            <li
+              onClick={() => setActiveRoute("دسته بندی ها")}
+              className={activeRoute === "دسته بندی ها" ? "active" : ""}
+            >
+              <Link to="/admin/dashboard/categories">
+                <FaLayerGroup />
+                <span className="sidebar-text-link">دسته بندی ها</span>
               </Link>
             </li>
             <li
@@ -296,12 +260,48 @@ const AdminDashboardLayout = ({ children }) => {
               </Link>
             </li>
             <li
+              onClick={() => setActiveRoute("ایجاد محصول")}
+              className={activeRoute === "ایجاد محصول" ? "active" : ""}
+            >
+              <Link to="/admin/dashboard/create-product">
+                <IoCreateOutline />
+                <span className="sidebar-text-link">ایجاد محصول</span>
+              </Link>
+            </li>
+            <li
               onClick={() => setActiveRoute("یادداشت ها")}
               className={activeRoute === "یادداشت ها" ? "active" : ""}
             >
               <Link to="/admin/dashboard/todo">
                 <RiTodoLine />
                 <span className="sidebar-text-link">یادداشت ها</span>
+              </Link>
+            </li>
+            <li
+              onClick={() => setActiveRoute("برچسب ها")}
+              className={activeRoute === "برچسب ها" ? "active" : ""}
+            >
+              <Link to="/admin/dashboard/subcategories">
+                <MdLabel />
+                <span className="sidebar-text-link">برچسب ها</span>
+              </Link>
+            </li>
+            <li
+              onClick={() => setActiveRoute("برند ها")}
+              className={activeRoute === "برند ها" ? "active" : ""}
+            >
+              <Link to="/admin/dashboard/brands">
+                <SiBrandfolder />
+                <span className="sidebar-text-link">برند ها</span>
+              </Link>
+            </li>
+            <li
+              onClick={() => setActiveRoute("رنگ ها")}
+              className={activeRoute === "رنگ ها" ? "active" : ""}
+            >
+              <Link to="/admin/dashboard/colors">
+                <IoColorPaletteSharp />
+                <span className="sidebar-text-link">رنگ ها</span>
               </Link>
             </li>
             <li
