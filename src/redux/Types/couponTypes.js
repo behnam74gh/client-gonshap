@@ -1,1 +1,0 @@
-export const COUPON_APPLIED = "COUPON_APPLIED";

@@ -15,7 +15,7 @@ const Section3 = () => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [errorText, setErrorText] = useState("");
-  const [categoryErrorText, setCategoryErrorText] = useState("");
+  const [showEmptyMessage, setShowEmptyMessage] = useState(false);
   const [activeCategory, setActiveCategory] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(4);
 
@@ -32,15 +32,9 @@ const Section3 = () => {
             const activeCategories = categories.filter(c => c.storeProvider !== null)
             setCategories(activeCategories);
             setActiveCategory(activeCategories[0]._id);
-            setCategoryErrorText("");
           }
         }
       })
-      .catch((err) => {
-        if (err.response) {
-          setCategoryErrorText(err.response.data.message);
-        }
-      });
   }, []);
 
   useEffect(() => {
@@ -97,6 +91,7 @@ const Section3 = () => {
           }
           setProducts(foundedProducts);
           setErrorText("");
+          foundedProducts.length === 0 && setShowEmptyMessage(true)
 
           db.newestProducts.clear()
           db.newestProducts.bulkPut(foundedProducts)
@@ -118,7 +113,7 @@ const Section3 = () => {
   const changeCategoryHandler = (id) => {
     setActiveCategory(id);
   };
-console.log(numberOfSlides);
+
   const setting = {
     dots: false,
     infinite: true,
@@ -131,33 +126,30 @@ console.log(numberOfSlides);
 
   return (
     <section className="list_of_products">
-      <div className="column_item">
+      {categories.length > 0 && <div className="column_item">
         <h1>جدیدترین محصولات</h1>
-        {categoryErrorText.length > 0 && (
-          <p className="warning-message">{categoryErrorText}</p>
-        )}
         {isOnline && <select className="categories_wrapper_select" onChange={(e) => changeCategoryHandler(e.target.value)}>
           {categories?.length > 0 && categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
         </select>}
-      </div>
+      </div>}
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (
         <LoadingSkeletonCard count={numberOfSlides < 1 ? 1 : numberOfSlides} />
-      ) : products && products.length > 0 ? (
+      ) : products?.length > 0 ? (
         <Slider
           {...setting}
           slidesToShow={numberOfSlides}
           className="custom_slider"
         >
-          {products.map((p, i) => (
-            <ProductCard key={i} product={p} loading={loading} />
+          {products.map((p) => (
+            <ProductCard key={p._id} product={p} loading={loading} />
           ))}
         </Slider>
-      ) : (
+      ) : showEmptyMessage && (
         <p className="warning-message">محصولی یافت نشد!</p>
       )}
-      {(isOnline && products.length > 0) && <div className="column_item">
+      {(isOnline && products.length > 4) && <div className="column_item">
         <Link
           to="/shop"
           onClick={() =>

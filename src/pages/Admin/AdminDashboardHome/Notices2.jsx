@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../util/axios";
-import "./Notices.css";
+import "./Notice2.css";
 
 const Notices2 = () => {
   const [newOrdersCount, setNewOrdersCount] = useState(0);

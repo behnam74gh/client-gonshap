@@ -63,7 +63,6 @@ const ShopPage = () => {
           perPage,
         })
         .then((response) => {
-          console.log(response.data);
           setLoading(false);
           const { success, foundedProducts, allCount } = response.data;
           if (success) {
@@ -400,35 +399,7 @@ const ShopPage = () => {
           className="desktop_only_filtering"
           style={{ display: openMobileFiltering ? "flex" : "none" }}
         >
-          <div className="price_filtering_wrapper">
-            <span className="range_slider_lable">قیمت :</span>
-            <div className="range_slider">
-              <InputRange
-                maxValue={99999}
-                minValue={10}
-                step={1}
-                direction="rtl"
-                draggableTrack={false}
-                onChange={(value) => {
-                  setRangeValues(value);
-                }}
-                value={rangeValues}
-                formatLabel={(value) => {
-                  const newValue = value + "000";
-
-                  return `${Number(newValue).toLocaleString("fa")} تومان`;
-                }}
-              />
-            </div>
-            <button
-              className="range_slider_btn"
-              type="button"
-              onClick={priceFilteringHandler}
-            >
-              ثبت
-            </button>
-          </div>
-          <div className="multi_filtering_wrapper">
+          <div className="multi_filtering_wrapper" style={{flex: !showSub && "10% 1"}}>
             <div className="category_filtering_wrapper">
               <select
                 value={activeCategory}
@@ -480,6 +451,35 @@ const ShopPage = () => {
                 </select>
               </div>
             )}
+          </div>
+
+          <div className="price_filtering_wrapper">
+            <span className="range_slider_lable">قیمت :</span>
+            <div className="range_slider">
+              <InputRange
+                maxValue={99999}
+                minValue={10}
+                step={1}
+                direction="rtl"
+                draggableTrack={false}
+                onChange={(value) => {
+                  setRangeValues(value);
+                }}
+                value={rangeValues}
+                formatLabel={(value) => {
+                  const newValue = value + "000";
+
+                  return `${Number(newValue).toLocaleString("fa")} تومان`;
+                }}
+              />
+            </div>
+            <button
+              className="range_slider_btn"
+              type="button"
+              onClick={priceFilteringHandler}
+            >
+              ثبت
+            </button>
           </div>
         </div>
       </div>}

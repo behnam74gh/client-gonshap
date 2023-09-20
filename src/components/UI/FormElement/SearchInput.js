@@ -14,7 +14,7 @@ const SearchInput = () => {
   const [productsName, setProductsName] = useState([]);
   const [showSuggests, setShowSuggests] = useState(false);
 
-  const { search: {text},isOnline } = useSelector((state) => ({...state}));
+  const { search: {text} } = useSelector((state) => ({...state}));
   
   const history = useHistory();
 
@@ -46,7 +46,7 @@ const SearchInput = () => {
   };
 
   const submitSearchKeywordHandler = () => {
-    if (!isOnline){
+    if (!navigator.onLine){
       toast.warning('شما به اینترنت دسترسی ندارید')
       return
     }

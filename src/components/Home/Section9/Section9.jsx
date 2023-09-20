@@ -25,7 +25,7 @@ const Section9 = () => {
     axios
       .post("/find/products/by-category-and/order", {
         order: "reviewsCount",
-        activeCategory: "mostReviews",
+        activeCategory: null,
       })
       .then((response) => {
         setLoading(false);
@@ -95,7 +95,7 @@ const Section9 = () => {
 
   return (
     <section className="list_of_products">
-      <h1 className="column_item singleTitle">پربازدیدترین محصولات</h1>
+      <h1 className="d-flex-center-center my-1 singleTitle">پربازدیدترین محصولات</h1>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (

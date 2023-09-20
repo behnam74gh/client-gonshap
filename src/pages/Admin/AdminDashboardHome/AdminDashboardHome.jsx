@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import Notices1 from "./Notices1";
 import AreaChartComponent from "./AreaChart";
-import PieChartComponent from "./PieChart";
+import Notices2 from "./Notices2";
 
 const AdminDashboardHome = () => {
   const [date, setDate] = useState(new Date());
@@ -14,7 +14,7 @@ const AdminDashboardHome = () => {
     <div className="admin-panel-wrapper">
       <Notices1 date={date} setParticularDateHandler={setParticularDateHandler} />
       <AreaChartComponent date={date} />
-      <PieChartComponent />
+      <Notices2 />
     </div>
   );
 };

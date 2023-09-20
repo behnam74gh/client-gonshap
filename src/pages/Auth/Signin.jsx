@@ -65,11 +65,11 @@ const Signin = ({ history, location }) => {
       history.push(intended.from);
     } else {
       if (userInfo.isAdmin) {
-        history.push("/admin/dashboard");
+        history.push("/admin/dashboard/home");
       } else if (userInfo.role === 2) {
-        history.push('/store-admin/dashboard')
+        history.push('/store-admin/dashboard/home')
       } else {
-        history.push("/user/dashboard");
+        history.push("/user/dashboard/home");
       }
     }
   };
@@ -151,10 +151,12 @@ const Signin = ({ history, location }) => {
           تبریک میگم! شما عضو خانواده گُنشاپ شدید.
         </h3>
       )}
-      <h4>
+      {history?.location?.state?.from.includes('/product/details/') ? 
+      <span className="text-purple" style={{fontSize: "14px"}}>جهت ثبت دیدگاه یا امتیازدهی به محصول ابتدا باید وارد حساب کاربری شوید</span>
+       :<h4>
         برای <strong className="text-blue">ورود</strong> به حساب، اطلاعات زیر را
         وارد کنید!
-      </h4>
+      </h4>}
       <form className="auth-form" onSubmit={signinHandler}>
         <label className="auth-label">
           شماره تلفن :<span className="need_to_fill">*</span>

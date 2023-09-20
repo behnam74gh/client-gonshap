@@ -11,6 +11,10 @@ import UserRoute from "./util/routes/UserRoute";
 import { withErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./pages/ErrorFallback.jsx";
 import StoreAdminRoute from "./util/routes/StoreAdminRoute";
+import { useDispatch } from "react-redux";
+import {fetchActiveAdsHandler} from './redux/Actions/advertiseActions'
+import { db } from "./util/indexedDB";
+import { ADS_SUCCESS } from "./redux/Types/advertise";
 
 const Layout = lazy(() => import("./layout/Layout"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -58,7 +62,34 @@ const LazyLoad = () => {
 };
 
 const App = () => {
- 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(navigator.onLine){
+      dispatch(fetchActiveAdsHandler())
+    }else{
+      db.ads.toArray().then(items => {
+        if(items.length > 0){
+          const firstLevelAds = items.filter((ad) => ad.level === 1);
+          const secondLevelAds = items.filter((ad) => ad.level === 2);
+          const thirdLevelAds = items.filter((ad) => ad.level === 3);
+          const fourthLevelAds = items.filter((ad) => ad.level === 4);
+          const fifthLevelAds = items.filter((ad) => ad.level === 5);
+          dispatch({
+            type: ADS_SUCCESS,
+            payload: {
+              firstLevelAds,
+              secondLevelAds,
+              thirdLevelAds,
+              fourthLevelAds,
+              fifthLevelAds
+            }
+          })
+        }
+      })
+    }
+  }, [dispatch])
+
   return (
     <Suspense fallback={<LazyLoad />}>
       <Layout>

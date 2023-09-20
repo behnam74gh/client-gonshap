@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import axios from "../../../util/axios";
 import Pagination from "../../../components/UI/Pagination/Pagination";
 import defPic from "../../../assets/images/def.jpg";
+import "./Product.css";
 import "./Products.css";
 
 const Products = () => {
@@ -295,7 +296,6 @@ const Products = () => {
         }
       });
   };
- 
 
   const searchProductsByBrand = (e) => {
     if (e === "none") {
@@ -544,6 +544,11 @@ const Products = () => {
     setOPage(1);
   };
 
+  const copyIdToClipBoard = (id,title) => {
+    navigator.clipboard.writeText(id)
+    toast.info(`کد محصول با نام "${title}" کپی شد`)
+  }
+
   return (
     <div className="admin-panel-wrapper">
       {!otherFilterings ? (
@@ -733,7 +738,12 @@ const Products = () => {
                         />
                       </div>
                     </td>
-                    <td className="font-sm">{p.title}</td>
+                    <td onClick={() => copyIdToClipBoard(p._id,p.title)} className="font-sm tooltip" style={{display: "table-cell",cursor: "copy"}}>
+                        <span className="tooltip_text">
+                          کپی کد محصول
+                        </span>
+                        {p.title}
+                    </td>
                     <td className="font-sm">{p.category.name}</td>
                     <td className="font-sm">{p.subcategory.name}</td>
                     <td className="font-sm">{p.brand.brandName}</td>

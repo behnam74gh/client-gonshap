@@ -64,8 +64,8 @@ const Navbar = (props) => {
                     <Link
                       to={
                         userInfo.role === 1
-                          ? "/admin/dashboard"
-                          : userInfo.role === 2 ? "/store-admin/dashboard" : "/user/dashboard"
+                          ? "/admin/dashboard/home"
+                          : userInfo.role === 2 ? "/store-admin/dashboard/home" : "/user/dashboard/home"
                       }
                     >
                       <MdDashboard />

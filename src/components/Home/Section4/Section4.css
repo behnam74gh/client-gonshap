@@ -4,7 +4,7 @@
   display: flex;
   flex-flow: row wrap;
   padding: 8px 16px;
-  margin: 50px 0;
+  margin: 20px 0;
   box-shadow: 0 3px 23px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }

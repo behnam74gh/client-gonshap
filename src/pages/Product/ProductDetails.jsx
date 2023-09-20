@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import Slider from "react-slick";
-import { BsBookmarkFill, BsBookmark } from "react-icons/bs";
+import { BsBookmarkFill, BsBookmark,BsShare } from "react-icons/bs";
 import { MdLabel, MdRemoveShoppingCart, MdShoppingCart } from "react-icons/md";
 import { IoIosStar, IoIosGitCompare } from "react-icons/io";
 import { FaTimesCircle } from "react-icons/fa";
@@ -158,6 +158,11 @@ const ProductDetails = ({
     );
   };
 
+  const copyUrlToClipBoardHandler = () => {
+    navigator.clipboard.writeText(window.location.href)
+    toast.info("آدرس محصول کپی شد")
+  }
+
   return (
     <div className="product_details_wrapper">
       <div className="product_images">
@@ -175,7 +180,7 @@ const ProductDetails = ({
       </div>
       <div className="product_info">
         <div className="product_header_info">
-          <h1>{title}</h1>
+          <h1 className="my-1">{title}</h1>
           <div className="rating_compare_wrapper">
             {ratings && ratings.length > 0 ? (
               <div className="product_rating_wrapper_info">
@@ -187,10 +192,17 @@ const ProductDetails = ({
             ) : (
               <p className="font-sm">امتیازی داده نشده است</p>
             )}
-            {isOnline &&<Link to={`/compares/${_id}`} className="compare_icon tooltip">
-              <span className="tooltip_text">مقایسه</span>
-              <IoIosGitCompare />
-            </Link>}
+            <div className="d-flex-center-center" style={{gap: "8px"}}>
+              <span onClick={copyUrlToClipBoardHandler} className="tooltip" style={{display: "flex"}}>
+                <span className="tooltip_text">کپی آدرس محصول</span>
+                <BsShare className="text-purple" />
+              </span>
+
+              {isOnline &&<Link to={`/compares/${_id}`} className="compare_icon tooltip">
+                <span className="tooltip_text">مقایسه</span>
+                  <IoIosGitCompare />
+              </Link>}
+            </div>
           </div>
         </div>
 
@@ -242,7 +254,7 @@ const ProductDetails = ({
             </strong>
           </div>
           <div className="info_wrapper text-purple">
-            <strong className="question_info">قیمت نهایی بازارک : </strong>
+            <strong className="question_info">قیمت فروش بازارک : </strong>
             <strong className="answer_info">
               <strong className="mx-1">
                 {finallyPrice.toLocaleString("fa-IR")}
@@ -252,7 +264,7 @@ const ProductDetails = ({
           </div>
           {!sell && (
             <div className="info_wrapper">
-              <span className="question_info">وضعیت ارائه محصول : </span>
+              <span className="question_info">وضعیت ارائه : </span>
 
               <span className="answer_info">
                 <span className="compare_item_not_exist">
@@ -262,7 +274,7 @@ const ProductDetails = ({
             </div>
           )}
           <div className="info_wrapper">
-            <span className="question_info">تعداد موجودی : </span>
+            <span className="question_info">موجودی : </span>
             {countInStock > 0 ? (
               <strong className="answer_info text-purple">
                 <strong className="mx-1">{countInStock}</strong>عدد
@@ -330,7 +342,7 @@ const ProductDetails = ({
                 onClick={addToCartHandler}
                 disabled={!sell}
               >
-                {inCart ? "حذف از سبد خرید" : "افزودن به سبد خرید"}
+                {inCart ? "حذف از سبد" : "افزودن به سبد"}
                 {inCart ? (
                   <MdRemoveShoppingCart className="mx-2 font-md" />
                 ) : (
@@ -340,21 +352,10 @@ const ProductDetails = ({
             </div>
             {isOnline && <div className="rating_btn_wrapper">
               <button
-                className="d-flex-center-center tooltip"
+                className="d-flex-center-center"
                 onClick={ratingModalHandler}
               >
-                {(!userInfo || userInfo === null) && (
-                  <span
-                    className="tooltip_text"
-                    style={{
-                      visibility: windoInnerWidth < 450 && "visible",
-                      opacity: windoInnerWidth < 450 && "0.8",
-                    }}
-                  >
-                    ورود جهت امتیازدهی
-                  </span>
-                )}
-                امتیاز دهید
+                امتیاز دهی
                 <IoIosStar className="mx-2 font-md" />
               </button>
             </div>}

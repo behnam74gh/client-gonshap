@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "../../util/axios";
 import {
@@ -9,7 +9,7 @@ import {
 } from "react-icons/ai";
 import { toast } from "react-toastify";
 
-const LikeDislike = ({ commentId }) => {
+const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDisikes] = useState(0);
   const [likeAction, setLikeAction] = useState(null);
@@ -17,54 +17,37 @@ const LikeDislike = ({ commentId }) => {
 
   const { userInfo } = useSelector((state) => state.userSignin);
 
-  useEffect(() => {
-    axios
-      .post("/get/all-likes/current-product", { commentId })
-      .then((res) => {
-        if (res.data.success) {
-          setLikes(res.data.likes.length);
+  useLayoutEffect(() => {
+    if (commentLikes) {
+      setLikes(commentLikes.length);
 
-          if (userInfo && userInfo.userId.length > 0) {
-            res.data.likes.map(
-              (like) =>
-                like.userId === userInfo.userId && setLikeAction("liked")
-            );
-          }
-        }
-      })
-      .catch((err) => {
-        if (typeof err.response.data.message === "object") {
-          toast.warning(err.response.data.message[0]);
-        } else {
-          toast.warning(err.response.data.message);
-        }
-      });
+      if (userInfo?.userId?.length > 0) {
+        commentLikes.map(
+          (like) =>
+            like.userId === userInfo.userId && setLikeAction("liked")
+        );
+      }
+    }
+      
+    if (commentDislikes) {
+      setDisikes(commentDislikes.length);
 
-    axios
-      .post("/get/all-dislikes/current-product", { commentId })
-      .then((res) => {
-        if (res.data.success) {
-          setDisikes(res.data.dislikes.length);
-
-          if (userInfo && userInfo.userId.length > 0) {
-            res.data.dislikes.map(
-              (dislike) =>
-                dislike.userId === userInfo.userId &&
-                setDislikeAction("disliked")
-            );
-          }
-        }
-      })
-      .catch((err) => {
-        if (typeof err.response.data.message === "object") {
-          toast.warning(err.response.data.message[0]);
-        } else {
-          toast.warning(err.response.data.message);
-        }
-      });
-  }, [commentId, userInfo]);
+      if (userInfo?.userId?.length > 0) {
+        commentDislikes.map(
+          (dislike) =>
+            dislike.userId === userInfo.userId &&
+            setDislikeAction("disliked")
+        );
+      }
+    }
+    
+  }, [commentLikes,commentDislikes, userInfo]);
 
   const onLikeHandler = () => {
+    if(!navigator.onLine || !userInfo?.refreshToken){
+      toast.warning('ابتدا وارد حسابتان شوید')
+      return;
+    }
     if (likeAction === null) {
       axios
         .post("/up-like", { commentId })
@@ -107,6 +90,10 @@ const LikeDislike = ({ commentId }) => {
   };
 
   const onDislikeHandler = () => {
+    if(!navigator.onLine || !userInfo?.refreshToken){
+      toast.warning('ابتدا وارد حسابتان شوید')
+      return;
+    }
     if (dislikeAction === null) {
       axios
         .post("/up-dislike", { commentId })

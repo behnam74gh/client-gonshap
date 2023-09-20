@@ -14,14 +14,15 @@ import {
   VALIDATOR_SPECIAL_CHARACTERS,
 } from "../../util/validators";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 import "./Comments.css";
 
-const Comments = (props) => {
+const Comments = ({postId,category,commentList}) => {
   const [reRenderComponent, setReRenderComponent] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const { userInfo } = useSelector((state) => state.userSignin);
-
+  const history = useHistory()
   const [formState, inputHandler] = useForm(
     {
       commentContent: {
@@ -44,9 +45,10 @@ const Comments = (props) => {
 
     const data = {
       commentContent: formState.inputs.commentContent.value,
-      productId: props.postId,
+      productId: postId,
+      isSupplier: userInfo?.role === 2 && userInfo?.supplierFor === category ? true : false,
     };
-
+    
     axios
       .post("/create-comment", data)
       .then((res) => {
@@ -64,15 +66,28 @@ const Comments = (props) => {
           toast.warning(err.response.data.message);
         }
       });
+
   };
+
+  const goSigninHandler = () => {
+    history.push({
+      pathname: "/signin",
+      state: {
+        from: `/product/details/${postId}`,
+      },
+    })
+  }
 
   return (
     <div className="comment_box_wrapper">
-      {reRenderComponent && (
+      {!userInfo && <span className="d-flex-center-center mt-3">
+        جهت ثبت دیدگاه، ابتدا
+      <strong onClick={goSigninHandler} className="text-blue mx-1" style={{cursor: "pointer"}}>وارد حساب  </strong> شوید
+      </span>}
+      {reRenderComponent && userInfo?.isBan === false && (
         <form className="auth-form" onSubmit={submitCommentHandler}>
           <label className="auth-label">
-            لطفا نظر خود را ثبت کنید :
-            {!userInfo && <span className="text-mute">( ابتدا وارد حسابتان شوید )</span>}
+            دیدگاه شما :
           </label>
           <Input
             id="commentContent"
@@ -85,49 +100,46 @@ const Comments = (props) => {
               VALIDATOR_MINLENGTH(2),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="از علامت ها و عملگر ها استفاده نکنید،بین 2 تا 2000 حرف میتوانید وارد کنید"
+            errorText="لطفا ازعملگرها استفاده نکنید"
           />
 
           <Button
             type="submit"
             disabled={
               !formState.inputs.commentContent.isValid ||
-              loading ||
-              userInfo === null ||
-              userInfo === undefined || userInfo.isBan
+              loading
             }
           >
             {loading ? (
               <VscLoading className="loader" />
-            ) : userInfo && userInfo.refreshToken ? (
-              "ثبت نظر"
-            ) : (
-              "ابتدا وارد شوید"
+            ) : userInfo?.refreshToken && (
+              "ثبت دیدگاه"
             )}
           </Button>
         </form>
       )}
       <hr />
       <p className="text-purple my-2 d-flex-center-center">
-        نظرات کاربران
+        دیدگاه کاربران
         <FaComments className="font-md mx-2" />
       </p>
-      {props.commentList && props.commentList.length > 0 ? (
-        props.commentList.map(
+      {commentList?.length > 0 ? (
+        commentList.map(
           (comment) =>
             !comment.responseTo && (
               <React.Fragment key={comment._id}>
-                <SingleComment comment={comment} />
+                <SingleComment comment={comment} category={category} />
                 <RepleyComments
-                  postId={props.postId}
-                  commentList={props.commentList}
+                  postId={postId}
+                  commentList={commentList}
                   parentCommentId={comment._id}
+                  category={category}
                 />
               </React.Fragment>
             )
         )
       ) : (
-        <p className="info-message text-center">اولین نظر را شما ثبت کنید</p>
+        <p className="info-message text-center" style={{width:"80%"}}>اولین نظر را شما ثبت کنید</p>
       )}
     </div>
   );

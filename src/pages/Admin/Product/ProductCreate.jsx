@@ -80,6 +80,10 @@ const ProductCreate = () => {
       answer: {
         value: "",
         isValid: false
+      },
+      hostId: {
+        value: "",
+        isValid: false
       }
     },
     false
@@ -298,6 +302,7 @@ const ProductCreate = () => {
 
     const formData = new FormData();
 
+    formData.append("validHostId", role === 1 ? formState.inputs.hostId.value : null);
     formData.append("title", formState.inputs.title.value);
     formData.append("countInStock", formState.inputs.countInStock.value);
     formData.append("attr1", formState.inputs.attr1.value);
@@ -389,6 +394,19 @@ const ProductCreate = () => {
                 </div>
               ))}
           </div>
+          {role === 1 && <Input
+            id="hostId"
+            element="input"
+            type="text"
+            placeholder="کد کاربری فروشنده"
+            onInput={inputHandler}
+            validators={[
+              VALIDATOR_MAXLENGTH(30),
+              VALIDATOR_MINLENGTH(3),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+            errorText="ازعلامتها و عملگرها استفاده نکنید,میتوانید از 3 تا 30 حرف وارد کنید!"
+          />}
           <label className="auth-label" htmlFor="category">
             عنوان کالا :
           </label>
@@ -653,7 +671,10 @@ const ProductCreate = () => {
           {values.details?.length > 0 && <div className="details_wrapper">
             {values.details.map((detail,i) => <div className="detail" key={i}><span>{detail.question}؟ {detail.answer}</span><span className="delete_img" onClick={() => deleteDetailHandler(i)}><TiDelete /></span></div>)}
           </div>}
-          <Button type="submit" disabled={!formState.inputs.description.isValid}>
+          <Button type="submit" disabled={
+            !formState.inputs.description.isValid ||
+            (role === 1 && !formState.inputs.hostId.isValid)
+            }>
             {!loading ? "ثبت" : <VscLoading className="loader" />}
           </Button>
         </form>

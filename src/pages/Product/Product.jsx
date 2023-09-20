@@ -6,12 +6,14 @@ import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCar
 import { useSelector, useDispatch } from "react-redux";
 import ProductDetails from "./ProductDetails";
 import TabFeature from "./TabFeature";
-import Section2 from "../../components/Home/Section2/Section2";
+import Section6 from "../../components/Home/Section6/Section6";
 import { toast } from "react-toastify";
 import { CLOSE_STAR_RATING_MODAL } from "../../redux/Types/ratingModalType";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
 import { db } from "../../util/indexedDB";
 import {Helmet} from 'react-helmet'
+import { deleteSearchConfig } from "../../redux/Actions/shopActions";
+import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
 import "../../components/Home/Section3/Section3.css";
 import "./Product.css";
 
@@ -122,11 +124,15 @@ const Product = ({ match }) => {
           star: 0,
           productId: "",
         })
+        if(!window.location.href.includes('/shop')){
+          dispatch(deleteSearchConfig());
+          dispatch({ type: UNSUBMIT_QUERY });
+        }
       }
-  }, [productId]);
+  }, [productId,dispatch]);
 
   useEffect(() => {
-    if (userInfo && userInfo.userId && userInfo.userId.length > 0) {
+    if (userInfo && userInfo.userId?.length > 0) {
       const bodyWidth = window.innerWidth;
       setRecentLoading(true);
       axios
@@ -253,6 +259,7 @@ const Product = ({ match }) => {
               descritionContent={product.description}
               commentList={commentList}
               productId={productId}
+              productCategory={product.category}
               commentsError={commentsError}
               productDetails={product.details}
             />
@@ -286,7 +293,7 @@ const Product = ({ match }) => {
                 )
               )}
             </div>
-            <Section2 />
+            <Section6 />
             <div className="list_of_products">
               {loading ? (
                 <LoadingSkeletonCard

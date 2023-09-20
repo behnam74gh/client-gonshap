@@ -6,6 +6,7 @@ import LikeDislike from "./LikeDislike";
 import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { BsFillCartCheckFill } from "react-icons/bs";
+import { HiBadgeCheck } from "react-icons/hi";
 import Button from "../UI/FormElement/Button";
 import Input from "../UI/FormElement/Input";
 import { useForm } from "../../util/hooks/formHook";
@@ -15,7 +16,7 @@ import {
   VALIDATOR_SPECIAL_CHARACTERS,
 } from "../../util/validators";
 
-const SingleComment = ({ comment }) => {
+const SingleComment = ({ comment,category }) => {
   const [showForm, setShowForm] = useState(false);
   const [reRenderComponent, setReRenderComponent] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ const SingleComment = ({ comment }) => {
   );
 
   const { userInfo } = useSelector((state) => state.userSignin);
-  const { _id, productId, writer, content, createdAt, writerImage } = comment;
+  const { _id, productId, writer, content, createdAt, writerImage,isSupplier } = comment;
 
   useEffect(() => {
     if (!reRenderComponent) {
@@ -50,8 +51,9 @@ const SingleComment = ({ comment }) => {
       commentContent: formState.inputs.repleyComment.value,
       productId: productId,
       responseTo: _id,
+      isSupplier: userInfo?.role === 2 && userInfo?.supplierFor === category ? true : false,
     };
-
+    
     axios
       .post("/create-comment", data)
       .then((res) => {
@@ -89,31 +91,46 @@ const SingleComment = ({ comment }) => {
 
         <div className="comment_content_wrapper">
           <div>
-            <span className="d-flex-center-center">
-              <strong className="text-mute mx-1">
-                {`${writer.firstName} ${writer.lastName}`}
-              </strong>
-              {comment.isBought && <BsFillCartCheckFill style={{cursor: "auto"}} color="var(--thirdColorPalete)" />}
-            </span>
+            {writer?.role === 1 ? (
+              <span className="d-flex-center-center">
+                <strong className="text-mute mx-1">
+                  مدیر
+                </strong>
+                <HiBadgeCheck style={{cursor: "auto"}} color="var(--thirdColorPalete)" />
+              </span>
+            ) : writer?.role === 2 && isSupplier ? (
+              <span className="d-flex-center-center">
+                <strong className="text-mute mx-1">
+                  فروشنده
+                </strong>
+                <HiBadgeCheck style={{cursor: "auto"}} color="var(--thirdColorPalete)" />
+              </span>
+            ) : (
+              <span className="d-flex-center-center">
+                <strong className="text-mute mx-1">
+                  {`${writer.firstName} ${writer.lastName}`}
+                </strong>
+                {comment.isBought && <BsFillCartCheckFill style={{cursor: "auto"}} color="var(--thirdColorPalete)" />}
+              </span>
+            )}
             <span className="font-sm">
-              تاریخ ثبت نظر :{" "}
-              <strong className="mx-2">
+              <strong>
                 {new Date(createdAt).toLocaleDateString("fa-IR")}
               </strong>
             </span>
           </div>
           <p className="comment_content">{content}</p>
           <div className="like_dislike_wrapper">
-            <LikeDislike commentId={_id} />
-            <span onClick={toggleFormToAnswerHandler} className="reply_btn">
+            <LikeDislike commentId={_id} commentLikes={comment.likes} commentDislikes={comment.disLikes} />
+            {navigator.onLine && userInfo !== null && <span onClick={toggleFormToAnswerHandler} className="reply_btn">
               {showForm ? "انصراف" : "پاسخ دادن"}
-            </span>
+            </span>}
           </div>
         </div>
       </div>
       {showForm && reRenderComponent && (
         <form className="auth-form" onSubmit={submitCommentHandler}>
-          <label className="auth-label">لطفا پاسخ خود را ثبت کنید :</label>
+          <label className="auth-label">پاسخ شما :</label>
           <Input
             id="repleyComment"
             element="textarea"
@@ -125,7 +142,7 @@ const SingleComment = ({ comment }) => {
               VALIDATOR_MINLENGTH(2),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="از علامت ها و عملگر ها استفاده نکنید،بین 2 تا 2000 حرف میتوانید وارد کنید"
+            errorText="از علامت ها و عملگر ها استفاده نکنید"
           />
 
           <Button

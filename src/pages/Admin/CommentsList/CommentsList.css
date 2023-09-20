@@ -3,6 +3,8 @@
   line-height: 2;
   word-spacing: 1px;
   text-align: justify;
+  word-break: break-word;
+  white-space: pre-wrap;
 }
 .comment_content_btn {
   cursor: pointer;

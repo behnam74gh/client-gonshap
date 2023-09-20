@@ -25,7 +25,7 @@ const Section5 = () => {
     axios
       .post("/find/products/by-category-and/order", {
         order: "discount",
-        activeCategory: "all",
+        activeCategory: null,
       })
       .then((response) => {
         setLoading(false);
@@ -95,7 +95,7 @@ const Section5 = () => {
 
   return (
     <section className="list_of_products">
-      <h1 className="column_item singleTitle">تخفیف های ویژه</h1>
+      <h2 className="d-flex-center-center my-1 singleTitle">تخفیف های ویژه</h2>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (

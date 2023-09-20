@@ -26,6 +26,7 @@ const oldStates = {
   finallyPrice: "",
   question: "",
   answer: "",
+  hostId: "",
   details: []
 };
 
@@ -64,6 +65,7 @@ const ProductUpdate = ({ history }) => {
           details,
           brand,
           category,
+          hostId,
           subcategory,
           colors,
           description,
@@ -72,6 +74,7 @@ const ProductUpdate = ({ history }) => {
           discount,
           photos,
         } = response.data.product;
+        
         if (response.data.success) {
           setOldPhotos(photos);
           setColors(colors);
@@ -91,6 +94,7 @@ const ProductUpdate = ({ history }) => {
             details,
             sell,
             finallyPrice,
+            hostId,
             discount,
           });
           finallyPrice && setShowFinallyPrice(true);
@@ -293,6 +297,7 @@ const ProductUpdate = ({ history }) => {
 
     const formData = new FormData();
 
+    formData.append("validHostId", role === 1 ? values.hostId : null);
     formData.append("title", values.title);
     formData.append("price", values.price);
     formData.append("discount", values.discount);
@@ -401,6 +406,16 @@ const ProductUpdate = ({ history }) => {
               </div>
             ))}
         </div>
+        {role === 1 && <label className="auth-label" htmlFor="category">
+          کد کاربری فروشنده :
+        </label>}
+        {role === 1 &&
+        <input
+          name="hostId"
+          value={values.hostId}
+          type="text"
+          onChange={(e) => changeInputHandler(e)}
+        />}
         <label className="auth-label" htmlFor="category">
           عنوان کالا :
         </label>

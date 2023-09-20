@@ -5,7 +5,9 @@ import Tabs from "../../components/UI/Tab/Tab";
 const TabFeature = ({
   descritionContent,
   commentList,
-  productId,productDetails,
+  productId,
+  productDetails,
+  productCategory,
   commentsError,
 }) => {
   
@@ -17,11 +19,11 @@ const TabFeature = ({
             <p className="product_content">{descritionContent}</p>
           )}
         </div>
-        <div label={`نظرات (${commentList.length})`}>
+        <div label={`(${commentList.length}) دیدگاه`}>
           {commentsError.length > 0 && (
             <p className="warning-message">{commentsError}</p>
           )}
-          <Comments commentList={commentList} postId={productId} />
+          <Comments commentList={commentList} postId={productId} category={productCategory} />
         </div>
         <div label="مشخصات">
           <div className="details_info_wrapper">

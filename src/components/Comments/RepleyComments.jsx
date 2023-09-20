@@ -15,16 +15,17 @@ const RepleyComments = (props) => {
   }, [props.commentList, props.parentCommentId]);
 
   let renderRepleyComments = (parentCommentId) =>
-    props.commentList.map((comment, index) => {
+    props.commentList.map((comment) => {
       return (
         comment.responseTo === parentCommentId && (
-          <React.Fragment key={index}>
+          <React.Fragment key={comment._id}>
             <div className="reply_comment">
-              <SingleComment comment={comment} />
+              <SingleComment comment={comment} category={props.category} />
               <RepleyComments
                 postId={props.postId}
                 commentList={props.commentList}
                 parentCommentId={comment._id}
+                category={props.category}
               />
             </div>
           </React.Fragment>
@@ -33,15 +34,17 @@ const RepleyComments = (props) => {
     });
 
   return (
-    <div className="w-100">
+    <div style={{
+      width: "95%",
+      paddingRight: "20px"
+    }}>
       {childCommentNumber > 0 && (
         <p
           className="count_of_replye_comments"
           onClick={() => setOpenRepleyComments(!openRepleyComments)}
         >
           {openRepleyComments ? "بستن" : "مشاهده"}
-          <strong className="mx-2 text-purple">{childCommentNumber}</strong>پاسخ
-             
+          <strong className="mx-2">{childCommentNumber}</strong>پاسخ
         </p>
       )}
       {openRepleyComments && renderRepleyComments(props.parentCommentId)}

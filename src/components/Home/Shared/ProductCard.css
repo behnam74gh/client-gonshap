@@ -175,9 +175,10 @@
 .products_icons_wrapper {
   display: flex;
   flex-flow: row wrap;
+  align-items: center;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 4px;
+  top: 4px;
 }
 .products_icons_wrapper span {
   margin: 2px;

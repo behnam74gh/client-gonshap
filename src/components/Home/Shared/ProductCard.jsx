@@ -138,7 +138,7 @@ const ProductCard = ({ product, showSold, showReviews }) => {
           )}
         </div>
       </div>
-      {discount > 5 && (
+      {discount > 19 && (
         <div className="special_discount">
           <div className="discount_shape">
             <span>
@@ -160,19 +160,14 @@ const ProductCard = ({ product, showSold, showReviews }) => {
         </div>
       )}
       <div className="products_icons_wrapper">
-        <span className="tooltip" onClick={addToCartHandler}>
-          <span className="tooltip_text">
-            {!inCart ? "افزودن به سبد خرید" : "حذف از سبد خرید"}
-          </span>
-          {!inCart ? <IoCartOutline /> : <MdShoppingCart />}
+        <span style={{cursor: "pointer"}} onClick={addToCartHandler}>
+          {!inCart ? <IoCartOutline size={18} /> : <MdShoppingCart size={18} />}
         </span>
-        <Link to={`/compares/${_id}`} className="tooltip text-purple">
-          <span className="tooltip_text">افزودن جهت مقایسه</span>
-          <IoIosGitCompare style={{fontSize: "18px"}} />
+        <Link to={`/compares/${_id}`} className="text-purple">
+          <IoIosGitCompare size={18} />
         </Link>
-        <span className="tooltip" onClick={addToFavoritesHandler}>
-          <span className="tooltip_text">علاقه مندی ها</span>
-          {inFavorites ? <BsBookmarkFill /> : <BsBookmark />}
+        <span style={{cursor: "pointer"}} onClick={addToFavoritesHandler}>
+          {inFavorites ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
         </span>
       </div>
       <div

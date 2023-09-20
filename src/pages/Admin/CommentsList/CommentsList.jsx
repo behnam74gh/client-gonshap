@@ -21,12 +21,19 @@ const CommentsList = () => {
   const [perPage] = useState(50);
   const [queryWriterId, setQueryWriterId] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
+  const [productId, setProductId] = useState("");
+  const [searchProductLoading, setSearchProductLoading] = useState(false);
   //modal
   const [open, setOpen] = useState(false);
   const [modalComment, setModalComment] = useState();
 
   useEffect(() => {
+    if(commentsStatus === "none"){
+      return;
+    }
+
     setLoading(true);
+
     axios
       .post("/all-comments/by-admin-seen-status", {
         status: commentsStatus,
@@ -39,6 +46,8 @@ const CommentsList = () => {
           setComments(response.data.comments);
           setCommentsLength(response.data.allCount);
           setErrorText("");
+          setProductId("");
+          setQueryWriterId("");
         }
       })
       .catch((err) => {
@@ -59,7 +68,9 @@ const CommentsList = () => {
         setSearchLoading(false);
         if (response.data.success) {
           setComments(response.data.usersComments);
-          setQueryWriterId("");
+          setErrorText("")
+          setCommentsStatus('none')
+          setProductId("");
         }
       })
       .catch((err) => {
@@ -94,6 +105,30 @@ const CommentsList = () => {
         setOpen(false);
       });
   };
+
+  const searchCommentsByProductIdHandler = () => {
+    setSearchProductLoading(true);
+    axios
+      .post("/get-all-comments/current-product/admin", { productId })
+      .then((response) => {
+        setSearchProductLoading(false);
+        if (response.data.success) {
+          setComments(response.data.allComments);
+          setErrorText("")
+          setCommentsStatus('none')
+          setQueryWriterId("");
+        }
+      })
+      .catch((err) => {
+        setSearchProductLoading(false);
+        setComments([]);
+        if (typeof err.response.data.message === "object") {
+          setErrorText(err.response.data.message[0]);
+        } else {
+          setErrorText(err.response.data.message);
+        }
+      });
+  }
 
   return (
     <div className="admin-panel-wrapper">
@@ -146,14 +181,14 @@ const CommentsList = () => {
           </div>
         </Modal>
       )}
-      <h4>فهرست نظرات کاربران</h4>
+      <h4 className="my-1 text-purple">فهرست نظرات کاربران</h4>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (
-        <p className="mt-0">
+        <p className="mt-0 font-sm">
           براساس این مرتب سازی تعداد{" "}
           <strong className="text-blue">{comments && comments.length}</strong>{" "}
-          نظر جدید وجود دارد!
+          دیدگاه وجود دارد
         </p>
       )}
       {loading ? (
@@ -176,16 +211,34 @@ const CommentsList = () => {
                       setPage(1);
                     }}
                   >
-                    <option value={false}>جدیدترین نظرات</option>
-                    <option value={true}>نظرات تایید شده</option>
+                    <option value='none'>انتخاب وضعیت دیدگاه</option>
+                    <option value={false}>جدیدترین دیدگاه ها</option>
+                    <option value={true}>دیدگاه های تایید شده</option>
                   </select>
                 </th>
-                <th colSpan="6">
+                <th colSpan="3">
+                  <div className="dashboard-search">
+                    <input
+                      type="search"
+                      value={productId}
+                      placeholder="جستوجوی با کد کاربری محصول"
+                      onChange={(e) => setProductId(e.target.value)}
+                    />
+                    <span onClick={searchCommentsByProductIdHandler}>
+                      {searchProductLoading ? (
+                        <VscLoading className="loader" />
+                      ) : (
+                        <RiSearchLine />
+                      )}
+                    </span>
+                  </div>
+                </th>
+                <th colSpan="3">
                   <div className="dashboard-search">
                     <input
                       type="search"
                       value={queryWriterId}
-                      placeholder="جستوجوی نظر بر اساس کد کاربری نویسنده نظر.."
+                      placeholder="جستوجوی با کد کاربری نویسنده"
                       onChange={(e) => setQueryWriterId(e.target.value)}
                     />
                     <span onClick={searchCommentsByWriterIdHandler}>

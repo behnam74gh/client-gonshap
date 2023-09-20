@@ -296,6 +296,11 @@ svg.hovered path.star {
     font-size: 14px;
     margin-right: 2px;
   }
+  .answer_info span.tooltip {
+    width: 20px;
+    height: 20px;
+    margin:0 2px;
+}
 }
 
 @media (max-width: 450px) {
@@ -327,9 +332,7 @@ svg.hovered path.star {
 
   .rating_compare_wrapper {
     justify-content: flex-start;
-  }
-  .compare_icon {
-    margin-right: 50px;
+    gap: 100px;
   }
   .product_info_wrapper .info_wrapper:first-child .question_info {
     flex: 60%;
@@ -372,11 +375,16 @@ svg.hovered path.star {
   .product_header_info h1 {
     font-size: 16px;
   }
+  .cart_btn_wrapper button,
+  .favorite_btn_wrapper button,
+  .rating_btn_wrapper button {
+   gap: 0 10px;
+  }
 }
 
-@media (max-width: 300px) {
-  .compare_icon {
-    margin-right: 10px;
+@media (max-width: 370px) {
+  .rating_compare_wrapper {
+    gap: 50px;
   }
   #product_details .slick-dots li {
     width: 30px;
@@ -384,5 +392,16 @@ svg.hovered path.star {
   }
   #product_details {
     padding: 0;
+  }
+}
+
+@media (max-width: 290px) {
+  .rating_compare_wrapper {
+    gap: 5px;
+  }
+  .cart_btn_wrapper button,
+  .favorite_btn_wrapper button,
+  .rating_btn_wrapper button {
+   gap: 0 4px;
   }
 }

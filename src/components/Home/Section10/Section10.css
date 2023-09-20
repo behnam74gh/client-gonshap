@@ -1,6 +1,6 @@
 .suggests_wrapper {
   width: 75%;
-  margin: 0 auto;
+  margin: 20px auto 0;
   display: flex;
   flex-flow: column wrap;
 }
