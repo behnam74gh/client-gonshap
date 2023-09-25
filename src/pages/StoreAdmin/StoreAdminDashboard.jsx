@@ -3,6 +3,7 @@ import {Switch,Link} from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import StoreAdminRoute from '../../util/routes/StoreAdminRoute'
 import '../Admin/Product/Products.css'
+import '../Admin/Carousel/Carousels.css'
 
 const StoreAdminDashboardLayout = lazy(() => import('./StoreAdminDashboardLayout'))
 const StoreDashboardHome = lazy(() => import('./StoreDashboardHome/StoreDashboardHome'))

@@ -2,7 +2,6 @@ import {
   USER_SIGNIN_FAIL,
   USER_SIGNIN_REQUEST,
   USER_SIGNIN_SUCCESS,
-  UPDATE_USERS_TOKENS,
   UPDATE_DASHBOARD_IMAGE,
   USER_SIGNOUT,
 } from "../Types/authTypes";
@@ -10,7 +9,14 @@ import {
 const initialState = {
   userInfo: localStorage.getItem("gonshapUserInfo")
     ? JSON.parse(localStorage.getItem("gonshapUserInfo"))
-    : null,
+    : {
+      firstName: "",
+      isAdmin: null,
+      userId: "",
+      role: null,
+      isBan: null,
+      supplierFor: null,
+    },
   loading: false,
   userImage: "",
 };
@@ -25,7 +31,6 @@ export const userSigninReducer = (state = initialState, action) => {
         userInfo: {
           firstName: action.payload.firstName,
           isAdmin: action.payload.isAdmin,
-          refreshToken: action.payload.refreshToken,
           userId: action.payload.userId,
           role: action.payload.role,
           isBan: action.payload.isBan,
@@ -34,21 +39,24 @@ export const userSigninReducer = (state = initialState, action) => {
       };
     case USER_SIGNIN_FAIL:
       return { loading: false };
-    case UPDATE_USERS_TOKENS:
-      return {
-        ...state,
-        userInfo: {
-          ...state.userInfo,
-          refreshToken: action.payload,
-        },
-      };
     case UPDATE_DASHBOARD_IMAGE:
       return {
         ...state,
         userImage: action.payload,
       };
     case USER_SIGNOUT:
-      return {};
+      return {
+        userInfo : {
+          firstName: "",
+          isAdmin: null,
+          userId: "",
+          role: null,
+          isBan: null,
+          supplierFor: null,
+        },
+        loading: false,
+        userImage: ""
+      };
     default:
       return state;
   }

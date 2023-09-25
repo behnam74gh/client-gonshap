@@ -94,23 +94,6 @@ const SubCategory = () => {
       });
   };
 
-  const removeSubCategoryHandler = (slug) => {
-    if (window.confirm("برای حذف این برچسب مطئن هستید؟")) {
-      axios
-        .delete(`/subcategory/${slug}`)
-        .then((response) => {
-          if (response.data.success) {
-            toast.success(response.data.message);
-            loadAllSubcategories();
-          }
-        })
-        .catch((err) => {
-          if (err.response) {
-            toast.error(err.response.data.message);
-          }
-        });
-    }
-  };
 
   return (
     <div className="admin-panel-wrapper">
@@ -154,7 +137,6 @@ const SubCategory = () => {
       <hr />
       <ListOfSubcategories
         subcategories={subcategories}
-        removeSubCategory={removeSubCategoryHandler}
         categories={categories}
         role={role}
       />

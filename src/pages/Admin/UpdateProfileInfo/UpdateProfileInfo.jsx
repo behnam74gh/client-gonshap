@@ -143,7 +143,7 @@ const UpdateProfileInfo = ({ history }) => {
           if (response.data.success) {
             toast.success(response.data.message);
 
-            const { firstName, isAdmin,role,isBan,supplierFor, refreshToken, userId, usersImage } =
+            const { firstName, isAdmin,role,isBan,supplierFor, userId, usersImage } =
               userInfo;
 
             setExpired(true);
@@ -152,10 +152,6 @@ const UpdateProfileInfo = ({ history }) => {
               payload: {
                 firstName,
                 isAdmin,role,isBan,supplierFor,
-                refreshToken:
-                  refreshToken && refreshToken.length > 0
-                    ? refreshToken
-                    : oldUserInfo.refreshToken,
                 userId,
               },
             });
@@ -165,10 +161,6 @@ const UpdateProfileInfo = ({ history }) => {
                 JSON.stringify({
                   firstName,
                   isAdmin,role,isBan,supplierFor,
-                  refreshToken:
-                    refreshToken && refreshToken.length > 0
-                      ? refreshToken
-                      : oldUserInfo.refreshToken,
                   userId,
                 })
               );

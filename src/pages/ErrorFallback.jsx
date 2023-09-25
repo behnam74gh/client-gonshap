@@ -46,8 +46,8 @@ const ErrorFallback = ({ error }) => {
         <path d="M71.3582 114.813L65.0079 114.102L64.9062 117.638L71.2678 118.328L71.3582 114.813V114.813Z" fill="#F5D793"/>
         <path d="M70.7819 114.926C69.9233 115.317 69.4915 116.287 69.7762 117.186C69.8899 117.608 70.1789 117.96 70.5699 118.155C70.961 118.349 71.4166 118.367 71.8214 118.203C72.6883 117.82 73.127 116.846 72.8384 115.943C72.722 115.521 72.4308 115.168 72.038 114.974C71.6453 114.779 71.1882 114.762 70.7819 114.926V114.926Z" fill="#E5BC60"/>
       </svg>
-      <div className="info-message">
-        <p className="font-sm">خطایی رخ داده است!</p>
+      <div className="info-message w-50">
+        <p className="font-sm ml-2">خطایی رخ داده است!</p>
 
         <strong className="text-blue font-sm" style={{cursor: "pointer"}} onClick={reloadAppHandler}>
             بارگذاری مجدد صفحه

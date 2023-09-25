@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import LocalSearch from "../UI/FormElement/LocalSearch";
 import Pagination from "../UI/Pagination/Pagination";
 
 const ListOfSubcategories = ({
   subcategories,
-  removeSubCategory,
   categories,
   role
 }) => {
@@ -82,13 +81,12 @@ const ListOfSubcategories = ({
                 <th className="th-titles">نام برچسب</th>
                 <th className="th-titles">دسته بندی</th>
                 <th className="th-titles">ویرایش</th>
-                {role === 1 && <th className="th-titles">حذف</th>}
               </tr>
             </thead>
             <tbody>
               {currentSubs.length > 0 &&
-                currentSubs.filter(searched(keyword)).map((s, i) => (
-                  <tr key={i}>
+                currentSubs.filter(searched(keyword)).map((s) => (
+                  <tr key={s._id}>
                     <td className="font-sm">{s.name}</td>
                     <td className="font-sm">
                       {categories.find((c) => c._id === s.parent).name}
@@ -101,14 +99,6 @@ const ListOfSubcategories = ({
                         <MdEdit className="text-blue font-md" />
                       </Link>
                     </td>
-                    {role === 1 && <td className="font-sm">
-                      <span
-                        className="d-flex-center-center"
-                        onClick={() => removeSubCategory(s.slug)}
-                      >
-                        <MdDelete className="text-red" />
-                      </span>
-                    </td>}
                   </tr>
                 ))}
             </tbody>

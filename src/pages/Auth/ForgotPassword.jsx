@@ -66,7 +66,7 @@ const ForgotPassword = ({ history }) => {
   const { userInfo } = useSelector((state) => state.userSignin);
 
   useEffect(() => {
-    userInfo && userInfo.refreshToken && history.push("/");
+    userInfo && userInfo.userId && history.push("/");
   }, [history, userInfo]);
 
   useEffect(() => {

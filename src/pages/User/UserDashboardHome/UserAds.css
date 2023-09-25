@@ -1,0 +1,40 @@
+.user_ads_container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.user_ads_wrapper{
+    width: 100%;
+    max-height: 400px;
+    overflow-x: auto;
+}
+
+.user_ad_table{
+    font-size: 14px;
+}
+.user_ad_table thead {
+    background-color: var(--thirdColorPalete);
+    color: #FFFFFF;
+}
+.user_ad_table thead th {
+    padding: 5px 0;
+}
+
+.table_img{
+    width: 40px;
+    height: 40px;
+}
+
+@media (max-width: 450px) {
+    .user_ads_container h5 {
+        margin: 10px 0;
+        font-size: 12px;
+    }
+    .user_ad_table{
+        font-size: 10px;
+    }
+    .table_img{
+        width: 30px;
+        height: 30px;
+    }
+}

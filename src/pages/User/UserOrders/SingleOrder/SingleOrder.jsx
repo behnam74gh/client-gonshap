@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { PDFDownloadLink } from "@react-pdf/renderer";
-// import Invoice from "../../../../components/PdfFiles/Invoice";
 import defPic from "../../../../assets/images/def.jpg";
 import "./SingleOrder.css";
 
@@ -159,14 +157,6 @@ const SingleOrder = ({ order }) => {
               ))}
           </tbody>
         </table>
-      </div>
-      <div className="pdf_download_wrapper">
-        {/* <PDFDownloadLink
-          document={<Invoice order={order} />}
-          fileName="order.pdf"
-        >
-          دانلود فایل PDF
-        </PDFDownloadLink> */}
       </div>
     </div>
   );

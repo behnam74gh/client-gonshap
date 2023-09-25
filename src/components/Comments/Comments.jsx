@@ -80,7 +80,7 @@ const Comments = ({postId,category,commentList}) => {
 
   return (
     <div className="comment_box_wrapper">
-      {!userInfo && <span className="d-flex-center-center mt-3">
+      {!userInfo.userId && <span className="d-flex-center-center mt-3">
         جهت ثبت دیدگاه، ابتدا
       <strong onClick={goSigninHandler} className="text-blue mx-1" style={{cursor: "pointer"}}>وارد حساب  </strong> شوید
       </span>}
@@ -112,7 +112,7 @@ const Comments = ({postId,category,commentList}) => {
           >
             {loading ? (
               <VscLoading className="loader" />
-            ) : userInfo?.refreshToken && (
+            ) : userInfo?.userId && (
               "ثبت دیدگاه"
             )}
           </Button>
@@ -139,7 +139,7 @@ const Comments = ({postId,category,commentList}) => {
             )
         )
       ) : (
-        <p className="info-message text-center" style={{width:"80%"}}>اولین نظر را شما ثبت کنید</p>
+        <p className="info-message text-center">اولین دیدگاه را شما ثبت کنید</p>
       )}
     </div>
   );

@@ -156,7 +156,7 @@ const SingleComment = ({ comment,category }) => {
           >
             {loading ? (
               <VscLoading className="loader" />
-            ) : userInfo && userInfo.refreshToken ? (
+            ) : userInfo && userInfo.userId ? (
               "ثبت پاسخ"
             ) : (
               "ابتدا وارد شوید"

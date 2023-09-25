@@ -2,6 +2,7 @@ import React, { useEffect, useRef, lazy } from "react";
 import { Switch, Link } from "react-router-dom";
 import UserRoute from "../../../util/routes/UserRoute";
 import "../../Admin/Product/Products.css";
+import "../../Admin/Carousel/Carousels.css";
 
 const UserDashboardLayout = lazy(() => import("../UserDashboardLayout"));
 const UserDashboardHome = lazy(() =>

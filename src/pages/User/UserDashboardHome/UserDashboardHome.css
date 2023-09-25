@@ -66,4 +66,9 @@
     font-weight: 500;
     margin: 4px 0;
   }
+
+  h5.w-100 {
+    font-size: 12px;
+    margin: 10px 0;
+  }
 }

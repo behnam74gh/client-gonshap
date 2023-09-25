@@ -1,20 +1,18 @@
 import React, { useReducer, useEffect } from "react";
-
-import "./Input.css";
 import { validate } from "../../../util/validators";
+import {BsShieldFillCheck} from 'react-icons/bs';
+import {MdRemoveModerator} from 'react-icons/md';
+import "./Input.css";
 
 const inputReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE":
+      const {isValid,errorMessages} = validate(action.val, action.validators)
       return {
         ...state,
         value: action.val,
-        isValid: validate(action.val, action.validators),
-      };
-    case "BLUR":
-      return {
-        ...state,
-        isBlured: true,
+        isValid: isValid,
+        errMessages: errorMessages
       };
     default:
       return state;
@@ -25,7 +23,7 @@ const Input = (props) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: "",
     isValid: false,
-    isBlured: false,
+    errMessages: []
   });
 
   const { id, onInput } = props;
@@ -43,12 +41,6 @@ const Input = (props) => {
     });
   };
 
-  const onBlurHandler = () => {
-    dispatch({
-      type: "BLUR",
-    });
-  };
-
   const element =
     props.element === "input" ? (
       <input
@@ -59,14 +51,7 @@ const Input = (props) => {
         disabled={props.disabled}
         onFocus={props.focusHandler}
         value={inputState.value}
-        onBlur={onBlurHandler}
-        className={
-          !inputState.isValid && inputState.isBlured
-            ? "wrong-data"
-            : inputState.isValid && inputState.isBlured
-            ? "correct-data"
-            : null
-        }
+        className={!inputState.isValid && inputState.errMessages.length > 0 ? "wrong-data" : inputState.isValid ? "correct-data" : null}
       />
     ) : (
       <textarea
@@ -75,23 +60,26 @@ const Input = (props) => {
         rows={props.rows || 5}
         placeholder={props.placeholder}
         value={inputState.value}
-        onBlur={onBlurHandler}
-        className={
-          !inputState.isValid && inputState.isBlured
-            ? "wrong-data"
-            : inputState.isValid && inputState.isBlured
-            ? "correct-data"
-            : null
-        }
+        className={!inputState.isValid && inputState.errMessages.length > 0 ? "wrong-data" : inputState.isValid ? "correct-data" : null}
       ></textarea>
     );
 
   return (
-    <div>
+    <div className="input_wrapper">
       {element}
-      {!inputState.isValid && inputState.isBlured && (
-        <p className="err-text">{props.errorText}</p>
+      {!inputState.isValid && (
+        <ul className="err_messages_wrapper">
+          {inputState.errMessages.length > 0 && inputState.errMessages.map((item,i) => {
+            return (
+              <li key={i} className="err-text">{item.message}</li>
+            )
+          })}
+        </ul>
       )}
+      <span className="validity">
+        {inputState.isValid ? <BsShieldFillCheck className="text-green" />
+        : inputState.errMessages.length > 0 && <MdRemoveModerator className="text-red" />}
+      </span>
     </div>
   );
 };

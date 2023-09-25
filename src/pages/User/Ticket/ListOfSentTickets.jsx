@@ -75,11 +75,8 @@ const ListOfSentTickets = () => {
         <LoadingOrderSkeleton count={3} />
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
-      ) : (
-        tickets &&
-        tickets.length > 0 &&
-        tickets.map((t, i) => (
-          <div key={i} className="ticket-wrapper">
+      ) : (tickets?.length > 0 ? tickets.map((t) => (
+          <div key={t._id} className="ticket-wrapper">
             <div className="ticket-titles-wrapper">
               <span className="font-sm">
                 موضوع تیکت :{" "}
@@ -88,7 +85,7 @@ const ListOfSentTickets = () => {
                 </strong>
               </span>
               <span className="font-sm">
-                رسیدگی :
+                بررسی :
                 <strong className="text-blue mx-2">
                   {t.visited ? "شد" : "نشده است"}
                 </strong>
@@ -137,7 +134,9 @@ const ListOfSentTickets = () => {
               </div>
             )}
           </div>
-        ))
+        )) : (
+          <p className="info-message">شما تیکت ارسال شده ندارید</p>
+        )
       )}
       {ticketsLength > perPage && (
         <Pagination

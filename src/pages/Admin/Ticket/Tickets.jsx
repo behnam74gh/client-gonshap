@@ -151,7 +151,7 @@ const Tickets = () => {
 
   return (
     <div className="admin-panel-wrapper">
-      <h4>فهرست تیکت های دریافتی از جانب گُنشاپی ها</h4>
+      <h4>فهرست تیکت های دریافتی از کاربران بازارک</h4>
       {loading ? (
         <VscLoading className="loader" />
       ) : (
@@ -210,16 +210,13 @@ const Tickets = () => {
                   color: "white",
                 }}
               >
-                <th className="th-titles">وضعیت مشاهده</th>
+                <th className="th-titles">وضعیت</th>
                 <th className="th-titles">فرستنده</th>
-                <th className="th-titles">شماره موبایل</th>
+                <th className="th-titles">موبایل</th>
                 <th className="th-titles">موضوع</th>
-                <th className="th-titles">محتوایِ تیکت</th>
-                <th className="th-titles">عکسِ ضمیمه</th>
-                <th className="th-titles">تاریخِ ارسال</th>
-                <th className="th-titles">محتوایِ پاسخ</th>
-                <th className="th-titles">عکسِ پاسخ</th>
-                <th className="th-titles">تاریخ پاسخدهی</th>
+                <th className="th-titles">عکسِ</th>
+                <th className="th-titles">ت.ارسال</th>
+                <th className="th-titles">ت.پاسخدهی</th>
                 <th className="th-titles">مشاهده</th>
                 <th className="th-titles">حذف</th>
               </tr>
@@ -247,7 +244,6 @@ const Tickets = () => {
                     <td className="font-sm">
                       {spreadStatusInSelect(t.status)}
                     </td>
-                    <td className="font-sm">{t.content.substring(0, 15)}...</td>
                     <td className="font-sm">
                       {t.image && t.image.length > 0 ? (
                         <div className="d-flex-center-center">
@@ -258,29 +254,11 @@ const Tickets = () => {
                           />
                         </div>
                       ) : (
-                        "ضمیمه نشده است"
+                        "ضمیمه نشده"
                       )}
                     </td>
                     <td className="font-sm">
                       {new Date(t.createdAt).toLocaleDateString("fa-IR")}
-                    </td>
-                    <td className="font-sm">
-                      {t.answer && t.answer.length > 0
-                        ? `${t.answer.substring(0, 15)}...`
-                        : "در انتظار پاسخ دهی"}
-                    </td>
-                    <td className="font-sm">
-                      {t.answerImage && t.answerImage.length > 0 ? (
-                        <div className="d-flex-center-center">
-                          <img
-                            className="table-img"
-                            src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${t.answerImage}`}
-                            alt={t.status}
-                          />
-                        </div>
-                      ) : (
-                        "ضمیمه نشده است"
-                      )}
                     </td>
                     <td className="font-sm">
                       {Date.parse(t.createdAt) !== Date.parse(t.updatedAt)

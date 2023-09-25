@@ -60,69 +60,178 @@ export const VALIDATOR_ENGLISH_NUMERIC = () => ({
 
 export const validate = (value, validators) => {
   let isValid = true;
+  let errorMessages = [];
   for (const validator of validators) {
     if (validator.type === VALIDATOR_TYPE_REQUIRE) {
-      isValid = isValid && value.trim().length > 0;
+      let validatorTypeIsValid = false;
+      if(value.trim().length > 0){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "require")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "require", message: "نباید خالی بگذارید"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_MINLENGTH) {
-      isValid = isValid && value.trim().length >= validator.val;
+      let validatorTypeIsValid = false;
+      if(value.trim().length >= validator.val){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "min-length")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "min-length" , message: `حداقل ${validator.val} حرف وارد کنید`})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_MAXLENGTH) {
-      isValid = isValid && value.trim().length <= validator.val;
+      let validatorTypeIsValid = false;
+      if(value.trim().length <= validator.val){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "max-length")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "max-length" , message: `بیشتر از ${validator.val} حرف وارد نکنید`})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_MIN) {
-      isValid = isValid && +value >= validator.val;
+      let validatorTypeIsValid = false;
+      if(+value >= validator.val){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "min")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "min" , message: `کمتر از ${validator.val} وارد نکنید`})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_MAX) {
-      isValid = isValid && +value <= validator.val;
+      let validatorTypeIsValid = false;
+      if(+value <= validator.val){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "max")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "max" , message: `بیشتر از ${validator.val} وارد نکنید`})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_SPECIAL_CHARACTERS) {
-      isValid = isValid && !/[~`@#$%^&()_={}[\]:;÷|"';×*,<>+/?]/.test(value);
+      let validatorTypeIsValid = false;
+      if(!/[~`@#$%^&()_={}[\]:;÷|"';×*,<>+/?]/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "special-ch")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "special-ch" , message: "استفاده از این عملگر(علامت) مجاز نیست"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_SPECIAL_CHARACTERS_2) {
-      isValid = isValid && !/[~`$^={}[\];÷|"';×,<>+/?]/.test(value);
+      let validatorTypeIsValid = false;
+      if(!/[~`$^={}[\];÷|"';×,<>+/?]/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "special-ch-2")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "special-ch-2" , message: "استفاده از این عملگر(علامت) مجاز نیست"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_SPECIAL_CHARACTERS_3_LINK) {
-      isValid =
-        isValid &&
-        !/[~`$^_={}[\];÷|"';×,!:<>+?]/.test(value) &&
-        !/[\u0600-\u06FF\s]+$/.test(value);
+      let validatorTypeIsValid = false;
+      if(!/[~`$^_={}[\];÷|"';×,!:<>+?]/.test(value) && !/[\u0600-\u06FF\s]+$/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "special-ch-3")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "special-ch-3" , message: "استفاده از این عملگر(علامت) مجاز نیست"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_NUMBER) {
-      isValid = isValid && /[0-9]*$/.test(value) && value > 0;
+      let validatorTypeIsValid = false;
+      if(/[0-9]*$/.test(value) && value > 0){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "number")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "number" , message: "عدد وارد کنید"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_AUTHNUMBER) {
-      isValid = isValid && /^(?=^.{6,7}$)[0-9]*$/.test(value);
+      let validatorTypeIsValid = false;
+      if(/^(?=^.{6,7}$)[0-9]*$/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "authNumber")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "authNumber" , message: "بین 6 تا 7 رقم عدد وارد کنید"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_PASSWORD) {
-      isValid =
-        isValid &&
-        /^(?=^.{6,14}$)((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.*$/.test(
-          value
-        ) &&
-        !/\s{1,}/.test(value) &&
-        /^[A-Za-z0-9]*$/.test(value);
+      let validatorTypeIsValid = false;
+      if(/^(?=^.{6,14}$)((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.*$/.test(value) && !/\s{1,}/.test(value) && /^[A-Za-z0-9]*$/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "password")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "password" , message: "حداقل یک حرف بزرگ ویک حرف کوچک انگلیسی وازاعدادهم استفاده کنید، رمزبایدبیشتراز5حرف شود"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_PERSIAN) {
+      let validatorTypeIsValid = false;
       const duplicateSpaceRegex = new RegExp(/\s{2,}/);
       const persianAlphabetRegex = new RegExp(/^[\u0600-\u06FF\s]+$/);
-      isValid =
-        isValid &&
-        !duplicateSpaceRegex.test(value) &&
-        persianAlphabetRegex.test(value);
+
+      if(!duplicateSpaceRegex.test(value) && persianAlphabetRegex.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "persian")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "persian" , message: "از حروف فارسی استفاده کنید"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_PHONENUMBER) {
-      isValid =
-        isValid && /09(1[0-9]|3[0-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/.test(value);
+      let validatorTypeIsValid = false;
+      if(/09(1[0-9]|3[0-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "phoneNumber")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "phoneNumber" , message: "شماره باید با 09 شروع شود و 11 رقم باشد"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_CONSTANTNUMBER) {
-      isValid = isValid && /^0[1-9]{2}[0-9]{8}$/.test(value);
+      let validatorTypeIsValid = false;
+      if(/^0[1-9]{2}[0-9]{8}$/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "constantNumber")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "constantNumber" , message: "شماره باید با 01 شروع شود و 11 رقم باشد"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
     if (validator.type === VALIDATOR_TYPE_ENGLISH) {
-      isValid = isValid && /^[A-Za-z][A-Za-z0-9]*$/.test(value);
+      let validatorTypeIsValid = false;
+      if(/^[A-Za-z][A-Za-z0-9]*$/.test(value)){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "english")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "english" , message: "از حروف انگلیسی استفاده کنید"})
+      }
+      isValid = isValid && validatorTypeIsValid;
     }
   }
-  return isValid;
+  return {isValid,errorMessages};
 };
 
 // برای حروف فارسی /^[\u0600-\u06FF\uFB8A\u067E\u0686\u06AF]+$/.test(value);

@@ -112,7 +112,7 @@ const ProductDetails = ({
   };
 
   const ratingModalHandler = () => {
-    if (userInfo && userInfo.refreshToken.length > 0) {
+    if (userInfo?.userId?.length > 0) {
       dispatch({ type: OPEN_STAR_RATING_MODAL });
     } else {
       history.push({

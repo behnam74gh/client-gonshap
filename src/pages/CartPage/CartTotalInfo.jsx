@@ -126,7 +126,7 @@ const CartTotalInfo = ({cartItemsInfo}) => {
       )}
       {cartItems.length > 0 && (
         <div className="cart_checkout_btns_wrapper">
-          {userInfo && userInfo.refreshToken ? (
+          {userInfo && userInfo.userId ? (
             <button
               type="button"
               disabled={!cartItems.length || userInfo.isBan}

@@ -1,3 +1,14 @@
+.input_wrapper{
+  position: relative;
+}
+.validity{
+  position: absolute;
+  left: 10px;
+  top: 20px;
+}
+.err_messages_wrapper{
+  list-style: inside;
+}
 input {
   width: 100%;
   resize: vertical;

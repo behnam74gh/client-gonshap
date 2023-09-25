@@ -55,7 +55,7 @@ const Signin = ({ history, location }) => {
     if (intended) {
       return;
     } else {
-      if (userInfo && userInfo.refreshToken) history.push("/");
+      if (userInfo && userInfo.userId) history.push("/");
     }
   }, [history, userInfo]);
 
@@ -107,11 +107,11 @@ const Signin = ({ history, location }) => {
           const { success, message, userInfo, remindMe } = response.data;
           if (success) {
             isAdminBasedRedirect(userInfo);
-            const { firstName, isAdmin,role,isBan, refreshToken, userId,supplierFor } = userInfo;
+            const { firstName, isAdmin,role,isBan, userId,supplierFor } = userInfo;
 
             dispatch({
               type: USER_SIGNIN_SUCCESS,
-              payload: { firstName, isAdmin,role,isBan,supplierFor, refreshToken, userId },
+              payload: { firstName, isAdmin,role,isBan,supplierFor, userId },
             });
             if (remindMe) {
               localStorage.setItem(
@@ -122,7 +122,6 @@ const Signin = ({ history, location }) => {
                   role,
                   isBan,
                   supplierFor,
-                  refreshToken,
                   userId,
                 })
               );
@@ -148,7 +147,7 @@ const Signin = ({ history, location }) => {
       </Helmet>
       {registered && (
         <h3 className="success-message">
-          تبریک میگم! شما عضو خانواده گُنشاپ شدید.
+          تبریک میگم! شما عضو خانواده بازارک شدید.
         </h3>
       )}
       {history?.location?.state?.from.includes('/product/details/') ? 

@@ -44,7 +44,7 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
   }, [commentLikes,commentDislikes, userInfo]);
 
   const onLikeHandler = () => {
-    if(!navigator.onLine || !userInfo?.refreshToken){
+    if(!navigator.onLine || !userInfo?.userId){
       toast.warning('ابتدا وارد حسابتان شوید')
       return;
     }
@@ -90,7 +90,7 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
   };
 
   const onDislikeHandler = () => {
-    if(!navigator.onLine || !userInfo?.refreshToken){
+    if(!navigator.onLine || !userInfo?.userId){
       toast.warning('ابتدا وارد حسابتان شوید')
       return;
     }

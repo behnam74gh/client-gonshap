@@ -16,7 +16,7 @@ const UserTickets = ({history}) => {
         <RiMailAddLine className="font-md" />
       </Link>
       <hr />
-      <h4>تیکت های ارسالی شما به مدیریت، جهت پشتیبانی</h4>
+      <h4>تیکت های ارسالی شما به مدیریت</h4>
       <ListOfSentTickets />
     </div>
   );

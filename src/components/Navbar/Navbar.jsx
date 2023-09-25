@@ -53,7 +53,7 @@ const Navbar = (props) => {
         </div>
         <div className="header-feature">
           <ul>
-            {userInfo && isOnline && userInfo.refreshToken ? (
+            {isOnline && userInfo?.userId?.length > 0 ? (
               <li className="logged-user">
                 {userInfo.firstName}
                 <MdKeyboardArrowDown
@@ -101,12 +101,12 @@ const Navbar = (props) => {
             </li>
           </ul>
 
-          {(!userInfo && isOnline) && <Link to="/register" className="auth-btn">
+          {(userInfo?.userId?.length < 1 && isOnline) && <Link to="/register" className="auth-btn">
             ثبت نام
             <AiOutlineUser style={{ marginRight: "5px" }} />
           </Link>}
 
-          {(!userInfo && isOnline) && <Link to="/signin" className="auth-btn">
+          {(userInfo?.userId?.length < 1 && isOnline) && <Link to="/signin" className="auth-btn">
             ورود
             <RiLogoutBoxLine style={{ marginRight: "5px" }} />
           </Link>}

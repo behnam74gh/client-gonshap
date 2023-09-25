@@ -370,7 +370,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20%;
+  width: 100%;
 }
 .pos-rel {
   position: relative;

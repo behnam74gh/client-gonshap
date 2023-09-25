@@ -71,24 +71,6 @@ const Category = () => {
       });
   };
 
-  const removeCategoryHandler = (slug) => {
-    if (window.confirm("برای حذف این دسته بندی مطئن هستید؟")) {
-      axios
-        .delete(`/category/${slug}`)
-        .then((response) => {
-          if (response.data.success) {
-            toast.success(response.data.message);
-            loadAllCategories();
-          }
-        })
-        .catch((err) => {
-          if (err.response) {
-            toast.error(err.response.data.message);
-          }
-        });
-    }
-  };
-
   return (
     <div className="admin-panel-wrapper">
       {error.length > 0 && <p className="warning-message">{error}</p>}
@@ -114,7 +96,6 @@ const Category = () => {
       <hr />
       <ListOfCategories
         categories={categories}
-        removeCategory={removeCategoryHandler}
       />
     </div>
   );
