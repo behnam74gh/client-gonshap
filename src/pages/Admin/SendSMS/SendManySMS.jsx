@@ -121,7 +121,6 @@ const SendManySMS = () => {
               VALIDATOR_MINLENGTH(8),
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
-            errorText="از علامت ها و عملگرها استفاده نکنید؛ میتوانید از 8 تا 400 حرف وارد کنید!"
           />
           <Input
             id="phoneNumber"
@@ -131,10 +130,8 @@ const SendManySMS = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(11),
-              VALIDATOR_MINLENGTH(11),
               VALIDATOR_PHONENUMBER(),
             ]}
-            errorText="شماره تلفن با 09 شرو میشود و درمجموع 11 رقم میباشد!"
           />
           <div className="w-100 d-flex-between">
             <Button
@@ -183,7 +180,7 @@ const SendManySMS = () => {
         </form>
         <Link
           to="/admin/dashboard/send-sms"
-          className="text-blue font-sm d-flex-center-center"
+          className="text-blue create-new-slide-link font-sm d-flex-center-center"
         >
           لیست پیامک های ارسال شده
           <IoArrowUndoCircle className="font-md" />

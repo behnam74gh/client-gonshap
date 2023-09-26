@@ -14,6 +14,7 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_MAXLENGTH,
   VALIDATOR_SPECIAL_CHARACTERS,
+  VALIDATOR_REQUIRE,
 } from "../../util/validators";
 
 const SingleComment = ({ comment,category }) => {
@@ -138,11 +139,11 @@ const SingleComment = ({ comment,category }) => {
             row={6}
             onInput={inputHandler}
             validators={[
+              VALIDATOR_REQUIRE(),
               VALIDATOR_MAXLENGTH(2000),
-              VALIDATOR_MINLENGTH(2),
+              VALIDATOR_MINLENGTH(10),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="از علامت ها و عملگر ها استفاده نکنید"
           />
 
           <Button

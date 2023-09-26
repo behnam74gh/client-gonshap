@@ -7,14 +7,6 @@
   height: 100%;
   border-radius: 50%;
 }
-.edit-profile input:invalid,
-.edit-profile textarea:invalid {
-  border: red solid 1px;
-}
-.edit-profile input:valid,
-.edit-profile textarea:valid {
-  border: green solid 1px;
-}
 .delete_user_img {
   position: absolute;
   top: -5px;

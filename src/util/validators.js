@@ -10,6 +10,7 @@ const VALIDATOR_TYPE_PERSIAN = "PERSIAN";
 const VALIDATOR_TYPE_AUTHNUMBER = "AUTHNUMBER";
 const VALIDATOR_TYPE_NUMBER = "NUMBER";
 const VALIDATOR_TYPE_PASSWORD = "PASSWORD";
+const VALIDATOR_TYPE_REPEAT_PASSWORD = "REPEAT_PASSWORD";
 const VALIDATOR_TYPE_SPECIAL_CHARACTERS = "SPECIAL_CHARACTERS";
 const VALIDATOR_TYPE_SPECIAL_CHARACTERS_2 = "SPECIAL_CHARACTERS_2";
 const VALIDATOR_TYPE_SPECIAL_CHARACTERS_3_LINK = "SPECIAL_CHARACTERS_3_LINK";
@@ -45,6 +46,10 @@ export const VALIDATOR_NUMBER = () => ({
 export const VALIDATOR_PASSWORD = () => ({
   type: VALIDATOR_TYPE_PASSWORD,
 });
+export const VALIDATOR_REPEAT_PASSWORD = (val) => ({
+  type: VALIDATOR_TYPE_REPEAT_PASSWORD,
+  val: val,
+});
 export const VALIDATOR_SPECIAL_CHARACTERS = () => ({
   type: VALIDATOR_TYPE_SPECIAL_CHARACTERS,
 });
@@ -61,6 +66,7 @@ export const VALIDATOR_ENGLISH_NUMERIC = () => ({
 export const validate = (value, validators) => {
   let isValid = true;
   let errorMessages = [];
+
   for (const validator of validators) {
     if (validator.type === VALIDATOR_TYPE_REQUIRE) {
       let validatorTypeIsValid = false;
@@ -168,7 +174,7 @@ export const validate = (value, validators) => {
         errorMessages = errorMessages.filter(item => item.type !== "authNumber")
       }else{
         validatorTypeIsValid = false;
-        errorMessages.push({type: "authNumber" , message: "بین 6 تا 7 رقم عدد وارد کنید"})
+        errorMessages.push({type: "authNumber" , message: "کد تایید باید 6 یا 7 رقم باشد"})
       }
       isValid = isValid && validatorTypeIsValid;
     }
@@ -179,7 +185,18 @@ export const validate = (value, validators) => {
         errorMessages = errorMessages.filter(item => item.type !== "password")
       }else{
         validatorTypeIsValid = false;
-        errorMessages.push({type: "password" , message: "حداقل یک حرف بزرگ ویک حرف کوچک انگلیسی وازاعدادهم استفاده کنید، رمزبایدبیشتراز5حرف شود"})
+        errorMessages.push({type: "password" , message: "رمز باید شامل اعداد و حداقل یک حرف بزرگ ویک حرف کوچک انگلیسی باشد"})
+      }
+      isValid = isValid && validatorTypeIsValid;
+    }
+    if (validator.type === VALIDATOR_TYPE_REPEAT_PASSWORD) {
+      let validatorTypeIsValid = false;
+      if(value === validator.val){
+        validatorTypeIsValid = true;
+        errorMessages = errorMessages.filter(item => item.type !== "repeat_password")
+      }else{
+        validatorTypeIsValid = false;
+        errorMessages.push({type: "repeat_password" , message: "رمز بالا را دقیقا تکرار کنید"})
       }
       isValid = isValid && validatorTypeIsValid;
     }

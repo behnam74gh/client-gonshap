@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 // import ReCAPTCHA from "react-google-recaptcha";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
 import { toast } from "react-toastify";
-
 import axios from "../../../util/axios";
-import defPro from "../../../assets/images/pro-8.png";
 import Button from "../../../components/UI/FormElement/Button";
-import {
-  UPDATE_DASHBOARD_IMAGE,
-  USER_SIGNIN_SUCCESS,
-} from "../../../redux/Types/authTypes";
+import { UPDATE_DASHBOARD_IMAGE, USER_SIGNIN_SUCCESS } from "../../../redux/Types/authTypes";
+import Input from "../../../components/UI/FormElement/Input";
+import { 
+  VALIDATOR_MAXLENGTH,
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_PERSIAN_ALPHABET,
+  VALIDATOR_SPECIAL_CHARACTERS
+} from "../../../util/validators";
+import { useForm } from "../../../util/hooks/formHook";
+import defPro from "../../../assets/images/pro-8.png";
 import "../../../components/UI/FormElement/ImageUpload.css";
 import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
@@ -29,8 +33,25 @@ const UpdateProfileInfo = ({ history }) => {
     lastName: "",
     address: "",
   });
-  const { userInfo: oldUserInfo } = useSelector((state) => state.userSignin);
+
   const dispatch = useDispatch();
+  const [formState, inputHandler] = useForm(
+    {
+      firstName: {
+        value: "",
+        isValid: false,
+      },
+      lastName: {
+        value: "",
+        isValid: false,
+      },
+      address: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
 
   // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
@@ -126,26 +147,24 @@ const UpdateProfileInfo = ({ history }) => {
 
     const formData = new FormData();
 
-    formData.append("firstName", values.firstName);
-    formData.append("lastName", values.lastName);
-    formData.append("address", values.address);
+    formData.append("firstName", formState.inputs.firstName.value);
+    formData.append("lastName", formState.inputs.lastName.value);
+    formData.append("address", formState.inputs.address.value);
 
     formData.append("oldPhoto", oldPhoto);
     formData.append("deletedPhoto", deletedPhoto);
     formData.append("photo", file);
     setLoading(true);
+    
     if (!expired) {
       axios
         .put("/user/profile/update-info", formData)
         .then((response) => {
           setLoading(false);
-          const { userInfo } = response.data;
           if (response.data.success) {
-            toast.success(response.data.message);
-
-            const { firstName, isAdmin,role,isBan,supplierFor, userId, usersImage } =
-              userInfo;
-
+            const { userInfo,message } = response.data;
+            toast.success(message);
+            const {firstName,isAdmin,role,isBan,supplierFor,userId,usersImage}=userInfo;
             setExpired(true);
             dispatch({
               type: USER_SIGNIN_SUCCESS,
@@ -166,11 +185,6 @@ const UpdateProfileInfo = ({ history }) => {
               );
             }
             dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: usersImage });
-            if (isAdmin) {
-              history.push("/admin/dashboard/home");
-            } else {
-              history.push("/user/dashboard/home");
-            }
           }
         })
         .catch((err) => {
@@ -242,32 +256,44 @@ const UpdateProfileInfo = ({ history }) => {
         </div>
 
         <label className="auth-label">نام :</label>
-        <input
-          name="firstName"
-          value={values.firstName}
-          type="text"
-          onChange={(e) => changeInputHandler(e)}
-          pattern="[\u0600-\u06FF\s]{3,20}"
-          title="لطفا فقط از حروف فارسی استفاده کنید، نام باید بین 3 تا 20 حرف باشد"
+        <Input
+            id="firstName"
+            element="input"
+            type="text"
+            onInput={inputHandler}
+            defaultValue={values.firstName}
+            validators={[
+              VALIDATOR_MAXLENGTH(20),
+              VALIDATOR_MINLENGTH(3),
+              VALIDATOR_PERSIAN_ALPHABET(),
+            ]}
         />
         <label className="auth-label">نام خانوادگی :</label>
-        <input
-          name="lastName"
-          value={values.lastName}
-          type="text"
-          onChange={(e) => changeInputHandler(e)}
-          pattern="[\u0600-\u06FF\s]{3,25}"
-          title="لطفا فقط از حروف فارسی استفاده کنید، فامیلی باید بین 3 تا 25 حرف باشد"
+        <Input
+            id="lastName"
+            element="input"
+            type="text"
+            onInput={inputHandler}
+            defaultValue={values.lastName}
+            validators={[
+              VALIDATOR_MAXLENGTH(25),
+              VALIDATOR_MINLENGTH(3),
+              VALIDATOR_PERSIAN_ALPHABET(),
+            ]}
         />
         <label className="auth-label">آدرس :</label>
-        <textarea
-          type="text"
-          name="address"
-          value={values.address}
-          rows="3"
-          onChange={(e) => changeInputHandler(e)}
-          title="لطفا فقط از حروف فارسی استفاده کنید، آدرس باید بین 15 تا 300 حرف باشد"
-        ></textarea>
+        <Input
+            id="address"
+            element="input"
+            type="text"
+            onInput={inputHandler}
+            defaultValue={values.address}
+            placeholder="جهت ارسال کالا"
+            validators={[
+              VALIDATOR_MAXLENGTH(300),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+        />
         <label className="auth-label">تصاویر مرتبط را انتخاب کنید : </label>
         {/* <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
@@ -278,12 +304,7 @@ const UpdateProfileInfo = ({ history }) => {
         /> */}
         <Button
           type="submit"
-          disabled={
-            values.address.length < 15 ||
-            values.firstName.length < 2 ||
-            values.lastName.length < 3 ||
-            loading
-          }
+          disabled={ loading || !formState.inputs.firstName.isValid || !formState.inputs.lastName.isValid}
         >
           {!loading ? "ثبت" : <VscLoading className="loader" />}
         </Button>

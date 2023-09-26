@@ -14,6 +14,7 @@ const Checkout = ({history}) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [addressSaved, setAddressSaved] = useState(false);
   const [categories,setCategories] = useState([])
+  const [oldAddress,setOldAddress] = useState("")
 
   const { cart, userSignin } = useSelector((state) => ({
     ...state,
@@ -35,11 +36,16 @@ const Checkout = ({history}) => {
             products,
             cartTotal,
             categories,
+            address
           } = response.data;
           if (success) {
             setProducts(products);
             setTotalPrice(cartTotal);
             setCategories(categories)
+            if(address.length > 0){
+              setOldAddress(address);
+              setAddressSaved(true)
+            }
           }
         })
         .catch((err) => {
@@ -73,6 +79,7 @@ const Checkout = ({history}) => {
               setAddressSaved={setAddressSaved}
               addressSaved={addressSaved}
               categoriesLength={categories.length}
+              oldAddress={oldAddress}
             />
           </div>
           {products.length > 0 && (

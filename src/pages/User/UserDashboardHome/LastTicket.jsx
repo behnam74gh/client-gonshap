@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoadingOrderSkeleton from "../../../components/UI/LoadingSkeleton/LoadingOrderSkeleton";
 import axios from "../../../util/axios";
+import '../Ticket/Ticket.css'
 
 const LastTicket = () => {
   const [ticket, setTicket] = useState();

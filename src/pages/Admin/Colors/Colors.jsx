@@ -107,7 +107,6 @@ const Colors = () => {
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_PERSIAN_ALPHABET(),
             ]}
-            errorText="از حروف فارسی استفاده کنید؛ میتوانید از 3 تا 30 حرف وارد کنید!"
           />
           <label className="auth-label">رنگ :</label>
           <div className="d-flex-between my-1">

@@ -9,6 +9,9 @@ import { useSelector } from "react-redux";
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
 import "./Product.css";
+import { useForm } from "../../../util/hooks/formHook";
+import Input from "../../../components/UI/FormElement/Input";
+import { VALIDATOR_MAX, VALIDATOR_MAXLENGTH, VALIDATOR_MIN, VALIDATOR_MINLENGTH, VALIDATOR_NUMBER, VALIDATOR_SPECIAL_CHARACTERS, VALIDATOR_SPECIAL_CHARACTERS_2 } from "../../../util/validators";
 
 const oldStates = {
   title: "",
@@ -24,8 +27,6 @@ const oldStates = {
   sell: "",
   discount: "none",
   finallyPrice: "",
-  question: "",
-  answer: "",
   hostId: "",
   details: []
 };
@@ -46,6 +47,44 @@ const ProductUpdate = ({ history }) => {
   const [showFinallyPrice, setShowFinallyPrice] = useState(false);
   const [showSub, setShowSub] = useState(false);
   const [showBrand, setShowBrand] = useState(false);
+  const [formState, inputHandler] = useForm(
+    {
+      title: {
+        value: "",
+        isValid: false,
+      },
+      attr1: {
+        value: "",
+        isValid: false,
+      },
+      attr2: {
+        value: "",
+        isValid: false,
+      },
+      attr3: {
+        value: "",
+        isValid: false,
+      },
+      description: {
+        value: "",
+        isValid: false,
+      },
+      question: {
+        value: "",
+        isValid: false
+      },
+      answer: {
+        value: "",
+        isValid: false
+      },
+      hostId: {
+        value: "",
+        isValid: false
+      }
+    },
+    false
+  );
+
 
   const {userInfo : {role}} = useSelector(state => state.userSignin)
   
@@ -280,7 +319,10 @@ const ProductUpdate = ({ history }) => {
   };
 
   const appendDetailHandler = () => {
-    const newDetails = [...values.details, {question:values.question,answer: values.answer}]
+    const newDetails = [
+      ...values.details,
+      {question:formState.inputs.question.value,answer: formState.inputs.answer.value}
+    ]
     setValues({...values, details: newDetails})
   }
 
@@ -298,15 +340,15 @@ const ProductUpdate = ({ history }) => {
     const formData = new FormData();
 
     formData.append("validHostId", role === 1 ? values.hostId : null);
-    formData.append("title", values.title);
+    formData.append("title", formState.inputs.title.value);
     formData.append("price", values.price);
     formData.append("discount", values.discount);
     formData.append("finallyPrice", values.finallyPrice);
     formData.append("countInStock", values.countInStock);
-    formData.append("attr1", values.attr1);
-    formData.append("attr2", values.attr2);
-    formData.append("attr3", values.attr3);
-    formData.append("description", values.description);
+    formData.append("attr1", formState.inputs.attr1.value);
+    formData.append("attr2", formState.inputs.attr2.value);
+    formData.append("attr3", formState.inputs.attr3.value);
+    formData.append("description", formState.inputs.description.value);
     formData.append("category", values.category);
     formData.append("subcategory", values.subcategory);
     formData.append("sell", values.sell);
@@ -355,7 +397,7 @@ const ProductUpdate = ({ history }) => {
             <strong>{slug}</strong>
           </h4>
           <Link
-            to="/admin/dashboard/products"
+            to={role === 1 ? "/admin/dashboard/products" : "/store-admin/dashboard/products"}
             className="create-new-slide-link"
           >
             <span className="sidebar-text-link">بازگشت به فهرست محصولات</span>
@@ -410,20 +452,34 @@ const ProductUpdate = ({ history }) => {
           کد کاربری فروشنده :
         </label>}
         {role === 1 &&
-        <input
-          name="hostId"
-          value={values.hostId}
-          type="text"
-          onChange={(e) => changeInputHandler(e)}
-        />}
+          <Input
+            id="hostId"
+            element="input"
+            type="text"
+            placeholder="کد کاربری فروشنده"
+            onInput={inputHandler}
+            defaultValue={values.hostId}
+            validators={[
+              VALIDATOR_MAXLENGTH(30),
+              VALIDATOR_MINLENGTH(3),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+        />
+        }
         <label className="auth-label" htmlFor="category">
           عنوان کالا :
         </label>
-        <input
-          name="title"
-          value={values.title}
+        <Input
+          id="title"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
+          onInput={inputHandler}
+          defaultValue={values.title}
+          validators={[
+            VALIDATOR_MAXLENGTH(30),
+            VALIDATOR_MINLENGTH(3),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
         />
         {role === 1 && <label className="auth-label" htmlFor="category">
           دسته بندی :
@@ -441,7 +497,6 @@ const ProductUpdate = ({ history }) => {
               </option>
             ))}
         </select>}
-
         {showSub && (
           <label className="auth-label" htmlFor="subcategory">
             برچسب :
@@ -462,7 +517,6 @@ const ProductUpdate = ({ history }) => {
               ))}
           </select>
         )}
-
         {showBrand && (
           <label className="auth-label" htmlFor="brand">
             برند :
@@ -532,7 +586,7 @@ const ProductUpdate = ({ history }) => {
           type="number"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label">رنگ</label>
+        <label className="auth-label">رنگ ها</label>
         <select value="none" onChange={(e) => setColorsHandler(e.target.value)}>
           <option value="none">لطفا رنگ ها را انتخاب کنید</option>
           {defColors.length > 0 &&
@@ -567,54 +621,87 @@ const ProductUpdate = ({ history }) => {
             ))}
           </div>
         )}
-        <label className="auth-label">مشخصات-1 :</label>
-        <input
-          name="attr1"
-          value={values.attr1}
+        <Input
+          id="attr1"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
+          placeholder="مشخصات-1 :"
+          onInput={inputHandler}
+          defaultValue={values.attr1}
+          validators={[
+            VALIDATOR_MAXLENGTH(60),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
         />
-        <label className="auth-label">مشخصات-2 :</label>
-        <input
-          name="attr2"
-          value={values.attr2}
+        <Input
+          id="attr2"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
+          placeholder="مشخصات-2 :"
+          onInput={inputHandler}
+          defaultValue={values.attr2}
+          validators={[
+            VALIDATOR_MAXLENGTH(60),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
         />
-        <label className="auth-label">مشخصات-3 :</label>
-        <input
-          name="attr3"
-          value={values.attr3}
+        <Input
+          id="attr3"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
+          placeholder="مشخصات-3 :"
+          onInput={inputHandler}
+          defaultValue={values.attr3}
+          validators={[
+            VALIDATOR_MAXLENGTH(60),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
         />
         <label className="auth-label">توضیحات :</label>
-        <textarea
+        <Input
+          id="description"
+          element="textarea"
           type="text"
-          name="description"
-          value={values.description}
-          rows="10"
-          onChange={(e) => changeInputHandler(e)}
-        ></textarea>
-
-          <label className="auth-label">ویژگی های محصول :</label>
-          <input
-          name="question"
-          value={values.question}
+          placeholder="توضیحات"
+          onInput={inputHandler}
+          defaultValue={values.description}
+          rows={10}
+          validators={[
+            VALIDATOR_MAXLENGTH(1000),
+            VALIDATOR_MINLENGTH(10),
+            VALIDATOR_SPECIAL_CHARACTERS_2(),
+          ]}
+        />
+        <label className="auth-label">ویژگی های محصول :</label>
+        <Input
+          id="question"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
           placeholder="بخش اول"
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(100),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
         />
-        <input
-          name="answer"
-          value={values.answer}
+        <Input
+          id="answer"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
           placeholder="بخش دوم"
-        />
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(100),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
+          />
           <Button type="button" 
-            disabled={!values.answer || !values.question}
             onClick={appendDetailHandler}
+            disabled={
+              !formState.inputs.answer.isValid || !formState.inputs.question.isValid ||
+              formState.inputs.answer.value.length === 0 ||
+              formState.inputs.question.value.length === 0
+            }
           >
               {!loading ? "افزودن" : <VscLoading className="loader" />}
           </Button>

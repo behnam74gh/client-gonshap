@@ -144,7 +144,6 @@ const CreateHelp = () => {
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="از علامت ها و عملگر ها استفاده نکنید، میتوانید از 3 تا 20 حرف وارد کنید!"
           />
           <Input
             id="description"
@@ -158,7 +157,6 @@ const CreateHelp = () => {
               VALIDATOR_MINLENGTH(100),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="از علامت ها و عملگر ها استفاده نکنید،بین 100 تا 2000 حرف میتوانید وارد کنید"
           />
           <Button type="submit" disabled={loading || !formState.isValid}>
             {!loading ? "ثبت" : <VscLoading className="loader" />}

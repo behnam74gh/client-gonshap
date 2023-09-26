@@ -216,7 +216,6 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(3),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید، میتوانید از 3 تا 70 حرف وارد کنید!"
         />
         <label className="auth-label">شماره تلفن مالک :</label>
         <Input
@@ -229,9 +228,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_REQUIRE(),
             VALIDATOR_PHONENUMBER(),
             VALIDATOR_MAXLENGTH(11),
-            VALIDATOR_MINLENGTH(11),
           ]}
-          errorText="شماره باید با 09 شروع شود و درمجموع 11 عدد باشد!"
         />
         <label className="auth-label" htmlFor="category">
           محصولات پشتیبانی :
@@ -250,28 +247,23 @@ const CarouselCreate = ({ history }) => {
           id="storePhoneNumber"
           element="input"
           type="text"
-          placeholder="01733330309"
           onInput={inputHandler}
           validators={[
             VALIDATOR_MAXLENGTH(11),
-            VALIDATOR_MINLENGTH(11),
             VALIDATOR_CONSTANTNUMBER(),
           ]}
-          errorText="تلفن ثابت باید با 0 شروع شود و کلا 11 رقم باشد!"
         />
         <label className="auth-label">آدرس فروشگاه :</label>
         <Input
           id="address"
           element="input"
           type="text"
-          placeholder="گنبد-خیابان-پاسداران-کوچه پنجم-پلاک 18"
           onInput={inputHandler}
           validators={[
             VALIDATOR_MAXLENGTH(150),
             VALIDATOR_MINLENGTH(20),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 20 تا 150 حرف وارد کنید!"
         />
         <label className="auth-label">مختصات محل فروشگاه (longitude) :</label>
         <Input
@@ -281,7 +273,6 @@ const CarouselCreate = ({ history }) => {
           placeholder="55.16630172729493"
           onInput={inputHandler}
           validators={[VALIDATOR_NUMBER()]}
-          errorText="مختصات را از گوگل بگیرید، باید به عدد وارد شود"
         />
         <label className="auth-label">مختصات محل فروشگاه (latitude) :</label>
         <Input
@@ -291,7 +282,6 @@ const CarouselCreate = ({ history }) => {
           placeholder="37.253457669207286"
           onInput={inputHandler}
           validators={[VALIDATOR_NUMBER()]}
-          errorText="مختصات را از گوگل بگیرید، باید به عدد وارد شود"
         />
         <Input
           id="description"
@@ -305,7 +295,6 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(10),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،بین 1000 تا 10000 حرف میتوانید وارد کنید"
         />
         <Button type="submit" disabled={!formState.isValid}>
           {!loading ? "ثبت" : <VscLoading className="loader" />}

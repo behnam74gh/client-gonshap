@@ -109,7 +109,6 @@ const Faq = () => {
             VALIDATOR_MINLENGTH(8),
             VALIDATOR_PERSIAN_ALPHABET(),
           ]}
-          errorText="از حروف فارسی استفاده کنید،فاصله بین کلمات فقط یک مورد مجاز است؛ میتوانید از 8 تا 400 حرف وارد کنید!"
         />
         <Input
           id="answer"
@@ -123,7 +122,6 @@ const Faq = () => {
             VALIDATOR_MINLENGTH(40),
             VALIDATOR_PERSIAN_ALPHABET(),
           ]}
-          errorText="از حروف فارسی استفاده کنید،فاصله بین کلمات فقط یک مورد مجاز است؛ میتوانید از 40 تا 400 حرف وارد کنید!"
         />
         <Button type="submit" disabled={!formState.isValid}>
           {!loading ? "ثبت" : <VscLoading className="loader" />}

@@ -125,7 +125,6 @@ const SubCategory = () => {
             VALIDATOR_MINLENGTH(3),
             VALIDATOR_PERSIAN_ALPHABET(),
           ]}
-          errorText="از حروف فارسی استفاده کنید،فاصله بین کلمات فقط یک مورد مجاز است؛ میتوانید از 3 تا 30 حرف وارد کنید!"
         />
         <Button
           type="submit"

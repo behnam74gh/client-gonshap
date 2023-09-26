@@ -248,7 +248,6 @@ const Location = () => {
                   VALIDATOR_MINLENGTH(2),
                   VALIDATOR_SPECIAL_CHARACTERS(),
                 ]}
-                errorText="از علامت ها و عملگر ها استفاده نکنید، میتوانید از 2 تا 70 حرف وارد کنید!"
               />
               <label className="auth-label">شماره تلفن ثابت شرکت 1 :</label>
               <Input
@@ -260,9 +259,7 @@ const Location = () => {
                 validators={[
                   VALIDATOR_MAXLENGTH(11),
                   VALIDATOR_MINLENGTH(11),
-                  VALIDATOR_CONSTANTNUMBER(),
                 ]}
-                errorText="تلفن ثابت باید با 0 شروع شود و کلا 11 رقم باشد!"
               />
               <label className="auth-label">شماره تلفن ثابت شرکت 2 :</label>
               <Input
@@ -274,9 +271,7 @@ const Location = () => {
                 validators={[
                   VALIDATOR_MAXLENGTH(11),
                   VALIDATOR_MINLENGTH(11),
-                  VALIDATOR_CONSTANTNUMBER(),
                 ]}
-                errorText="تلفن ثابت باید با 0 شروع شود و کلا 11 رقم باشد!"
               />
               <label className="auth-label">آدرس شرکت :</label>
               <Input
@@ -286,10 +281,9 @@ const Location = () => {
                 onInput={inputHandler}
                 validators={[
                   VALIDATOR_MAXLENGTH(150),
-                  VALIDATOR_MINLENGTH(20),
+                  VALIDATOR_MINLENGTH(3),
                   VALIDATOR_SPECIAL_CHARACTERS(),
                 ]}
-                errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 20 تا 150 حرف وارد کنید!"
               />
               <label className="auth-label">
                 مختصات نقشه ی شرکت (longitude) :
@@ -301,7 +295,6 @@ const Location = () => {
                 placeholder="55.16630172729493"
                 onInput={inputHandler}
                 validators={[VALIDATOR_NUMBER()]}
-                errorText="مختصات را از گوگل بگیرید، باید به عدد وارد شود"
               />
               <label className="auth-label">
                 مختصات نقشه ی شرکت (latitude) :
@@ -313,7 +306,6 @@ const Location = () => {
                 placeholder="37.253457669207286"
                 onInput={inputHandler}
                 validators={[VALIDATOR_NUMBER()]}
-                errorText="مختصات را از گوگل بگیرید، باید به عدد وارد شود"
               />
               <label className="auth-label">آدرس اینستاگرام :</label>
               <Input
@@ -326,7 +318,6 @@ const Location = () => {
                   VALIDATOR_MINLENGTH(4),
                   VALIDATOR_SPECIAL_CHARACTERS(),
                 ]}
-                errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 4 تا 70 حرف وارد کنید!"
               />
               <label className="auth-label">آدرس تلگرام :</label>
               <Input
@@ -339,7 +330,6 @@ const Location = () => {
                   VALIDATOR_MINLENGTH(4),
                   VALIDATOR_SPECIAL_CHARACTERS(),
                 ]}
-                errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 4 تا 70 حرف وارد کنید!"
               />
               <label className="auth-label">آدرس واتساپ :</label>
               <Input
@@ -352,7 +342,6 @@ const Location = () => {
                   VALIDATOR_MINLENGTH(4),
                   VALIDATOR_SPECIAL_CHARACTERS(),
                 ]}
-                errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 4 تا 70 حرف وارد کنید!"
               />
               <label className="auth-label">آدرس نماد الکترونیک :</label>
               <Input
@@ -363,7 +352,6 @@ const Location = () => {
                 validators={[
                   VALIDATOR_MAXLENGTH(150),
                 ]}
-                errorText='لینک بسیار طولانی است'
               />
               <label className="auth-label">آدرس صنفی :</label>
               <Input
@@ -374,7 +362,6 @@ const Location = () => {
                 validators={[
                   VALIDATOR_MAXLENGTH(150),
                 ]}
-                errorText='لینک بسیار طولانی است'
               />
               <label className="auth-label">آدرس رسانه دیجیتال :</label>
               <Input
@@ -385,7 +372,6 @@ const Location = () => {
                 validators={[
                   VALIDATOR_MAXLENGTH(150),
                 ]}
-                errorText='لینک بسیار طولانی است'
               />
               <Input
                 id="aboutUs"
@@ -399,7 +385,6 @@ const Location = () => {
                   VALIDATOR_MINLENGTH(300),
                   VALIDATOR_SPECIAL_CHARACTERS(),
                 ]}
-                errorText="از علامت ها و عملگر ها استفاده نکنید،بین 300 تا 3000 حرف میتوانید وارد کنید"
               />
               <Button
                 type="submit"

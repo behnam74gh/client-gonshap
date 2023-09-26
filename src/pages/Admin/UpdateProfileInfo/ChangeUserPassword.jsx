@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { VscLoading } from "react-icons/vsc";
 import { toast } from "react-toastify";
-
 import axios from "../../../util/axios";
-import { VALIDATOR_PASSWORD } from "../../../util/validators";
+import { 
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_PASSWORD,
+  VALIDATOR_REPEAT_PASSWORD,
+  VALIDATOR_REQUIRE
+} from "../../../util/validators";
 import { useForm } from "../../../util/hooks/formHook";
 import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
@@ -61,11 +65,6 @@ const ChangeUserPassword = ({ history }) => {
           if (response.data.success) {
             toast.success(response.data.message);
             setExpired(true);
-            if (userInfo.isAdmin) {
-              history.push("/admin/dashboard/home");
-            } else {
-              history.push("/user/dashboard/home");
-            }
           }
         })
         .catch((err) => {
@@ -92,18 +91,18 @@ const ChangeUserPassword = ({ history }) => {
           type="password"
           placeholder="مثال: 12Ab3a"
           onInput={inputHandler}
-          validators={[VALIDATOR_PASSWORD()]}
-          errorText="رمز باید بین 6 تا 14حرف که ترکیبی از حرف بزرگ انگلیسی و عدد و حرف کوچک انگلیسی باشد!"
+          validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
         />
-        <label className="auth-label">تکرار دقیق رمز عبور</label>
+        <label className="auth-label">تکرار رمز عبور</label>
         <Input
           id="repeatPassword"
           element="input"
           type="password"
           placeholder="مثال: 12Ab3a"
           onInput={inputHandler}
-          validators={[VALIDATOR_PASSWORD()]}
-          errorText="دقیقا همان رمز را تکرارکنید!"
+          validators={[
+            VALIDATOR_REPEAT_PASSWORD(formState.inputs.password.value),
+          ]}
         />
         <label className="auth-label">تصاویر مرتبط را انتخاب کنید : </label>
         <ReCAPTCHA
@@ -115,11 +114,8 @@ const ChangeUserPassword = ({ history }) => {
         />
         <Button
           type="submit"
-          disabled={
-            formState.inputs.repeatPassword.value !==
-              formState.inputs.password.value ||
-            expired ||
-            loading
+          disabled={ formState.isValid || expired || loading ||
+            formState.inputs.password.value !== formState.inputs.repeatPassword.value
           }
         >
           {!loading ? "ثبت" : <VscLoading className="loader" />}

@@ -70,28 +70,28 @@ const CreateTicket = ({ history }) => {
         status = "فرایند خرید (ایجاد سفارش)";
         break;
       case "2":
-        status = "پرداخت الکترونیکی";
-        break;
-      case "3":
         status = "پرداخت در محل";
         break;
-      case "4":
+      case "3":
         status = "بازگشت وجه";
         break;
-      case "5":
+      case "4":
         status = "پس فرستادن کالا";
         break;
-      case "6":
+      case "5":
         status = "نحوه تحویل کالا";
         break;
-      case "7":
+      case "6":
         status = "کیفیت کالا";
         break;
-      case "8":
+      case "7":
         status = "قیمت کالا";
         break;
-      case "9":
+      case "8":
         status = "ویرایش اطلاعات حساب کاربری";
+        break;
+      case "9":
+        status = "موارد دیگر";
         break;
       default:
         return;
@@ -160,7 +160,6 @@ const CreateTicket = ({ history }) => {
             VALIDATOR_MINLENGTH(10),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،بین 10 تا 3000 حرف میتوانید وارد کنید"
         />
         <label className="auth-label">در صورت لزوم :</label>
         <div className="image-upload-wrapper">

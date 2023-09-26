@@ -7,6 +7,13 @@ import Button from "../../../components/UI/FormElement/Button";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { IoArrowUndoCircle } from "react-icons/io5";
+import Input from "../../../components/UI/FormElement/Input";
+import { 
+  VALIDATOR_MAXLENGTH,
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_SPECIAL_CHARACTERS_2
+} from "../../../util/validators";
+import { useForm } from "../../../util/hooks/formHook";
 
 const BrandUpdate = ({ match, history }) => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +29,15 @@ const BrandUpdate = ({ match, history }) => {
     parents: [],
     backupFor: {},
   });
-
+  const [formState, inputHandler] = useForm(
+    {
+      brandName: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
   const {userInfo: {role, supplierFor}} = useSelector(state => state.userSignin)
 
   const { id } = match.params;
@@ -154,7 +169,7 @@ const BrandUpdate = ({ match, history }) => {
 
     const formData = new FormData();
 
-    formData.append("newBrandName", values.brandName);
+    formData.append("newBrandName", formState.inputs.brandName.value);
     formData.append("parents", values.parents);
     formData.append("backupFor", role === 1 ?  values.backupFor  : supplierFor);
 
@@ -207,10 +222,18 @@ const BrandUpdate = ({ match, history }) => {
         onSubmit={submitHandler}
       >
         <label className="auth-label">نام برند :</label>
-        <input
-          value={values.brandName}
+        <Input
+          id="brandName"
+          element="input"
           type="text"
-          onChange={(e) => setValues({ ...values, brandName: e.target.value })}
+          placeholder="مثال: سامسونگ"
+          onInput={inputHandler}
+          defaultValue={values.brandName}
+          validators={[
+            VALIDATOR_MAXLENGTH(30),
+            VALIDATOR_MINLENGTH(2),
+            VALIDATOR_SPECIAL_CHARACTERS_2(),
+          ]}
         />
         {role === 1 && <label className="auth-label" htmlFor="category">
           دسته بندی :

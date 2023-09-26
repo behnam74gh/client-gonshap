@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
 import Input from "../../components/UI/FormElement/Input";
 import Button from "../../components/UI/FormElement/Button";
@@ -16,7 +16,8 @@ const CheckoutForms = ({
   userInfo,
   setAddressSaved,
   addressSaved,
-  categoriesLength
+  categoriesLength,
+  oldAddress
 }) => {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -33,6 +34,12 @@ const CheckoutForms = ({
     false
   );
 
+  useEffect(() => {
+    if(oldAddress.length > 0){
+      setAddress(oldAddress)
+    }
+  }, [oldAddress])
+
   const setAddressToDBHandler = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -45,7 +52,9 @@ const CheckoutForms = ({
           setSuccessMessage(response.data.message);
           setAddress(formState.inputs.address.value);
           setAddressSaved(true);
-          address.length > 0 ? toast.success("آدرس شما تغییر کرد") : toast.success(response.data.message)
+          address.length > 0 ?
+          toast.success("آدرس شما تغییر کرد") :
+          toast.success(response.data.message)
         }
       })
       .catch((err) => {
@@ -57,7 +66,7 @@ const CheckoutForms = ({
         }
       });
   };
-
+  
   const isSame = formState.inputs.address.value === address
   
   return (
@@ -70,6 +79,7 @@ const CheckoutForms = ({
             element="input"
             type="text"
             onInput={inputHandler}
+            defaultValue={oldAddress}
             focusHandler={() => {
               setSuccessMessage("");
               setErrorText("");
@@ -80,12 +90,11 @@ const CheckoutForms = ({
               VALIDATOR_MINLENGTH(10),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 10 تا 300 حرف وارد کنید!"
           />
           <Button
             type="submit"
             disabled={
-              !userInfo ||
+              !userInfo.userId.length > 0 ||
               !cartItems.length ||
               loading ||
               !formState.inputs.address.isValid || successMessage.length > 0 || isSame
@@ -97,9 +106,9 @@ const CheckoutForms = ({
         {errorText.length > 0 ? (
           <p className="warning-message">{errorText}</p>
         ) : (
-          addressSaved && (
+          addressSaved && address?.length > 0 && (
             <p className="attentionNote">آدرس شما : {address}</p>
-          )
+          ) 
         )}
       </div>
 

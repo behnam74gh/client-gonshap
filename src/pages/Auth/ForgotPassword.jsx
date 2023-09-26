@@ -12,6 +12,7 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_PASSWORD,
   VALIDATOR_AUTHNUMBER,
+  VALIDATOR_REPEAT_PASSWORD
 } from "../../util/validators";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -223,7 +224,7 @@ const ForgotPassword = ({ history }) => {
         <form className="auth-form" onSubmit={sendPhoneNumberHandler}>
           <h5 className="register_heading">
             شماره
-            <strong className="text-blue"> تلفن همراه </strong>خود را وارد کنید!
+            <strong className="text-blue mx-1"> تلفن همراه </strong>خود را وارد کنید!
           </h5>
           <Input
             id="phoneNumber"
@@ -239,9 +240,7 @@ const ForgotPassword = ({ history }) => {
               VALIDATOR_REQUIRE(),
               VALIDATOR_PHONENUMBER(),
               VALIDATOR_MAXLENGTH(11),
-              VALIDATOR_MINLENGTH(11),
             ]}
-            errorText="شماره باید با 09 شروع شود و درمجموع 11 عدد باشد!"
           />
           <Button
             type="submit"
@@ -253,11 +252,9 @@ const ForgotPassword = ({ history }) => {
             !phoneNumberMessage.success && (
               <p className="warning-message">
                 {phoneNumberMessage.message}
-                {!phoneNumberMessage.success && (
-                  <Link to="/register" className="text-blue mr-1">
-                    جهت عضویت کلیک کنید
-                  </Link>
-                )}
+                <Link to="/register" className="text-blue mr-1">
+                  جهت عضویت کلیک کنید
+                </Link>
               </p>
             )}
         </form>
@@ -273,7 +270,6 @@ const ForgotPassword = ({ history }) => {
             onInput={inputHandler}
             disabled={authCodeIsValid}
             validators={[VALIDATOR_AUTHNUMBER()]}
-            errorText="کد تایید صحیح نمی باشد!"
           />
           <div className="auth-code-wrapper">
             <Button
@@ -296,7 +292,7 @@ const ForgotPassword = ({ history }) => {
                 )}
               </Button>
             ) : (
-              new Date(count * 1000 - 30 * 60 * 1000).toLocaleTimeString("fa", {
+              new Date(count * 1000 - 30 * 3 * 1000).toLocaleTimeString("fa", {
                 minute: "numeric",
                 second: "numeric",
               })
@@ -321,26 +317,17 @@ const ForgotPassword = ({ history }) => {
             type="password"
             placeholder="مثال: 12Ab3a"
             onInput={inputHandler}
-            validators={[VALIDATOR_PASSWORD()]}
-            errorText="رمز باید بین 6 تا 14حرف که ترکیبی از حرف بزرگ انگلیسی و عدد و حرف کوچک انگلیسی باشد!"
+            validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
           />
-          <label className="auth-label">تکرار دقیق رمز عبور</label>
+          <label className="auth-label">تکرار رمز عبور</label>
           <Input
             id="repeatPassword"
             element="input"
             type="password"
             placeholder="مثال: 12Ab3a"
             onInput={inputHandler}
-            validators={[VALIDATOR_PASSWORD()]}
-            errorText="دقیقا همان رمز را تکرارکنید!"
+            validators={[VALIDATOR_REPEAT_PASSWORD(formState.inputs.password.value),]}
           />
-          {!expired &&
-            formState.inputs.password.value !==
-              formState.inputs.repeatPassword.value && (
-              <label className="font-sm text-red w-100 text-center">
-                رمز یکسان نیست!
-              </label>
-            )}
           <ReCAPTCHA
             sitekey={reCaptchaSiteKey}
             onChange={changeRecaptchaHandler}
@@ -351,10 +338,8 @@ const ForgotPassword = ({ history }) => {
           <Button
             type="submit"
             disabled={
-              !formState.inputs.password.isValid ||
-              formState.inputs.password.value !==
-                formState.inputs.repeatPassword.value ||
-              expired
+              !formState.inputs.password.isValid || expired ||
+              formState.inputs.password.value !== formState.inputs.repeatPassword.value 
             }
           >
             {!nPLoading ? "ثبت" : <VscLoading className="loader" />}

@@ -74,7 +74,6 @@ const SendToAllSMS = () => {
               VALIDATOR_MINLENGTH(8),
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
-            errorText="از علامت ها و عملگرها استفاده نکنید؛ میتوانید از 8 تا 400 حرف وارد کنید!"
           />
           <Button type="submit" disabled={!formState.isValid || loading}>
             {!loading ? "ثبت" : <VscLoading className="loader" />}
@@ -82,7 +81,7 @@ const SendToAllSMS = () => {
         </form>
         <Link
           to="/admin/dashboard/send-sms"
-          className="text-blue font-sm d-flex-center-center"
+          className="create-new-slide-link text-blue font-sm d-flex-center-center"
         >
           لیست پیامک های ارسال شده
           <IoArrowUndoCircle className="font-md" />

@@ -13,6 +13,7 @@ import {
   VALIDATOR_PERSIAN_ALPHABET,
   VALIDATOR_AUTHNUMBER,
   VALIDATOR_PASSWORD,
+  VALIDATOR_REPEAT_PASSWORD
 } from "../../util/validators";
 import { useForm } from "../../util/hooks/formHook";
 import { useSelector } from "react-redux";
@@ -226,7 +227,7 @@ const Register = ({ history }) => {
         });
     }
   };
-
+// console.log(formState.inputs.password.value);
   return (
     <div className="auth-section">
       <Helmet>
@@ -253,9 +254,7 @@ const Register = ({ history }) => {
               VALIDATOR_REQUIRE(),
               VALIDATOR_PHONENUMBER(),
               VALIDATOR_MAXLENGTH(11),
-              VALIDATOR_MINLENGTH(11),
             ]}
-            errorText="شماره باید با 09 شروع شود و درمجموع 11 عدد باشد!"
           />
           <Button
             type="submit"
@@ -283,7 +282,6 @@ const Register = ({ history }) => {
               setAuthCodeMessage({ success: false, message: "" })
             }
             validators={[VALIDATOR_AUTHNUMBER()]}
-            errorText="کد تایید صحیح نمی باشد!"
           />
           <div className="auth-code-wrapper">
             <Button
@@ -306,7 +304,7 @@ const Register = ({ history }) => {
                 )}
               </Button>
             ) : (
-              new Date(count * 1000 - 30 * 60 * 1000).toLocaleTimeString("fa", {
+              new Date(count * 1000 - 30 * 3 * 1000).toLocaleTimeString("fa", {
                 minute: "numeric",
                 second: "numeric",
               })
@@ -327,14 +325,12 @@ const Register = ({ history }) => {
             id="firstName"
             element="input"
             type="text"
-            placeholder="مثال: بهنام"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(20),
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_PERSIAN_ALPHABET(),
             ]}
-            errorText="لطفا به فارسی وارد کنید!"
           />
           <label className="auth-label">
             نام خانوادگی :<span className="need_to_fill">*</span>
@@ -343,14 +339,12 @@ const Register = ({ history }) => {
             id="lastName"
             element="input"
             type="text"
-            placeholder="مثال: قزاقی"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(25),
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_PERSIAN_ALPHABET(),
             ]}
-            errorText="لطفا به فارسی وارد کنید!"
           />
           <label className="auth-label">
             رمز عبور :<span className="need_to_fill">*</span>
@@ -361,8 +355,7 @@ const Register = ({ history }) => {
             type="password"
             placeholder="مثال: 12Ab3a"
             onInput={inputHandler}
-            validators={[VALIDATOR_PASSWORD()]}
-            errorText="رمز باید بین 6 تا 14حرف که ترکیبی از حرف بزرگ انگلیسی و عدد و حرف کوچک انگلیسی باشد!"
+            validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
           />
           <label className="auth-label">
             تکرار رمز :<span className="need_to_fill">*</span>
@@ -373,8 +366,9 @@ const Register = ({ history }) => {
             type="password"
             placeholder="مثال: 12Ab3a"
             onInput={inputHandler}
-            validators={[VALIDATOR_PASSWORD()]}
-            errorText="دقیقا همان رمز را تکرارکنید!"
+            validators={[
+              VALIDATOR_REPEAT_PASSWORD(formState.inputs.password.value),
+            ]}
           />
         {/* <ReCAPTCHA
           sitekey={reCaptchaSiteKey}

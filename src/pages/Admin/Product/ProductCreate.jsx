@@ -394,7 +394,8 @@ const ProductCreate = () => {
                 </div>
               ))}
           </div>
-          {role === 1 && <Input
+          {role === 1 &&
+           <Input
             id="hostId"
             element="input"
             type="text"
@@ -405,7 +406,6 @@ const ProductCreate = () => {
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید,میتوانید از 3 تا 30 حرف وارد کنید!"
           />}
           <label className="auth-label" htmlFor="category">
             عنوان کالا :
@@ -414,14 +414,12 @@ const ProductCreate = () => {
             id="title"
             element="input"
             type="text"
-            placeholder="لپتاپ ASUS"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(30),
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید,میتوانید از 3 تا 30 حرف وارد کنید!"
           />
           {role === 1 && <label className="auth-label" htmlFor="category">
             دسته بندی :
@@ -460,7 +458,6 @@ const ProductCreate = () => {
               برند :
             </label>
           )}
-
           {showBrand && (
             <select
               id="brand"
@@ -497,7 +494,6 @@ const ProductCreate = () => {
               VALIDATOR_NUMBER(),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="فقط عدد وارد کنید. بین 6 تا 10 رقم میتوانید وارد کنید"
           />
           <label className="auth-label">میزان تخفیف :</label>
           <select
@@ -531,7 +527,6 @@ const ProductCreate = () => {
             id="countInStock"
             element="input"
             type="number"
-            placeholder="25"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MIN(1),
@@ -539,9 +534,8 @@ const ProductCreate = () => {
               VALIDATOR_NUMBER(),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="تعداد کالا باید بین 1 تا 99 عدد باشد و باید به عدد وارد کنید"
           />
-          <label className="auth-label">رنگ</label>
+          <label className="auth-label">رنگ ها</label>
           <select
             value="none"
             onChange={(e) => setColorsHandler(e.target.value)}
@@ -588,10 +582,8 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
-              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
           />
           <Input
             id="attr2"
@@ -601,10 +593,8 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
-              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
           />
           <Input
             id="attr3"
@@ -614,10 +604,8 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
-              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 60 حرف وارد کنید!"
           />
           <label className="auth-label">توضیحات :</label>
           <Input
@@ -632,7 +620,6 @@ const ProductCreate = () => {
               VALIDATOR_MINLENGTH(10),
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید, بین 10 تا 1000 حرف میتوانید وارد کنید"
           />
           <label className="auth-label">ویژگی های محصول :</label>
           <Input
@@ -643,10 +630,8 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(100),
-              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 100 حرف وارد کنید!"
           />
           <Input
             id="answer"
@@ -656,13 +641,15 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(100),
-              VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="ازعلامتها و عملگرها استفاده نکنید, میتوانید از 3 تا 100 حرف وارد کنید!"
           />
           <Button type="button" 
-            disabled={!formState.inputs.answer.isValid || !formState.inputs.question.isValid}
+            disabled={
+              !formState.inputs.answer.isValid || !formState.inputs.question.isValid ||
+              formState.inputs.answer.value.length === 0 ||
+              formState.inputs.question.value.length === 0
+            }
             onClick={appendDetailHandler}
           >
               {!loading ? "افزودن" : <VscLoading className="loader" />}

@@ -2,9 +2,15 @@ import React, { useState, useEffect } from "react";
 import { VscLoading } from "react-icons/vsc";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
+import Input from "../../../components/UI/FormElement/Input";
+import { 
+  VALIDATOR_MAXLENGTH,
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_PERSIAN_ALPHABET
+} from "../../../util/validators";
+import { useForm } from "../../../util/hooks/formHook";
 import "./SubCategory.css";
 
 const SubCategoryUpdate = ({ history, match }) => {
@@ -12,6 +18,15 @@ const SubCategoryUpdate = ({ history, match }) => {
   const [category, setCategory] = useState();
   const [subcategory, setSubcategory] = useState("");
   const [categories, setCategories] = useState([]);
+  const [formState, inputHandler] = useForm(
+    {
+      subcategoryName: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
 
   const {userInfo : {role, supplierFor}} = useSelector(state => state.userSignin)
 
@@ -53,7 +68,7 @@ const SubCategoryUpdate = ({ history, match }) => {
     setLoading(true);
     axios
       .put(`/subcategory/${slug}`, {
-        newSubcategoryName: subcategory,
+        newSubcategoryName: formState.inputs.subcategoryName.value,
         parent: role === 1 ? category : supplierFor,
       })
       .then((response) => {
@@ -96,11 +111,18 @@ const SubCategoryUpdate = ({ history, match }) => {
         <label className="auth-label" htmlFor="subcategoryName">
           برچسب :
         </label>
-        <input
+        <Input
           id="subcategoryName"
+          element="input"
           type="text"
-          onChange={(e) => setSubcategory(e.target.value)}
-          value={subcategory}
+          placeholder="مثال: یخچال"
+          onInput={inputHandler}
+          defaultValue={subcategory}
+          validators={[
+            VALIDATOR_MAXLENGTH(30),
+            VALIDATOR_MINLENGTH(3),
+            VALIDATOR_PERSIAN_ALPHABET(),
+          ]}
         />
         <Button
           type="submit"

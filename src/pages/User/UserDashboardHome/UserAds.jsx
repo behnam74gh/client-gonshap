@@ -14,7 +14,6 @@ const UserAds = () => {
         axios.get('/user-ads')
         .then(res => {
             setLoading(false)
-            console.log(res);
             if(res.data?.success){
                 setAds(res.data.userAds)
                 setErrorText("")

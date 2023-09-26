@@ -87,7 +87,6 @@ const ToDoCreate = () => {
               VALIDATOR_MINLENGTH(8),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-            errorText="از علامت ها و عملگرها استفاده نکنید؛ میتوانید از 8 تا 400 حرف وارد کنید!"
           />
           <div className="d-flex-center-center">
             <Calendar

@@ -271,7 +271,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(6),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید، میتوانید از 6 تا 70 حرف وارد کنید!"
         />
         <label className="auth-label">
           شماره تلفن مالک :<span className="need_to_fill">*</span>
@@ -287,7 +286,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MAXLENGTH(11),
             VALIDATOR_MINLENGTH(11),
           ]}
-          errorText="شماره باید با 09 شروع شود و درمجموع 11 عدد باشد!"
         />
         <label className="auth-label">
           {" "}
@@ -307,7 +305,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_NUMBER(),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="فقط عدد وارد کنید. بین 5 تا 9 رقم میتوانید وارد کنید"
         />
         <label className="auth-label">
           {" "}
@@ -371,7 +368,6 @@ const AdvertiseCreate = ({ history }) => {
           placeholder="مثال: gonshap.com"
           onInput={inputHandler}
           validators={[VALIDATOR_SPECIAL_CHARACTERS_3_LINK()]}
-          errorText="آدرس سایت مقصد باید به انگلیسی وارد شود و نباید شامل کاراکترهای خاص باشد!"
         />
         <p className="warning-message">
           اگر آدرسِ لینک دارد،اطلاعات زیر را وارد نکنید؛درغیر اینصورت آدرسِ لینک
@@ -389,7 +385,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(11),
             VALIDATOR_CONSTANTNUMBER(),
           ]}
-          errorText="تلفن ثابت باید با 0 شروع شود و کلا 11 رقم باشد!"
         />
         <label className="auth-label">آدرس فروشگاه :</label>
         <Input
@@ -402,7 +397,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(20),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 20 تا 150 حرف وارد کنید!"
         />
         <label className="auth-label">مختصات محل فروشگاه (longitude) :</label>
         <Input
@@ -412,7 +406,6 @@ const AdvertiseCreate = ({ history }) => {
           placeholder="55.16630172729493"
           onInput={inputHandler}
           validators={[VALIDATOR_NUMBER()]}
-          errorText="مختصات را از گوگل بگیرید، باید به عدد وارد شود"
         />
         <label className="auth-label">مختصات محل فروشگاه (latitude) :</label>
         <Input
@@ -422,7 +415,6 @@ const AdvertiseCreate = ({ history }) => {
           placeholder="37.253457669207286"
           onInput={inputHandler}
           validators={[VALIDATOR_NUMBER()]}
-          errorText="مختصات را از گوگل بگیرید، باید به عدد وارد شود"
         />
         <label className="auth-label">آدرس اینستاگرام :</label>
         <Input
@@ -435,7 +427,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(4),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 4 تا 70 حرف وارد کنید!"
         />
         <label className="auth-label">آدرس تلگرام :</label>
         <Input
@@ -448,7 +439,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(4),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 4 تا 70 حرف وارد کنید!"
         />
         <label className="auth-label">آدرس واتساپ :</label>
         <Input
@@ -461,7 +451,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(4),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،میتوانید از 4 تا 70 حرف وارد کنید!"
         />
         <Input
           id="description"
@@ -475,7 +464,6 @@ const AdvertiseCreate = ({ history }) => {
             VALIDATOR_MINLENGTH(100),
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
-          errorText="از علامت ها و عملگر ها استفاده نکنید،بین 100 تا 10000 حرف میتوانید وارد کنید"
         />
         <Button
           type="submit"

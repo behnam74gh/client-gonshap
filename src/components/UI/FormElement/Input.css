@@ -6,6 +6,11 @@
   left: 10px;
   top: 20px;
 }
+.seeHiddenPass{
+  position: absolute;
+  left: 35px;
+  top: 20px;
+}
 .err_messages_wrapper{
   list-style: inside;
 }

@@ -170,9 +170,7 @@ const Signin = ({ history, location }) => {
             VALIDATOR_REQUIRE(),
             VALIDATOR_PHONENUMBER(),
             VALIDATOR_MAXLENGTH(11),
-            VALIDATOR_MINLENGTH(11),
           ]}
-          errorText="شماره باید با 09 شروع شود و درمجموع 11 عدد باشد!"
         />
 
         <label className="auth-label">
@@ -185,8 +183,7 @@ const Signin = ({ history, location }) => {
           placeholder="مثال: 12Ab3a"
           onInput={inputHandler}
           focusHandler={() => setError("")}
-          validators={[VALIDATOR_PASSWORD()]}
-          errorText="رمز باید بین 6 تا 14حرف که ترکیبی از حرف بزرگ انگلیسی و عدد و حرف کوچک انگلیسی باشد!"
+          validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
         />
         <label className="auth-label" id="saveInfo">
           مرا به خاطر بسپار

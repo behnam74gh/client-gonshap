@@ -19,7 +19,6 @@
     "react-geolocated": "^3.2.0",
     "react-google-recaptcha": "^2.1.0",
     "react-helmet": "^6.1.0",
-    "react-hook-form": "^7.46.1",
     "react-icons": "^4.2.0",
     "react-input-range-rtl": "^0.0.4",
     "react-leaflet": "^3.1.0",

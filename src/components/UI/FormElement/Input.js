@@ -1,7 +1,8 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import { validate } from "../../../util/validators";
 import {BsShieldFillCheck} from 'react-icons/bs';
 import {MdRemoveModerator} from 'react-icons/md';
+import {TbEyeglassOff,TbEyeglass} from 'react-icons/tb';
 import "./Input.css";
 
 const inputReducer = (state, action) => {
@@ -20,6 +21,7 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
+  const [showPassText,setShowPassText] = useState(false)
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: "",
     isValid: false,
@@ -28,6 +30,16 @@ const Input = (props) => {
 
   const { id, onInput } = props;
   const { value, isValid } = inputState;
+
+  useEffect(() => {
+    if(props.defaultValue?.length > 0){
+      dispatch({
+        type: "CHANGE",
+        val: props.defaultValue,
+        validators: props.validators,
+      });
+    }
+  }, [props.defaultValue])
 
   useEffect(() => {
     onInput(id, value, isValid);
@@ -46,7 +58,7 @@ const Input = (props) => {
       <input
         onChange={changeHandler}
         id={props.id}
-        type={props.type}
+        type={showPassText ? "text" : props.type}
         placeholder={props.placeholder}
         disabled={props.disabled}
         onFocus={props.focusHandler}
@@ -64,6 +76,10 @@ const Input = (props) => {
       ></textarea>
     );
 
+  const toogleShowPassHandler = () => {
+    setShowPassText(!showPassText)
+  }
+
   return (
     <div className="input_wrapper">
       {element}
@@ -80,6 +96,10 @@ const Input = (props) => {
         {inputState.isValid ? <BsShieldFillCheck className="text-green" />
         : inputState.errMessages.length > 0 && <MdRemoveModerator className="text-red" />}
       </span>
+      {['password','repeatPassword'].includes(props.id) &&
+      <span className="seeHiddenPass" onClick={toogleShowPassHandler}>
+        {showPassText ? <TbEyeglass className="text-mute" /> : <TbEyeglassOff className="text-silver" />}
+      </span>}
     </div>
   );
 };

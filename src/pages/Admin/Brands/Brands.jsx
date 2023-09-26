@@ -231,7 +231,6 @@ const Brands = () => {
                   VALIDATOR_MINLENGTH(2),
                   VALIDATOR_SPECIAL_CHARACTERS_2(),
                 ]}
-                errorText="از علامت ها و عملگرها استفاده نکنید، میتوانید از 2 تا 30 حرف وارد کنید!"
               />
               {role === 1 && <label className="auth-label" htmlFor="category">
                 دسته بندی :

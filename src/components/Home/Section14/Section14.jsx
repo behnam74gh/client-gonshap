@@ -130,6 +130,7 @@ const Section14 = () => {
       <div className="suggestion_wrapper">
         {reRenderForm && (
           <form className="auth-form" onSubmit={submitHandler}>
+            <h5 className="mt-0">پیشنهادات و انتقادات</h5> 
             <label className="auth-label">
               شماره تلفن همراه :<span className="need_to_fill">*</span>
             </label>
@@ -142,9 +143,7 @@ const Section14 = () => {
               validators={[
                 VALIDATOR_PHONENUMBER(),
                 VALIDATOR_MAXLENGTH(11),
-                VALIDATOR_MINLENGTH(11),
               ]}
-              errorText="شماره تلفن نامعتبر است!"
             />
             <Input
               id="content"
@@ -155,10 +154,9 @@ const Section14 = () => {
               onInput={inputHandler}
               validators={[
                 VALIDATOR_MAXLENGTH(1000),
-                VALIDATOR_MINLENGTH(2),
+                VALIDATOR_MINLENGTH(20),
                 VALIDATOR_SPECIAL_CHARACTERS(),
               ]}
-              errorText="نظر حاوی علامت های نامعتبر میباشد!"
             />
             <Button type="submit" disabled={loading || !formState.isValid}>
               {!loading ? "ارسال" : <VscLoading className="loader" />}
