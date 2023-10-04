@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { db } from "../../../util/indexedDB";
 import "./ProductCard.css";
 
-const ProductCard = ({ product, showSold, showReviews }) => {
+const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
   const [inCart, setInCart] = useState(false);
   const [inFavorites, setInFavorites] = useState(false);
 
@@ -157,6 +157,12 @@ const ProductCard = ({ product, showSold, showReviews }) => {
         <div className="products_sold_count">
           <span className="font-sm">{reviewsCount}</span>
           <span>بازدید</span>
+        </div>
+      )}
+      {showDiscount && (
+        <div className="products_sold_count tooltip">
+          <span className="tooltip_text">off</span>
+          <i className="text-purple">%{discount}</i>
         </div>
       )}
       <div className="products_icons_wrapper">

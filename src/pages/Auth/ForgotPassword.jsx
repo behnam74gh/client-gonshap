@@ -67,18 +67,22 @@ const ForgotPassword = ({ history }) => {
   const { userInfo } = useSelector((state) => state.userSignin);
 
   useEffect(() => {
-    userInfo && userInfo.userId && history.push("/");
-  }, [history, userInfo]);
+    userInfo?.userId?.length > 0 && history.push("/");
+  }, [history, userInfo.userId]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((currentCount) => --currentCount);
-    }, 1000);
+    let interval;
+    if(phoneNumIsValid && !authCodeIsValid){
+        interval = setInterval(() => {
+          if(count > 0){
+            setCount((currentCount) => --currentCount);
+          }
+        }, 1000);
 
-    count === 0 && setAllowToReqAuthcode(true);
-
+        count === 0 && setAllowToReqAuthcode(true);
+    }
     return () => clearInterval(interval);
-  }, [count]);
+  }, [count,phoneNumIsValid,authCodeIsValid]);
 
   const sendPhoneNumberHandler = (e) => {
     e.preventDefault();
@@ -88,8 +92,8 @@ const ForgotPassword = ({ history }) => {
         phoneNumber: formState.inputs.phoneNumber.value,
       })
       .then((response) => {
+        setLoading(false);
         if (response.data.success) {
-          setLoading(false);
           toast.success(response.data.message);
           setPhoneNumIsValid(true);
         }
@@ -118,10 +122,10 @@ const ForgotPassword = ({ history }) => {
           phoneNumber: formState.inputs.phoneNumber.value,
         })
         .then((response) => {
+          setAAuthLoading(false);
           if (response.data.success) {
-            setAAuthLoading(false);
+            setCount(180);
             toast.success(response.data.message);
-            setPhoneNumIsValid(true);
             setAllowToReqAuthcode(false);
           }
         })
@@ -148,8 +152,8 @@ const ForgotPassword = ({ history }) => {
         authCode: formState.inputs.authCode.value,
       })
       .then((response) => {
+        setALoading(false);
         if (response.data.success) {
-          setALoading(false);
           toast.success(response.data.message);
           setAuthCodeIsValid(true);
         }
@@ -198,8 +202,8 @@ const ForgotPassword = ({ history }) => {
           newPassword: password.value,
         })
         .then((response) => {
+          setNPLoading(false);
           if (response.data.success) {
-            setNPLoading(false);
             toast.success(response.data.message);
             history.push("/signin");
           }
@@ -212,6 +216,9 @@ const ForgotPassword = ({ history }) => {
             toast.warning(err.response.data.message);
           }
         });
+    }else{
+      toast.warn('رمز ها برابر نیستند')
+      return;
     }
   };
 
@@ -224,7 +231,7 @@ const ForgotPassword = ({ history }) => {
         <form className="auth-form" onSubmit={sendPhoneNumberHandler}>
           <h5 className="register_heading">
             شماره
-            <strong className="text-blue mx-1"> تلفن همراه </strong>خود را وارد کنید!
+            <strong className="text-blue mx-1"> تلفن همراه </strong>خود را جهت بازگرداندن رمز ورود، وارد کنید!
           </h5>
           <Input
             id="phoneNumber"
@@ -244,7 +251,7 @@ const ForgotPassword = ({ history }) => {
           />
           <Button
             type="submit"
-            disabled={!formState.inputs.phoneNumber.isValid || phoneNumIsValid}
+            disabled={loading || !formState.inputs.phoneNumber.isValid || phoneNumIsValid}
           >
             {!loading ? "ثبت" : <VscLoading className="loader" />}
           </Button>
@@ -270,11 +277,15 @@ const ForgotPassword = ({ history }) => {
             onInput={inputHandler}
             disabled={authCodeIsValid}
             validators={[VALIDATOR_AUTHNUMBER()]}
+            focusHandler={() =>
+              setAuthCodeMessage({ success: false, message: "" })
+            }
           />
           <div className="auth-code-wrapper">
             <Button
               type="submit"
-              disabled={!formState.inputs.authCode.isValid || authCodeIsValid}
+              disabled={aLoading || !formState.inputs.authCode.isValid ||
+                authCodeIsValid || allowToReqAuthcode}
             >
               {!aLoading ? "ثبت" : <VscLoading className="loader" />}
             </Button>
@@ -282,7 +293,7 @@ const ForgotPassword = ({ history }) => {
               <Button
                 type="button"
                 style={{ width: "140px" }}
-                disabled={authCodeIsValid || !allowToReqAuthcode}
+                disabled={authCodeIsValid || !allowToReqAuthcode || aAuthLoading}
                 onClick={sendAuthCodeAgainHandler}
               >
                 {!aAuthLoading ? (
@@ -292,15 +303,19 @@ const ForgotPassword = ({ history }) => {
                 )}
               </Button>
             ) : (
-              new Date(count * 1000 - 30 * 3 * 1000).toLocaleTimeString("fa", {
-                minute: "numeric",
-                second: "numeric",
-              })
-            )}
-            {!authCodeMessage.success && authCodeMessage.message.length > 0 && (
-              <p className="warning-message">{authCodeMessage.message}</p>
+              <span className="timer">
+                {
+                  new Date(count * 1000 - 30 * 60 * 1000).toLocaleTimeString("fa", {
+                    minute: "numeric",
+                    second: "numeric",
+                  })
+                }
+              </span>
             )}
           </div>
+          {!authCodeMessage.success && authCodeMessage.message.length > 0 && (
+              <p className="warning-message">{authCodeMessage.message}</p>
+          )}
         </form>
       )}
 
@@ -334,11 +349,12 @@ const ForgotPassword = ({ history }) => {
             theme="dark"
             hl="fa"
             className="recaptcha"
+            onExpired={() => setExpired(true)}
           />
           <Button
             type="submit"
             disabled={
-              !formState.inputs.password.isValid || expired ||
+              !formState.inputs.password.isValid || expired || nPLoading ||
               formState.inputs.password.value !== formState.inputs.repeatPassword.value 
             }
           >

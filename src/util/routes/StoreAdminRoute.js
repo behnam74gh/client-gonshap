@@ -8,12 +8,12 @@ const StoreAdminRoute = ({ children, ...rest }) => {
   const [ok, setOk] = useState(false);
 
   useEffect(() => {
-    if (userInfo && userInfo.role === 2) {
+    if (userInfo.role === 2) {
       setOk(true);
     } else {
       setOk(false);
     }
-  }, [userInfo]);
+  }, [userInfo.role]);
 
   return ok ? <Route {...rest} /> : <LoadingToRedirect />;
 };

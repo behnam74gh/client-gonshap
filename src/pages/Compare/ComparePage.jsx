@@ -15,15 +15,15 @@ const ComparePage = ({ match }) => {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`/fetch-products/to-compare/${id}`)
+    if(navigator.onLine){
+      axios.get(`/fetch-products/to-compare/${id}`)
       .then((response) => {
         setLoading(false);
         if (response?.data?.success) {
           const {currentProduct,similarProducts} = response.data;
           setCurrentProduct(currentProduct);
           setSimilarProducts(similarProducts);
-
+  
           setErrorText("");
         }
       })
@@ -35,6 +35,11 @@ const ComparePage = ({ match }) => {
           setErrorText(err.response.data.message);
         }
       });
+    }else{
+      setLoading(false);
+      setErrorText("شما به اینترنت دسترسی ندارید")
+    }
+   
   }, [id]);
 
   return (
@@ -60,7 +65,7 @@ const ComparePage = ({ match }) => {
           <CompareItem item={currentProduct} />
         )
       )}
-      <p className="my-1 font-sm">محصولات مشابه :</p>
+      {navigator.onLine && <p className="my-1 font-sm">محصولات مشابه :</p>}
       {loading ? (
         <React.Fragment>
           <LoadingSkeleton />
@@ -68,7 +73,7 @@ const ComparePage = ({ match }) => {
         </React.Fragment>
       ) : similarProducts?.length > 0 ? (
           similarProducts.map((item) => <CompareItem key={item._id} item={item} />)
-      ) : (
+      ) : navigator.onLine && (
         <p className="warning-message">محصول مشابه ای جهت مقایسه ، یافت نشد!</p>
       )}
     </section>

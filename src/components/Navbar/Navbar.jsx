@@ -5,7 +5,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { MdShoppingCart } from "react-icons/md";
 import { BsFillBookmarkFill, BsBookmarksFill } from "react-icons/bs";
 import { MdDashboard, MdKeyboardArrowDown } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { closeSubmenu } from "../../redux/Actions/subMenu";
 import NavbarItems from "./NavbarItems";
@@ -15,6 +15,7 @@ import "./Navbar.css";
 
 const Navbar = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory()
 
   const { subMenu, userSignin, cart, favorites,isOnline } = useSelector((state) => ({
     ...state,
@@ -38,7 +39,7 @@ const Navbar = (props) => {
     <header className="c-navbar" id="header">
       <div className="header-wrapper" onMouseOver={subMenuHandler}>
         <Link to="/" className='logo_Img'>
-          {props.companyInfo.logo && props.companyInfo.logo.length > 0 ? (
+          {props.companyInfo?.logo?.length > 0 ? (
             <img
               src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${props.companyInfo.logo}`}
               alt={props.companyInfo.companyTitle}
@@ -53,7 +54,7 @@ const Navbar = (props) => {
         </div>
         <div className="header-feature">
           <ul>
-            {isOnline && userInfo?.userId?.length > 0 ? (
+            {userInfo?.userId?.length > 0 ? (
               <li className="logged-user">
                 {userInfo.firstName}
                 <MdKeyboardArrowDown
@@ -71,7 +72,7 @@ const Navbar = (props) => {
                       <MdDashboard />
                       حساب کاربری
                     </Link>
-                    <Link to="/" onClick={signoutHandler}>
+                    <Link to='/' onClick={signoutHandler}>
                       <RiLogoutBoxRLine />
                       خروج از حساب
                     </Link>

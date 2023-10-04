@@ -25,7 +25,7 @@ const ShopPage = () => {
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("gonshapPageNumber")) || 1
   );
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(40);
   const [activeOrder, setActiveOrder] = useState("createdAt");
   const [activeCategory, setActiveCategory] = useState("none");
   const [activeSubcategory, setActiveSubcategory] = useState("none");
@@ -186,7 +186,7 @@ const ShopPage = () => {
       }
     }
     if (window.innerWidth < 450) {
-      setPerPage(8);
+      setPerPage(20);
     }
   }, []);
 
@@ -489,15 +489,20 @@ const ShopPage = () => {
         ) : errorText.length > 0 ? (
           <p className="warning-message w-100 text-center">{errorText}</p>
         ) : products.length > 0 ? (
-          products.map((product, i) => (
+          products.map((product) => (
             <ProductCard
-              key={i}
+              key={product._id}
               product={product}
               showSold={
                 (searchConfig?.order || searchConfig?.lastConfig?.order) === "sold" ? true : false
               }
               showReviews={
                 (searchConfig?.order || searchConfig?.lastConfig?.order) === "reviewsCount"
+                  ? true
+                  : false
+              }
+              showDiscount={
+                (searchConfig?.order || searchConfig?.lastConfig?.order) === "discount"
                   ? true
                   : false
               }

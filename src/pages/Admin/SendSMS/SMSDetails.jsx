@@ -61,7 +61,7 @@ const SMSDetails = ({ match }) => {
                 ? "فقط به یک کاربر ارسال شده است."
                 : message.level === "many"
                 ? "به چند کاربر خاص ارسال شده است."
-                : "به همه گُنشاپی ها ارسال شده است."}
+                : "به همه کاربران ارسال شده است."}
             </strong>
           </p>
           <p className="text-muted">
@@ -97,9 +97,8 @@ const SMSDetails = ({ match }) => {
                 </tr>
               </thead>
               <tbody>
-                {message.receivedStatusCodes &&
-                  message.receivedStatusCodes.map((sms, index) => (
-                    <tr key={index}>
+                {message.receivedStatusCodes?.map((sms) => (
+                    <tr key={sms._id}>
                       <td className="font-sm">0{sms.mobile}</td>
                       <td className="font-sm">{sms.receivedStatus}</td>
                     </tr>

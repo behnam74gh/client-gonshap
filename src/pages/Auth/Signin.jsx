@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../components/UI/FormElement/Input";
 import Button from "../../components/UI/FormElement/Button";
-// import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 import { VscLoading } from "react-icons/vsc";
 import {
   VALIDATOR_MAXLENGTH,
@@ -27,8 +27,8 @@ const Signin = ({ history, location }) => {
   const [remindMe, setRemindMe] = useState(false);
   const [error, setError] = useState("");
 
-  const [expired, setExpired] = useState(false); //must be true-for developing => i set it to false
-  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
+  const [expired, setExpired] = useState(true);
+  const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   const dispatch = useDispatch();
 
@@ -59,12 +59,12 @@ const Signin = ({ history, location }) => {
     }
   }, [history, userInfo]);
 
-  const isAdminBasedRedirect = (userInfo) => {
+  const roleBasedRedirect = (userInfo) => {
     let intended = history.location.state;
     if (intended) {
       history.push(intended.from);
     } else {
-      if (userInfo.isAdmin) {
+      if (userInfo.role === 1) {
         history.push("/admin/dashboard/home");
       } else if (userInfo.role === 2) {
         history.push('/store-admin/dashboard/home')
@@ -106,7 +106,7 @@ const Signin = ({ history, location }) => {
         .then((response) => {
           const { success, message, userInfo, remindMe } = response.data;
           if (success) {
-            isAdminBasedRedirect(userInfo);
+            roleBasedRedirect(userInfo);
             const { firstName, isAdmin,role,isBan, userId,supplierFor } = userInfo;
 
             dispatch({
@@ -189,14 +189,15 @@ const Signin = ({ history, location }) => {
           مرا به خاطر بسپار
           <input type="checkbox" onChange={() => setRemindMe(!remindMe)} />
         </label>
-        {/* <ReCAPTCHA
+        <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           hl="fa"
           className="recaptcha"
           theme="dark"
-        /> */}
-        <Button type="submit" disabled={!formState.isValid}>
+          onExpired={() => setExpired(true)}
+        />
+        <Button type="submit" disabled={!formState.isValid || expired || loading}>
           {!loading ? "ورود" : <VscLoading className="loader" />}
         </Button>
         {error && <p className="warning-message">{error}</p>}

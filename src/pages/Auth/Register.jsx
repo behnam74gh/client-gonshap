@@ -37,10 +37,10 @@ const Register = ({ history }) => {
   const [allowToReqAuthcode, setAllowToReqAuthcode] = useState(false);
   const [aAuthLoading, setAAuthLoading] = useState(false);
   const [registerErrMessage, setRegisterErrMessage] = useState("");
-  const [expired, setExpired] = useState(false);
+  const [expired, setExpired] = useState(true);
   const [count, setCount] = useState(180);
 
-  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
+  const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   const [formState, inputHandler] = useForm(
     {
@@ -79,46 +79,48 @@ const Register = ({ history }) => {
   }, [history, userInfo]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((currentCount) => --currentCount);
-    }, 1000);
+    let interval;
+    if(phoneNumIsValid && !authCodeIsValid){
+        interval = setInterval(() => {
+          if(count > 0){
+            setCount((currentCount) => --currentCount);
+          }
+        }, 1000);
 
-    count === 0 && setAllowToReqAuthcode(true);
-
+        count === 0 && setAllowToReqAuthcode(true);
+    }
     return () => clearInterval(interval);
-  }, [count]);
+  }, [count,phoneNumIsValid,authCodeIsValid]);
 
   const sendPhoneNumberHandler = (e) => {
     e.preventDefault();
-    // setPLoading(true);
-    setAuthCodeIsValid(true)
-    setPhoneNumIsValid(true)
+    setPLoading(true);
 
-    // axios
-    //   .post("/check-phone-number", {
-    //     phoneNumber: formState.inputs.phoneNumber.value,
-    //   })
-    //   .then((response) => {
-    //     if (response.data.success) {
-    //       setPLoading(false);
-    //       toast.success(response.data.message);
-    //       setPhoneNumIsValid(true);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setPLoading(false);
-    //     if (typeof err.response.data.message === "object") {
-    //       setPhoneNumberMessage({
-    //         success: err.response.data.success,
-    //         message: err.response.data.message[0],
-    //       });
-    //     } else {
-    //       setPhoneNumberMessage({
-    //         success: err.response.data.success,
-    //         message: err.response.data.message,
-    //       });
-    //     }
-    //   });
+    axios
+      .post("/check-phone-number", {
+        phoneNumber: formState.inputs.phoneNumber.value,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          setPLoading(false);
+          toast.success(response.data.message);
+          setPhoneNumIsValid(true);
+        }
+      })
+      .catch((err) => {
+        setPLoading(false);
+        if (typeof err.response.data.message === "object") {
+          setPhoneNumberMessage({
+            success: err.response.data.success,
+            message: err.response.data.message[0],
+          });
+        } else {
+          setPhoneNumberMessage({
+            success: err.response.data.success,
+            message: err.response.data.message,
+          });
+        }
+      });
   };
 
   const checkValidity = (e) => {
@@ -130,10 +132,10 @@ const Register = ({ history }) => {
         authCode: formState.inputs.authCode.value,
       })
       .then((response) => {
+        setALoading(false);
         if (response.data.success) {
-          setALoading(false);
-          toast.success(response.data.message);
           setAuthCodeIsValid(true);
+          toast.success(response.data.message);
         }
       })
       .catch((err) => {
@@ -160,8 +162,8 @@ const Register = ({ history }) => {
           phoneNumber: formState.inputs.phoneNumber.value,
         })
         .then((response) => {
+          setAAuthLoading(false);
           if (response.data.success) {
-            setAAuthLoading(false);
             setCount(180);
             toast.success(response.data.message);
             setAllowToReqAuthcode(false);
@@ -225,9 +227,12 @@ const Register = ({ history }) => {
             setRegisterErrMessage(err.response.data.message);
           }
         });
+    }else{
+      toast.warn('رمز ها برابر نیستند')
+      return;
     }
   };
-// console.log(formState.inputs.password.value);
+
   return (
     <div className="auth-section">
       <Helmet>
@@ -258,11 +263,11 @@ const Register = ({ history }) => {
           />
           <Button
             type="submit"
-            disabled={!formState.inputs.phoneNumber.isValid || phoneNumIsValid}
+            disabled={!formState.inputs.phoneNumber.isValid || phoneNumIsValid || pLoading}
           >
             {!pLoading ? "ثبت" : <VscLoading className="loader" />}
           </Button>
-          {phoneNumberMessage.success &&
+          {!phoneNumberMessage.success &&
             phoneNumberMessage.message.length > 0 && (
               <p className="warning-message">{phoneNumberMessage.message}</p>
             )}
@@ -286,7 +291,9 @@ const Register = ({ history }) => {
           <div className="auth-code-wrapper">
             <Button
               type="submit"
-              disabled={!formState.inputs.authCode.isValid || authCodeIsValid}
+              disabled={aLoading || !formState.inputs.authCode.isValid ||
+              allowToReqAuthcode || authCodeIsValid
+              }
             >
               {!aLoading ? "ثبت" : <VscLoading className="loader" />}
             </Button>
@@ -294,7 +301,7 @@ const Register = ({ history }) => {
               <Button
                 type="button"
                 style={{ width: "140px" }}
-                disabled={authCodeIsValid || !allowToReqAuthcode}
+                disabled={aAuthLoading || authCodeIsValid}
                 onClick={sendAuthCodeAgainHandler}
               >
                 {!aAuthLoading ? (
@@ -304,10 +311,14 @@ const Register = ({ history }) => {
                 )}
               </Button>
             ) : (
-              new Date(count * 1000 - 30 * 3 * 1000).toLocaleTimeString("fa", {
-                minute: "numeric",
-                second: "numeric",
-              })
+              <span className="timer">
+                {
+                  new Date(count * 1000 - 30 * 60 * 1000).toLocaleTimeString("fa", {
+                    minute: "numeric",
+                    second: "numeric",
+                  })
+                }
+              </span>
             )}
           </div>
           {authCodeMessage.message.length > 0 && (
@@ -370,16 +381,18 @@ const Register = ({ history }) => {
               VALIDATOR_REPEAT_PASSWORD(formState.inputs.password.value),
             ]}
           />
-        {/* <ReCAPTCHA
+        <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           theme="dark"
           hl="fa"
           className="recaptcha"
-        /> */}
+          onExpired={() => setExpired(true)}
+        />
           <Button
             type="submit"
             disabled={
+              loading || expired ||
               !formState.isValid ||
               formState.inputs.password.value !==
                 formState.inputs.repeatPassword.value 

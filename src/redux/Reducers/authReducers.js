@@ -24,7 +24,7 @@ const initialState = {
 export const userSigninReducer = (state = initialState, action) => {
   switch (action.type) {
     case USER_SIGNIN_REQUEST:
-      return { loading: true };
+      return { ...state, loading: true };
     case USER_SIGNIN_SUCCESS:
       return {
         loading: false,
@@ -38,7 +38,7 @@ export const userSigninReducer = (state = initialState, action) => {
         },
       };
     case USER_SIGNIN_FAIL:
-      return { loading: false };
+      return { ...state,loading: false };
     case UPDATE_DASHBOARD_IMAGE:
       return {
         ...state,

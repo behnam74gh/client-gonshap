@@ -32,4 +32,5 @@
   box-shadow: var(--mainBoxShadow);
   color: rgb(66, 65, 65);
   text-align: right;
+  word-break: break-all;
 }
