@@ -5,6 +5,7 @@ import CheckoutForms from "./CheckoutForms";
 import CheckoutHistory from "./CheckoutHistory";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
+import "../CartPage/CartPage"
 import "./Checkout.css";
 
 const Checkout = ({history}) => {

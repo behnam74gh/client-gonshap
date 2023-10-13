@@ -10,6 +10,7 @@ import Footer from "../components/Footer/Footer";
 import Brands from "../components/Brands/Brands";
 import Backdrop from "../components/UI/Backdrop/Backdrop";
 import { db } from "../util/indexedDB";
+import { toast } from "react-toastify";
 import "./Layout.css";
 
 const Layout = (props) => {
@@ -44,7 +45,7 @@ const Layout = (props) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
   };
@@ -59,7 +60,7 @@ const Layout = (props) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
   };
@@ -77,7 +78,7 @@ const Layout = (props) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
   };
@@ -95,7 +96,7 @@ const Layout = (props) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
 

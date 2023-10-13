@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import axios from "../../../util/axios";
 import { VscArrowLeft } from "react-icons/vsc";
 import Slider from "react-slick";
@@ -8,6 +8,7 @@ import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { useDispatch,useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { db } from "../../../util/indexedDB";
+import {setCountOfSlidersHandler} from '../../../util/customFunctions';
 import "./Section3.css";
 
 const Section3 = () => {
@@ -22,37 +23,53 @@ const Section3 = () => {
   const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
   
-  useEffect(() => {
-    axios
-      .get("/get-all-categories")
-      .then((response) => {
-        if (response.data.success) {
-          const { categories } = response.data;
-          if (categories && categories.length > 0) {
-            const activeCategories = categories.filter(c => c.storeProvider !== null)
-            setCategories(activeCategories);
-            setActiveCategory(activeCategories[0]._id);
-          }
-        }
-      })
-  }, []);
+  useLayoutEffect(() => {
+    if(window.innerWidth < 315){
+      setNumberOfSlides(1)
+    }else if (window.innerWidth < 720) {
+      setNumberOfSlides(2)
+    }else if (window.innerWidth < 1000) {
+      setNumberOfSlides(3)
+    }else {
+      setNumberOfSlides(4)
+    }
+  } , [])
 
   useEffect(() => {
+    setLoading(true)
     if(!navigator.onLine){
       db.newestProducts.toArray()
       .then(items => {
         if(items?.length > 0){
           setProducts(items)
         }
-      })
+      }) 
     }
-  }, [])
 
+    db.activeCategories.toArray().then(items => {
+      if(items.length > 0){
+        setCategories(items);
+        setActiveCategory(items[0]._id);
+      }else{
+        axios.get("/get-all-categories")
+        .then((response) => {
+          if (response.data.success) {
+            const { categories } = response.data;
+            if (categories?.length > 0) {
+              const activeCategories = categories.filter(c => c.storeProvider !== null)
+              setCategories(activeCategories);
+              setActiveCategory(activeCategories[0]._id);
+            }
+          }
+        })
+      }
+    })
+  }, []);
+  
   useEffect(() => {
     if (!activeCategory.length > 0) {
       return;
     }
-    const bodyWidth = window.innerWidth;
     setLoading(true);
     axios
       .post("/find/products/by-category-and/order", {
@@ -64,31 +81,7 @@ const Section3 = () => {
         if (response.data.success) {
           const { foundedProducts } = response.data;
           const produtsLength = foundedProducts.length;
-          if (bodyWidth > 1350 && produtsLength >= 4) {
-            setNumberOfSlides(4);
-          } else if (bodyWidth > 1350 && produtsLength < 4) {
-            setNumberOfSlides(produtsLength);
-          } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
-            setNumberOfSlides(3);
-          } else if (
-            bodyWidth < 1350 &&
-            bodyWidth > 910 &&
-            produtsLength === 1
-          ) {
-            setNumberOfSlides(1);
-          }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
-            setNumberOfSlides(2);
-          } else if (
-            bodyWidth < 910 &&
-            bodyWidth > 450 &&
-            produtsLength === 1
-          ) {
-            setNumberOfSlides(1);
-          }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
-            setNumberOfSlides(2)
-          }else{
-            setNumberOfSlides(1)
-          }
+          setNumberOfSlides(setCountOfSlidersHandler(produtsLength))
           setProducts(foundedProducts);
           setErrorText("");
           foundedProducts.length === 0 && setShowEmptyMessage(true)
@@ -107,7 +100,7 @@ const Section3 = () => {
           } else {
             setErrorText(err.response.data.message);
           }
-        })
+      })
   }, [activeCategory]);
   
   const changeCategoryHandler = (id) => {
@@ -126,16 +119,16 @@ const Section3 = () => {
 
   return (
     <section className="list_of_products">
-      {categories.length > 0 && <div className="column_item">
+      {categories?.length > 0 && navigator.onLine && <div className="column_item">
         <h1>جدیدترین محصولات</h1>
-        {isOnline && <select className="categories_wrapper_select" onChange={(e) => changeCategoryHandler(e.target.value)}>
-          {categories?.length > 0 && categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-        </select>}
+        <select className="categories_wrapper_select" onChange={(e) => changeCategoryHandler(e.target.value)}>
+          {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+        </select>
       </div>}
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (
-        <LoadingSkeletonCard count={numberOfSlides < 1 ? 1 : numberOfSlides} />
+        <LoadingSkeletonCard count={numberOfSlides === 1 ? 1 : numberOfSlides} />
       ) : products?.length > 0 ? (
         <Slider
           {...setting}

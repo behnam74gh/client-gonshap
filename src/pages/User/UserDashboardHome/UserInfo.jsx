@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import LoadingOrderSkeleton from "../../../components/UI/LoadingSkeleton/LoadingOrderSkeleton";
 import axios from "../../../util/axios";
+import { useDispatch } from "react-redux";
+import { UPDATE_DASHBOARD_IMAGE } from "../../../redux/Types/authTypes";
 
 const UserInfo = () => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setLoading(true);
@@ -16,6 +20,7 @@ const UserInfo = () => {
         if (response.data.success) {
           setUser(response.data.wantedUser);
           setErrorText("");
+          dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: response.data.wantedUser?.image });
         }
       })
       .catch((err) => {
@@ -37,27 +42,27 @@ const UserInfo = () => {
         user.firstName.length > 0 && (
           <div className="user-info-wrapper">
             <h6 className="user_dashboard_name">
-              نام و نام خانوادگی:
+              نام کاربری:
               <strong className="text-blue mx-1">{`${user.firstName}  ${user.lastName}`}</strong>
             </h6>
             <h6 className="user_dashboard_phoneNumber">
-              تلفن تماس:
+              شماره ثبت شده:
               <strong className="text-blue mx-1">{user.phoneNumber}</strong>
             </h6>
             <h6 className="user_dashboard_address">
-              آدرس:
+              آدرس ارسال کالا:
               <strong className="text-blue mx-1">
                 {user.address && user.address.length > 0
                   ? user.address
                   : "ثبت نکرده اید"}
               </strong>
             </h6>
-            <h6 className="user_dashboard_status">
+            {user.isBanned && <h6 className="user_dashboard_status">
               وضعیت:
               <strong className="text-blue mx-1">
-                {!user.isBanned ? "فعال" : "مسدود"}
+                مسدود
               </strong>
-            </h6>
+            </h6>}
           </div>
         )
       )}

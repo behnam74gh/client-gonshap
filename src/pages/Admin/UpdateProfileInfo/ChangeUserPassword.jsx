@@ -65,12 +65,17 @@ const ChangeUserPassword = ({ history }) => {
           if (response.data.success) {
             toast.success(response.data.message);
             setExpired(true);
+            if (userInfo.role === 1) {
+              history.push("/admin/dashboard/home");
+            } else if (userInfo.role === 2) {
+              history.push('/store-admin/dashboard/home')
+            } else {
+              history.push("/user/dashboard/home");
+            }
           }
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err);
-          console.log(err.response);
           if (typeof err.response.data.message === "object") {
             toast.error(err.response.data.message[0]);
           } else {
@@ -111,10 +116,11 @@ const ChangeUserPassword = ({ history }) => {
           className="recaptcha"
           hl="fa"
           theme="dark"
+          onExpired={() => setExpired(true)}
         />
         <Button
           type="submit"
-          disabled={ formState.isValid || expired || loading ||
+          disabled={ !formState.isValid || expired || loading ||
             formState.inputs.password.value !== formState.inputs.repeatPassword.value
           }
         >

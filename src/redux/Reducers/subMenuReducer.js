@@ -15,9 +15,9 @@ export const subMenuReducer = (state = initialState, action) => {
         location: action.location,
         navItem: {
           order: action.navItemInfo.order,
-          image: action.navItemInfo.image,
           categories: action.navItemInfo.categories,
           subcategories: action.navItemInfo.subcategories,
+          count: action.navItemInfo.count
         },
       };
     case CLOSE_SUBMENU:

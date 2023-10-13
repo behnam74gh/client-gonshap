@@ -1,13 +1,11 @@
 .ticket-img {
-  width: 100%;
-  height: 100%;
-  max-width: 40vw;
-  max-height: 40vh;
+  width: 70%;
+  height: 70%;
 }
 
 .delete_ticket_img {
   position: absolute;
-  right: -30px;
+  right: 0px;
   top: -30px;
 }
 .delete_ticket_img svg {
@@ -102,10 +100,15 @@
     width: 100%;
   }
   h4{
-    font-size: 12px;
-    background-color: #FFFFFF;
-    padding: 4px 8px;
+    font-size: 10px;
+    padding: 4px 6px;
     width: 100%;
     text-align: center;
+  }
+  .ticket_select {
+    font-size: 10px;
+    display: block;
+    width: 80%;
+    margin: 0 auto;
   }
 }

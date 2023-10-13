@@ -157,18 +157,13 @@
 }
 
 /* responsibility */
-@media (max-width: 450px) {
-  .cart_wrapper {
-    min-height: 300px;
-    margin-bottom: 10px;
+@media (max-width: 1060px) {
+  .cart_details_wrapper {
+    flex-basis: 100%;
+    padding: 0;
   }
-  .cart_items_wrapper h2 {
-    font-size: 14px;
-  }
-  .cart_length {
-    padding: 2px 12px;
-    border-radius: 2px;
-    font-size: 12px;
+  .cart_items_wrapper {
+    flex-basis: 100%;
   }
   .cart_details_wrapper h2 {
     font-size: 14px;
@@ -178,23 +173,56 @@
     font-size: 12px;
     margin: 0;
   }
+  .cart_items_wrapper h2 {
+    font-size: 14px;
+  }
+  .cart_length {
+    font-size: 14px;
+  }
+  .cart_checkout_btns_wrapper {
+    margin: 0;
+    height: 40px;
+  }
+  .cart_checkout_btns_wrapper button {
+    width: 40% !important;
+    padding: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .cart_checkout_btns_wrapper button {
+    width: 50% !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .cart_wrapper {
+    min-height: 300px;
+    margin-bottom: 10px;
+  }
+  .cart_length {
+    padding: 2px 12px;
+    border-radius: 2px;
+    font-size: 12px;
+  }
   .total_price_wrapper {
     font-size: 10px;
   }
   .total_price {
     justify-content: center;
-    font-size: 12px;
+    font-size: 14px;
     position: fixed;
-    bottom: 47px;
+    bottom: 60px;
     left: 0;
     background: white;
-    z-index: 20;
+    z-index: 30;
     width: 100vw;
     box-shadow: 0 2px 14px rgb(0 0 0 / 40%);
-    padding-top: 10px;
+    padding: 10px 0;
+    margin: 0;
   }
   .finaly_total_price_digit {
-    font-size: 12px;
+    font-size: 16px;
     background-color: transparent;
     font-weight: 700;
     color: var(--firstColorPalete);
@@ -203,17 +231,21 @@
     font-size: 10px;
   }
   .cart_checkout_btns_wrapper {
-    margin: 20px 0;
+    margin: 0;
     position: fixed;
-    bottom: -20px;
+    bottom: 0;
     left: 0;
     width: 100vw;
     background: #ffffff;
     z-index: 30;
     padding: 10px 5px;
+    justify-content: center;
+    height: 60px;
   }
   .cart_checkout_btns_wrapper button {
-    padding: 8px 4px !important;
+    padding: 0;
+    width: 60% !important;
+    font-size: 14px !important;
   }
   .deprecated_items_wrapper {
     padding: 2px 30px;

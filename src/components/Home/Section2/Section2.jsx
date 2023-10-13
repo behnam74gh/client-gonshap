@@ -12,12 +12,12 @@ const Section2 = () => {
       {adsLevelOne?.length > 0 ? (
         <React.Fragment>
           {adsLevelOne[0]?.owner?.length > 0 && (
-            <div className="advertise1">
+            <div className="ad1">
               <SingleAd ad={adsLevelOne[0]} />
             </div>
           )}
           {adsLevelOne[1]?.owner?.length > 0 ? (
-            <div className="advertise2">
+            <div className="ad2">
               <SingleAd ad={adsLevelOne[1]} />
             </div>
           ) : (

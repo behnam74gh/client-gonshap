@@ -23,17 +23,22 @@
 }
 
 @media (max-width: 1060px) {
+  .notice1_wrapper{
+    justify-content: space-between;
+  }
   .notice_1:first-of-type {
-    flex-basis: 100%;
-    margin: 0 0 5px 0;
+    flex-basis: 60%;
   }
   .notice_1 {
-    flex-basis: 50%;
+    flex-basis: 35%;
     margin: 5px 0;
   }
 }
 
 @media (max-width: 450px) {
+  .notice_1:first-of-type {
+    flex-basis: 100%;
+  }
   .notice_1 {
     flex-basis: 100%;
     margin: 3px 0;

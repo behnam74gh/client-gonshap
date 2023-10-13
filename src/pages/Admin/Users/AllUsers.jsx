@@ -135,7 +135,7 @@ const AllUsers = () => {
                 color: "white",
               }}
             >
-              <th colSpan="2">
+              <th colSpan="3">
                 <div className="dashboard-search">
                   <input
                     type="search"
@@ -184,6 +184,7 @@ const AllUsers = () => {
               <th className="th-titles">تلفن همراه</th>
               <th className="th-titles">کد کاربری</th>
               <th className="th-titles">وضعیت</th>
+              <th className="th-titles">سطح</th>
               <th className="th-titles">ویرایش</th>
             </tr>
           </thead>
@@ -191,13 +192,13 @@ const AllUsers = () => {
             {loading ? (
               <tr>
               <td colSpan="7">
-                <VscLoading />
+                <VscLoading className="loader" />
               </td>
             </tr>
             ) :
             users.length > 0 ? (
-              users.map((u, i) => (
-                <tr key={i}>
+              users.map((u) => (
+                <tr key={u._id}>
                   <td className="font-sm">
                     <div className="d-flex-center-center">
                       <img
@@ -215,9 +216,11 @@ const AllUsers = () => {
                   <td className="font-sm">{u.lastName}</td>
                   <td className="font-sm">{u.phoneNumber}</td>
                   <td className="font-sm">{u._id}</td>
-
                   <td className="font-sm">
                     {u.isBanned === false ? "فعال" : "مسدود"}
+                  </td>
+                  <td className="font-sm">
+                    {u.role === 3 ? "مشتری" : u.role === 2 ? "فروشنده" : "مدیر مجموعه"}
                   </td>
                   <td className="font-sm">
                     <Link
@@ -231,7 +234,7 @@ const AllUsers = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7">
+                <td colSpan="8">
                   <p
                     className="warning-message"
                     style={{ textAlign: "center" }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import SingleOrder from "./SingleOrder/SingleOrder";
 import axios from "../../../util/axios";
 import Pagination from "../../../components/UI/Pagination/Pagination";
@@ -11,7 +11,13 @@ const ListOfUserOrders = () => {
   const [ordersLength, setOrdersLength] = useState(0);
   const [errorText, setErrorText] = useState("");
   const [page, setPage] = useState(1);
-  const [perPage] = useState(10);
+  const [perPage,setPerPage] = useState(12);
+
+  useLayoutEffect(() => {
+    if(window.innerWidth < 750){
+      setPerPage(4)
+    }
+  }, [])
 
   useEffect(() => {
     setLoading(true);

@@ -46,9 +46,14 @@
 }
 
 /* responsive */
-@media (max-width: 920px) {
+@media (max-width: 1060px) {
   #call_us{
-    padding: 6px 0;
+    margin: 10px 0;
+    min-height: 70px;
+  }
+  .call_us_icon svg {
+    width: 60px;
+    height: 60px;
   }
   .call_us_icon {
     flex-basis: 15%;
@@ -57,13 +62,25 @@
     flex-basis: 60%;
     font-size: 12px;
   }
+  .call_us_desc p {
+    margin: 5px 0;
+  }
   .call_us_phone_numbers{
     flex-basis: 20%;
   }
-  .call_us_icon svg {
-    width: 60px;
-    height: 60px;
+  .call_us_phone_numbers strong {
+    font-size: 14px;
   }
+  .phone_icon {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 920px) {
+  #call_us{
+    padding: 6px 0;
+  }
+ 
 }
 @media (max-width: 780px) {
   #call_us {
@@ -86,7 +103,6 @@
     margin: 5px 0;
   }
   .phone_icon {
-    font-size: 20px;
     margin-top: 5px;
   }
 }
@@ -97,7 +113,7 @@
     margin: 25px 0;
   }
   .call_us_icon {
-    flex-basis: 30%;
+    flex-basis: 20%;
     order: 2;
     max-height: 50px;
   }
@@ -117,13 +133,26 @@
     font-size: 12px;
   }
   .call_us_phone_numbers_wrapper {
-    flex-basis: 70%;
+    flex-basis: 80%;
     max-height: 50px;
     order: 3;
     font-size: 8px;
   }
 }
-@media (max-width: 320px) {
+
+@media (max-width: 450px) {
+  #call_us {
+    margin: 10px 0;
+  }
+  .phone_icon {
+    margin-right: 10px;
+  }
+  .call_us_phone_numbers {
+    justify-content: flex-start;
+  }
+}
+
+  @media (max-width: 320px) {
   .call_us_icon {
     flex-basis: 20%;
   }

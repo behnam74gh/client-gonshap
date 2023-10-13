@@ -20,18 +20,37 @@
 #sec13 img:hover {
   box-shadow: 0 3px 20px rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 1300px) {
+  #sec13 img {
+    max-height: 120px;
+  }
+}
+
 @media (max-width: 1060px) {
   #sec13 img {
-    max-height: 100px;
+    max-height: 95px;
     border-radius: 8px;
   }
 }
+
 @media (max-width: 780px) {
   #sec13 img {
     max-height: 70px;
     border-radius: 6px;
   }
 }
+
+@media (max-width: 550px) {
+  #sec13 {
+    margin: 15px 0 5px;
+  }
+  #sec13 img {
+    max-height: 55px;
+    border-radius: 5px;
+  }
+}
+
 @media (max-width: 450px) {
   #sec13 img {
     border-radius: 3px;

@@ -5,7 +5,7 @@ import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCar
 import Pagination from "../../components/UI/Pagination/Pagination";
 import "./SupplierProducts.css";
 
-const SupplierProducts = ({ backupFor }) => {
+const SupplierProducts = ({ backupFor,storeName }) => {
   const [subcategories, setSubcategories] = useState([]);
   const [activeSub, setActiveSub] = useState(
     JSON.parse(localStorage.getItem("gonshapSupplierActiveSub")) || ""
@@ -17,11 +17,11 @@ const SupplierProducts = ({ backupFor }) => {
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("gonshapSupplierPageNumber")) || 1
   );
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(20);
 
   useEffect(() => {
     if (window.innerWidth < 450) {
-      setPerPage(4);
+      setPerPage(10);
     }
   }, []);
 
@@ -92,25 +92,18 @@ const SupplierProducts = ({ backupFor }) => {
 
   return (
     <div className="suppliers_list_of_products_wrapper">
-      <p className="font-sm my-1">
-        محصولات <strong className="mx-1">{backupFor && backupFor.name}</strong>{" "}
-        از این فروشگاه تامین میشوند.
-      </p>
       <div className="supplier_subcategory_wrapper">
-        {subcategories.length > 0 &&
-          subcategories.map((s, i) => (
-            <span
-              key={i}
-              className={
-                activeSub === s._id
-                  ? "supplier_sub_label active"
-                  : "supplier_sub_label"
-              }
-              onClick={() => switchSubcategoryHandler(s._id)}
-            >
-              {s.name}
-            </span>
-          ))}
+        <p className="font-sm my-1 mx-2">
+          محصولات <strong className="mx-1">{backupFor?.name}</strong>{" "}
+          از فروشگاه{" "}    
+          <strong className="mx-1">{storeName}</strong> {" "}
+            تامین میشوند.
+        </p>
+        {subcategories.length > 0 && navigator.onLine &&
+          <select className="categories_wrapper_select" onChange={(e) => switchSubcategoryHandler(e.target.value)}>
+          {subcategories.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
+          </select>
+        }
       </div>
       <div className="supplier_products_wrapper">
         {loading ? (

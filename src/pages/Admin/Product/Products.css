@@ -57,8 +57,21 @@ span svg {
   font-weight: 500;
 }
 
+@media (max-width: 790px) {
+  .th-titles {
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .table-wrapper td {
+    font-size: 10px;
+  }
+}
+
 @media (max-width: 450px) {
   .dashboard-search span {
     margin: 4px 0;
+  }
+  span svg {
+    font-size: 14px;
   }
 }

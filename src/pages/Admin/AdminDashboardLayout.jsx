@@ -23,9 +23,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import axios from "../../util/axios";
-import { signout } from "../../redux/Actions/authActions";
 import UserDefaultPicture from "../../assets/images/pro-8.png";
-import { UPDATE_DASHBOARD_IMAGE } from "../../redux/Types/authTypes";
+import { UPDATE_DASHBOARD_IMAGE, USER_SIGNOUT } from "../../redux/Types/authTypes";
 import "./TemplateAdminDashboard.css";
 
 const AdminDashboardLayout = ({ children }) => {
@@ -38,22 +37,22 @@ const AdminDashboardLayout = ({ children }) => {
   const history = useHistory();
 
   useEffect(() => {
-    axios
-      .get("/users/dashboard/profile-image")
-      .then((response) => {
-        if (response.data.success) {
-          dispatch({
-            type: UPDATE_DASHBOARD_IMAGE,
-            payload: response.data.usersImage,
-          });
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          toast.warning(err.response.data.message);
-        }
-      });
-  }, [dispatch]);
+    axios.get("/users/dashboard/profile-image")
+    .then((response) => {
+      if (response.data.success) {
+        dispatch({
+          type: UPDATE_DASHBOARD_IMAGE,
+          payload: response.data.usersImage,
+        });
+      }
+    })
+    .catch((err) => {
+      if (err.response) {
+        toast.warning(err.response.data.message);
+      }
+    });
+    
+  }, [dispatch,]);
 
   useEffect(() => {
     switch (history.location.pathname) {
@@ -138,7 +137,26 @@ const AdminDashboardLayout = ({ children }) => {
       default:
         break;
     }
-  }, [history]);
+  }, [history.location.pathname]);
+
+  const signoutHandler = () => {
+    if(!navigator.onLine){
+      toast.warn('شما آفلاین هستید')
+      return;
+    }
+
+    axios.get('/sign-out/user').then(res => {
+      if(res.status === 200){
+        dispatch({type: USER_SIGNOUT});
+        localStorage.removeItem("BZ_User_Info");
+        history.push('/')
+      }
+    }).catch(err => {
+      if(err.response.status !== 401){
+        toast.warn('خروج ناموفق بود')
+      }
+    })
+  }
 
   return (
     <div id="admin-dashboard">
@@ -349,11 +367,11 @@ const AdminDashboardLayout = ({ children }) => {
                 <span className="sidebar-text-link">تغییر رمزعبور</span>
               </Link>
             </li>
-            <li onClick={() => dispatch(signout())}>
-              <Link to="/">
+            <li onClick={signoutHandler}>
+              <b>
                 <FaSignOutAlt />
                 <span className="sidebar-text-link">خروج</span>
-              </Link>
+              </b>
             </li>
           </ul>
         </div>

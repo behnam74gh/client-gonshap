@@ -120,7 +120,7 @@ const ListOfSentSMS = () => {
   return (
     <div className="w-100">
       {loading ? (
-        <VscLoading />
+        <VscLoading className="loader" />
       ) : (
         <div className="table-wrapper">
           <table>

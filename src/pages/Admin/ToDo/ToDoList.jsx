@@ -85,9 +85,8 @@ const ToDoList = () => {
         <GoPlus />
       </Link>
       <hr />
-      <p className="font-sm mt-0">
-        برای دسترسی به یادداشت های تاریخ دلخواه خود، از تقویم زیر تاریخ مورد نظر
-        را انتخاب کنید
+      <p className="font-sm mt-0 text-purple">
+        مشاهده یادداشت ها براساس تاریخ
       </p>
       <div className="d-flex-center-center">
         <Calendar
@@ -102,7 +101,7 @@ const ToDoList = () => {
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (
-        <p className="mt-0">
+        <p className="mt-0 bell_title">
           برای تاریخ
           <strong className="text-blue mx-2">
             {todaysDate.toLocaleDateString("fa")}

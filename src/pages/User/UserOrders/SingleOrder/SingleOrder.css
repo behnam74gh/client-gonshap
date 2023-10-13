@@ -83,6 +83,25 @@
   margin: 8px auto;
 }
 
+@media (max-width: 1050px) {
+  .order_details_wrapper > span {
+    margin: 8px 4px;
+  }
+}
+
+@media (max-width: 560px) {
+  .order_details_wrapper {
+    order: 2;
+    padding: 10px 10px 5px;
+  }
+  .order_table{
+    order: 1;
+  }
+  .order_details_wrapper > span {
+    margin: 6px 2px;
+  }
+}
+
 @media (max-width: 450px) {
   .single_order_wrapper {
     margin: 8px 0;

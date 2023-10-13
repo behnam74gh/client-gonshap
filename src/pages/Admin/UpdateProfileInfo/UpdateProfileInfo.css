@@ -6,6 +6,7 @@
   min-height: 200px;
   height: 100%;
   border-radius: 50%;
+  object-fit: cover;
 }
 .delete_user_img {
   position: absolute;
@@ -15,4 +16,13 @@
 
 .delete_user_img svg {
   font-size: 35px;
+}
+
+@media (max-width: 780px) {
+  .profile_img {
+    min-width: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    min-height: 100px;
+  }
 }

@@ -18,3 +18,13 @@
   background-color: var(--firstColorPalete);
   color: #ffffff;
 }
+
+@media (max-width: 560px) {
+  .create-new-slide-link {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  .admin-panel-wrapper hr {
+    margin: 20px 0;
+  }
+}

@@ -55,14 +55,16 @@
 .rahnama-dropdown a:hover {
   padding-right: 18px;
 }
-@media (max-width: 992px) {
-  .nav-items li {
-    padding: 0 4px;
+
+@media (max-width: 1060px) {
+  .items {
+    font-size: 14px;
   }
   .nav-items li {
-    padding-left: 10px;
+    padding: 0 10px;
+    font-size: 12px;
   }
   .nav-items li:first-child {
-    padding-left: 15px;
+    padding: 0 0 0 15px;
   }
 }

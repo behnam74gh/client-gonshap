@@ -5,18 +5,22 @@
   padding-top: 26px;
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 1537px) {
   .main-body {
-    width: 75% !important;
+    width: 1305px !important;
     margin: 0 auto;
     height: 100%;
-    padding-top: 26px;
   }
 }
 
- @media (max-width: 450px) {
+@media (max-width: 1060px) {
   .main-body {
-    /* width: 90% !important; */
+    padding-top: 10px;
+  }
+}
+
+ @media (max-width: 780px) {
+  .main-body {
     padding-top: 0;
   }
 } 

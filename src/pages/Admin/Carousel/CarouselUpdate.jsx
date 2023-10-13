@@ -16,6 +16,9 @@ const oldStates = {
   backupFor: "",
   longitude: "",
   latitude: "",
+  instagramId: "",
+  telegramId: "",
+  whatsupId: "",
 };
 
 const CarouselUpdate = ({ history, match }) => {
@@ -37,7 +40,7 @@ const CarouselUpdate = ({ history, match }) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
   };
@@ -58,6 +61,9 @@ const CarouselUpdate = ({ history, match }) => {
           longitude,
           latitude,
           description,
+          instagramId,
+          telegramId,
+          whatsupId,
           backupFor,
           photos,
         } = response.data.thisSupplier;
@@ -69,6 +75,9 @@ const CarouselUpdate = ({ history, match }) => {
             address,
             longitude,
             latitude,
+            instagramId,
+            telegramId,
+            whatsupId,
             description,
             backupFor: backupFor._id,
           });
@@ -155,6 +164,9 @@ const CarouselUpdate = ({ history, match }) => {
     formData.append("address", address);
     formData.append("longitude", longitude);
     formData.append("latitude", latitude);
+    formData.append("instagramId", values.instagramId);
+    formData.append("telegramId", values.telegramId);
+    formData.append("whatsupId", values.whatsupId);
     formData.append("description", description);
 
     formData.append("deletedPhotos", deletedPhotos);
@@ -311,6 +323,27 @@ const CarouselUpdate = ({ history, match }) => {
           name="latitude"
           value={values.latitude}
           type="number"
+          onChange={(e) => changeInputHandler(e)}
+        />
+        <label className="auth-label">آدرس اینستاگرام :</label>
+        <input
+          name="instagramId"
+          value={values.instagramId}
+          type="text"
+          onChange={(e) => changeInputHandler(e)}
+        />
+        <label className="auth-label">آدرس تلگرام :</label>
+        <input
+          name="telegramId"
+          value={values.telegramId}
+          type="text"
+          onChange={(e) => changeInputHandler(e)}
+        />
+        <label className="auth-label">آدرس واتساپ :</label>
+        <input
+          name="whatsupId"
+          value={values.whatsupId}
+          type="text"
           onChange={(e) => changeInputHandler(e)}
         />
         <textarea

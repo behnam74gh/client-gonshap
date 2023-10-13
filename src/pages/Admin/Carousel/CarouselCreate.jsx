@@ -56,6 +56,18 @@ const CarouselCreate = ({ history }) => {
         value: "",
         isValid: false,
       },
+      instagramId: {
+        value: "",
+        isValid: true,
+      },
+      telegramId: {
+        value: "",
+        isValid: true,
+      },
+      whatsupId: {
+        value: "",
+        isValid: true,
+      },
     },
     false
   );
@@ -68,7 +80,7 @@ const CarouselCreate = ({ history }) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
   };
@@ -130,6 +142,9 @@ const CarouselCreate = ({ history }) => {
     formData.append("address", formState.inputs.address.value);
     formData.append("longitude", formState.inputs.longitude.value);
     formData.append("latitude", formState.inputs.latitude.value);
+    formData.append("instagramId", formState.inputs.instagramId.value);
+    formData.append("telegramId", formState.inputs.telegramId.value);
+    formData.append("whatsupId", formState.inputs.whatsupId.value);
     formData.append("description", formState.inputs.description.value);
 
     formData.append("backupFor", backupFor);
@@ -283,6 +298,42 @@ const CarouselCreate = ({ history }) => {
           onInput={inputHandler}
           validators={[VALIDATOR_NUMBER()]}
         />
+        <label className="auth-label">آدرس اینستاگرام :</label>
+        <Input
+          id="instagramId"
+          element="input"
+          type="text"
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(70),
+            VALIDATOR_MINLENGTH(4),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
+        />
+        <label className="auth-label">آدرس تلگرام :</label>
+        <Input
+          id="telegramId"
+          element="input"
+          type="text"
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(70),
+            VALIDATOR_MINLENGTH(4),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
+        />
+        <label className="auth-label">آدرس واتساپ :</label>
+        <Input
+          id="whatsupId"
+          element="input"
+          type="text"
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(70),
+            VALIDATOR_MINLENGTH(4),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
+        />
         <Input
           id="description"
           element="textarea"
@@ -296,7 +347,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
-        <Button type="submit" disabled={!formState.isValid}>
+        <Button type="submit" disabled={!formState.inputs.description.isValid}>
           {!loading ? "ثبت" : <VscLoading className="loader" />}
         </Button>
       </form>

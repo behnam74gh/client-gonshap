@@ -118,10 +118,12 @@ const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
       </Link>
       <div className="product_info_box">
         <Link to={`/product/details/${_id}`} onClick={cacheProductDetailsHandler}>
-          <h3 className={`${showReviews || showSold ? "has_Second_att" : "my-0"}`}>{title}</h3>
+          <h3 className={`${(showReviews || showSold || showDiscount) ? "has_Second_att" : "my-0"}`}>
+            {title.length > 22 ? `${title.substring(0,22)}...` : title}
+          </h3>
         </Link>
 
-        <div className="font-sm mt-2" style={{textAlign: (showReviews || showSold) && "center"}}>
+        <div className="font-sm mt-2" style={{textAlign: (showReviews || showSold || showDiscount) && "center"}}>
           {finallyPrice.toLocaleString("fa")}
           <span className="mx-1">تومان</span>
         </div>
@@ -138,11 +140,11 @@ const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
           )}
         </div>
       </div>
-      {discount > 19 && (
+      {!showDiscount && discount > 10 && (
         <div className="special_discount">
           <div className="discount_shape">
             <span>
-              <strong className="ml-1">%{discount}</strong>تخفیف
+              <strong className="ml-1">%{discount}</strong> off
             </span>
           </div>
         </div>
@@ -183,7 +185,7 @@ const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
         <span className="font-sm">
           {countInStock > 0 ? countInStock : "ناموجود"}
         </span>
-        {countInStock > 0 && <span>موجودی</span>}
+        {countInStock > 0 && <span>موجود</span>}
       </div>
     </div>
   );

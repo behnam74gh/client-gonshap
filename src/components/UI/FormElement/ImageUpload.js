@@ -23,7 +23,6 @@ const ImageUpload = (props) => {
   }, [file]);
 
   const pickedHandler = (e) => {
-    // console.log(e.target);
     let pickedFile;
     let fileIsValid = isValid;
 

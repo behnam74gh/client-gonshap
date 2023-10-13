@@ -22,6 +22,16 @@
   margin: 10px 0 15px;
   overflow: hidden;
 }
+.back_to_product_text{
+  color: var(--firstColorPalete);
+  font-size: 14px;
+}
+
+@media (max-width: 450px) {
+  .back_to_product_text {
+    font-size: 10px;
+  }
+}
 
 @media (max-width: 320px) {
   .recaptcha iframe {

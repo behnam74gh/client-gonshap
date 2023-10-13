@@ -22,3 +22,10 @@
   width: 12px;
   height: 12px;
 }
+
+
+@media (max-width: 560px) {
+  .bell_title{
+    font-size: 10px;
+  }
+}

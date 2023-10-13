@@ -24,19 +24,45 @@
 #sec8 img:hover {
   box-shadow: 0 3px 20px rgba(0, 0, 0, 0.2);
 }
+@media (max-width: 1300px) {
+  #sec8 img {
+    max-height: 160px;
+  }
+}
+
 @media (max-width: 1060px) {
+  #sec8 {
+    margin: 10px 0;
+  }
   #sec8 img {
     max-height: 140px;
     border-radius: 8px;
   }
 }
-@media (max-width: 780px) {
+
+@media (max-width: 920px) {
   #sec8 img {
     max-height: 120px;
-    border-radius: 6px;
   }
 }
+
+@media (max-width: 780px) {
+  #sec8 img {
+    border-radius: 6px;
+    max-height: 100px;
+  }
+}
+@media (max-width: 550px) {
+  #sec8 img {
+    max-height: 80px;
+    border-radius: 5px;
+  }
+}
+
 @media (max-width: 450px) {
+  #sec8 {
+    margin: 10px 0 0;
+  }
   #sec8 img {
     border-radius: 3px;
     max-height: 50px;

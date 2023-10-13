@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   flex-flow: column wrap;
-  margin: 10px 0;
+  margin: 0 0 10px;
 }
 .temporary_questions_wrapper {
   width: 100%;
@@ -80,7 +80,23 @@
   padding: 15px;
 }
 
+@media (max-width: 1060px) {
+  .accordion {
+    width: 80%;
+  }
+  .accordion_title {
+    padding: 10px;
+  }
+  .accordion_content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
 @media (max-width: 780px) {
+  .accordion {
+    width: 90%;
+  }
   #sec12 h2 {
     font-size: 16px;
   }
@@ -105,10 +121,17 @@
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 550px) {
   .accordion {
     width: 100%;
   }
+  #sec12 h2 {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+}
+
+@media (max-width: 450px) {
   #sec12 h2 {
     font-size: 12px;
   }

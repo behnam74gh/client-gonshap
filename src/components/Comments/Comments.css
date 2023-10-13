@@ -129,6 +129,17 @@
     width: 100%;
   }
 }
+
+@media (max-width: 550px) {
+  .comment_box_wrapper>span.mt-3{
+    font-size: 12px;
+  }
+  .comment_box_wrapper>p.my-2{
+    font-size: 14px;
+    margin: 12px 0;
+  }
+}
+
 @media (max-width: 450px) {
   .comment_box_wrapper::-webkit-scrollbar {
     width: 5px;

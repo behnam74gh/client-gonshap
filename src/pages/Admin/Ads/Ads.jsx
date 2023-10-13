@@ -81,7 +81,7 @@ const Ads = () => {
         <strong className="text-blue">{AdsLength}</strong> تبلیغ وجود دارد!
       </p>
       {loading ? (
-        <VscLoading />
+        <VscLoading className="loader" />
       ) : (
         <div className="table-wrapper">
           <table>

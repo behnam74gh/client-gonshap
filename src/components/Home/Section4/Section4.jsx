@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { FiPhoneCall } from "react-icons/fi";
 import axios from "../../../util/axios";
+import { db } from "../../../util/indexedDB";
 import "./Section4.css";
 
 const Section4 = () => {
   const [companyInfo, setCompanyInfo] = useState({});
 
   useEffect(() => {
-    axios
-      .get("/read/company-info")
-      .then((response) => {
-        if (response.data.success) {
-          setCompanyInfo(response.data.companyInfo);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response.data.message);
-        }
-      });
+    db.companyInformation.toArray().then(items => {
+      if(items.length > 0){
+        setCompanyInfo(items[0])
+      }else{
+        axios.get("/read/company-info").then((response) => {
+          if (response.data.success) {
+            setCompanyInfo(response.data.companyInfo);
+          }
+        })
+      }
+    })
   }, []);
 
   return (

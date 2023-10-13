@@ -37,13 +37,13 @@ const SupplierSlider = () => {
   }, []);
 
   const setting = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 1300,
     slidesToShow: 1,
     slidesToScroll: 1,
     pauseOnHover: true,
-    arrows: false,
+    arrows: true,
     autoplay: true,
     fade: true,
   };
@@ -63,12 +63,11 @@ const SupplierSlider = () => {
             suppliers.map((s, i) => (
               <div key={i} className="supplier_img_wrapper">
                 <div className="supplier_info_wrapper">
-                  <h6>{s.title}</h6>
                   <Link
                     to={`/supplier/introduce/${s.slug}`}
                     className="supplier_button"
                   >
-                    مشاهده
+                    ورود به فروشگاه
                   </Link>
                 </div>
                 <img

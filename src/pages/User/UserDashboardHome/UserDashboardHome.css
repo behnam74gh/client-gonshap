@@ -30,7 +30,7 @@
   flex-basis: 10%;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 960px) {
   .user_dashboard_name {
     flex-basis: 50%;
   }
@@ -38,10 +38,13 @@
     flex-basis: 50%;
   }
   .user_dashboard_address {
-    flex-basis: 70%;
+    flex-basis: 100%;
   }
   .user_dashboard_status {
-    flex-basis: 30%;
+    flex-basis: 100%;
+  }
+  .user-info-wrapper {
+    padding: 5px 10px;
   }
 }
 
@@ -50,12 +53,6 @@
     flex-basis: 100%;
   }
   .user_dashboard_phoneNumber {
-    flex-basis: 100%;
-  }
-  .user_dashboard_address {
-    flex-basis: 100%;
-  }
-  .user_dashboard_status {
     flex-basis: 100%;
   }
   .user-info-wrapper {

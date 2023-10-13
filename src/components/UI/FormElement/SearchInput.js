@@ -29,11 +29,6 @@ const SearchInput = () => {
           setProductsName(productsName);
         }
       })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response.data.message);
-        }
-      });
   }, []);
 
   const setKeywordHandler = (e) => {

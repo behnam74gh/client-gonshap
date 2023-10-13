@@ -99,22 +99,23 @@ footer {
   left: 40px;
   bottom: 35px;
   background-color: white;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease;
-  border: 1px solid #d6d6d6;
+  border: 1px solid var(--firstColorPalete);
+  z-index: 20;
 }
 .arrow_up svg {
-  font-size: 40px;
-  color: #a8a8a8;
+  font-size: 35px;
+  color: var(--firstColorPalete)
 }
 .arrow_up:hover {
-  box-shadow: 0 0px 14px var(--secondColorPalete);
+  box-shadow: 0 0px 14px var(--firstColorPalete);
 }
 .install_app{
   position: fixed;
@@ -127,13 +128,46 @@ footer {
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  z-index: 20;
 }
 .install_app svg {
   cursor: pointer;
   width: 80%;
   height: auto;
 }
+
+@media (min-width: 2500px) {
+  .arrow_up{
+    left: 20% !important;
+  }
+  .install_app{
+    right: 20% !important;
+  }
+}
+
+@media (min-width: 1537px) {
+  #sec_footer {
+    width: 1305px !important;
+  }
+  .arrow_up{
+    left: 5%;
+  }
+  .install_app{
+    right: 5%;
+  }
+}
+
+@media (max-width: 1060px) {
+  .arrow_up {
+    left: 15px;
+    width: 40px;
+    height: 40px;
+  }
+  .install_app{
+    right: 15px;
+  }
+}
+
 @media (max-width: 780px) {
   footer {
     margin: 20px auto 0;
@@ -162,11 +196,24 @@ footer {
   }
   .arrow_up {
     left: 20px;
-    width: 40px;
-    height: 40px;
   }
   .arrow_up svg {
     font-size: 30px;
+  }
+}
+
+@media (max-width: 550px) {
+  .install_app {
+    right: 5px;
+    width: 25px;
+  }
+  .arrow_up {
+    left: 5px;
+    width: 25px;
+    height: 25px;
+  }
+  .arrow_up svg {
+    font-size: 15px;
   }
 }
 
@@ -198,24 +245,17 @@ footer {
   .about_us_description {
     font-size: 10px;
   }
+  .call_us_info_box{
+    justify-content: space-around;
+  }
   .call_us_info_box span {
     font-size: 12px;
   }
   .footer_nemad_img {
     margin: 0 10px;
   }
-  .arrow_up {
-    left: 10px;
-    width: 30px;
-    height: 30px;
-  }
-  .arrow_up svg {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 450px) {
   .call_us_info_box span:last-of-type {
     font-size: 10px;
   }
 }
+

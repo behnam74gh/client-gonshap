@@ -9,8 +9,10 @@ import { Link,useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { closeSubmenu } from "../../redux/Actions/subMenu";
 import NavbarItems from "./NavbarItems";
-import { signout } from "../../redux/Actions/authActions";
+import axios from "../../util/axios";
 import SearchInput from "../UI/FormElement/SearchInput";
+import { USER_SIGNOUT } from "../../redux/Types/authTypes";
+import { toast } from "react-toastify";
 import "./Navbar.css";
 
 const Navbar = (props) => {
@@ -32,7 +34,22 @@ const Navbar = (props) => {
     }
   };
   const signoutHandler = () => {
-    dispatch(signout());
+    if(!navigator.onLine){
+      toast.warn('شما آفلاین هستید')
+      return;
+    }
+
+    axios.get('/sign-out/user').then(res => {
+      if(res.status === 200){
+        dispatch({type: USER_SIGNOUT});
+        localStorage.removeItem("BZ_User_Info");
+        history.push('/')
+      }
+    }).catch(err => {
+      if(err.response.status !== 401){
+        toast.warn('خروج ناموفق بود')
+      }
+    })
   };
 
   return (
@@ -72,10 +89,10 @@ const Navbar = (props) => {
                       <MdDashboard />
                       حساب کاربری
                     </Link>
-                    <Link to='/' onClick={signoutHandler}>
+                    <span onClick={signoutHandler}>
                       <RiLogoutBoxRLine />
                       خروج از حساب
-                    </Link>
+                    </span>
                   </div>
                 </div>
               </li>

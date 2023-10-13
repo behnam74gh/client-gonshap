@@ -25,6 +25,12 @@
     height: 40px;
 }
 
+@media (max-width: 1050px) {
+    .user_ad_table {
+        font-size: 10px;
+    }
+}
+
 @media (max-width: 450px) {
     .user_ads_container h5 {
         margin: 10px 0;

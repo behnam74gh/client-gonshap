@@ -76,7 +76,7 @@ const Carousels = () => {
         <p className="warning-message">{gettingSuppliersError}</p>
       )}
       {loading ? (
-        <VscLoading />
+        <VscLoading className="loader" />
       ) : (
         <div className="table-wrapper">
           {suppliers.length > 0 && (

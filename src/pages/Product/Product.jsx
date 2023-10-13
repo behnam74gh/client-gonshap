@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import axios from "../../util/axios";
 import Slider from "react-slick";
 import ProductCard from "../../components/Home/Shared/ProductCard";
@@ -14,6 +14,7 @@ import { db } from "../../util/indexedDB";
 import {Helmet} from 'react-helmet'
 import { deleteSearchConfig } from "../../redux/Actions/shopActions";
 import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
+import {setCountOfSlidersHandler} from '../../util/customFunctions';
 import "../../components/Home/Section3/Section3.css";
 import "./Product.css";
 
@@ -38,11 +39,23 @@ const Product = ({ match }) => {
   const { userInfo } = useSelector((state) => state.userSignin);
   const dispatch = useDispatch();
 
-  const loadCurrentProduct = useCallback(() => {
-    const bodyWidth = window.innerWidth;
-    if (bodyWidth < 321) {
-      setSecondNumberOfSlides(1);
+  useLayoutEffect(() => {
+    if(window.innerWidth < 315){
+      setNumberOfSlides(1)
+      setSecondNumberOfSlides(1)
+    }else if (window.innerWidth < 720) {
+      setNumberOfSlides(2)
+      setSecondNumberOfSlides(2)
+    }else if (window.innerWidth < 1000) {
+      setNumberOfSlides(3)
+      setSecondNumberOfSlides(3)
+    }else {
+      setNumberOfSlides(4)
+      setSecondNumberOfSlides(4)
     }
+  } , [])
+
+  const loadCurrentProduct = useCallback(() => {  
     axios
       .get(`/read/current-product/${productId}`)
       .then((response) => {
@@ -50,31 +63,7 @@ const Product = ({ match }) => {
         if (response.data.success) {
           setProduct(response.data.thisProduct);
           const produtsLength = response.data.releatedProducts.length;
-          if (bodyWidth > 1350 && produtsLength >= 4) {
-            setSecondNumberOfSlides(4);
-          } else if (bodyWidth > 1350 && produtsLength < 4) {
-            setSecondNumberOfSlides(produtsLength);
-          } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
-            setSecondNumberOfSlides(3);
-          } else if (
-            bodyWidth < 1350 &&
-            bodyWidth > 910 &&
-            produtsLength === 1
-          ) {
-            setSecondNumberOfSlides(1);
-          }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
-            setSecondNumberOfSlides(2);
-          } else if (
-            bodyWidth < 910 &&
-            bodyWidth > 450 &&
-            produtsLength === 1
-          ) {
-            setSecondNumberOfSlides(1);
-          }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
-            setSecondNumberOfSlides(2)
-          }else{
-            setSecondNumberOfSlides(1)
-          }
+          setSecondNumberOfSlides(setCountOfSlidersHandler(produtsLength))
           setReleatedProducts(response.data.releatedProducts);
           setErrorText("");
         }
@@ -132,8 +121,7 @@ const Product = ({ match }) => {
   }, [productId,dispatch]);
 
   useEffect(() => {
-    if (userInfo && userInfo.userId?.length > 0) {
-      const bodyWidth = window.innerWidth;
+    if (userInfo?.userId?.length > 0 && navigator.onLine) {
       setRecentLoading(true);
       axios
         .put(`/current-user/recent-views/upgrade/${userInfo.userId}`, {
@@ -147,31 +135,7 @@ const Product = ({ match }) => {
           );
           if (success) {
             const produtsLength = activeRecentViewsProducts.length;
-            if (bodyWidth > 1350 && produtsLength >= 4) {
-              setNumberOfSlides(4);
-            } else if (bodyWidth > 1350 && produtsLength < 4) {
-              setNumberOfSlides(produtsLength);
-            } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
-              setNumberOfSlides(3);
-            } else if (
-              bodyWidth < 1350 &&
-              bodyWidth > 910 &&
-              produtsLength === 1
-            ) {
-              setNumberOfSlides(1);
-            }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
-              setNumberOfSlides(2);
-            } else if (
-              bodyWidth < 910 &&
-              bodyWidth > 450 &&
-              produtsLength === 1
-            ) {
-              setNumberOfSlides(1);
-            }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
-              setNumberOfSlides(2)
-            }else{
-              setNumberOfSlides(1)
-            }
+            setNumberOfSlides(setCountOfSlidersHandler(produtsLength))
             setRecentViews(activeRecentViewsProducts);
             setRecentViewsError("");
           }
@@ -209,7 +173,7 @@ const Product = ({ match }) => {
       .then((response) => {
         if (response.data.success) {
           dispatch({ type: CLOSE_STAR_RATING_MODAL });
-          toast.info("از توجه شما متشکریم ،مدیریت گُنشاپ!");
+          toast.info("از توجه شما متشکریم ،مدیریت بازارک!");
           loadCurrentProduct();
         }
       })
@@ -245,9 +209,7 @@ const Product = ({ match }) => {
         </React.Fragment>
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
-      ) : (
-        product &&
-        product._id.length > 0 && (
+      ) : (product?._id?.length > 0 && (
           <React.Fragment>
             <ProductDetails
               product={product}
@@ -263,61 +225,57 @@ const Product = ({ match }) => {
               commentsError={commentsError}
               productDetails={product.details}
             />
-            <div className="list_of_products">
-              {recentViewserror.length > 0 ? (
-                <p className="warning-message">{recentViewserror}</p>
-              ) : recentLoading ? (
-                <LoadingSkeletonCard
-                  count={numberOfSlides < 1 ? 1 : numberOfSlides}
-                />
-              ) : (
-                recentViews &&
-                recentViews.length > 0 && (
-                  <React.Fragment>
-                    <h3 className="column_item">بازدید های اخیر</h3>
+            
+            {recentViewserror.length > 0 ? (
+              <p className="warning-message">{recentViewserror}</p>
+            ) : recentLoading ? (
+              <LoadingSkeletonCard
+                count={numberOfSlides === 1 ? 1 : numberOfSlides}
+              />
+            ) : (recentViews?.length > 0 && (
+              <div className="list_of_products">
+                  <h3 className="column_item">بازدید های اخیر</h3>
 
-                    <Slider
-                      {...setting}
-                      slidesToShow={numberOfSlides}
-                      className="custom_slider"
-                    >
-                      {recentViews.map((p, i) => (
-                        <ProductCard
-                          key={i}
-                          product={p}
-                          loading={recentLoading}
-                        />
-                      ))}
-                    </Slider>
-                  </React.Fragment>
-                )
-              )}
-            </div>
+                  <Slider
+                    {...setting}
+                    slidesToShow={numberOfSlides}
+                    className="custom_slider"
+                  >
+                    {recentViews.map((p, i) => (
+                      <ProductCard
+                        key={i}
+                        product={p}
+                        loading={recentLoading}
+                      />
+                    ))}
+                  </Slider>
+                </div>
+              )
+            )}
+          
             <Section6 />
-            <div className="list_of_products">
-              {loading ? (
-                <LoadingSkeletonCard
-                  count={secondNumberOfSlides < 1 ? 1 : secondNumberOfSlides}
-                />
-              ) : (
-                releatedProducts &&
-                releatedProducts.length > 0 && (
-                  <React.Fragment>
-                    <h3 className="column_item">محصولات مشابه</h3>
+            
+            {loading ? (
+              <LoadingSkeletonCard
+                count={secondNumberOfSlides < 1 ? 1 : secondNumberOfSlides}
+              />
+            ) : (
+              releatedProducts?.length > 0 && (
+                <div className="list_of_products">
+                  <h4 className="column_item">محصولات مشابه</h4>
 
-                    <Slider
-                      {...setting}
-                      slidesToShow={secondNumberOfSlides}
-                      className="custom_slider"
-                    >
-                      {releatedProducts.map((p, i) => (
-                        <ProductCard key={i} product={p} loading={loading} />
-                      ))}
-                    </Slider>
-                  </React.Fragment>
-                )
-              )}
-            </div>
+                  <Slider
+                    {...setting}
+                    slidesToShow={secondNumberOfSlides}
+                    className="custom_slider"
+                  >
+                    {releatedProducts.map((p, i) => (
+                      <ProductCard key={i} product={p} loading={loading} />
+                    ))}
+                  </Slider>
+                </div>
+              )
+            )}
           </React.Fragment>
         )
       )}

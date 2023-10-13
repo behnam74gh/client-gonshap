@@ -40,7 +40,7 @@ const SubCategoryUpdate = ({ history, match }) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
   };

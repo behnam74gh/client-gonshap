@@ -79,9 +79,9 @@ const ListOfBrands = ({ brands, categories,role }) => {
                 color: "white",
               }}
             >
-              <th className="th-titles">نام برند</th>
-              <th className="th-titles">پشتیبانی از دسته بندیِ</th>
-              <th className="th-titles">برچسب هایِ پشتیبانی</th>
+              <th className="th-titles">نام</th>
+              <th className="th-titles">پشتیبانی از</th>
+              <th className="th-titles">برچسب ها</th>
               <th className="th-titles">ویرایش</th>
               <th className="th-titles">آرمِ برند</th>
             </tr>

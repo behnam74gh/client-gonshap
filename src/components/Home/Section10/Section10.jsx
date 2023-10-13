@@ -75,36 +75,39 @@ const Section10 = () => {
         ) : errorText.length > 0 ? (
           <p className="info-message">{errorText}</p>
         ) : (
-          bestSuggests.length > 0 && (
+          bestSuggests?.length > 0 && (
             <article className="review">
-              <div className="img-container">
-                <img
-                  src={
-                    activeSuggest.writerImage &&
-                    activeSuggest.writerImage.length > 0
-                      ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${activeSuggest.writerImage}`
-                      : defPic
-                  }
-                  alt={`تصویر ${activeSuggest.writerName}`}
-                  className="person-img"
-                />
-                <span className="quote-icon">
-                  <FaQuoteRight />
-                </span>
+              <figure className="img-container">
+                  <img
+                    src={
+                      activeSuggest.writerImage &&
+                      activeSuggest.writerImage.length > 0
+                        ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${activeSuggest.writerImage}`
+                        : defPic
+                    }
+                    alt='عکس'
+                    className="person-img"
+                  />
+                  <span className="quote-icon">
+                    <FaQuoteRight />
+                  </span>
+              </figure>
+              <div className="suggest_tools">
+                <h6 className="suggest_title">مردم چی میگن ؟</h6>
+                <div className="button-container">
+                  <button onClick={nextSuggestHandler}>
+                    <FaChevronRight />
+                  </button>
+                  <strong className="author">
+                    {activeSuggest?.writerName || " ناشناس "}
+                  </strong>
+                  <button onClick={prevSuggestHandler}>
+                    <FaChevronLeft />
+                  </button>
+                </div>
               </div>
-              <h4 className="author">
-                {activeSuggest.writerName && activeSuggest.writerName.length > 0
-                  ? activeSuggest.writerName
-                  : "شخص ناشناس"} میگوید :
-              </h4>
-              <p className="info">{activeSuggest.content}</p>
-              <div className="button-container">
-                <button onClick={nextSuggestHandler}>
-                  <FaChevronRight />
-                </button>
-                <button onClick={prevSuggestHandler}>
-                  <FaChevronLeft />
-                </button>
+              <div className="content_wrapper">
+                <p className="info">{activeSuggest.content}</p>
               </div>
             </article>
           )

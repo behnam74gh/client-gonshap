@@ -38,36 +38,25 @@ const Section14 = () => {
   });
 
   useEffect(() => {
-    if(navigator.onLine){
-      axios
-      .get("/read/company-info")
-      .then((response) => {
-        if (response.data.success) {
-          setCompanyInfo(response.data.companyInfo);
-          
-          setCoordinates({
-            latitude: response.data.companyInfo.latitude,
-            longitude: response.data.companyInfo.longitude,
-          });
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response.data.message);
-        }
-      });
-    }else{
-      db.companyInformation.toArray().then(items => {
-        if(items.length > 0){
-          setCompanyInfo(items[0])
-          setCoordinates({
-            latitude: items[0].latitude,
-            longitude: items[0].longitude,
-          });
-        }
-      })
-    }
-
+    db.companyInformation.toArray().then(items => {
+      if(items.length > 0){
+        setCompanyInfo(items[0])
+        setCoordinates({
+          latitude: items[0].latitude,
+          longitude: items[0].longitude,
+        });
+      }else{
+        axios.get("/read/company-info").then((response) => {
+          if (response.data.success) {
+            setCompanyInfo(response.data.companyInfo);
+            setCoordinates({
+              latitude: response.data.companyInfo.latitude,
+              longitude: response.data.companyInfo.longitude,
+            });
+          }
+        })
+      }
+    })
   }, []);
 
   useEffect(() => {

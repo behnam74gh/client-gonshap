@@ -182,7 +182,7 @@ const CartItem = ({ product }) => {
           <span className="font-sm">تومان</span>
         </div>
         <div className="cart_item_price_wrapper">
-          <span>تخفیف داده شده :</span>
+          <span>مبلغ تخفیف :</span>
           <strong className="cart_item_price_after_discount">
             {(
               ((product.price * product.discount) / 100) *
@@ -191,6 +191,7 @@ const CartItem = ({ product }) => {
           </strong>
           <span className="font-sm">تومان</span>
         </div>
+
         <div className="cart_item_price_wrapper">
           <span>{currentItem.count > 1 ? "قیمت کُل :" : "قیمت نهایی :"}</span>
           <strong className="cart_item_price_after_discount">
@@ -198,6 +199,7 @@ const CartItem = ({ product }) => {
           </strong>
           <span className="font-sm">تومان</span>
         </div>
+        
         <div className="product_count_btns_wrapper">
           <div className="count_controller_wrapper">
             <span onClick={incCartItemCountHandler}>
@@ -219,6 +221,7 @@ const CartItem = ({ product }) => {
             </span>
           </div>
         </div>
+
       </div>
       <div className="item_color_wrapper">
         <div className="select_color_wrapper">
@@ -254,7 +257,6 @@ const CartItem = ({ product }) => {
         </div>
         <div
           className="selected_colors_wrapper"
-          style={{ justifyContent: activeColors.length === 0 && "center" }}
         >
           {activeColors.length > 0 ? (
             activeColors.map((c, i) => {

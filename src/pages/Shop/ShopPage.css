@@ -10,7 +10,7 @@
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
-  gap: 40px 20px;
+  gap: 40px 30px;
   padding: 20px 0;
 }
 .filtering_wrapper {
@@ -84,7 +84,16 @@
   padding: 2px 4px;
 }
 
-@media (max-width: 1060px) {
+@media (max-width: 1300px) {
+  .shop_products_wrapper{
+    gap: 40px 20px;
+  }
+}
+
+@media (max-width: 1190px) {
+  .shop_products_wrapper{
+    gap: 20px;
+  }
   .range_slider_lable {
     flex: 12%;
   }
@@ -146,8 +155,9 @@
 
 @media (max-width: 450px) {
   .shop_products_wrapper {
-    justify-content: space-evenly;
-    gap: 40px 10px;
+    justify-content: space-between;
+    gap: 15px 0px;
+    padding: 10px 0;
   }
   .base_filtering_wrapper select {
     flex: 60%;

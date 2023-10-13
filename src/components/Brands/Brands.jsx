@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Slider from "react-slick";
 import axios from "../../util/axios";
 import { db } from "../../util/indexedDB";
@@ -9,21 +9,32 @@ const Brands = () => {
   const [errorText, setErrorText] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(8);
 
-  useEffect(() => {
-    if (window.innerWidth < 450) {
+  useLayoutEffect(() => {
+     if (window.innerWidth < 450) {
       setNumberOfSlides(4);
-    } else if (window.innerWidth < 800) {
-      setNumberOfSlides(6);
+    } else if (window.innerWidth < 720) {
+      setNumberOfSlides(5);
     }
+  }, [])
 
-    if (navigator.onLine){
+  useEffect(() => {
+   if (navigator.onLine){
       axios
       .get("/get-all-brands")
       .then((response) => {
         if (response.data.success) {
-          setBrands(response.data.brands);
+          const {brands} = response.data
+          setBrands(brands);
           db.brands.clear()
           db.brands.bulkPut(response.data.brands)
+
+          if(window.innerWidth > 720 && brands.length < 8){
+            setNumberOfSlides(Number(brands.length) - 1)
+          }else if (window.innerWidth < 720 && brands.length < 6){
+            setNumberOfSlides(Number(brands.length) - 1)
+          }else if (window.innerWidth < 450 && brands.length < 4){
+            setNumberOfSlides(Number(brands.length) - 1)
+          }
         }
       })
       .catch((err) => {
@@ -56,7 +67,7 @@ const Brands = () => {
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (
-        brands.length > 0 && (
+        brands?.length > 0 && (
           <Slider {...setting} slidesToShow={numberOfSlides}>
             {brands.map((b, i) => (
               <div key={i} className="carousel_brand_img_wrapper">

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-// import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useDispatch } from "react-redux";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
 import { toast } from "react-toastify";
 import axios from "../../../util/axios";
 import Button from "../../../components/UI/FormElement/Button";
-import { UPDATE_DASHBOARD_IMAGE, USER_SIGNIN_SUCCESS } from "../../../redux/Types/authTypes";
+import { UPDATE_DASHBOARD_IMAGE, UPDATE_USER_INFO } from "../../../redux/Types/authTypes";
 import Input from "../../../components/UI/FormElement/Input";
 import { 
   VALIDATOR_MAXLENGTH,
@@ -21,7 +21,7 @@ import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
 
 const UpdateProfileInfo = ({ history }) => {
-  const [expired, setExpired] = useState(false);
+  const [expired, setExpired] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [oldPhoto, setOldPhoto] = useState("");
@@ -53,7 +53,7 @@ const UpdateProfileInfo = ({ history }) => {
     false
   );
 
-  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
+  const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   useEffect(() => {
     setLoading(true);
@@ -108,9 +108,9 @@ const UpdateProfileInfo = ({ history }) => {
   };
   //image-picker-codes
 
-  const changeInputHandler = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+  // const changeInputHandler = (e) => {
+  //   setValues({ ...values, [e.target.name]: e.target.value });
+  // };
 
   const changeRecaptchaHandler = (value) => {
     if (value !== null) {
@@ -144,6 +144,7 @@ const UpdateProfileInfo = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData();
 
@@ -154,7 +155,6 @@ const UpdateProfileInfo = ({ history }) => {
     formData.append("oldPhoto", oldPhoto);
     formData.append("deletedPhoto", deletedPhoto);
     formData.append("photo", file);
-    setLoading(true);
     
     if (!expired) {
       axios
@@ -164,27 +164,44 @@ const UpdateProfileInfo = ({ history }) => {
           if (response.data.success) {
             const { userInfo,message } = response.data;
             toast.success(message);
-            const {firstName,isAdmin,role,isBan,supplierFor,userId,usersImage}=userInfo;
+            const {firstName,role,isBan,supplierFor,userId,avatar}=userInfo;
             setExpired(true);
             dispatch({
-              type: USER_SIGNIN_SUCCESS,
+              type: UPDATE_USER_INFO,
               payload: {
                 firstName,
-                isAdmin,role,isBan,supplierFor,
+                role,
+                isBan,
+                supplierFor,
                 userId,
               },
             });
-            if (localStorage.getItem("gonshapUserInfo")) {
+            dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: avatar });
+
+            if (localStorage.getItem("BZ_User_Info")) {
+              const { csrfToken } = JSON.parse(localStorage.getItem("BZ_User_Info"))
+              
               localStorage.setItem(
-                "gonshapUserInfo",
+                "BZ_User_Info",
                 JSON.stringify({
                   firstName,
-                  isAdmin,role,isBan,supplierFor,
+                  role,
+                  isBan,
+                  supplierFor,
                   userId,
+                  csrfToken
                 })
               );
             }
-            dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: usersImage });
+
+            if (userInfo.role === 1) {
+              history.push("/admin/dashboard/home");
+            } else if (userInfo.role === 2) {
+              history.push('/store-admin/dashboard/home')
+            } else {
+              history.push("/user/dashboard/home");
+            }
+          
           }
         })
         .catch((err) => {
@@ -295,16 +312,17 @@ const UpdateProfileInfo = ({ history }) => {
             ]}
         />
         <label className="auth-label">تصاویر مرتبط را انتخاب کنید : </label>
-        {/* <ReCAPTCHA
+        <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           theme="dark"
           hl="fa"
           className="recaptcha"
-        /> */}
+          onExpired={() => setExpired(true)}
+        />
         <Button
           type="submit"
-          disabled={ loading || !formState.inputs.firstName.isValid || !formState.inputs.lastName.isValid}
+          disabled={ loading || expired || !formState.isValid}
         >
           {!loading ? "ثبت" : <VscLoading className="loader" />}
         </Button>

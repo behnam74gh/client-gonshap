@@ -5,8 +5,11 @@ import { VscLoading } from "react-icons/vsc";
 import axios from "../../util/axios";
 import { Helmet } from "react-helmet";
 import SupplierProducts from "./SupplierProducts";
-import Section13 from "../../components/Home/Section13/Section13";
 import defPic from "../../assets/images/pro-8.png";
+import InstagramLogo from "../../assets/images/instalogo.png";
+import TelegramLogo from "../../assets/images/telegram_PNG11.png";
+import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
+import "../Advertise/AdvertisePage.css"
 import "./SupplierIntroduce.css";
 
 const SupplierIntroduce = ({ match }) => {
@@ -68,31 +71,8 @@ const SupplierIntroduce = ({ match }) => {
         <div className="w-100 d-flex-center-center mt-3">
           <VscLoading className="loader" />
         </div>
-      ) : (
-        supplier &&
-        supplier.photos.length > 1 && (
-          <Slider {...setting}>
-            {supplier.photos.map((p, i) => (
-              <img
-                key={i}
-                src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${p}`}
-                alt={supplier.title}
-                className="supplier_carousel_img"
-              />
-            ))}
-          </Slider>
-        )
-      )}
-      {supplier && supplier.backupFor && (
-        <SupplierProducts backupFor={supplier && supplier.backupFor} />
-      )}
-      <Section13 />
-      {errorText.length > 0 ? (
-        <p className="warning-message">{errorText}</p>
-      ) : (
-        supplier &&
-        supplier._id.length > 0 && (
-          <div className="supplier_information_wrapper">
+      ) : (supplier?.photos?.length > 1 && (
+          <div className="store_info_wrapper">
             <div className="supplier_info_box">
               <div className="info_box">
                 <strong>نام فروشگاه :</strong>
@@ -110,8 +90,82 @@ const SupplierIntroduce = ({ match }) => {
                 <strong>آدرس :</strong>
                 <span>{supplier.address}</span>
               </div>
+              { (supplier?.instagramId?.length > 0 || supplier?.telegramId?.length > 0 || supplier?.whatsupId?.length > 0) &&
+                <div className="social_address_wrapper">
+                <span style={{marginLeft: "auto"}}>ما را دنبال کنید در : </span>
+                {supplier?.instagramId?.length > 0 && <div>
+                  <a
+                    href={`https://instagram.com/${supplier.instagramId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={supplier.title}
+                  >
+                    <img
+                    src={InstagramLogo}
+                    alt="instagram_id"
+                    className="instagram_logo"
+                    style={{width: "25px",height: "25px"}}
+                    />
+                  </a>
+                </div>}
+                {supplier?.telegramId?.length > 0 && <div>
+                  <a
+                    href={`https://telegram.com/${supplier.telegramId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={supplier.title}
+                  >
+                  <img src={TelegramLogo} alt="telegram_id" style={{width: "25px",height: "25px"}} />
+                  </a>
+                </div>}
+                {supplier?.whatsupId?.length > 0 && <div>
+                  <a
+                    href={`https://whatsapp.com/${supplier.whatsupId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={supplier.title}
+                  >
+                  <img src={WhatsappLogo} alt="whatsapp_id" />
+                  </a>
+                </div>}
+              </div>}
             </div>
-
+            <div className="store_carousel_wrapper">
+              <Slider {...setting}>
+                {supplier.photos.map((p, i) => (
+                  <img
+                    key={i}
+                    src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${p}`}
+                    alt={supplier.title}
+                    className="supplier_carousel_img"
+                  />
+                ))}
+              </Slider>
+            </div>
+          </div>
+        )
+      )}
+      {supplier?.backupFor && (
+        <SupplierProducts backupFor={supplier.backupFor} storeName={supplier.title} />
+      )}
+      {errorText.length > 0 ? (
+        <p className="warning-message">{errorText}</p>
+      ) : (supplier?._id?.length > 0 && (
+          <div className="supplier_information_wrapper">
+             <div className="supplier_content_wrapper">
+              <figure>
+                <img
+                  src={
+                    supplier.ownerImage && supplier.ownerImage.length > 0
+                      ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${supplier.ownerImage}`
+                      : defPic
+                  }
+                  alt={supplier.title}
+                  className="owner_img"
+                />
+              </figure>
+              <p>{supplier.description}</p>
+            </div>
             <div className="supplier_location_box">
               <div className="supplier_map">
                 {loading ? (
@@ -137,20 +191,6 @@ const SupplierIntroduce = ({ match }) => {
                   )
                 )}
               </div>
-            </div>
-            <div className="supplier_content_wrapper">
-              <figure>
-                <img
-                  src={
-                    supplier.ownerImage && supplier.ownerImage.length > 0
-                      ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${supplier.ownerImage}`
-                      : defPic
-                  }
-                  alt={supplier.title}
-                  className="owner_img"
-                />
-              </figure>
-              <p>{supplier.description}</p>
             </div>
           </div>
         )

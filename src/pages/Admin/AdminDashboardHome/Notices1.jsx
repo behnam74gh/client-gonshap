@@ -69,6 +69,14 @@ const Notices1 = ({date,setParticularDateHandler}) => {
           )}
         </strong>
       </div>
+
+      {errorText.length > 0 ? <p className="warning-message">{errorText}</p> 
+        : <div className="notice_1">
+            <span>سفارش های جدید :</span>
+            <strong>{newOrdersCount}</strong>
+          </div>
+      }
+
       <DatePicker
         value={date}
         onChange={setDateHandler}
@@ -78,12 +86,6 @@ const Notices1 = ({date,setParticularDateHandler}) => {
         calendarPosition="bottom-right"
         style={{ height: "40px" }}         
       />
-
-      {errorText.length > 0 ? <p className="warning-message">{errorText}</p> 
-        : <div className="notice_1">
-            <span>سفارش های جدید :</span>
-            <strong>{newOrdersCount}</strong>
-          </div>}
     </div>
   );
 };

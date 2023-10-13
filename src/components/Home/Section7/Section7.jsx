@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import axios from "../../../util/axios";
 import { VscArrowLeft } from "react-icons/vsc";
 import Slider from "react-slick";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { db } from "../../../util/indexedDB";
+import {setCountOfSlidersHandler} from '../../../util/customFunctions';
 import "../Section3/Section3.css";
 
 const Section7 = () => {
@@ -22,25 +23,43 @@ const Section7 = () => {
   const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
 
+  useLayoutEffect(() => {
+    if(window.innerWidth < 315){
+      setNumberOfSlides(1)
+    }else if (window.innerWidth < 720) {
+      setNumberOfSlides(2)
+    }else if (window.innerWidth < 1000) {
+      setNumberOfSlides(3)
+    }else {
+      setNumberOfSlides(4)
+    }
+  } , [])
+
   useEffect(() => {
-    axios
-      .get("/get-all-categories")
-      .then((response) => {
-        if (response.data.success) {
-          const { categories } = response.data;
-          if (categories && categories.length > 0) {
-            const activeCategories = categories.filter(c => c.storeProvider !== null)
-            setCategories(activeCategories);
-            setActiveCategory(activeCategories[0]._id);
-            setCategoryErrorText("");
+    db.activeCategories.toArray().then(items => {
+      if(items.length > 0){
+        setCategories(items);
+        setActiveCategory(items[0]._id);
+      }else{
+        axios.get("/get-all-categories")
+        .then((response) => {
+          if (response.data.success) {
+            const { categories } = response.data;
+            if (categories?.length > 0) {
+              const activeCategories = categories.filter(c => c.storeProvider !== null)
+              setCategories(activeCategories);
+              setActiveCategory(activeCategories[0]._id);
+              setCategoryErrorText("");
+            }
           }
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          setCategoryErrorText(err.response.data.message);
-        }
-      });
+        })
+        .catch((err) => {
+          if (err.response) {
+            setCategoryErrorText(err.response.data.message);
+          }
+        });
+      }
+    })
   }, []);
 
   
@@ -59,7 +78,6 @@ const Section7 = () => {
     if (!activeCategory.length > 0) {
       return;
     }
-    const bodyWidth = window.innerWidth;
     setLoading(true);
     axios
       .post("/find/products/by-category-and/order", {
@@ -71,31 +89,7 @@ const Section7 = () => {
         if (response.data.success) {
           const { foundedProducts } = response.data;
           const produtsLength = foundedProducts.length;
-          if (bodyWidth > 1350 && produtsLength >= 4) {
-            setNumberOfSlides(4);
-          } else if (bodyWidth > 1350 && produtsLength < 4) {
-            setNumberOfSlides(produtsLength);
-          } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
-            setNumberOfSlides(3);
-          } else if (
-            bodyWidth < 1350 &&
-            bodyWidth > 910 &&
-            produtsLength === 1
-          ) {
-            setNumberOfSlides(1);
-          }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
-            setNumberOfSlides(2);
-          } else if (
-            bodyWidth < 910 &&
-            bodyWidth > 450 &&
-            produtsLength === 1
-          ) {
-            setNumberOfSlides(1);
-          }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
-            setNumberOfSlides(2)
-          }else{
-            setNumberOfSlides(1)
-          }
+          setNumberOfSlides(setCountOfSlidersHandler(produtsLength));
           setProducts(foundedProducts);
           setErrorText("");
 
@@ -145,8 +139,8 @@ const Section7 = () => {
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (
-        <LoadingSkeletonCard count={numberOfSlides < 1 ? 1 : numberOfSlides} />
-      ) : products && products.length > 0 ? (
+        <LoadingSkeletonCard count={numberOfSlides === 1 ? 1 : numberOfSlides} />
+      ) : products?.length > 0 ? (
         <Slider
           {...setting}
           slidesToShow={numberOfSlides}

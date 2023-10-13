@@ -139,9 +139,10 @@ const CreateTicket = ({ history }) => {
         <label className="auth-label">موضوع تیکت :</label>
         <select
           value={ticketStatus}
+          className="ticket_select"
           onChange={(e) => setTicketStatus(e.target.value)}
         >
-          <option value="none">موضوع تیکت را انتخاب کنید</option>
+          <option value="none">تعیین موضوع</option>
           {defaultStatus.map((s, i) => (
             <option key={i} value={s}>
               {spreadStatusInSelect(s)}

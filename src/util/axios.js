@@ -10,6 +10,12 @@ const instance = axios.create({
 
 instance.defaults.withCredentials = true;
 
+instance.interceptors.request.use(config => {
+  const {userInfo : { csrfToken }} = store.getState().userSignin;
+  config.headers['csrf-token'] = csrfToken ;
+
+  return config;
+})
 instance.interceptors.response.use((response) => response , (error) => {
   if (error.response.status === 401) {
     store.dispatch(kickOut());

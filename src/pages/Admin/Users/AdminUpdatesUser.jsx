@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import ReCAPTCHA from "react-google-recaptcha";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
 import { toast } from "react-toastify";
@@ -11,7 +10,6 @@ import Button from "../../../components/UI/FormElement/Button";
 import "../UpdateProfileInfo/UpdateProfileInfo.css";
 
 const AdminUpdatesUser = ({ match, history }) => {
-  const [expired, setExpired] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [oldPhoto, setOldPhoto] = useState("");
@@ -21,12 +19,9 @@ const AdminUpdatesUser = ({ match, history }) => {
     lastName: "",
     address: "",
     isBanned: "",
-    isAdmin: false,
     role: 3
   });
   const { id } = match.params;
-
-  // const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   useEffect(() => {
     setLoading(true);
@@ -41,7 +36,6 @@ const AdminUpdatesUser = ({ match, history }) => {
             lastName: thisUser.lastName,
             address: thisUser.address ? thisUser.address : "",
             isBanned: thisUser.isBanned,
-            isAdmin: thisUser.isAdmin,
             role: thisUser.role
           });
           thisUser.image ? setOldPhoto(thisUser.image) : setOldPhoto("");
@@ -58,21 +52,6 @@ const AdminUpdatesUser = ({ match, history }) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  // const changeRecaptchaHandler = (value) => {
-  //   if (value !== null) {
-  //     axios
-  //       .post("/recaptcha", { securityToken: value })
-  //       .then((res) => {
-  //         if (res.data.success) {
-  //           setExpired(false);
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         toast.warning(err.response);
-  //       });
-  //   }
-  // };
-
   const deleteOldImageHandler = () => {
     if (oldPhoto.length > 0) {
       setDeletedPhoto(oldPhoto);
@@ -87,33 +66,32 @@ const AdminUpdatesUser = ({ match, history }) => {
       return toast.warning("نام و نام خانوادگی باید وارد شود");
     }
     setLoading(true);
-    if (!expired) {
-      axios
-        .put(`/admin/update/users-profile/${id}`, {
-          firstName: values.firstName,
-          lastName: values.lastName,
-          address: values.address,
-          isBanned: values.isBanned,
-          role: Number(values.role),
-          oldPhoto,
-          deletedPhoto,
-        })
-        .then((response) => {
-          setLoading(false);
-          if (response.data.success) {
-            toast.success(response.data.message);
-            history.goBack();
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          if (typeof err.response.data.message === "object") {
-            toast.error(err.response.data.message[0]);
-          } else {
-            toast.error(err.response.data.message);
-          }
-        });
-    }
+    axios
+    .put(`/admin/update/users-profile/${id}`, {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      address: values.address,
+      isBanned: values.isBanned,
+      role: Number(values.role),
+      oldPhoto,
+      deletedPhoto,
+    })
+    .then((response) => {
+      setLoading(false);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        history.goBack();
+      }
+    })
+    .catch((err) => {
+      setLoading(false);
+      if (typeof err.response.data.message === "object") {
+        toast.error(err.response.data.message[0]);
+      } else {
+        toast.error(err.response.data.message);
+      }
+    });
+    
   };
 
   return (
@@ -125,7 +103,7 @@ const AdminUpdatesUser = ({ match, history }) => {
           <h4 className="mb-0">
             ویرایش اطلاعات کاربر با نام{" "}
             <strong className="text-blue">{`${values.firstName} ${values.lastName}`}</strong>
-            {values.isAdmin && <span className="font-sm mr-1">(مدیریت)</span>}
+            {values.role === 1 && <span className="font-sm mr-1">(مدیریت)</span>}
           </h4>
         )}
         <Link to="/admin/dashboard/users" className="create-new-slide-link">
@@ -201,13 +179,6 @@ const AdminUpdatesUser = ({ match, history }) => {
         </select>}
 
         <label className="auth-label">تصاویر مرتبط را انتخاب کنید : </label>
-        {/* <ReCAPTCHA
-          sitekey={reCaptchaSiteKey}
-          onChange={changeRecaptchaHandler}
-          hl="fa"
-          className="recaptcha"
-          theme="dark"
-        /> */}
         <Button type="submit" disabled={loading}>
           {!loading ? "ثبت" : <VscLoading className="loader" />}
         </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import axios from "../../../util/axios";
 import { VscArrowLeft } from "react-icons/vsc";
 import Slider from "react-slick";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { db } from "../../../util/indexedDB";
+import {setCountOfSlidersHandler} from '../../../util/customFunctions';
 import "../Section3/Section3.css";
 
 const Section9 = () => {
@@ -19,8 +20,20 @@ const Section9 = () => {
   const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
 
+  
+  useLayoutEffect(() => {
+    if(window.innerWidth < 315){
+      setNumberOfSlides(1)
+    }else if (window.innerWidth < 720) {
+      setNumberOfSlides(2)
+    }else if (window.innerWidth < 1000) {
+      setNumberOfSlides(3)
+    }else {
+      setNumberOfSlides(4)
+    }
+  } , [])
+
   useEffect(() => {
-    const bodyWidth = window.innerWidth;
     setLoading(true);
     axios
       .post("/find/products/by-category-and/order", {
@@ -32,31 +45,7 @@ const Section9 = () => {
         if (response.data.success) {
           const { foundedProducts } = response.data;
           const produtsLength = foundedProducts.length;
-          if (bodyWidth > 1350 && produtsLength >= 4) {
-            setNumberOfSlides(4);
-          } else if (bodyWidth > 1350 && produtsLength < 4) {
-            setNumberOfSlides(produtsLength);
-          } else if (bodyWidth < 1350 && bodyWidth > 910 && produtsLength > 1) {
-            setNumberOfSlides(3);
-          } else if (
-            bodyWidth < 1350 &&
-            bodyWidth > 910 &&
-            produtsLength === 1
-          ) {
-            setNumberOfSlides(1);
-          }else if (bodyWidth < 910 && bodyWidth > 450 && produtsLength > 1) {
-            setNumberOfSlides(2);
-          } else if (
-            bodyWidth < 910 &&
-            bodyWidth > 450 &&
-            produtsLength === 1
-          ) {
-            setNumberOfSlides(1);
-          }else if (bodyWidth < 450 && bodyWidth > 320 && produtsLength > 1) {
-            setNumberOfSlides(2)
-          }else{
-            setNumberOfSlides(1)
-          }
+          setNumberOfSlides(setCountOfSlidersHandler(produtsLength));
           setProducts(foundedProducts);
           setErrorText("");
 
@@ -95,11 +84,11 @@ const Section9 = () => {
 
   return (
     <section className="list_of_products">
-      <h1 className="d-flex-center-center my-1 singleTitle">پربازدیدترین محصولات</h1>
+      <h2 className="d-flex-center-center my-1 singleTitle">پربازدیدترین محصولات</h2>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (
-        <LoadingSkeletonCard count={numberOfSlides < 1 ? 1 : numberOfSlides} />
+        <LoadingSkeletonCard count={numberOfSlides === 1 ? 1 : numberOfSlides} />
       ) : products && products.length > 0 ? (
         <Slider
           {...setting}
@@ -118,7 +107,7 @@ const Section9 = () => {
       ) : (
         <p className="warning-message">محصولی وجود ندارد!</p>
       )}
-      {(isOnline && products.length > 0) && <div className="column_item">
+      {(isOnline && products.length > 4) && <div className="column_item">
         <Link
           to={`/shop?all-discounts`}
           onClick={() =>

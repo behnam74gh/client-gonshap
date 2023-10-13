@@ -8,12 +8,12 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_MAXLENGTH,
   VALIDATOR_SPECIAL_CHARACTERS,
-  VALIDATOR_CONSTANTNUMBER,
   VALIDATOR_NUMBER,
 } from "../../../util/validators";
 import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
 import { TiDelete } from "react-icons/ti";
+import { db } from '../../../util/indexedDB';
 import defPic from "../../../assets/images/def.jpg";
 import InstagramLogo from "../../../assets/images/instalogo.png";
 import TelegramLogo from "../../../assets/images/telegram_PNG11.png";
@@ -89,26 +89,34 @@ const Location = () => {
   });
 
   const loadCompanyInfo = () => {
-    axios
-      .get("/read/company-info")
-      .then((response) => {
-        if (response.data.success) {
-          setCompanyInfo(response.data.companyInfo);
-          setCoordinates({
-            latitude: response.data.companyInfo.latitude,
-            longitude: response.data.companyInfo.longitude,
-          });
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrorText(err.response.data.message);
-        }
-      });
-  };
+    axios.get("/read/company-info").then((response) => {
+      if (response.data.success) {
+        setCompanyInfo(response.data.companyInfo);
+        setCoordinates({
+          latitude: response.data.companyInfo.latitude,
+          longitude: response.data.companyInfo.longitude,
+        });
+      }
+    })
+    .catch((err) => {
+      if (err.response) {
+        setErrorText(err.response.data.message);
+      }
+    });
+  }
 
   useEffect(() => {
-    loadCompanyInfo();
+    db.companyInformation.toArray().then(items => {
+      if(items.length > 0){
+        setCompanyInfo(items[0])
+        setCoordinates({
+          latitude: items[0].latitude,
+          longitude: items[0].longitude,
+        });
+      }else{
+        loadCompanyInfo()
+      }
+    })
   }, []);
 
   useEffect(() => {

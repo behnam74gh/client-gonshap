@@ -1,7 +1,6 @@
 const self = this
-// console.log('hi this is my first serviceWorker')
 
-const cacheName = `bazarak-static-v-${1.14}` 
+const cacheName = `bazarak-static-v-${0.01}` 
 
 const HomePageUrls = [
     '/',
@@ -45,6 +44,13 @@ const HomePageUrls = [
     '/static/media/nemad-logo-1.42df37e1cd4303ab272e.png',
     '/static/media/nemad-logo-2.20d2be1a97c7e17a17ff.png',
     '/static/media/nemad-logo-3.77c51e8f9285a99b447f.png',
+    '/static/js/vendors-node_modules_react-icons_tb_index_esm_js.chunk.js',
+    '/static/js/vendors-node_modules_react-icons_si_index_esm_js.chunk.js',
+    '/static/js/src_components_UI_FormElement_Button_js-src_components_UI_FormElement_Input_js-src_util_hooks-fbb426.chunk.js',
+    '/static/js/src_components_Home_Shared_FekeAd_jsx-src_components_UI_Ad_SingleAd_jsx-src_redux_Actions_sho-429d16.chunk.js',
+    '/static/js/src_util_customFunctions_js-src_components_Home_Section3_Section3_css.chunk.js',
+    '/static/js/src_components_Home_Section5_Section5_jsx-src_components_Home_Section8_Section8_jsx-src_compo-7714ab.chunk.js',
+    '/static/js/src_pages_Home_Home_jsx-src_components_UI_FormElement_Input_css.chunk.js',
     '/static/media/Vazir-FD.f7b59344dab12cdd0ff8.woff',
     '/static/media/slick.295183786cd8a1389865.woff',
     '/favicon.ico',
@@ -73,6 +79,7 @@ self.addEventListener('install', e => {
                 '/static/js/src_pages_Product_Product_jsx.chunk.js',
                 '/shop',
                 '/static/js/src_pages_Shop_ShopPage_jsx.chunk.js',
+                '/static/js/src_layout_Layout_jsx.chunk.js',
                 '/static/js/vendors-node_modules_react-icons_lib_esm_index_js-node_modules_react-input-range-rtl_lib_js_i-426034.chunk.js',
             ])
         })
@@ -95,8 +102,7 @@ self.addEventListener('activate', e => {
 })
 
 self.addEventListener('fetch', e => {
-   const inValidMethods = ['POST','PUT','PATCH']
-    if(!inValidMethods.includes(e.request.method)){
+   if(e.request.method === 'GET' && !e.request.url.includes('/uploads/images/')){
         e.respondWith(
             caches.match(e.request)
             .then(response => {
@@ -110,41 +116,3 @@ self.addEventListener('fetch', e => {
     }
     
 })
-
-//push Event will trigger when a notification arrives
-self.addEventListener('push', e => {
-    const DEFAULT_TAG = 'simple-notification';
-    console.log('push event',e);
-    const notifData = e.data.json()
-
-    const title = notifData.notification.title;
-    const options = notifData.notification;
-
-    if(!options.tag){
-        options.tag = DEFAULT_TAG;
-    }
-
-    e.waitUntil(
-       self.registration.showNotification(title,options)
-    )
-})
-
-// self.addEventListener('notificationclick', e => {
-//     console.log(e.notification);
-    
-//     switch(e.action){
-//         case 'download-action':
-//             promiseCahin = clients.openWindow('/');
-//             break;
-//         case 'show-action':
-//             promiseCahin = clients.openWindow('/');
-//             break;
-//         default :
-//         promiseCahin = clients.openWindow('/');
-//         break;
-//     }
-
-//     notification.close()
-
-//     e.waitUntil(promiseCahin)
-// })

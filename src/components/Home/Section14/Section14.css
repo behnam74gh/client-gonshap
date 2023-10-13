@@ -23,9 +23,9 @@
   background-color: #f7f5f5;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 550px) {
   #sec14 {
-    margin: 5px 0 0;
+    margin: 20px 0 0;
   }
   .company_location {
     flex: 100%;
@@ -37,6 +37,12 @@
   }
   #sec14 .auth-form {
     width: 100%;
-    margin: 10px 0 5px;
+    margin: 15px 0 5px;
+  }
+}
+
+@media (max-width: 450px) {
+  .auth-form h5 {
+    margin: 0;
   }
 }

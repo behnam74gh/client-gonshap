@@ -9,6 +9,7 @@ import TelegramLogo from "../../assets/images/telegram_PNG11.png";
 import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
 import defPic from "../../assets/images/pro-8.png";
 import "../Supplier/SupplierIntroduce.css";
+import "./AdvertisePage.css";
 
 const AdvertisePage = ({ match }) => {
   const [loading, setLoading] = useState(false);
@@ -52,7 +53,7 @@ const AdvertisePage = ({ match }) => {
     slidesToScroll: 1,
     pauseOnHover: true,
     arrows: true,
-    // autoplay: true,
+    autoplay: true,
   };
 
   return (
@@ -64,15 +65,70 @@ const AdvertisePage = ({ match }) => {
         <div className="w-100 d-flex-center-center mt-3">
           <VscLoading className="loader" />
         </div>
-      ) : errorText.length > 0 ? (
-        <p className="warning-message">{errorText}</p>
-      ) : (
-        advertise &&
-        advertise.title &&
-        advertise.title.length > 0 && (
-          <div className="supplier_information_wrapper">
-            <div className="w-100 mb-3">
-              {advertise && advertise.photos.length > 1 && (
+      ) : advertise?.title?.length > 0 && (
+          <div className="store_info_wrapper">  
+            <div className="supplier_info_box">
+              <div className="info_box">
+                <strong>نام فروشگاه :</strong>
+                <span>{advertise.title}</span>
+              </div>
+              <div className="info_box">
+                <strong>مالک فروشگاه :</strong>
+                <span>{advertise.owner}</span>
+              </div>
+              <div className="info_box">
+                <strong>شماره تماس مالک :</strong>
+                <span>{advertise.phoneNumber}</span>
+              </div>
+              <div className="info_box">
+              <strong>آدرس فروشگاه :</strong>
+              <span>{advertise.address}</span>
+            </div>
+            {advertise?.storePhoneNumber?.length > 0 && <div className="info_box">
+              <strong>شماره تماس فروشگاه :</strong>
+              <span>{advertise.storePhoneNumber}</span>
+            </div>}
+            <div className="social_address_wrapper">
+              <span style={{marginLeft: "auto"}}>ما را دنبال کنید در : </span>
+              {advertise?.instagramId?.length > 0 && <div>
+                <a
+                  href={`https://instagram.com/${advertise.instagramId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={advertise.title}
+                >
+                  <img
+                  src={InstagramLogo}
+                  alt="instagram_id"
+                  className="instagram_logo"
+                  style={{width: "25px",height: "25px"}}
+                  />
+                </a>
+              </div>}
+              {advertise?.telegramId?.length > 0 && <div>
+                <a
+                  href={`https://telegram.com/${advertise.telegramId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={advertise.title}
+                >
+                <img src={TelegramLogo} alt="telegram_id" style={{width: "25px",height: "25px"}} />
+                </a>
+              </div>}
+              {advertise?.whatsupId?.length > 0 && <div>
+                <a
+                  href={`https://whatsapp.com/${advertise.whatsupId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={advertise.title}
+                >
+                <img src={WhatsappLogo} alt="whatsapp_id" />
+                </a>
+              </div>}
+            </div>
+            </div>
+            <div className="store_carousel_wrapper">
+              {advertise?.photos?.length > 1 && (
                 <Slider {...setting}>
                   {advertise.photos.map((p, i) => (
                     <img
@@ -84,105 +140,53 @@ const AdvertisePage = ({ match }) => {
                   ))}
                 </Slider>
               )}
-            </div>
-            <div className="supplier_info_box">
-              <div className="info_box">
-                <strong>نام فروشگاه :</strong>
-                <span>{advertise.title}</span>
-              </div>
-              <div className="info_box">
-                <strong>مالکِ فروشگاه :</strong>
-                <span>{advertise.owner}</span>
-              </div>
-              <div className="info_box">
-                <strong>شماره تماسِ مالک :</strong>
-                <span>{advertise.phoneNumber}</span>
-              </div>
-              <div className="info_box">
-                <strong>آدرسِ فروشگاه :</strong>
-                <span>{advertise.address}</span>
-              </div>
-              <div className="info_box">
-                <strong>شماره تماسِ فروشگاه :</strong>
-                <span>{advertise.storePhoneNumber}</span>
-              </div>
-              <div className="info_box">
-                <img
-                  src={InstagramLogo}
-                  alt="instagram_id"
-                  className="instagram_logo"
-                />
-                <a
-                  href={`https://instagram.com/${advertise.instagramId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={advertise.title}
-                >
-                  {advertise.instagramId}
-                </a>
-              </div>
-              <div className="info_box">
-                <img src={TelegramLogo} alt="telegram_id" />
-                <a
-                  href={`https://telegram.com/${advertise.telegramId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={advertise.title}
-                >
-                  {advertise.telegramId}
-                </a>
-              </div>
-              <div className="info_box">
-                <img src={WhatsappLogo} alt="whatsapp_id" />
-                <a
-                  href={`https://whatsapp.com/${advertise.whatsupId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={advertise.title}
-                >
-                  {advertise.whatsupId}
-                </a>
-              </div>
-            </div>
-            <div className="supplier_location_box">
-              <div className="supplier_map">
-                {coordinates.latitude && (
-                  <MapContainer
-                    center={[coordinates.latitude, coordinates.longitude]}
-                    zoom={16}
-                    scrollWheelZoom={false}
-                    className="map_supp"
-                  >
-                    <TileLayer
-                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker
-                      position={[coordinates.latitude, coordinates.longitude]}
-                    >
-                      <Popup>{advertise.title}</Popup>
-                    </Marker>
-                  </MapContainer>
-                )}
-              </div>
-            </div>
-            <div className="supplier_content_wrapper">
-              <figure>
-                <img
-                  src={
-                    advertise.ownerImage && advertise.ownerImage.length > 0
-                      ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${advertise.ownerImage}`
-                      : defPic
-                  }
-                  alt={advertise.title}
-                  className="owner_img"
-                />
-              </figure>
-              <p>{advertise.description}</p>
-            </div>
+            </div> 
           </div>
         )
-      )}
+      }
+      {
+        errorText?.length > 0 ? <p className="warning-message">{errorText}</p> : (
+          <div className="supplier_information_wrapper">
+              <div className="supplier_content_wrapper">
+                <figure>
+                  <img
+                    src={
+                      advertise.ownerImage && advertise.ownerImage.length > 0
+                        ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${advertise.ownerImage}`
+                        : defPic
+                    }
+                    alt={advertise.title}
+                    className="owner_img"
+                  />
+                </figure>
+                <p>{advertise.description}</p>
+              </div>
+
+              <div className="supplier_location_box">
+                <div className="supplier_map">
+                  {coordinates.latitude && (
+                    <MapContainer
+                      center={[coordinates.latitude, coordinates.longitude]}
+                      zoom={16}
+                      scrollWheelZoom={false}
+                      className="map_supp"
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker
+                        position={[coordinates.latitude, coordinates.longitude]}
+                      >
+                        <Popup>{advertise.title}</Popup>
+                      </Marker>
+                    </MapContainer>
+                  )}
+                </div>
+              </div>
+          </div>
+        )
+      }
     </div>
   );
 };

@@ -18,6 +18,10 @@ const CartTotalInfo = ({cartItemsInfo}) => {
   const history = useHistory();
 
   const purchaseCheckoutHandler = () => {
+    if(!navigator.onLine) {
+      toast.warn('شما آفلاین هستید')
+      return;
+    }
     let activeCartItems = [];
     let notExistItemsLength = 0;
 
@@ -64,8 +68,8 @@ const CartTotalInfo = ({cartItemsInfo}) => {
           }
         })
         .catch((err) => {
+          setLoading2(false);
           if (err.response) {
-            setLoading2(false);
             toast.warning(err.response.data.message);
           }
         });
@@ -129,7 +133,7 @@ const CartTotalInfo = ({cartItemsInfo}) => {
           {userInfo && userInfo.userId ? (
             <button
               type="button"
-              disabled={!cartItems.length || userInfo.isBan}
+              disabled={!cartItems.length || userInfo.isBan || loading2 || !isOnline}
               onClick={purchaseCheckoutHandler}
               className="modal_btn bg-purple w-45 p-0"
             >

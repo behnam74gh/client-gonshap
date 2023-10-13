@@ -11,7 +11,7 @@ import axios from "../../../util/axios";
 import "./Product.css";
 import { useForm } from "../../../util/hooks/formHook";
 import Input from "../../../components/UI/FormElement/Input";
-import { VALIDATOR_MAX, VALIDATOR_MAXLENGTH, VALIDATOR_MIN, VALIDATOR_MINLENGTH, VALIDATOR_NUMBER, VALIDATOR_SPECIAL_CHARACTERS, VALIDATOR_SPECIAL_CHARACTERS_2 } from "../../../util/validators";
+import { VALIDATOR_MAXLENGTH, VALIDATOR_MINLENGTH, VALIDATOR_SPECIAL_CHARACTERS, VALIDATOR_SPECIAL_CHARACTERS_2 } from "../../../util/validators";
 
 const oldStates = {
   title: "",
@@ -156,7 +156,7 @@ const ProductUpdate = ({ history }) => {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          toast.warn(err.response.data.message);
         }
       });
   };

@@ -15,6 +15,7 @@ import axios from "../../util/axios";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
+  UPDATE_DASHBOARD_IMAGE,
   USER_SIGNIN_FAIL,
   USER_SIGNIN_REQUEST,
   USER_SIGNIN_SUCCESS,
@@ -26,7 +27,7 @@ import "./Signin.css";
 const Signin = ({ history, location }) => {
   const [remindMe, setRemindMe] = useState(false);
   const [error, setError] = useState("");
-
+  
   const [expired, setExpired] = useState(true);
   const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
@@ -106,27 +107,30 @@ const Signin = ({ history, location }) => {
         .then((response) => {
           const { success, message, userInfo, remindMe } = response.data;
           if (success) {
-            roleBasedRedirect(userInfo);
-            const { firstName, isAdmin,role,isBan, userId,supplierFor } = userInfo;
-
+            const { firstName,avatar,role,isBan, userId,supplierFor,csrfToken } = userInfo;
+            
             dispatch({
               type: USER_SIGNIN_SUCCESS,
-              payload: { firstName, isAdmin,role,isBan,supplierFor, userId },
+              payload: { firstName,role,isBan,supplierFor, userId,csrfToken },
             });
+            dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: avatar });
+
             if (remindMe) {
               localStorage.setItem(
-                "gonshapUserInfo",
+                "BZ_User_Info",
                 JSON.stringify({
                   firstName,
-                  isAdmin,
                   role,
                   isBan,
                   supplierFor,
                   userId,
+                  csrfToken
                 })
               );
             }
             toast.success(message);
+
+            roleBasedRedirect(userInfo);
           }
         })
         .catch((err) => {
@@ -147,11 +151,11 @@ const Signin = ({ history, location }) => {
       </Helmet>
       {registered && (
         <h3 className="success-message">
-          تبریک میگم! شما عضو خانواده بازارک شدید.
+          تبریک! شما عضو خانواده بازارک شدید.
         </h3>
       )}
       {history?.location?.state?.from.includes('/product/details/') ? 
-      <span className="text-purple" style={{fontSize: "14px"}}>جهت ثبت دیدگاه یا امتیازدهی به محصول ابتدا باید وارد حساب کاربری شوید</span>
+      <span className="back_to_product_text" style={{fontSize: "14px"}}>جهت ثبت دیدگاه یا امتیازدهی به محصول ابتدا باید وارد حساب کاربری شوید</span>
        :<h4>
         برای <strong className="text-blue">ورود</strong> به حساب، اطلاعات زیر را
         وارد کنید!

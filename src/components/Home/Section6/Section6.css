@@ -26,47 +26,72 @@
 #sec6 img:hover {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
 }
-@media (max-width: 1060px) {
+@media (max-width: 1300px) {
+  #sec6 {
+    margin: 20px 0;
+  }
+  #sec6 img {
+    height: 140px;
+  }
   #sec6 .advertise1 {
-    padding: 30px 0 30px 25px;
+    padding: 0 0 0 15px;
   }
   #sec6 .advertise2 {
-    padding: 30px 15px 30px;
+    padding: 0 10px;
   }
   #sec6 .advertise3 {
-    padding: 30px 25px 30px 0;
+    padding: 0 15px 0 0;
+  }
+}
+
+@media (max-width: 1060px) {
+  #sec6 {
+    margin: 5px 0;
+  }
+  #sec6 .advertise1 {
+    padding: 0 0 0 12px;
+  }
+  #sec6 .advertise2 {
+    padding: 0 0 0 7px;
+  }
+  #sec6 .advertise3 {
+    padding: 0 4px 0 0;
   }
   #sec6 img {
     border-radius: 8px;
+    height: 110px;
   }
 }
+
 @media (max-width: 780px) {
-  #sec6 .advertise1 {
-    padding: 15px 0 15px 12px;
-  }
-  #sec6 .advertise2 {
-    padding: 15px 0 15px 7px;
-  }
-  #sec6 .advertise3 {
-    padding: 15px 4px 15px 0;
-  }
   #sec6 img {
-    max-height: 145px;
+    max-height: 90px;
     border-radius: 6px;
   }
 }
+
+@media (max-width: 550px) {
+  #sec6 {
+    margin: 0;
+  }
+  #sec6 img {
+    max-height: 80px;
+    border-radius: 5px;
+}
+}
+
 @media (max-width: 450px) {
   #sec6 {
     margin: 15px 0 5px;
   }
   #sec6 .advertise1 {
-    padding: 10px 0 10px 4px;
+    padding: 0 0 0 4px;
   }
   #sec6 .advertise2 {
-    padding: 10px 0 10px 2px;
+    padding: 0 0 0 2px;
   }
   #sec6 .advertise3 {
-    padding: 10px 2px 10px 0;
+    padding: 0 2px 0 0;
   }
   #sec6 img {
     border-radius: 3px;

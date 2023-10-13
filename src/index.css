@@ -466,6 +466,12 @@ td {
   }
 }
 
+@media (max-width: 1060px) {
+  .auth-form {
+    width: 90%;
+  }
+}
+
 @media (max-width: 780px) {
   .auth-section {
     width: 80%;

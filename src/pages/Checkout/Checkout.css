@@ -88,7 +88,61 @@
   padding: 5px 10px;
   border-radius: 6px;
 }
+
+@media (max-width: 1190px) {
+  #checkout_page input {
+    font-size: 12px;
+  }
+  #checkout_page hr {
+    margin: 8px 0;
+  }
+  .checkout_info_wrapper h3 {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+  .checkout_item_price{
+    margin: 0;
+  }
+  .checkout_total_price,.finaly_total_price_digit{
+    font-size: 12px;
+  }
+  .attentionNote{
+    font-size: 12px;
+  }
+  .warningNote{
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 930px) {
+  #checkout_page {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 830px) {
+  #checkout_page {
+    min-height: unset;
+  }
+  .attentionNote{
+    font-size: 10px;
+  }
+  .warningNote{
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .finaly_total_price_digit {
+    font-weight: 500;
+  }
+}
+
 @media (max-width: 780px) {
+  .attentionNote{
+    font-size: 12px;
+  }
+  .warningNote{
+    font-size: 12px;
+  }
   #checkout_page {
     margin: 20px 0;
   }

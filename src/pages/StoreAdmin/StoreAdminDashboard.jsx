@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet'
 import StoreAdminRoute from '../../util/routes/StoreAdminRoute'
 import '../Admin/Product/Products.css'
 import '../Admin/Carousel/Carousels.css'
+import "../../components/UI/FormElement/ImageUpload.css";
+import "../../components/UI/FormElement/Input.css"
 
 const StoreAdminDashboardLayout = lazy(() => import('./StoreAdminDashboardLayout'))
 const StoreDashboardHome = lazy(() => import('./StoreDashboardHome/StoreDashboardHome'))

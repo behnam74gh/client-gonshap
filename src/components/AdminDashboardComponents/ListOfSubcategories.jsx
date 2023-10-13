@@ -60,8 +60,8 @@ const ListOfSubcategories = ({
                     <option value="none">جستوجو براساس دسته بندی</option>
                     <option value="all">همه برچسب ها</option>
                     {categories.length > 0 &&
-                      categories.map((c, i) => (
-                        <option key={i} value={c._id}>
+                      categories.map((c) => (
+                        <option key={c._id} value={c._id}>
                           {c.name}
                         </option>
                       ))}
@@ -89,7 +89,7 @@ const ListOfSubcategories = ({
                   <tr key={s._id}>
                     <td className="font-sm">{s.name}</td>
                     <td className="font-sm">
-                      {categories.find((c) => c._id === s.parent).name}
+                      {categories.find((c) => c._id === s.parent)?.name}
                     </td>
                     <td className="font-sm">
                       <Link
