@@ -38,6 +38,7 @@
   color: #ffffff;
   position: relative;
   display: flex;
+  font-size: 14px;
 }
 .auth-dropdown {
   display: none;
@@ -46,7 +47,7 @@
   top: 25px;
   background-color: transparent;
   padding: 12px 0 0;
-  z-index: 110;
+  z-index: 210;
 }
 .wrapper-dropdown {
   background-color: #ffffff;
@@ -267,9 +268,15 @@
     top: 80px;
     right: 40px;
   }
+  .header-wrapper {
+    width: 81%;
+  }
 }
 
 @media (max-width: 450px) {
+  .auth-dropdown a, .auth-dropdown span {
+    padding: 5px 0;
+  }
   .header-feature ul li > a {
     margin: 0 2px;
   }
@@ -312,7 +319,9 @@
   }
 }
 @media (max-width: 290px) {
-  
+  .header-wrapper {
+    width: 78%;
+  }
   .wrapper-dropdown {
     width: 130px;
   }

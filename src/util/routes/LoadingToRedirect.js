@@ -19,11 +19,11 @@ const LoadingToRedirect = () => {
     <div className="gonshap-container">
       <div className="auth-section">
         <h4>
-          کاربر گرامی؛ شما <strong className="text-blue">اجازه دسترسی</strong>{" "}
+        شما <strong className="text-blue mx-1">اجازه دسترسی</strong>
           به این مسیر را ندارید!
         </h4>
         <p className="warning-message">
-          شما به صفحه اصلی بازگردانده خواهید شد پس از {count} ثانیه!
+          شما به صفحه اصلی بازگردانده میشوید پس از {count} ثانیه!
         </p>
       </div>
     </div>

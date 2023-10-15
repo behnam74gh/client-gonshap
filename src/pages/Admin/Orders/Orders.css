@@ -6,3 +6,66 @@
   padding: 2px 4px;
   font-size: 11px;
 }
+.profitWrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.orders_title{
+  margin: 0;
+  font-size: 16px;
+  flex-basis: 50%;
+}
+.profit{
+  flex-basis: 50%;
+  font-size: 14px;
+  background-color: #FFF;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+.profit_number{
+  margin: 0 8px;
+  background-color: var(--firstColorPalete);
+  color: var(--secondColorPalete);
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1060px) {
+  .orders_title{
+    flex-basis: 30%;
+    font-size: 14px;
+  }
+  .profit{
+    flex-basis: 70%;
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 720px) {
+  .profitWrapper {
+    flex-direction: column;
+  }
+  .orders_title{
+    flex-basis: 100%;
+  }
+  .profit{
+    flex-basis: 100%;
+  }
+  .profit_number{
+    margin: 0 6px;
+    padding: 4px 8px;
+  }
+}
+@media (max-width: 450px) {
+  .orders_title{
+    font-size: 12px;
+  }
+  .profit{
+    font-size: 10px;
+    padding: 4px;
+  }
+}

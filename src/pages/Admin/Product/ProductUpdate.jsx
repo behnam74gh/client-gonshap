@@ -15,6 +15,7 @@ import { VALIDATOR_MAXLENGTH, VALIDATOR_MINLENGTH, VALIDATOR_SPECIAL_CHARACTERS,
 
 const oldStates = {
   title: "",
+  factorPrice: "",
   price: "",
   countInStock: "",
   attr1: "",
@@ -96,6 +97,7 @@ const ProductUpdate = ({ history }) => {
       .then((response) => {
         const {
           title,
+          factorPrice,
           price,
           countInStock,
           attr1,
@@ -121,6 +123,7 @@ const ProductUpdate = ({ history }) => {
           setSubcategories(response.data.subcategories);
           setValues({
             title,
+            factorPrice,
             price,
             countInStock,
             attr1,
@@ -341,6 +344,7 @@ const ProductUpdate = ({ history }) => {
 
     formData.append("validHostId", role === 1 ? values.hostId : null);
     formData.append("title", formState.inputs.title.value);
+    formData.append("factorPrice", values.factorPrice);
     formData.append("price", values.price);
     formData.append("discount", values.discount);
     formData.append("finallyPrice", values.finallyPrice);
@@ -543,7 +547,14 @@ const ProductUpdate = ({ history }) => {
               ))}
           </select>
         )}
-        <label className="auth-label"> قیمت کالا (تومان) : </label>
+        {role === 1 && <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>}
+        {role === 1 && <input
+          name="factorPrice"
+          value={values.factorPrice}
+          type="number"
+          onChange={(e) => changeInputHandler(e)}
+        />}
+        <label className="auth-label"> قیمت فروش کالا (تومان) : </label>
         <input
           name="price"
           value={values.price}

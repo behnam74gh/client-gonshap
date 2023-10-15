@@ -12,6 +12,12 @@
   width: 100%;
   max-width: 50px;
 }
+.brand_img_create{
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  max-height: 400px;
+}
 
 @media (max-width: 450px) {
   .brands_wrapper {

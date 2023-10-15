@@ -13,6 +13,7 @@
 #root {
   display: flex;
   flex-flow: column wrap;
+  overflow: hidden;
 }
 body,
 html {
@@ -457,6 +458,19 @@ td {
   cursor: not-allowed !important;
   background-color: #e4e8e4 !important;
 }
+
+.err_boundary_wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-flow: column wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--thirdColorPalete);
+  overflow: hidden;
+}
+
 @keyframes loading {
   0% {
     transform: rotate(0deg);
@@ -477,17 +491,13 @@ td {
     width: 80%;
     margin: 50px auto 30px;
   }
-}
-
-.err_boundary_wrapper {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-flow: column wrap;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--thirdColorPalete);
+  .warning-message {
+    word-break: break-word;
+    white-space: break-spaces;
+  }
+  .err_boundary_wrapper {
+    padding: 0 20px;
+  }
 }
 
 @media (max-width: 450px) {
@@ -530,5 +540,8 @@ td {
     border-radius: 2px;
     padding: 10px;
     font-size: 10px;
+  }
+  .err_boundary_wrapper.info-message {
+    width: 100% !important;
   }
 }

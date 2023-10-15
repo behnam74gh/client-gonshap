@@ -79,7 +79,7 @@ const SearchInput = () => {
                 </li>
               ))
             ) : (
-              <li className="font-sm">موردی وجود ندارد</li>
+              <li className="font-sm">کالایی با این نام وجود ندارد</li>
             )}
           </ul>
         )}

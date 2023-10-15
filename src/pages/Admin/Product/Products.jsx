@@ -7,7 +7,6 @@ import { TiDelete } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
 import { useSelector } from "react-redux";
-
 import axios from "../../../util/axios";
 import Pagination from "../../../components/UI/Pagination/Pagination";
 import defPic from "../../../assets/images/def.jpg";
@@ -572,7 +571,7 @@ const Products = () => {
           <table>
             <thead className="heading-table">
               {role === 1 && <tr>
-                <th colSpan="4">
+                <th colSpan="5">
                   <select
                     value={orderConfig}
                     onChange={(e) => searchProductsByCreated(e.target.value)}
@@ -676,7 +675,7 @@ const Products = () => {
                     <option value="3">20 به بالا</option>
                   </select>
                 </th>
-                <th colSpan="3">
+                <th colSpan={role === 1 ? "4" : "3"}>
                   <select
                     value={activeFilterConfig}
                     onChange={(e) =>
@@ -707,11 +706,12 @@ const Products = () => {
               >
                 <th className="th-titles">تصویر</th>
                 <th className="th-titles">عنوان محصول</th>
-                <th className="th-titles">دسته بندی</th>
+                {role === 1 && <th className="th-titles">دسته بندی</th>}
                 <th className="th-titles">برچسب</th>
                 <th className="th-titles">برند</th>
+                <th className="th-titles">قیمت فاکتور</th>
                 <th className="th-titles">فروش</th>
-                <th className="th-titles">قیمت</th>
+                <th className="th-titles">قیمت فروش</th>
                 <th className="th-titles">تخفیف</th>
                 <th className="th-titles">قیمت نهایی</th>
                 <th className="th-titles">وضعیت ارائه</th>
@@ -742,11 +742,12 @@ const Products = () => {
                         <span className="tooltip_text">
                           کپی کد محصول
                         </span>
-                        {p.title}
+                        {p.title.length > 14 ? `${p.title.substring(0,14)}..` : p.title}
                     </td>
-                    <td className="font-sm">{p.category.name}</td>
+                    {role === 1 && <td className="font-sm">{p.category.name}</td>}
                     <td className="font-sm">{p.subcategory.name}</td>
                     <td className="font-sm">{p.brand.brandName}</td>
+                    <td className="font-sm">{p.factorPrice.toLocaleString("fa")}&nbsp;تومان</td>
                     <td className="font-sm">{p.sold}</td>
                     <td className="font-sm">
                       {p.price.toLocaleString("fa")}&nbsp;تومان

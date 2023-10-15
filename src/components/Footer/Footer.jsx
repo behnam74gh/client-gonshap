@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FiPhoneCall } from "react-icons/fi";
 import { IoIosArrowUp } from "react-icons/io";
 import { HiLocationMarker } from "react-icons/hi";
@@ -10,9 +10,11 @@ import Nemad1 from "../../assets/images/nemad-logo-1.png";
 import Nemad2 from "../../assets/images/nemad-logo-2.png";
 import Nemad3 from "../../assets/images/nemad-logo-3.png";
 import "./Footer.css";
+import { toast } from "react-toastify";
 
 const Footer = ({ companyInfo }) => {
   const [deferredPrompt,setDeferredPrompt] = useState(null);
+  const [alreadyInstalled,setAlreadyInstalled] = useState(false);
 
   const {
     companyTitle,
@@ -35,6 +37,12 @@ const Footer = ({ companyInfo }) => {
     })
   }, [])
   
+  useEffect(() => {
+    if(window.matchMedia('(display-mode: standalone)').matches){
+      setAlreadyInstalled(true)
+    }
+  }, [])
+
   const installBannerHandler = () => {
     if(deferredPrompt !== null){
       deferredPrompt.prompt().then(result => {
@@ -43,7 +51,9 @@ const Footer = ({ companyInfo }) => {
         }
       })
     }else{
-      return
+      setAlreadyInstalled(true)
+      toast.info('قبلا اپلیکیشن را نصب کرده اید')
+      return;
     }
   }
 
@@ -129,11 +139,11 @@ const Footer = ({ companyInfo }) => {
         </a>
       </div>
 
-      <div className="pos-rel">
+      {!alreadyInstalled && <div className="pos-rel">
         <span className="install_app" onClick={installBannerHandler}>
            <MdOutlinePhonelinkSetup color="var(--firstColorPalete)" />
         </span>
-      </div>
+      </div>}
 
       <div className="protection">
         <p className="font-sm">

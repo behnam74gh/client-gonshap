@@ -14,6 +14,7 @@ import {
   VALIDATOR_SPECIAL_CHARACTERS_2
 } from "../../../util/validators";
 import { useForm } from "../../../util/hooks/formHook";
+import './Brands.css'
 
 const BrandUpdate = ({ match, history }) => {
   const [loading, setLoading] = useState(false);
@@ -309,7 +310,7 @@ const BrandUpdate = ({ match, history }) => {
               <img
                 src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${oldPhoto}`}
                 alt="preview"
-                className="profile_img"
+                className="brand_img_create"
               />
             </div>
           ) : (
@@ -321,7 +322,7 @@ const BrandUpdate = ({ match, history }) => {
                 >
                   <TiDelete />
                 </span>
-                <img src={url} alt="preview" className="profile_img" />
+                <img src={url} alt="preview" className="brand_img_create" />
               </div>
             )
           )}

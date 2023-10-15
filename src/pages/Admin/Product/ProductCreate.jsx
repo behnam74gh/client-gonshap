@@ -49,6 +49,10 @@ const ProductCreate = () => {
         value: "",
         isValid: false,
       },
+      factorPrice: {
+        value: "",
+        isValid: false,
+      },
       price: {
         value: "",
         isValid: false,
@@ -309,6 +313,7 @@ const ProductCreate = () => {
     formData.append("attr2", formState.inputs.attr2.value);
     formData.append("attr3", formState.inputs.attr3.value);
     formData.append("description", formState.inputs.description.value);
+    formData.append("factorPrice", formState.inputs.factorPrice.value);
     formData.append("price", formState.inputs.price.value);
     formData.append("discount", values.discount);
     formData.append("finallyPrice", values.finallyPrice);
@@ -480,12 +485,24 @@ const ProductCreate = () => {
                 ))}
             </select>
           )}
-          <label className="auth-label"> قیمت کالا (تومان) : </label>
+          <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>
+          <Input
+            id="factorPrice"
+            element="input"
+            type="number"
+            onInput={inputHandler}
+            validators={[
+              VALIDATOR_MAXLENGTH(10),
+              VALIDATOR_MINLENGTH(6),
+              VALIDATOR_NUMBER(),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+          />
+          <label className="auth-label"> قیمت فروش کالا (تومان) : </label>
           <Input
             id="price"
             element="input"
             type="number"
-            placeholder="1000000 تومان"
             onInput={inputHandler}
             focusHandler={clearFinallyPriceHandler}
             validators={[

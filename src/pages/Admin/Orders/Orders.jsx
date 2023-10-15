@@ -37,6 +37,7 @@ const Orders = () => {
   const [dates, setDates] = useState(
     JSON.parse(localStorage.getItem("orderConfig-date-dash")) ||
   []);
+  const [profit,setProfit] = useState(0)
 
   const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin)
   
@@ -92,8 +93,9 @@ const Orders = () => {
       })
       .then((response) => {
         setLoading(false);
-        const { success, orders, allCount } = response.data;
-        if (success) {
+        if (response.data.success) {
+          const { orders, profitOfOrders, allCount } = response.data;
+          setProfit(profitOfOrders);
           setOrders(orders);
           setOrdersLength(allCount);
           setErrorText("");
@@ -263,7 +265,14 @@ const Orders = () => {
 
   return (
     <div className="admin-panel-wrapper">
-      <h4>سفارش های اخیر</h4>
+      <div className="profitWrapper"> 
+        <h4 className="orders_title">سفارش های اخیر</h4>
+        <span className="profit">
+          سود مجموع سفارش های زیر
+          <strong className="profit_number">{profit.toLocaleString("fa")}</strong>
+          تومان میباشد.
+        </span>
+      </div>
       {errorText.length > 0 && <p className="warning-message">{errorText}</p>}
       {loading ? (
         <VscLoading className="loader" />
@@ -310,7 +319,7 @@ const Orders = () => {
                     <option value="4">رد شده ها</option>
                   </select>
                 </th>
-                <th colSpan={role === 2 ? "2" : "1"}>
+                <th colSpan={role === 2 ? "3" : "2"}>
                   <DatePicker
                     value={dates}
                     onChange={setDateHandler}
@@ -352,7 +361,7 @@ const Orders = () => {
                     <option value={false}>پرداخت نشده ها</option>
                   </select>
                 </th>
-                <th colSpan="2">
+                <th colSpan="3">
                   <select
                     value={orderConfig.activeDeliveryStatus}
                     onChange={(e) =>
@@ -389,12 +398,13 @@ const Orders = () => {
                 <th className="th-titles">تصویر</th>
                 <th className="th-titles">خریدار</th>
                 <th className="th-titles">تلفن همراه</th>
-                <th className="th-titles">شماره سریال</th>
+                <th className="th-titles">کد سفارش</th>
                 <th className="th-titles">وضعیت سفارش</th>
-                <th className="th-titles">هزینه نهایی</th>
+                <th className="th-titles">هزینه سفارش</th>
                 <th className="th-titles">تاریخ سفارش</th>
                 <th className="th-titles">وضعیت ارسال</th>
                 <th className="th-titles">وضعیت پرداخت</th>
+                <th className="th-titles">سود مجموع</th>
                 <th className="th-titles">مشاهده</th>
               </tr>
             </thead>
@@ -488,6 +498,10 @@ const Orders = () => {
                         <option value={true}>پرداخت شد</option>
                         <option value={false}>پرداخت نشد</option>
                       </select>
+                    </td>
+                    <td className="font-sm">
+                      {order.paymentInfo.profit?.toLocaleString("fa")}
+                      &nbsp;تومان
                     </td>
                     <td>
                       <Link to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/order/${order._id}`}>

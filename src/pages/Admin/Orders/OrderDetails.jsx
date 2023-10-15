@@ -105,6 +105,13 @@ const OrderDetails = ({ match }) => {
                   <strong style={{marginBottom: "10px"}}>جزئیات سفارش</strong>
                   <hr style={{marginTop: "5px",marginBottom: "10px",width: "100%",border: "none",margin: "30px 0",borderTop: "1px solid rgba(150,148,148)"}} />
                   <div style={{width: "100%",display: "flex",flexFlow: "row wrap",justifyContent: "space-between",alignItems: "center",margin: "4px 0"}}>
+                    <span>سود سفارش :</span>
+                    <strong>
+                      {order.paymentInfo.profit?.toLocaleString("fa")}
+                      &nbsp;تومان
+                    </strong>
+                  </div>
+                  <div style={{width: "100%",display: "flex",flexFlow: "row wrap",justifyContent: "space-between",alignItems: "center",margin: "4px 0"}}>
                     <span>تاریخ ثبت سفارش :</span>
                     <strong>
                       {new Date(order.createdAt).toLocaleDateString("fa-IR")}
@@ -166,8 +173,10 @@ const OrderDetails = ({ match }) => {
                     <tr>
                       <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>تصویر</th>
                       <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>عنوان</th>
-                      <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>قیمت</th>
+                      <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>قیمت فروش</th>
+                      <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>سود تکی</th>
                       <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>تعداد</th>
+                      <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>سود مجموع</th>
                       <th style={{fontWeight: "500", color: "#ffffff",border: "0", fontSize: "14px",padding: "4px", borderCollapse: "collapse", whiteSpace: "nowrap",wordBreak: 'break-all'}}>رنگ</th>
                     </tr>
                   </thead>
@@ -191,13 +200,15 @@ const OrderDetails = ({ match }) => {
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>
                             <Link
                               to={`/product/details/${item.product._id}`}
-                              style={{color: "2c6df0"}}
+                              style={{color: "#2c6df0",fontWeight: "600"}}
                             >
                               {item.product.title}
                             </Link>
                           </td>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{item.price.toLocaleString("fa")} تومان</td>
+                          <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{item.profit.toLocaleString("fa")} تومان</td>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{item.count}</td>
+                          <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{(item.count * item.profit).toLocaleString("fa")} تومان</td>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>
                             <div style={{display: "flex",flexFlow: "row wrap",justifyContent: "center",alignItems: "center"}}>
                               {item.colors.length > 0 &&

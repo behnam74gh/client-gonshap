@@ -33,6 +33,16 @@ const Navbar = (props) => {
       dispatch(closeSubmenu());
     }
   };
+  const goToPanelHandler = () => {
+    if(!navigator.onLine){
+      toast.warn('شما آفلاین هستید')
+      return;
+    }
+    
+    const url =  userInfo.role === 1 ? "/admin/dashboard/home"
+    : userInfo.role === 2 ? "/store-admin/dashboard/home" : "/user/dashboard/home"
+    history.push(url)
+  }
   const signoutHandler = () => {
     if(!navigator.onLine){
       toast.warn('شما آفلاین هستید')
@@ -79,16 +89,10 @@ const Navbar = (props) => {
                 />
                 <div className="auth-dropdown">
                   <div className="wrapper-dropdown">
-                    <Link
-                      to={
-                        userInfo.role === 1
-                          ? "/admin/dashboard/home"
-                          : userInfo.role === 2 ? "/store-admin/dashboard/home" : "/user/dashboard/home"
-                      }
-                    >
+                    <span onClick={goToPanelHandler}>
                       <MdDashboard />
                       حساب کاربری
-                    </Link>
+                    </span>
                     <span onClick={signoutHandler}>
                       <RiLogoutBoxRLine />
                       خروج از حساب

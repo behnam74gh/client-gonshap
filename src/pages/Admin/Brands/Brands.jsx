@@ -307,7 +307,7 @@ const Brands = () => {
                     >
                       <TiDelete />
                     </span>
-                    <img src={url} alt="preview" className="ticket-img" />
+                    <img src={url} alt="preview" className="brand_img_create" />
                   </div>
                 )}
               </div>

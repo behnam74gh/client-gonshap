@@ -102,7 +102,10 @@ self.addEventListener('activate', e => {
 })
 
 self.addEventListener('fetch', e => {
-   if(e.request.method === 'GET' && !e.request.url.includes('/uploads/images/')){
+    const validDestination = e.request.destination.length > 1;
+    const invalidUrl = e.request.url.includes('/uploads/images/') || e.request.url.includes('/leaflet') || e.request.url.includes('openstreetmap')
+
+    if(e.request.method === 'GET' && !invalidUrl && validDestination){
         e.respondWith(
             caches.match(e.request)
             .then(response => {

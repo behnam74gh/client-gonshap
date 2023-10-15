@@ -81,12 +81,14 @@
 .attentionNote {
   color: var(--firstColorPalete);
   font-weight: 600;
+  font-size: 14px;
 }
 .warningNote {
   color: var(--secondColorPalete);
   background-color: var(--firstColorPalete);
   padding: 5px 10px;
   border-radius: 6px;
+  font-size: 14px;
 }
 
 @media (max-width: 1190px) {
