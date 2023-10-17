@@ -14,7 +14,7 @@ export const advertiseReducer = (state = initialState, action) => {
   switch (type) {
     case ADS_REQUEST:
       return {
-        ...initialState,
+        ...state,
         loading: true,
       };
     case ADS_SUCCESS:
@@ -28,7 +28,7 @@ export const advertiseReducer = (state = initialState, action) => {
       };
     case ADS_FAIL:
       return {
-        ...initialState,
+        ...state,
         loading: false,
       };
     default:

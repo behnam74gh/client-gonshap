@@ -17,7 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import "./ForgotPassword.css";
 import "./Register.css";
 

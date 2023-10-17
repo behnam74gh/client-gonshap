@@ -9,11 +9,11 @@ import axios from "../../util/axios";
 import ProductCard from "../../components/Home/Shared/ProductCard";
 import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCard";
 import Pagination from "../../components/UI/Pagination/Pagination";
-import Section6 from "../../components/Home/Section6/Section6";
+import Section13 from "../../components/Home/Section13/Section13";
 import { toast } from "react-toastify";
 import { db } from "../../util/indexedDB";
 import InputRange from "react-input-range-rtl";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import "react-input-range-rtl/lib/css/index.css";
 import "./ShopPage.css";
 
@@ -525,7 +525,7 @@ const ShopPage = () => {
           isShopPage={true}
         />
       )}
-      <Section6 />
+      <Section13 />
     </section>
   );
 };

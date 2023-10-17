@@ -9,9 +9,9 @@ import TabFeature from "./TabFeature";
 import Section6 from "../../components/Home/Section6/Section6";
 import { toast } from "react-toastify";
 import { CLOSE_STAR_RATING_MODAL } from "../../redux/Types/ratingModalType";
-import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
+import { VscLoading } from "react-icons/vsc";
 import { db } from "../../util/indexedDB";
-import {Helmet} from 'react-helmet'
+import {Helmet} from 'react-helmet-async'
 import { deleteSearchConfig } from "../../redux/Actions/shopActions";
 import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
 import {setCountOfSlidersHandler} from '../../util/customFunctions';
@@ -117,6 +117,11 @@ const Product = ({ match }) => {
           dispatch(deleteSearchConfig());
           dispatch({ type: UNSUBMIT_QUERY });
         }
+
+        if(!window.location.href.includes('/supplier/introduce')){
+          localStorage.removeItem("gonshapSupplierActiveSub");
+          localStorage.removeItem("gonshapSupplierPageNumber");
+        }
       }
   }, [productId,dispatch]);
 
@@ -203,10 +208,9 @@ const Product = ({ match }) => {
         <meta name="description" content={product?.description} />
       </Helmet>
       {loading ? (
-        <React.Fragment>
-          <LoadingSkeleton />
-          <LoadingSkeleton />
-        </React.Fragment>
+       <div className="loader_wrapper">
+        <VscLoading className="loader" fontSize={window.innerWidth < 450 ? 20 : 40} />
+       </div>
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (product?._id?.length > 0 && (

@@ -154,6 +154,9 @@
 }
 
 @media (max-width: 450px) {
+  #shop_page {
+    margin: 10px 0 0;
+  }
   .shop_products_wrapper {
     justify-content: space-between;
     gap: 15px 0px;

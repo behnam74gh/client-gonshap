@@ -10,7 +10,7 @@ import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton
 import Section5 from "../../components/Home/Section5/Section5";
 import Section8 from "../../components/Home/Section8/Section8";
 import { db } from "../../util/indexedDB";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { ReactComponent as EmptyCartSvg } from '../../assets/images/empty_cart.svg'
 import "./CartPage.css";
 
@@ -41,7 +41,7 @@ const CartPage = () => {
         }
       })
     }
-  }, [dispatch,isOnline]);
+  }, [dispatch,isOnline,cartItems]);
 
   useEffect(() => {
     if (deprecatedItems && deprecatedItems.length > 0) {

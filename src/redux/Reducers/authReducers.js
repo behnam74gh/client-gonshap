@@ -6,20 +6,21 @@ import {
   UPDATE_USER_INFO,
   USER_SIGNOUT,
 } from "../Types/authTypes";
+import { getCookie } from '../../util/customFunctions';
+
+const savedInfoData = getCookie('userInfoBZ');
 
 const initialState = {
-  userInfo: localStorage.getItem("BZ_User_Info")
-    ? JSON.parse(localStorage.getItem("BZ_User_Info"))
-    : {
-      firstName: "",
-      userId: "",
-      role: null,
-      isBan: null,
-      supplierFor: null,
-      csrfToken: null
+  userInfo: {
+      firstName: savedInfoData?.firstName || "",
+      userId: savedInfoData?.userId || "",
+      role: savedInfoData?.role || null,
+      isBan: savedInfoData?.isBan || null,
+      supplierFor: savedInfoData?.supplierFor || null,
+      csrfToken: savedInfoData?.csrfToken || null
     },
   loading: false,
-  userImage: "",
+  userImage: savedInfoData?.avatar || "",
 };
 
 export const userSigninReducer = (state = initialState, action) => {

@@ -1,0 +1,117 @@
+#order_status_wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #FFF;
+    border-radius: 8px;
+    padding: 10px;
+    gap: 40px 0;
+    margin-top: 25px;
+}
+.orders_title_wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+.status_wrapper{
+    display: flex;
+    align-items: center;
+}
+.status_of_orders{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.status_info_wrapper{
+    display: flex;
+    align-items: center;
+    gap: 0 10px;
+}
+.status_info{
+    display: flex;
+    flex-direction: column;
+    gap: 5px 0;
+}
+.order_count{
+    font-size: 16px;
+}
+.order_status{
+    font-size: 14px;
+}
+
+/* responsive */
+@media (max-width: 1060px) {
+    .status_info_wrapper svg {
+        width: 50px;
+        height: 50px;
+    }
+    .status_info{
+        gap: 2px 0;
+    }
+    .order_count{
+        font-size: 14px;
+    }
+    .order_status{
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 730px) {
+    #order_status_wrapper {
+        gap: 25px 0;
+        margin-top: 15px;
+        border-radius: 4px;
+    }
+    .status_of_orders {
+        justify-content: space-around;
+    }
+    .orders_title_wrapper{
+        padding: 0 10px;
+    }
+    .orders_title_wrapper h5 {
+        font-size: 12px;
+    }
+    .orders_title_wrapper a {
+        font-size: 10px;
+    }
+    .status_info_wrapper{
+        gap: 0 5px;
+    }
+    .status_info_wrapper svg {
+        width: 35px;
+        height: 35px;
+    }
+    .status_info{
+        gap: 0;
+    }
+    .order_count{
+        font-size: 12px;
+    }
+    .order_status{
+        font-size: 10px;
+    }
+}
+@media (max-width: 450px) {
+    #order_status_wrapper {
+        gap: 15px 0;
+        padding: 10px 5px;
+    }
+    .status_info_wrapper svg {
+        width: 30px;
+        height: 30px;
+    }
+    .status_of_orders {
+        justify-content: space-between;
+    }
+    .orders_title_wrapper > h5 {
+        margin: 0 !important;
+    }
+    .status_info_wrapper {
+        gap: 0 3px;
+    }
+    .order_count{
+        font-size: 10px;
+    }
+}

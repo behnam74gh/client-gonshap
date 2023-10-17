@@ -10,28 +10,37 @@ const Section12 = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const ac = new AbortController()
+    let mounted = true;
     if(navigator.onLine){
       axios
-      .get("/get-all-faqs")
+      .get("/get-all-faqs",{signal: ac.signal})
       .then((response) => {
-        setFaqs(response.data.allFaqs);
-        setActiveAccItem(response.data.allFaqs[0]._id);
-
-        db.faq.clear()
-        db.faq.bulkPut(response.data.allFaqs)
+        if(response.data.success && mounted){
+          setFaqs(response.data.allFaqs);
+          setActiveAccItem(response.data.allFaqs[0]._id);
+          
+          db.faq.clear()
+          db.faq.bulkPut(response.data.allFaqs)
+        }
       })
       .catch((err) => {
-        if (err.response) {
+        if (err.response && mounted) {
           setError(err.response.data.message);
         }
       });
     }else{
       db.faq.toArray().then(items => {
-        if(items.length > 0){
+        if(items.length > 0 && mounted){
           setFaqs(items)
           setActiveAccItem(items[0]._id);
         }
       })
+    }
+
+    return () => {
+      ac.abort()
+      mounted = false;
     }
   }, []);
 

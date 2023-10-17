@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { VscLoading } from "react-icons/vsc";
 import axios from "../../util/axios";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import SupplierProducts from "./SupplierProducts";
 import defPic from "../../assets/images/pro-8.png";
 import InstagramLogo from "../../assets/images/instalogo.png";

@@ -17,7 +17,7 @@ import {
 } from "../../util/validators";
 import { useForm } from "../../util/hooks/formHook";
 import { useSelector } from "react-redux";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import "./Register.css";
 
 const Register = ({ history }) => {

@@ -21,7 +21,8 @@ import {
   USER_SIGNIN_SUCCESS,
 } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
+import { getCookie } from "../../util/customFunctions";
 import "./Signin.css";
 
 const Signin = ({ history, location }) => {
@@ -60,14 +61,14 @@ const Signin = ({ history, location }) => {
     }
   }, [history, userInfo]);
 
-  const roleBasedRedirect = (userInfo) => {
+  const roleBasedRedirect = (role) => {
     let intended = history.location.state;
     if (intended) {
       history.push(intended.from);
     } else {
-      if (userInfo.role === 1) {
+      if (role === 1) {
         history.push("/admin/dashboard/home");
-      } else if (userInfo.role === 2) {
+      } else if (role === 2) {
         history.push('/store-admin/dashboard/home')
       } else {
         history.push("/user/dashboard/home");
@@ -105,32 +106,18 @@ const Signin = ({ history, location }) => {
           saveInfo: remindMe,
         })
         .then((response) => {
-          const { success, message, userInfo, remindMe } = response.data;
-          if (success) {
-            const { firstName,avatar,role,isBan, userId,supplierFor,csrfToken } = userInfo;
+          if (response.data.success) {
+            const { firstName, avatar, role, isBan, userId, supplierFor, csrfToken } =  getCookie('userInfoBZ');
             
             dispatch({
               type: USER_SIGNIN_SUCCESS,
-              payload: { firstName,role,isBan,supplierFor, userId,csrfToken },
+              payload: { firstName, role, isBan, supplierFor, userId, csrfToken },
             });
             dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: avatar });
 
-            if (remindMe) {
-              localStorage.setItem(
-                "BZ_User_Info",
-                JSON.stringify({
-                  firstName,
-                  role,
-                  isBan,
-                  supplierFor,
-                  userId,
-                  csrfToken
-                })
-              );
-            }
-            toast.success(message);
-
-            roleBasedRedirect(userInfo);
+            roleBasedRedirect(role);
+          }else{
+            setError('ارتباط با سرور برقرار نشد')
           }
         })
         .catch((err) => {

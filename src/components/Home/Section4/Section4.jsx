@@ -8,17 +8,29 @@ const Section4 = () => {
   const [companyInfo, setCompanyInfo] = useState({});
 
   useEffect(() => {
+    const ac = new AbortController();
+    let mounted = true;
     db.companyInformation.toArray().then(items => {
-      if(items.length > 0){
+      if(items.length > 0 && mounted){
         setCompanyInfo(items[0])
       }else{
-        axios.get("/read/company-info").then((response) => {
-          if (response.data.success) {
+        axios.get("/read/company-info",{signal: ac.signal}).then((response) => {
+          if (response.data.success && mounted) {
             setCompanyInfo(response.data.companyInfo);
           }
         })
+        .catch(err => {
+          if(err){
+            return;
+          };
+        })
       }
     })
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
   }, []);
 
   return (

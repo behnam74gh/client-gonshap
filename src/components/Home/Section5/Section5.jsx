@@ -33,15 +33,17 @@ const Section5 = () => {
   } , [])
 
   useEffect(() => {
+    const ac = new AbortController();
+    let mounted = true;
     setLoading(true);
     axios
       .post("/find/products/by-category-and/order", {
         order: "discount",
         activeCategory: null,
-      })
+      },{signal: ac.signal})
       .then((response) => {
-        setLoading(false);
-        if (response.data.success) {
+        if (response.data.success && mounted) {
+          setLoading(false);
           const { foundedProducts } = response.data;
           const produtsLength = foundedProducts.length;
           setNumberOfSlides(setCountOfSlidersHandler(produtsLength));
@@ -54,21 +56,28 @@ const Section5 = () => {
         }
       })
       .catch((err) => {
-        setLoading(false)
-        db.discountProducts.toArray()
-        .then(items => {
-          if(items?.length > 0){
-            setProducts(items)
-          }else{
-            if (typeof err.response.data.message === "object") {
-              setErrorText(err.response.data.message[0]);
-              setProducts([]);
+        if(mounted){
+          setLoading(false)
+          db.discountProducts.toArray()
+          .then(items => {
+            if(items?.length > 0){
+              setProducts(items)
+            }else{
+              if (typeof err.response.data.message === "object") {
+                setErrorText(err.response.data.message[0]);
+                setProducts([]);
               } else {
                 setErrorText(err.response.data.message);
               }
-          }
-        })
-      });
+            }
+          })
+        }
+        });
+
+      return () => {
+        ac.abort()
+        mounted = false;
+      }
   }, []);
   
   const setting = {

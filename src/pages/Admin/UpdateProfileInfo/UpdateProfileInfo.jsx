@@ -16,6 +16,7 @@ import {
 } from "../../../util/validators";
 import { useForm } from "../../../util/hooks/formHook";
 import defPro from "../../../assets/images/pro-8.png";
+import { getCookie } from '../../../util/customFunctions';
 import "../../../components/UI/FormElement/ImageUpload.css";
 import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
@@ -162,9 +163,8 @@ const UpdateProfileInfo = ({ history }) => {
         .then((response) => {
           setLoading(false);
           if (response.data.success) {
-            const { userInfo,message } = response.data;
-            toast.success(message);
-            const {firstName,role,isBan,supplierFor,userId,avatar}=userInfo;
+            const { message } = response.data;
+            const {firstName, role, isBan, supplierFor, userId, avatar, csrfToken}= getCookie('userInfoBZ');
             setExpired(true);
             dispatch({
               type: UPDATE_USER_INFO,
@@ -174,29 +174,15 @@ const UpdateProfileInfo = ({ history }) => {
                 isBan,
                 supplierFor,
                 userId,
+                csrfToken
               },
             });
             dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: avatar });
+            toast.success(message);
 
-            if (localStorage.getItem("BZ_User_Info")) {
-              const { csrfToken } = JSON.parse(localStorage.getItem("BZ_User_Info"))
-              
-              localStorage.setItem(
-                "BZ_User_Info",
-                JSON.stringify({
-                  firstName,
-                  role,
-                  isBan,
-                  supplierFor,
-                  userId,
-                  csrfToken
-                })
-              );
-            }
-
-            if (userInfo.role === 1) {
+            if (role === 1) {
               history.push("/admin/dashboard/home");
-            } else if (userInfo.role === 2) {
+            } else if (role === 2) {
               history.push('/store-admin/dashboard/home')
             } else {
               history.push("/user/dashboard/home");

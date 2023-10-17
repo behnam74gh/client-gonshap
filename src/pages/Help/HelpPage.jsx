@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../util/axios";
-import LoadingSuggest from "../../components/UI/LoadingSkeleton/LoadingSuggest";
-import { Helmet } from "react-helmet";
+import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
+import { Helmet } from "react-helmet-async";
 import "./HelpPage.css";
 
 const HelpPage = ({ match }) => {
@@ -32,15 +32,16 @@ const HelpPage = ({ match }) => {
   return (
     <section id="help_page">
       <Helmet>
-        <title>صفحه راهنما</title>
+        <title>{`راهنمای ${help?.title}`}</title>
       </Helmet>
       {loading ? (
-        <LoadingSuggest />
+        <>
+          <LoadingSkeleton />
+          <LoadingSkeleton />
+        </>
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
-      ) : (
-        help._id &&
-        help._id.length > 0 && (
+      ) : (help?._id?.length > 0 && (
           <React.Fragment>
             <h4 className="helpTitle">{help.title}</h4>
             <p className="help_description">{help.description}</p>
@@ -50,7 +51,7 @@ const HelpPage = ({ match }) => {
                   <React.Fragment>
                     <span className="my-2 font-sm">{`مرحله ${i + 1} :`}</span>
                     <img
-                      key={i}
+                      key={i*3}
                       src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${photo}`}
                       alt={help.title}
                       className="mb-3"

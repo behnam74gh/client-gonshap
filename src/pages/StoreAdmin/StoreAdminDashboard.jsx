@@ -1,6 +1,6 @@
 import React,{useEffect,useRef,lazy} from 'react'
 import {Switch,Link} from 'react-router-dom'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import StoreAdminRoute from '../../util/routes/StoreAdminRoute'
 import '../Admin/Product/Products.css'
 import '../Admin/Carousel/Carousels.css'

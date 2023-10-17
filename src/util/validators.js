@@ -216,7 +216,7 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_PHONENUMBER) {
       let validatorTypeIsValid = false;
-      if(/09(1[0-9]|3[0-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/.test(value)){
+      if(/09([0-9]{2})-?[0-9]{3}-?[0-9]{4}/.test(value)){
         validatorTypeIsValid = true;
         errorMessages = errorMessages.filter(item => item.type !== "phoneNumber")
       }else{

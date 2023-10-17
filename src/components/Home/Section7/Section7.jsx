@@ -36,14 +36,16 @@ const Section7 = () => {
   } , [])
 
   useEffect(() => {
+    const ac = new AbortController();
+    let mounted = true;
     db.activeCategories.toArray().then(items => {
-      if(items.length > 0){
+      if(items.length > 0 && mounted){
         setCategories(items);
         setActiveCategory(items[0]._id);
       }else{
-        axios.get("/get-all-categories")
+        axios.get("/get-all-categories",{signal: ac.signal})
         .then((response) => {
-          if (response.data.success) {
+          if (response.data.success && mounted) {
             const { categories } = response.data;
             if (categories?.length > 0) {
               const activeCategories = categories.filter(c => c.storeProvider !== null)
@@ -54,12 +56,17 @@ const Section7 = () => {
           }
         })
         .catch((err) => {
-          if (err.response) {
+          if (err.response && mounted) {
             setCategoryErrorText(err.response.data.message);
           }
         });
       }
     })
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
   }, []);
 
   

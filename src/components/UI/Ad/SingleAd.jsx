@@ -7,16 +7,21 @@ const SingleAd = ({ad}) => {
     const [supplierSlug,setSupplierSlug] = useState(null)
 
     useEffect(() => {
+        let mounted = true;
         const getSupplier = async () => {
             const supplier = await db.supplierList
             .bulkGet([ad.phoneNumber])
         
-            if(supplier[0]?.phoneNumber === ad.phoneNumber){
+            if(supplier[0]?.phoneNumber === ad.phoneNumber && mounted){
                 setIsStoreSupplier(true)
                 setSupplierSlug(supplier[0].slug)
             }
         }
         getSupplier()
+
+        return () => {
+            mounted = false;
+        }
     }, [isStoreSupplier,ad])
 
     return  isStoreSupplier ? (

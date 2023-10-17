@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Typewriter from "typewriter-effect";
 import axios from "../../../util/axios";
-import "./Notices.css";
 import DatePicker,{DateObject} from "react-multi-date-picker";
 import { useSelector } from 'react-redux';
+import "./Notices.css";
 
 const Notices1 = ({date,setParticularDateHandler}) => {
   const [todaysTasks, setTodaysTasks] = useState([]);
@@ -14,31 +14,44 @@ const Notices1 = ({date,setParticularDateHandler}) => {
   const {userInfo : {role,supplierFor}} = useSelector(state => state.userSignin)
 
   useEffect(() => {
+    const ac = new AbortController();
+    let mounted = true;
     axios
-      .get("/get/todays-tasks")
+      .get("/get/todays-tasks",{signal: ac.signal})
       .then((response) => {
-        if (response.data.success) {
+        if (response.data.success && mounted) {
           setTodaysTasks(response.data.tasks);
           setTasksError("");
         }
       })
       .catch((err) => {
-        if (err.response) setTasksError(err.response.data.message);
+        if (err.response && mounted) setTasksError(err.response.data.message);
       });
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
   }, []);
 
   useEffect(() => {
-    axios
-    .post("/new-orders/count",{category: role === 2 ? supplierFor : null})
-    .then((response) => {
-      if (response.data.success) {
-        setNewOrdersCount(response.data.count);
-        setErrorText("");
-      }
-    })
-    .catch((err) => {
-      if (err.response) setErrorText(err.response.data.message);
-    });
+    const ac = new AbortController();
+    let mounted = true;
+    axios.post("/new-orders/count",{category: role === 2 ? supplierFor : null},{signal: ac.signal})
+      .then((response) => {
+        if (response.data.success && mounted) {
+          setNewOrdersCount(response.data.count);
+          setErrorText("");
+        }
+      })
+      .catch((err) => {
+        if (err.response && mounted) setErrorText(err.response.data.message);
+      });
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
   }, [role,supplierFor])
 
   

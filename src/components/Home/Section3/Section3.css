@@ -92,6 +92,9 @@
 }
 
 @media (max-width: 450px) {
+  .list_of_products h2 {
+    font-size: 12px;
+  }
   .column_item {
     margin: 0;
     font-size: 14px;

@@ -65,6 +65,7 @@
   align-items: center;
   margin: 10px 0;
   gap: 0 10px;
+  font-size: 14px;
 }
 .info_box img {
   width: 9%;
@@ -177,7 +178,7 @@
     justify-content: center;
   }
   .info_box {
-    font-size: 13px;
+    font-size: 12px;
     margin: 6px 0;
   }
   .supplier_map {
@@ -247,7 +248,7 @@
     justify-content: end;
   }
   .info_box {
-    font-size: 12px;
+    font-size: 10px;
     justify-content: space-between;
   }
   .supplier_location_box {

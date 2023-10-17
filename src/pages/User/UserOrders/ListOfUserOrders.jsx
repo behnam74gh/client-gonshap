@@ -5,24 +5,31 @@ import Pagination from "../../../components/UI/Pagination/Pagination";
 import LoadingOrderSkeleton from "../../../components/UI/LoadingSkeleton/LoadingOrderSkeleton";
 import "./ListOfUserOrders.css";
 
-const ListOfUserOrders = () => {
+const ListOfUserOrders = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [ordersLength, setOrdersLength] = useState(0);
   const [errorText, setErrorText] = useState("");
   const [page, setPage] = useState(1);
   const [perPage,setPerPage] = useState(12);
+  const [status,setStatus] = useState(0)
 
   useLayoutEffect(() => {
     if(window.innerWidth < 750){
       setPerPage(4)
     }
   }, [])
-
+  
   useEffect(() => {
     setLoading(true);
+    const from = history?.location?.state?.from;
+    let num = 0;
+    if(from !== undefined){
+      num = from.slice(from.length-1,from.length);
+      setStatus(num)
+    }
     axios
-      .post("/fetch/user/all-orders", { page, perPage })
+      .post("/fetch/user/all-orders", {status: +num, page, perPage })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -39,7 +46,11 @@ const ListOfUserOrders = () => {
           setErrorText(err.response.data.message);
         }
       });
-  }, [page, perPage]);
+
+      return () => {
+        setOrdersLength(0)
+      }
+  }, [page, perPage,history]);
 
   return (
     <section id="user_orders_page">
@@ -51,7 +62,7 @@ const ListOfUserOrders = () => {
       ) : orders.length > 0 ? (
         orders.map((order, i) => <SingleOrder key={i} order={order} />)
       ) : (
-        <p className="info-message">سفارشی برای شما ثبت نشده است.</p>
+        <p className="info-message">سفارش {status === 1 ? "جاری" : status === 3 ? "ناموفق" : "تحویل شده"} برای شما ثبت نشده است.</p>
       )}
       {ordersLength > perPage && (
         <Pagination

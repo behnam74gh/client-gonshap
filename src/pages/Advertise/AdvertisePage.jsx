@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { VscLoading } from "react-icons/vsc";
 import axios from "../../util/axios";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import InstagramLogo from "../../assets/images/instalogo.png";
 import TelegramLogo from "../../assets/images/telegram_PNG11.png";
 import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
@@ -59,7 +59,7 @@ const AdvertisePage = ({ match }) => {
   return (
     <div id="advertise_page">
       <Helmet>
-        <title>{advertise?.title}</title>
+        <title>{`فروشگاه ${advertise?.title}`}</title>
       </Helmet>
       {loading ? (
         <div className="w-100 d-flex-center-center mt-3">

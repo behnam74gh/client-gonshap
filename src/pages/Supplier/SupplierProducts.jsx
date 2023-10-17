@@ -85,8 +85,10 @@ const SupplierProducts = ({ backupFor,storeName }) => {
 
   useEffect(() => {
     return () => {
-      localStorage.removeItem("gonshapSupplierActiveSub");
-      localStorage.removeItem("gonshapSupplierPageNumber");
+      if(!window.location.href.includes('/product/details')){
+        localStorage.removeItem("gonshapSupplierActiveSub");
+        localStorage.removeItem("gonshapSupplierPageNumber");
+      }
     };
   }, []);
 

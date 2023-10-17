@@ -4,7 +4,7 @@ import axios from "../../util/axios";
 import CheckoutForms from "./CheckoutForms";
 import CheckoutHistory from "./CheckoutHistory";
 import { useSelector } from "react-redux";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import "../CartPage/CartPage"
 import "./Checkout.css";
 

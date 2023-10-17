@@ -11,12 +11,14 @@ const SupplierSlider = () => {
   const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
+    const ac = new AbortController()
+    let mounted = true;
     setLoading(true);
     axios
-      .get("/all-suppliers")
+      .get("/all-suppliers",{signal: ac.signal})
       .then((response) => {
-        setLoading(false);
-        if (response.data.success) {
+        if (response.data.success && mounted) {
+          setLoading(false);
           const activeSuppliers = response.data.allSuppliers.filter(s => !s.isBan)
           setSuppliers(activeSuppliers);
           setErrorText("");
@@ -26,14 +28,21 @@ const SupplierSlider = () => {
         }
       })
       .catch((err) => {
-        setLoading(false);
-        db.supplierList.toArray().then(items => {
-          setSuppliers(items)
-        })
-        if (err.response) {
-          setErrorText(err.response.data.message);
+        if(mounted){
+          setLoading(false);
+          db.supplierList.toArray().then(items => {
+            setSuppliers(items)
+          })
+          if (err.response) {
+            setErrorText(err.response.data.message);
+          }
         }
       });
+
+      return () => {
+        ac.abort()
+        mounted = false;
+      }
   }, []);
 
   const setting = {
@@ -51,10 +60,7 @@ const SupplierSlider = () => {
   return (
     <div id="supplier_wrapper">
       {loading ? (
-        <React.Fragment>
-          <LoadingSkeleton />
-          <LoadingSkeleton />
-        </React.Fragment>
+        <LoadingSkeleton NumHeight={window.innerWidth > 450 && 320} />
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (

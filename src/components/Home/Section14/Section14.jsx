@@ -38,16 +38,18 @@ const Section14 = () => {
   });
 
   useEffect(() => {
+    const ac = new AbortController()
+    let mounted = true;
     db.companyInformation.toArray().then(items => {
-      if(items.length > 0){
+      if(items.length > 0 && mounted){
         setCompanyInfo(items[0])
         setCoordinates({
           latitude: items[0].latitude,
           longitude: items[0].longitude,
         });
       }else{
-        axios.get("/read/company-info").then((response) => {
-          if (response.data.success) {
+        axios.get("/read/company-info",{signal: ac.signal}).then((response) => {
+          if (response.data.success && mounted) {
             setCompanyInfo(response.data.companyInfo);
             setCoordinates({
               latitude: response.data.companyInfo.latitude,
@@ -55,8 +57,18 @@ const Section14 = () => {
             });
           }
         })
+        .catch(err => {
+          if(err){
+            return;
+          };
+        })
       }
     })
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
   }, []);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
 import axios from "../../util/axios";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import CompareItem from "./CompareItem";
 import "./ComparePage.css";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 import Section1 from "../../components/Home/Section1/Section1";
 import Section3 from "../../components/Home/Section3/Section3";
@@ -19,6 +19,7 @@ import "../Supplier/SupplierIntroduce.css";
 import "./Home.css";
 
 const Home = () => {
+
   return (
     <React.Fragment>
       <Helmet>

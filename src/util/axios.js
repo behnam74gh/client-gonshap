@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const instance = axios.create({
   baseURL: `${process.env.REACT_APP_GONSHAP_BASE_URL}`,
-  withCredentials:true
+  withCredentials:true,
 });
 
 instance.defaults.withCredentials = true;
@@ -17,7 +17,7 @@ instance.interceptors.request.use(config => {
   return config;
 })
 instance.interceptors.response.use((response) => response , (error) => {
-  if (error.response.status === 401) {
+  if (error?.response?.status === 401) {
     store.dispatch(kickOut());
     toast.warn(error.response.data.message)
     throw error;

@@ -9,7 +9,7 @@ import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCar
 import Section11 from "../../components/Home/Section11/Section11";
 import Section5 from "../../components/Home/Section5/Section5";
 import { db } from "../../util/indexedDB";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import {ReactComponent as EmptyFavoriteSvg} from '../../assets/images/empty_favorites.svg'
 import "./MyFavoritePage.css";
 
@@ -28,7 +28,7 @@ const MyFavoritePage = () => {
     favoriteItemsInfo,
     deprecatedFavoriteItems,
   } = favorites;
-
+  
   useEffect(() => {
     if (isOnline && navigator.onLine){
       dispatch(upgradeFavoriteItems());
@@ -41,7 +41,7 @@ const MyFavoritePage = () => {
       })
     }
    
-  }, [dispatch,isOnline]);
+  }, [dispatch,isOnline,favoriteItems]);
 
   useEffect(() => {
     if (deprecatedFavoriteItems && deprecatedFavoriteItems.length > 0) {
@@ -62,7 +62,7 @@ const MyFavoritePage = () => {
         {favoriteItems?.length < 1 && <EmptyFavoriteSvg style={{maxWidth: "250px"}} />}
       </div>
       {favoriteItems?.length > 0 ?
-        <span style={{display: "block"}} className="info-message">شما تعداد {favoriteItems.length} محصول را پسندیده اید</span> :
+        <span style={{display: "block",fontSize: "14px"}}>شما تعداد {favoriteItems.length} محصول را پسندیده اید</span> :
         <span style={{display: "block"}} className="warning-message">شما محصولی را پسند نکرده اید</span>
       }
       <div className="my_favorites_wrapper">

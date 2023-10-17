@@ -28,22 +28,30 @@ const AreaChartComponent = ({date}) => {
   }, []);
 
   useEffect(() => {
+    const ac = new AbortController();
+    let mounted = true;
     setLoading(true);
     axios
-      .post("/orders/per-day/area-chart",{category: role === 2 ? supplierFor : null,dateValue: date})
+      .post("/orders/per-day/area-chart",
+      {category: role === 2 ? supplierFor : null,dateValue: date},{signal: ac.signal})
       .then((response) => {
-        setLoading(false);
-        if (response.data.success) {
+        if (response.data.success && mounted) {
+          setLoading(false);
           setOrderDays(response.data.daysOrders);
           setErrorText("");
         }
       })
       .catch((err) => {
-        setLoading(false);
-        if (err.response) {
+        if (err.response && mounted) {
+          setLoading(false);
           setErrorText(err.response.data.message);
         }
       });
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
   }, [date,role,supplierFor]);
 
   return (

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import LastTicket from "./LastTicket";
 import UserInfo from "./UserInfo";
-import LastOrder from "./LastOrder";
+import OrderStatus from "./OrderStatus";
 import Button from '../../../components/UI/FormElement/Button'
 import UserAds from "./UserAds";
 import "./UserDashboardHome.css";
@@ -18,8 +18,7 @@ const UserDashboardHome = () => {
         {role === 2 && <Button to='/store-admin/dashboard/home'>پنل فروشگاه</Button>}
       </div>
       <UserInfo />
-      <h5 className="w-100">آخرین خرید شما</h5>
-      <LastOrder />
+      <OrderStatus />
       <UserAds />
       <h5 className="w-100">آخرین تیکت شما</h5>
       <LastTicket />

@@ -14,13 +14,15 @@ const Section10 = () => {
   const [activeSuggest, setActiveSuggest] = useState({});
 
   useEffect(() => {
+    const ac = new AbortController()
+    let mounted = true;
     if(navigator.onLine){
       setLoading(true);
       axios
-      .get("/fetch/best-suggests")
+      .get("/fetch/best-suggests",{signal: ac.signal})
       .then((response) => {
-        setLoading(false);
-        if (response.data.success) {
+        if (response.data.success && mounted) {
+          setLoading(false);
           setBestSuggests(response.data.suggests);
           setErrorText("");
 
@@ -29,18 +31,23 @@ const Section10 = () => {
         }
       })
       .catch((err) => {
-        setLoading(false);
-        if (err.response) {
+        if (err.response && mounted) {
+          setLoading(false);
           setErrorText(err.response.data.message);
         }
       });
     }else{
       db.suggests.toArray().then(items => {
-        if(items.length > 0){
+        if(items.length > 0 && mounted){
           setBestSuggests(items)
           setErrorText("")
         }
       })
+    }
+
+    return () => {
+      ac.abort()
+      mounted = false;
     }
   }, []);
 

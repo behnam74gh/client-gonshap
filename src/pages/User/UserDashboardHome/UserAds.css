@@ -22,7 +22,7 @@
 
 .table_img{
     width: 40px;
-    height: 40px;
+    max-height: 40px;
 }
 
 @media (max-width: 1050px) {
