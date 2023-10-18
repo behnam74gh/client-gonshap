@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdEdit,MdOutlineToggleOn,MdToggleOff } from "react-icons/md";
 import { RiSearchLine, RiDeleteBin2Fill } from "react-icons/ri";
 import { HiBadgeCheck } from "react-icons/hi";
 import { TiDelete } from "react-icons/ti";
@@ -432,14 +432,14 @@ const Products = () => {
     indexOfLastProducts
   );
 
-  const removeProductHandler = (_id, title) => {
+  const toggleProductSellHandler = (_id, sell, title) => {
     if (
       window.confirm(
-        `میخواهید محصول با عنوان "${title}" را از فهرست کالاهای قابل فروش بردارید؟`
+        `میخواهید محصول با عنوان "${title}" را ${sell ? "از فهرست کالاهای قابل فروش بردارید" : "به حالت امکان فروش برگردانید"}؟`
       )
     ) {
       axios
-        .put(`/product/delete`, { _id })
+        .put('/product/sell/toggle', { _id,sell })
         .then((response) => {
           if (response.data.success) {
             toast.success(response.data.message);
@@ -789,9 +789,9 @@ const Products = () => {
                     <td className="font-sm">
                       {p.colors.length > 0 && (
                         <div className="products_active_colors">
-                          {p.colors.map((c, i) => (
+                          {p.colors.map((c) => (
                             <span
-                              key={i}
+                              key={c._id}
                               style={{ background: `#${c.colorHex}` }}
                             ></span>
                           ))}
@@ -807,25 +807,12 @@ const Products = () => {
                       </Link>
                     </td>
                     <td>
-                      {p.sell ? (
-                        <span
-                          className="d-flex-center-center"
-                          onClick={() => removeProductHandler(p._id, p.title)}
-                        >
-                          <MdDelete className="text-red" />
-                        </span>
-                      ) : (
-                        <span
-                          className="d-flex-center-center"
-                          onClick={() =>
-                            toast.warning(
-                              "این محصول قبلا به وضعیت ارائه نمیشود تغییر کرده است!"
-                            )
-                          }
-                        >
-                          <RiDeleteBin2Fill />
-                        </span>
-                      )}
+                      <span
+                        className="d-flex-center-center"
+                        onClick={() => toggleProductSellHandler(p._id,p.sell, p.title)}
+                      >
+                        {p.sell ? <MdToggleOff className="text-blue" /> : <MdOutlineToggleOn className="text-red" /> }
+                      </span>
                     </td>
                   </tr>
                 ))

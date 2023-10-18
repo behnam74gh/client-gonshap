@@ -47,13 +47,14 @@
 .rahnama-dropdown a {
   display: block;
   font-size: 12px;
-  padding: 5px 10px 0 0;
+  padding: 5px 0;
   transition: all 0.3s ease-in-out;
   color: #000;
-  text-align: right;
+  text-align: center;
 }
 .rahnama-dropdown a:hover {
-  padding-right: 18px;
+  color: var(--thirdColorPalete);
+  text-decoration: underline;
 }
 
 @media (max-width: 1060px) {
