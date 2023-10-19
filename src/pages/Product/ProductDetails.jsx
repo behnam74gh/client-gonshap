@@ -301,9 +301,9 @@ const ProductDetails = ({
             <span className="question_info">رنگ ها : </span>
             <div className="answer_info">
               {colors.length > 0 &&
-                colors.map((c, i) => (
+                colors.map((c) => (
                   <span
-                    key={i}
+                    key={c._id}
                     style={{ background: `#${c.colorHex}` }}
                     className="tooltip"
                   >

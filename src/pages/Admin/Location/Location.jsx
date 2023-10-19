@@ -396,7 +396,7 @@ const Location = () => {
               />
               <Button
                 type="submit"
-                disabled={loading || !formState.isValid || file === undefined}
+                disabled={loading || !formState.inputs.aboutUs.isValid || file === undefined}
               >
                 {!loading ? "ثبت" : <VscLoading className="loader" />}
               </Button>

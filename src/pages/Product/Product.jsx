@@ -15,6 +15,7 @@ import {Helmet} from 'react-helmet-async'
 import { deleteSearchConfig } from "../../redux/Actions/shopActions";
 import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
 import {setCountOfSlidersHandler} from '../../util/customFunctions';
+import RecentViews from "./RecentViews";
 import "../../components/Home/Section3/Section3.css";
 import "./Product.css";
 
@@ -22,12 +23,9 @@ const Product = ({ match }) => {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState(null);
   const [errorText, setErrorText] = useState("");
-  const [recentViewserror, setRecentViewsError] = useState("");
   const [commentsError, setCommentsError] = useState("");
   const [releatedProducts, setReleatedProducts] = useState([]);
   const [commentList, setCommentList] = useState([]);
-  const [recentLoading, setRecentLoading] = useState(false);
-  const [recentViews, setRecentViews] = useState([]);
   const [numberOfSlides, setNumberOfSlides] = useState(4);
   const [secondNumberOfSlides, setSecondNumberOfSlides] = useState(4);
   const [starValue, setStarValue] = useState({
@@ -108,53 +106,23 @@ const Product = ({ match }) => {
       });
     }
 
-      return () => {
-        setStarValue({
-          star: 0,
-          productId: "",
-        })
-        if(!window.location.href.includes('/shop')){
-          dispatch(deleteSearchConfig());
-          dispatch({ type: UNSUBMIT_QUERY });
-        }
-
-        if(!window.location.href.includes('/supplier/introduce')){
-          localStorage.removeItem("gonshapSupplierActiveSub");
-          localStorage.removeItem("gonshapSupplierPageNumber");
-        }
+    return () => {
+      setStarValue({
+        star: 0,
+        productId: "",
+      })
+      if(!window.location.href.includes('/shop')){
+        dispatch(deleteSearchConfig());
+        dispatch({ type: UNSUBMIT_QUERY });
       }
+
+      if(!window.location.href.includes('/supplier/introduce')){
+        localStorage.removeItem("gonshapSupplierActiveSub");
+        localStorage.removeItem("gonshapSupplierPageNumber");
+      }
+    }
   }, [productId,dispatch]);
 
-  useEffect(() => {
-    if (userInfo?.userId?.length > 0 && navigator.onLine) {
-      setRecentLoading(true);
-      axios
-        .put(`/current-user/recent-views/upgrade/${userInfo.userId}`, {
-          productId,
-        })
-        .then((response) => {
-          setRecentLoading(false);
-          const { success, recentViewsProducts } = response.data;
-          const activeRecentViewsProducts = recentViewsProducts.filter(
-            (p) => p._id !== productId
-          );
-          if (success) {
-            const produtsLength = activeRecentViewsProducts.length;
-            setNumberOfSlides(setCountOfSlidersHandler(produtsLength))
-            setRecentViews(activeRecentViewsProducts);
-            setRecentViewsError("");
-          }
-        })
-        .catch((err) => {
-          setRecentLoading(false);
-          if (typeof err.response.data.message === "object") {
-            setRecentViewsError(err.response.data.message[0]);
-          } else {
-            setRecentViewsError(err.response.data.message);
-          }
-        });
-    }
-  }, [productId, userInfo]);
 
   const setting = {
     dots: false,
@@ -230,56 +198,30 @@ const Product = ({ match }) => {
               productDetails={product.details}
             />
             
-            {recentViewserror.length > 0 ? (
-              <p className="warning-message">{recentViewserror}</p>
-            ) : recentLoading ? (
-              <LoadingSkeletonCard
-                count={numberOfSlides === 1 ? 1 : numberOfSlides}
-              />
-            ) : (recentViews?.length > 0 && (
-              <div className="list_of_products">
-                  <h3 className="column_item">بازدید های اخیر</h3>
+            <RecentViews numberOfSlides={numberOfSlides} productId={productId} setNumberOfSlides={setNumberOfSlides} />
 
-                  <Slider
-                    {...setting}
-                    slidesToShow={numberOfSlides}
-                    className="custom_slider"
-                  >
-                    {recentViews.map((p, i) => (
-                      <ProductCard
-                        key={i}
-                        product={p}
-                        loading={recentLoading}
-                      />
-                    ))}
-                  </Slider>
-                </div>
-              )
-            )}
-          
             <Section6 />
-            
-            {loading ? (
-              <LoadingSkeletonCard
-                count={secondNumberOfSlides < 1 ? 1 : secondNumberOfSlides}
-              />
-            ) : (
-              releatedProducts?.length > 0 && (
-                <div className="list_of_products">
-                  <h4 className="column_item">محصولات مشابه</h4>
-
+  
+            <div className="list_of_products">
+              <h4 className="column_item">محصولات مشابه</h4>
+              {
+                loading ? (
+                  <LoadingSkeletonCard
+                    count={secondNumberOfSlides < 1 ? 1 : secondNumberOfSlides}
+                  />
+                ) : releatedProducts?.length > 0 ? (
                   <Slider
                     {...setting}
                     slidesToShow={secondNumberOfSlides}
                     className="custom_slider"
                   >
-                    {releatedProducts.map((p, i) => (
-                      <ProductCard key={i} product={p} loading={loading} />
+                    {releatedProducts.map((p) => (
+                      <ProductCard key={p._id} product={p} />
                     ))}
                   </Slider>
-                </div>
-              )
-            )}
+                ) : null
+              }
+            </div>
           </React.Fragment>
         )
       )}

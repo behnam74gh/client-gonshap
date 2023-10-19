@@ -9,6 +9,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { db } from "../../../util/indexedDB";
 import {setCountOfSlidersHandler} from '../../../util/customFunctions';
+import { useInView } from "react-intersection-observer";
 import "../Section3/Section3.css";
 
 const Section7 = () => {
@@ -19,9 +20,11 @@ const Section7 = () => {
   const [categoryErrorText, setCategoryErrorText] = useState("");
   const [activeCategory, setActiveCategory] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(4);
+  const [isViewed,setIsviewed] = useState(false);
 
   const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
+  const {ref, inView} = useInView({threshold: 0});
 
   useLayoutEffect(() => {
     if(window.innerWidth < 315){
@@ -38,55 +41,58 @@ const Section7 = () => {
   useEffect(() => {
     const ac = new AbortController();
     let mounted = true;
-    db.activeCategories.toArray().then(items => {
-      if(items.length > 0 && mounted){
-        setCategories(items);
-        setActiveCategory(items[0]._id);
-      }else{
-        axios.get("/get-all-categories",{signal: ac.signal})
-        .then((response) => {
-          if (response.data.success && mounted) {
-            const { categories } = response.data;
-            if (categories?.length > 0) {
-              const activeCategories = categories.filter(c => c.storeProvider !== null)
-              setCategories(activeCategories);
-              setActiveCategory(activeCategories[0]._id);
-              setCategoryErrorText("");
+    if(inView && !isViewed){
+      db.activeCategories.toArray().then(items => {
+        if(items.length > 0 && mounted){
+          setCategories(items);
+          setActiveCategory(items[0]._id);
+        }else{
+          axios.get("/get-all-categories",{signal: ac.signal})
+          .then((response) => {
+            if (response.data.success && mounted) {
+              const { categories } = response.data;
+              if (categories?.length > 0) {
+                const activeCategories = categories.filter(c => c.storeProvider !== null)
+                setCategories(activeCategories);
+                setActiveCategory(activeCategories[0]._id);
+                setCategoryErrorText("");
+              }
             }
-          }
-        })
-        .catch((err) => {
-          if (err.response && mounted) {
-            setCategoryErrorText(err.response.data.message);
-          }
-        });
-      }
-    })
+          })
+          .catch((err) => {
+            if (err.response && mounted) {
+              setCategoryErrorText(err.response.data.message);
+            }
+          });
+        }
+      })
+    }
 
     return () => {
       ac.abort()
       mounted = false;
     }
-  }, []);
+  }, [inView]);
 
   
   useEffect(() => {
-    if(!navigator.onLine){
+    if(inView && !isViewed && !navigator.onLine){
       db.soldProducts.toArray()
       .then(items => {
         if(items?.length > 0){
           setProducts(items)
         }
       })
-    }
-  }, [])
+  }
+  }, [inView])
 
   useEffect(() => {
     if (!activeCategory.length > 0) {
       return;
     }
-    setLoading(true);
-    axios
+    if(inView && !isViewed){
+      setLoading(true);
+      axios
       .post("/find/products/by-category-and/order", {
         order: "sold",
         activeCategory,
@@ -115,7 +121,10 @@ const Section7 = () => {
           setErrorText(err.response.data.message);
         }
       });
-  }, [activeCategory]);
+
+      setIsviewed(true);
+    }
+  }, [activeCategory,inView]);
 
   const changeCategoryHandler = (id) => {
     setActiveCategory(id);
@@ -132,7 +141,7 @@ const Section7 = () => {
   };
 
   return (
-    <section className="list_of_products">
+    <section ref={ref} className="list_of_products">
 
       <div className="column_item">
         <h1>پرفروشترین محصولات</h1>
@@ -153,11 +162,10 @@ const Section7 = () => {
           slidesToShow={numberOfSlides}
           className="custom_slider"
         >
-          {products.map((p, i) => (
+          {products.map((p) => (
             <ProductCard
-              key={i}
+              key={p._id}
               product={p}
-              loading={loading}
               showSold={true}
             />
           ))}

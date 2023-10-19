@@ -66,22 +66,18 @@ const SupplierSlider = () => {
       ) : (
         <Slider {...setting}>
           {suppliers.length > 0 &&
-            suppliers.map((s, i) => (
-              <div key={i} className="supplier_img_wrapper">
-                <div className="supplier_info_wrapper">
-                  <Link
-                    to={`/supplier/introduce/${s.slug}`}
-                    className="supplier_button"
-                  >
-                    ورود به فروشگاه
-                  </Link>
-                </div>
+            suppliers.map((s) => (
+              <Link
+                key={s._id}
+                to={`/supplier/introduce/${s.slug}`}
+                className="supplier_button"
+              >
                 <img
                   src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${s.photos[0]}`}
                   alt={s.title}
                   className="supplier_img"
                 />
-              </div>
+              </Link>
             ))}
         </Slider>
       )}

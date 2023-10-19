@@ -4,6 +4,7 @@ import axios from "../../../util/axios";
 import LoadingSuggest from "../../UI/LoadingSkeleton/LoadingSuggest";
 import defPic from "../../../assets/images/pro-8.png";
 import { db } from "../../../util/indexedDB";
+import { useInView } from "react-intersection-observer";
 import "./Section10.css";
 
 const Section10 = () => {
@@ -12,44 +13,52 @@ const Section10 = () => {
   const [errorText, setErrorText] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeSuggest, setActiveSuggest] = useState({});
+  const [isViewed,setIsviewed] = useState(false);
+
+  const {ref, inView} = useInView({threshold: 0});
 
   useEffect(() => {
     const ac = new AbortController()
     let mounted = true;
-    if(navigator.onLine){
-      setLoading(true);
-      axios
-      .get("/fetch/best-suggests",{signal: ac.signal})
-      .then((response) => {
-        if (response.data.success && mounted) {
-          setLoading(false);
-          setBestSuggests(response.data.suggests);
-          setErrorText("");
+    
+    if(inView && !isViewed){
+      if(navigator.onLine){
+        setLoading(true);
+        axios
+        .get("/fetch/best-suggests",{signal: ac.signal})
+        .then((response) => {
+          if (response.data.success && mounted) {
+            setLoading(false);
+            setBestSuggests(response.data.suggests);
+            setErrorText("");
 
-          db.suggests.clear()
-          db.suggests.bulkPut(response.data.suggests)
-        }
-      })
-      .catch((err) => {
-        if (err.response && mounted) {
-          setLoading(false);
-          setErrorText(err.response.data.message);
-        }
-      });
-    }else{
-      db.suggests.toArray().then(items => {
-        if(items.length > 0 && mounted){
-          setBestSuggests(items)
-          setErrorText("")
-        }
-      })
+            db.suggests.clear()
+            db.suggests.bulkPut(response.data.suggests)
+          }
+        })
+        .catch((err) => {
+          if (err.response && mounted) {
+            setLoading(false);
+            setErrorText(err.response.data.message);
+          }
+        });
+      }else{
+        db.suggests.toArray().then(items => {
+          if(items.length > 0 && mounted){
+            setBestSuggests(items)
+            setErrorText("")
+          }
+        })
+      }
+
+      setIsviewed(true)
     }
 
     return () => {
       ac.abort()
       mounted = false;
     }
-  }, []);
+  }, [inView]);
 
   useEffect(() => {
     setLoading(true);
@@ -76,7 +85,7 @@ const Section10 = () => {
   };
 
   return (
-      <section className="suggests_wrapper">
+      <section ref={ref} className="suggests_wrapper">
         {loading ? (
           <LoadingSuggest />
         ) : errorText.length > 0 ? (

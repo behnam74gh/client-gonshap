@@ -9,6 +9,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { db } from "../../../util/indexedDB";
 import {setCountOfSlidersHandler} from '../../../util/customFunctions';
+import { useInView } from "react-intersection-observer";
 import "../Section3/Section3.css";
 
 const Section5 = () => {
@@ -16,9 +17,11 @@ const Section5 = () => {
   const [products, setProducts] = useState([]);
   const [errorText, setErrorText] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(4);
+  const [isViewed,setIsviewed] = useState(false);
 
   const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
+  const {ref, inView} = useInView({threshold: 0});
 
   useLayoutEffect(() => {
     if(window.innerWidth < 315){
@@ -35,8 +38,9 @@ const Section5 = () => {
   useEffect(() => {
     const ac = new AbortController();
     let mounted = true;
-    setLoading(true);
-    axios
+    if(inView && !isViewed){
+      setLoading(true);
+      axios
       .post("/find/products/by-category-and/order", {
         order: "discount",
         activeCategory: null,
@@ -72,13 +76,16 @@ const Section5 = () => {
             }
           })
         }
-        });
+      });
 
-      return () => {
-        ac.abort()
-        mounted = false;
-      }
-  }, []);
+      setIsviewed(true);
+    }
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
+  }, [inView]);
   
   const setting = {
     dots: false,
@@ -91,7 +98,7 @@ const Section5 = () => {
   };
 
   return (
-    <section className="list_of_products">
+    <section ref={ref} className="list_of_products">
       <h2 className="d-flex-center-center my-1 singleTitle">تخفیف های ویژه</h2>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
@@ -103,8 +110,8 @@ const Section5 = () => {
           slidesToShow={numberOfSlides}
           className="custom_slider"
         >
-          {products.map((p, i) => (
-            <ProductCard key={i} product={p} loading={loading} />
+          {products.map((p) => (
+            <ProductCard key={p._id} product={p} />
           ))}
         </Slider>
       ) : (

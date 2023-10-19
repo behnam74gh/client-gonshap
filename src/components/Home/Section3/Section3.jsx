@@ -147,7 +147,7 @@ const Section3 = () => {
           className="custom_slider"
         >
           {products.map((p) => (
-            <ProductCard key={p._id} product={p} loading={loading} />
+            <ProductCard key={p._id} product={p} />
           ))}
         </Slider>
       ) : showEmptyMessage && (

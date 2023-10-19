@@ -9,6 +9,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { db } from "../../../util/indexedDB";
 import {setCountOfSlidersHandler} from '../../../util/customFunctions';
+import { useInView } from "react-intersection-observer";
 import "../Section3/Section3.css";
 
 const Section9 = () => {
@@ -16,10 +17,11 @@ const Section9 = () => {
   const [products, setProducts] = useState([]);
   const [errorText, setErrorText] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(4);
+  const [isViewed,setIsviewed] = useState(false);
 
   const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
-
+  const {ref, inView} = useInView({threshold: 0});
   
   useLayoutEffect(() => {
     if(window.innerWidth < 315){
@@ -36,8 +38,10 @@ const Section9 = () => {
   useEffect(() => {
     const ac = new AbortController()
     let mounted = true;
-    setLoading(true);
-    axios
+
+    if(inView && !isViewed){
+      setLoading(true);
+      axios
       .post("/find/products/by-category-and/order", {
         order: "reviewsCount",
         activeCategory: null,
@@ -75,11 +79,14 @@ const Section9 = () => {
         }
       });
 
+      setIsviewed(true);
+    }
+
       return () => {
         ac.abort()
         mounted = false;
       }
-  }, []);
+  }, [inView]);
 
   const setting = {
     dots: false,
@@ -92,7 +99,7 @@ const Section9 = () => {
   };
 
   return (
-    <section className="list_of_products">
+    <section ref={ref} className="list_of_products">
       <h2 className="d-flex-center-center my-1 singleTitle">پربازدیدترین محصولات</h2>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
@@ -104,11 +111,10 @@ const Section9 = () => {
           slidesToShow={numberOfSlides}
           className="custom_slider"
         >
-          {products.map((p, i) => (
+          {products.map((p) => (
             <ProductCard
-              key={i}
+              key={p._id}
               product={p}
-              loading={loading}
               showReviews={true}
             />
           ))}

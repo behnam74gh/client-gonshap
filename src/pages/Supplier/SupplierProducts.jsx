@@ -113,8 +113,8 @@ const SupplierProducts = ({ backupFor,storeName }) => {
         ) : errorText.length > 0 ? (
           <p className="warning-message">{errorText}</p>
         ) : products.length > 0 ? (
-          products.map((product, i) => (
-            <ProductCard key={i} product={product} showSold={true} />
+          products.map((product) => (
+            <ProductCard key={product._id} product={product} showSold={true} />
           ))
         ) : (
           <p className="info-message text-center w-100">

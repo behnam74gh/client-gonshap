@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowDown } from "react-icons/md";
@@ -47,9 +47,16 @@ const Drawer = (props) => {
     props.backdropClick();
   };
 
+  const unMountDrawerHandler = () => {
+    setActiveCategory('')
+    setActiveOrder('')
+    setActiveSubcategories([])
+    props.backdropClick()
+  }
+
   return (
     <>
-      <Backdrop show={props.showBackdrop} onClick={props.backdropClick} />
+      <Backdrop show={props.showBackdrop} onClick={unMountDrawerHandler} />
       <div
         className={
           props.drawerOpen ? "drawer openDrawer" : "drawer closeDrawer"
@@ -68,7 +75,7 @@ const Drawer = (props) => {
                 <h2 className="logo">{props.companyInfo.companyTitle}</h2>
               )}
             </Link>
-            <span onClick={props.backdropClick}>
+            <span onClick={unMountDrawerHandler}>
               <IoClose />
             </span>
           </div>
@@ -77,8 +84,7 @@ const Drawer = (props) => {
             <ul className="drawer-items">
               <li onClick={props.backdropClick}>
                 <Link to="/">
-                  خانه
-                  <FaHome style={{ marginRight: "5px" }} />
+                  <FaHome className="text-blue" style={{verticalAlign: "bottom"}} />
                 </Link>
               </li>
               <li onClick={props.backdropClick}>

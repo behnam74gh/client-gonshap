@@ -17,6 +17,9 @@ instance.interceptors.request.use(config => {
   return config;
 })
 instance.interceptors.response.use((response) => response , (error) => {
+  // if(axios.isCancel(error)){
+  //   console.log('->',error);
+  // }
   if (error?.response?.status === 401) {
     store.dispatch(kickOut());
     toast.warn(error.response.data.message)

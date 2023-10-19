@@ -7,7 +7,7 @@
   top: 0;
   z-index: 110;
   background-color: #fff;
-  padding: 32px 10px;
+  padding: 0 0 16px;
   box-sizing: border-box;
   transition: transform 0.3s ease-out;
 }
@@ -15,6 +15,7 @@
   display: flex;
   flex-flow: row wrap;
   height: 80%;
+  padding: 10px;
 }
 
 .drawer-wrapper {
@@ -35,10 +36,11 @@
   width: 110px;
   align-items: center;
   cursor: pointer;
+  color: var(--thirdColorPalete);
 }
 .drawer-items li a {
   font-size: 14px;
-  color: black;
+  color: var(--thirdColorPalete);
 }
 .drawer-items li a.active {
   color: darkred !important;
@@ -52,6 +54,8 @@
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
+  background-color: var(--firstColorPalete);
+  padding: 10px 10px 5px;
 }
 .company_logo_drawer {
   width: 100%;
@@ -63,7 +67,7 @@
   align-items: center;
   align-self: center;
   font-size: 30px;
-  color: var(--firstColorPalete);
+  color: #FFF;
 }
 .submenu-drawer-link.active {
   border-bottom: 2px solid var(--secondColorPalete);
@@ -108,6 +112,7 @@
   padding: 4px;
   font-size: 12px;
   border-radius: 50px;
+  color: #FFF;
 }
 .activeCategoryTXT {
   margin-left: 35px;
@@ -118,10 +123,9 @@
   position: absolute;
   width: 60%;
   right: 0;
-  margin-top: 150px;
+  margin-top: 70px;
   text-align: center;
-  min-height: 80px;
-  background-color: #ffffff;
+  background-color: var(--secondColorPalete);
   box-shadow: var(--mainBoxShadow);
 }
 .rahnama-in-drawer-dropdown a {

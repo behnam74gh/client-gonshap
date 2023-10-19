@@ -66,8 +66,8 @@ const CheckoutHistory = ({
       <hr className="my-2" />
       <div className="items_price_wrapper">
         {products.length > 0 &&
-          products.map((item, i) => (
-            <div key={i} className="checkout_item_price">
+          products.map((item) => (
+            <div key={item._id} className="checkout_item_price">
               <div className="checkout_price">
                 <span>{item.product.title}</span>
                 <strong className="mx-2 text-purple">X</strong>

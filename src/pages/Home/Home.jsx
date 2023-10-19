@@ -1,6 +1,5 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-
 import Section1 from "../../components/Home/Section1/Section1";
 import Section3 from "../../components/Home/Section3/Section3";
 import Section4 from "../../components/Home/Section4/Section4";
@@ -21,7 +20,7 @@ import "./Home.css";
 const Home = () => {
 
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>بازارک</title>
       </Helmet>
@@ -39,7 +38,7 @@ const Home = () => {
       <Section13 />
       <SectionAdvantage />
       <Section14 />
-    </React.Fragment>
+    </>
   );
 };
 

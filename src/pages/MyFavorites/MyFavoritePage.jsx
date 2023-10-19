@@ -72,8 +72,8 @@ const MyFavoritePage = () => {
           <p className="warning-message">{errorText}</p>
         ) : (
           activeFavoriteItems?.length > 0 &&
-          activeFavoriteItems.map((item, i) => (
-            <ProductCard key={i} product={item} loading={loading} />
+          activeFavoriteItems.map((item) => (
+            <ProductCard key={item._id} product={item} />
           ))
         )}
       </div>
@@ -93,8 +93,8 @@ const MyFavoritePage = () => {
             </div>
             {deprecatedFavoriteItems &&
               deprecatedFavoriteItems.length > 0 &&
-              deprecatedFavoriteItems.map((product, i) => (
-                <div key={i} className="deprecated_item">
+              deprecatedFavoriteItems.map((product) => (
+                <div key={product._id} className="deprecated_item">
                   <p className="deprecated_item_title">{product.title}</p>
 
                   <img

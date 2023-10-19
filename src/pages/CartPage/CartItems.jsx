@@ -4,9 +4,8 @@ import CartItem from "./CartItem";
 const CartItems = ({ cartItems }) => {
   return (
     <React.Fragment>
-      {cartItems &&
-        cartItems.length > 0 &&
-        cartItems.map((item, i) => <CartItem key={i} product={item} />)}
+      {cartItems?.length > 0 &&
+        cartItems.map((item) => <CartItem key={item._id} product={item} />)}
     </React.Fragment>
   );
 };
