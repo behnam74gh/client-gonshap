@@ -83,8 +83,8 @@ const CartTotalInfo = ({cartItemsInfo}) => {
       <h4>محصولات</h4>
       <hr className="my-2" />
       {cartItemsInfo && cartItemsInfo.length > 0 ? (
-        cartItemsInfo.map((item, i) => (
-          <div key={i} className="total_price_wrapper">
+        cartItemsInfo.map((item) => (
+          <div key={item._id} className="total_price_wrapper">
             <span>{item.title}</span>
             <strong className="mx-2 text-purple">X</strong>
             <span>

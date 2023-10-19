@@ -128,6 +128,7 @@ const SendManySMS = () => {
             type="text"
             placeholder="شماره موبایل :"
             onInput={inputHandler}
+            focusHandler={() => setPhoneNumberIsValid(false)}
             validators={[
               VALIDATOR_MAXLENGTH(11),
               VALIDATOR_PHONENUMBER(),
@@ -158,8 +159,8 @@ const SendManySMS = () => {
           </div>
           {contacts.length > 0 && (
             <div className="contacts-wrapper">
-              {contacts.map((c, i) => (
-                <span key={i} className="contact-wrapper">
+              {contacts.map((c) => (
+                <span key={c} className="contact-wrapper">
                   <TiDelete
                     onClick={() => deletePhoneNumHandler(c)}
                     className="delete-contact"

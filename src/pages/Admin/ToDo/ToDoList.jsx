@@ -117,8 +117,8 @@ const ToDoList = () => {
           </div>
         ) : (
           tasks.length > 0 &&
-          tasks.map((t, i) => (
-            <div className="task-wrapper" key={i}>
+          tasks.map((t) => (
+            <div className="task-wrapper" key={t._id}>
               <span className="font-sm">{t.taskContent}</span>
               <div className="tasks-options-wrapper">
                 <span

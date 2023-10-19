@@ -267,8 +267,8 @@ const Suggests = () => {
             </thead>
             <tbody>
               {suggests && suggests.length > 0 ? (
-                suggests.map((s, i) => (
-                  <tr key={i}>
+                suggests.map((s) => (
+                  <tr key={s._id}>
                     <td>
                       <div className="d-flex-center-center">
                         <img

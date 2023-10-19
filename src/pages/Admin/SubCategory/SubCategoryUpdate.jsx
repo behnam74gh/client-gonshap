@@ -102,8 +102,8 @@ const SubCategoryUpdate = ({ history, match }) => {
         >
           <option>انتخاب دسته بندی</option>
           {categories.length > 0 &&
-            categories.map((c, i) => (
-              <option key={i} value={c._id}>
+            categories.map((c) => (
+              <option key={c._id} value={c._id}>
                 {c.name}
               </option>
             ))}

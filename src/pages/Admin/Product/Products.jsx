@@ -615,8 +615,8 @@ const Products = () => {
                   >
                     <option value="none">دسته بندی</option>
                     {categories.length > 0 &&
-                      categories.map((c, i) => (
-                        <option key={i} value={c._id}>
+                      categories.map((c) => (
+                        <option key={c._id} value={c._id}>
                           {c.name}
                         </option>
                       ))}
@@ -631,8 +631,8 @@ const Products = () => {
                   >
                     <option value="none">برچسب (همه)</option>
                     {subcategories.length > 0 &&
-                      subcategories.map((s, i) => (
-                        <option key={i} value={s._id}>
+                      subcategories.map((s) => (
+                        <option key={s._id} value={s._id}>
                           {s.name}
                         </option>
                       ))}
@@ -645,8 +645,8 @@ const Products = () => {
                   >
                     <option value="none">برند</option>
                     {brands.length > 0 &&
-                      brands.map((b, i) => (
-                        <option key={i} value={b._id}>
+                      brands.map((b) => (
+                        <option key={b._id} value={b._id}>
                           {b.brandName}
                         </option>
                       ))}
@@ -723,8 +723,8 @@ const Products = () => {
             </thead>
             <tbody>
               {products.length > 0 ? (
-                (!otherFilterings ? products : currentProducts).map((p, i) => (
-                  <tr key={i}>
+                (!otherFilterings ? products : currentProducts).map((p) => (
+                  <tr key={p._id}>
                     <td>
                       <div className="d-flex-center-center">
                         <img
@@ -818,7 +818,7 @@ const Products = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="14">
+                  <td colSpan={role === 2 ? "14" : "15"}>
                     <p
                       className="warning-message"
                       style={{ textAlign: "center" }}

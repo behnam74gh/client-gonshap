@@ -78,7 +78,7 @@ const Ads = () => {
       <h4>لیست تبلیغات موجود</h4>
       <p className="mt-0">
         براساس این مرتب سازی تعداد{" "}
-        <strong className="text-blue">{AdsLength}</strong> تبلیغ وجود دارد!
+        <strong className="text-blue">{AdsLength}</strong> تبلیغ وجود دارد
       </p>
       {loading ? (
         <VscLoading className="loader" />
@@ -146,8 +146,8 @@ const Ads = () => {
             </thead>
             <tbody>
               {Ads.length > 0 ? (
-                Ads.map((ad, i) => (
-                  <tr key={i}>
+                Ads.map((ad) => (
+                  <tr key={ad._id}>
                     <td>
                       <div className="d-flex-center-center">
                         <img

@@ -102,11 +102,11 @@ const SubMenu = () => {
       <div className="submenu-wrapper">
         <div className="submenu-col-1">
           <ul>
-            {categories?.length > 0 && categories.map((item, index) => {
+            {categories?.length > 0 && categories.map((item) => {
                 const { name: categoryName, _id } = item;
                 return (
                   <li
-                    key={index}
+                    key={_id}
                     onMouseOver={() => displaySubCategories(categoryName, _id)}
                     className={
                       activeCategoryName === categoryName

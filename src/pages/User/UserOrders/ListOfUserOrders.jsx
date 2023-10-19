@@ -60,7 +60,7 @@ const ListOfUserOrders = ({ history }) => {
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : orders.length > 0 ? (
-        orders.map((order, i) => <SingleOrder key={i} order={order} />)
+        orders.map((order) => <SingleOrder key={order._id} order={order} />)
       ) : (
         <p className="info-message">سفارش {status === 1 ? "جاری" : status === 3 ? "ناموفق" : "تحویل شده"} برای شما ثبت نشده است.</p>
       )}

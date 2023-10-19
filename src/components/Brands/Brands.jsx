@@ -69,8 +69,8 @@ const Brands = () => {
       ) : (
         brands?.length > 0 && (
           <Slider {...setting} slidesToShow={numberOfSlides}>
-            {brands.map((b, i) => (
-              <div key={i} className="carousel_brand_img_wrapper">
+            {brands.map((b) => (
+              <div key={b._id} className="carousel_brand_img_wrapper">
                 <img
                   src={
                     b.image.length > 0 &&

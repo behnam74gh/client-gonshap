@@ -14,11 +14,11 @@ const ListOfColors = ({ colors }) => {
         <LocalSearch keyword={keyword} setKeyword={setKeyword} />
       </div>
       {colors.length > 0 &&
-        colors.filter(searched(keyword)).map((c, i) => (
+        colors.filter(searched(keyword)).map((c) => (
           <div
             className="single_color_wrapper"
             style={{ background: `#${c.colorHex}` }}
-            key={i}
+            key={c._id}
           >
             <span
               className="font-sm"

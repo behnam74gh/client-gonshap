@@ -71,9 +71,9 @@ const HelpsList = () => {
               </tr>
             </thead>
             <tbody>
-              {helps.length > 0
-                ? helps.map((help, i) => (
-                    <tr key={i}>
+              {helps?.length > 0
+                ? helps.map((help) => (
+                    <tr key={help._id}>
                       <td className="font-sm text-purple">
                         <strong>{help.title}</strong>
                       </td>

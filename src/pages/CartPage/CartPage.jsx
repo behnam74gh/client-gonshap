@@ -100,8 +100,8 @@ const CartPage = () => {
             </div>
             {deprecatedItems &&
               deprecatedItems.length > 0 &&
-              deprecatedItems.map((product, i) => (
-                <div key={i} className="deprecated_item">
+              deprecatedItems.map((product) => (
+                <div key={product._id} className="deprecated_item">
                   <p className="deprecated_item_title">{product.title}</p>
 
                   <img

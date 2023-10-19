@@ -291,8 +291,8 @@ const CarouselUpdate = ({ history, match }) => {
         >
           <option>دسته بندی را انتخاب کنید</option>
           {categories.length > 0 &&
-            categories.map((c, i) => (
-              <option key={i} value={c._id}>
+            categories.map((c) => (
+              <option key={c._id} value={c._id}>
                 {c.name}
               </option>
             ))}

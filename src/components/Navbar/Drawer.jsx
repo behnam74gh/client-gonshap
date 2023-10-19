@@ -138,9 +138,9 @@ const Drawer = (props) => {
                 راهنما
                 <MdKeyboardArrowDown />
                 <div className="rahnama-in-drawer-dropdown">
-                  {props.helps.map((help, i) => (
+                  {props.helps.map((help) => (
                     <Link
-                      key={i}
+                      key={help._id}
                       to={`/help/${help._id}`}
                       onClick={props.backdropClick}
                     >
@@ -153,7 +153,7 @@ const Drawer = (props) => {
             <div className="drawer-categories">
               {activeOrder.length > 0 &&
                 props.categories.length > 0 &&
-                props.categories.map((c, i) => {
+                props.categories.map((c) => {
                   return (
                     <div
                       className={
@@ -161,7 +161,7 @@ const Drawer = (props) => {
                           ? "drawer-category-name active"
                           : "drawer-category-name"
                       }
-                      key={i}
+                      key={c._id}
                       onClick={() => setSubcategoriesHandler(c)}
                     >
                       {c.name}
@@ -172,9 +172,9 @@ const Drawer = (props) => {
             <div className="drawer-subCategories_wrapper">
               <div className="drawer-subCategories">
                 {activeSubcategories.length > 0 &&
-                  activeSubcategories.map((s, i) => (
+                  activeSubcategories.map((s) => (
                     <Link
-                      key={i}
+                      key={s._id}
                       to="/shop"
                       className="drawer-sublinks"
                       onClick={() => submitSearchKeyword(s)}

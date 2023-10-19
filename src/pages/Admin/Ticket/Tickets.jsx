@@ -223,8 +223,8 @@ const Tickets = () => {
             </thead>
             <tbody>
               {tickets.length > 0 ? (
-                tickets.map((t, i) => (
-                  <tr key={i}>
+                tickets.map((t) => (
+                  <tr key={t._id}>
                     <td className="font-sm">
                       <span className="d-flex-center-center">
                         {t.visited ? "مشاهده شد" : "مشاهده نشده"}

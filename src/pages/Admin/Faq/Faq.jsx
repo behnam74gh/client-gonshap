@@ -139,8 +139,8 @@ const Faq = () => {
           </thead>
           <tbody>
             {faqs.length > 0 &&
-              faqs.map((fa, i) => (
-                <tr key={i}>
+              faqs.map((fa) => (
+                <tr key={fa._id}>
                   <td className="font-sm">{fa.question}</td>
                   <td className="font-sm">{fa.answer}</td>
                   <td>

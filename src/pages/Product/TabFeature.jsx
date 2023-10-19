@@ -27,11 +27,10 @@ const TabFeature = ({
         </div>
         <div label="مشخصات">
           <div className="details_info_wrapper">
-            {productDetails &&
-              productDetails.length > 0 &&
-              productDetails.map((d, i) => {
+            {productDetails?.length > 0 &&
+              productDetails.map((d) => {
                 return (
-                  <div key={i} className="details_info">
+                  <div key={d._id} className="details_info">
                     <div className="detail_question">
                       <p>{d.question}</p>
                     </div>

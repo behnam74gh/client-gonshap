@@ -64,8 +64,8 @@ const ListOfBrands = ({ brands, categories,role }) => {
                     مرتب سازیِ برند ها براساس دسته بندی
                   </option>
                   {categories.length > 0 &&
-                    categories.map((c, i) => (
-                      <option key={i} value={c._id}>
+                    categories.map((c) => (
+                      <option key={c._id} value={c._id}>
                         {c.name}
                       </option>
                     ))}
@@ -88,14 +88,14 @@ const ListOfBrands = ({ brands, categories,role }) => {
           </thead>
           <tbody>
             {brands.length > 0 && keywordSearch ? (
-              brands.filter(searched(keyword)).map((b, i) => (
-                <tr key={i}>
+              brands.filter(searched(keyword)).map((b) => (
+                <tr key={b._id}>
                   <td className="font-sm">{b.brandName}</td>
                   <td className="font-sm">{b.backupFor.name}</td>
                   <td>
                     <div className="image-upload__preview">
-                      {b.parents.map((p, i) => (
-                        <span key={i} className="color_wrapper bg-purple">
+                      {b.parents.map((p) => (
+                        <span key={p._id} className="color_wrapper bg-purple">
                           {p.name}
                         </span>
                       ))}
@@ -125,14 +125,14 @@ const ListOfBrands = ({ brands, categories,role }) => {
                 </tr>
               ))
             ) : !keywordSearch && sortedBrands.length > 0 ? (
-              sortedBrands.map((b, i) => (
-                <tr key={i}>
+              sortedBrands.map((b) => (
+                <tr key={b._id}>
                   <td className="font-sm">{b.brandName}</td>
                   <td className="font-sm">{b.backupFor.name}</td>
                   <td>
                     <div className="image-upload__preview">
-                      {b.parents.map((p, i) => (
-                        <span key={i} className="color_wrapper bg-purple">
+                      {b.parents.map((p) => (
+                        <span key={p._id} className="color_wrapper bg-purple">
                           {p.name}
                         </span>
                       ))}

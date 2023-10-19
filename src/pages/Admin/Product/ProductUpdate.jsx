@@ -495,8 +495,8 @@ const ProductUpdate = ({ history }) => {
         >
           <option value="none">دسته بندی را انتخاب کنید</option>
           {categories.length > 0 &&
-            categories.map((c, i) => (
-              <option key={i} value={c._id}>
+            categories.map((c) => (
+              <option key={c._id} value={c._id}>
                 {c.name}
               </option>
             ))}
@@ -514,8 +514,8 @@ const ProductUpdate = ({ history }) => {
           >
             <option value="none">برچسب را انتخاب کنید</option>
             {subcategories.length > 0 &&
-              subcategories.map((s, i) => (
-                <option key={i} value={s._id}>
+              subcategories.map((s) => (
+                <option key={s._id} value={s._id}>
                   {s.name}
                 </option>
               ))}
@@ -540,8 +540,8 @@ const ProductUpdate = ({ history }) => {
           >
             <option value="none">برند را انتخاب کنید</option>
             {brands.length > 0 &&
-              brands.map((b, i) => (
-                <option key={i} value={b._id}>
+              brands.map((b) => (
+                <option key={b._id} value={b._id}>
                   {b.brandName}
                 </option>
               ))}

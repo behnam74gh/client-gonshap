@@ -79,8 +79,8 @@ const Section12 = () => {
             <p className="warning-message">{error}</p>
           ) : (
             faqs.length > 0 &&
-            faqs.map((item, i) => (
-              <div key={i} className="accordion_item">
+            faqs.map((item) => (
+              <div key={item._id} className="accordion_item">
                 <div className="accordion_question_wrapper">
                   <div className="d-flex-center-center">
                     <FaCircle className="first_icon" />

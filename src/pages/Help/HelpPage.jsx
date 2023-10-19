@@ -51,7 +51,7 @@ const HelpPage = ({ match }) => {
                   <React.Fragment>
                     <span className="my-2 font-sm">{`مرحله ${i + 1} :`}</span>
                     <img
-                      key={i*3}
+                      key={i}
                       src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${photo}`}
                       alt={help.title}
                       className="mb-3"

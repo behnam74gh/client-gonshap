@@ -246,8 +246,8 @@ const BrandUpdate = ({ match, history }) => {
         >
           <option value="none">دسته بندی را انتخاب کنید</option>
           {categories.length > 0 &&
-            categories.map((c, i) => (
-              <option key={i} value={c._id}>
+            categories.map((c) => (
+              <option key={c._id} value={c._id}>
                 {c.name}
               </option>
             ))}
@@ -263,8 +263,8 @@ const BrandUpdate = ({ match, history }) => {
         >
           <option value="none">برچسب را انتخاب کنید</option>
           {subcategories.length > 0 &&
-            subcategories.map((s, i) => (
-              <option key={i} value={s._id}>
+            subcategories.map((s) => (
+              <option key={s._id} value={s._id}>
                 {s.name}
               </option>
             ))}
@@ -272,8 +272,8 @@ const BrandUpdate = ({ match, history }) => {
 
         {values.parents.length > 0 && (
           <div className="image-upload__preview mt-3 mb-1">
-            {values.parents.map((p, i) => (
-              <span className="color_wrapper bg-purple" key={i}>
+            {values.parents.map((p) => (
+              <span className="color_wrapper bg-purple" key={p}>
                 {subcategories &&
                   subcategories.length > 0 &&
                   subcategories.find((s) => s._id === p).name}

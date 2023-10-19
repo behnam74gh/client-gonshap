@@ -182,8 +182,8 @@ const OrderDetails = ({ match }) => {
                   </thead>
                   <tbody style={{fontSize: "12px",border: "none"}}>
                     {order.products.length > 0 &&
-                      order.products.map((item, i) => (
-                        <tr key={i}>
+                      order.products.map((item) => (
+                        <tr key={item.product._id}>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>
                             <div style={{display: "flex",alignItems: "center",flexFlow: "row wrap",justifyContent: "center"}}>
                               <img
@@ -206,7 +206,7 @@ const OrderDetails = ({ match }) => {
                             </Link>
                           </td>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{item.price.toLocaleString("fa")} تومان</td>
-                          <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{item.profit.toLocaleString("fa")} تومان</td>
+                          <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{item.profit?.toLocaleString("fa")} تومان</td>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{item.count}</td>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>{(item.count * item.profit).toLocaleString("fa")} تومان</td>
                           <td style={{padding: "6px 12px", border: "none", whiteSpace: "nowrap",wordBreak: "break-all", borderCollapse: "collapse"}}>

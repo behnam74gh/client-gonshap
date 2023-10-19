@@ -410,8 +410,8 @@ const Orders = () => {
             </thead>
             <tbody>
               {orders.length > 0 ? (
-                orders.map((order, i) => (
-                  <tr key={i}>
+                orders.map((order) => (
+                  <tr key={order._id}>
                     <td>
                       <div className="d-flex-center-center">
                         <img

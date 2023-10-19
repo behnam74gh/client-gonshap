@@ -111,13 +111,13 @@ const Section10 = () => {
               <div className="suggest_tools">
                 <h6 className="suggest_title">مردم چی میگن ؟</h6>
                 <div className="button-container">
-                  <button onClick={nextSuggestHandler}>
+                  <button style={{cursor: bestSuggests.length < 2 && "not-allowed"}} disabled={bestSuggests.length < 2} onClick={nextSuggestHandler}>
                     <FaChevronRight />
                   </button>
                   <strong className="author">
                     {activeSuggest?.writerName || " ناشناس "}
                   </strong>
-                  <button onClick={prevSuggestHandler}>
+                  <button style={{cursor: bestSuggests.length < 2 && "not-allowed"}} disabled={bestSuggests.length < 2} onClick={prevSuggestHandler}>
                     <FaChevronLeft />
                   </button>
                 </div>

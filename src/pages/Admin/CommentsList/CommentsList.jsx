@@ -269,8 +269,8 @@ const CommentsList = () => {
             </thead>
             <tbody>
               {comments && comments.length > 0 ? (
-                comments.map((c, i) => (
-                  <tr key={i}>
+                comments.map((c) => (
+                  <tr key={c._id}>
                     <td>
                       <div className="d-flex-center-center">
                         <img

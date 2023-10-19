@@ -13,8 +13,8 @@ const ListOfCategories = ({ categories }) => {
         <LocalSearch keyword={keyword} setKeyword={setKeyword} />
       </div>
       {categories.length > 0 &&
-        categories.filter(searched(keyword)).map((c, i) => (
-          <div className="category" key={i}>
+        categories.filter(searched(keyword)).map((c) => (
+          <div className="category" key={c._id}>
             <span>{c.name}</span>
             <div className="icons-wrapper">
               <Link to={`/admin/dashboard/category/${c.slug}`}>

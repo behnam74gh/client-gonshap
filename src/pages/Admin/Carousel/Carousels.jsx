@@ -97,8 +97,8 @@ const Carousels = () => {
               </thead>
               <tbody>
                 {suppliers.length > 0 &&
-                  suppliers.map((s, i) => (
-                    <tr key={i}>
+                  suppliers.map((s) => (
+                    <tr key={s._id}>
                       <td>
                         <div className="d-flex-center-center">
                           <img

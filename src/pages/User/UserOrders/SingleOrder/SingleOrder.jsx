@@ -106,8 +106,8 @@ const SingleOrder = ({ order }) => {
           </thead>
           <tbody>
             {order.products.length > 0 &&
-              order.products.map((item, i) => (
-                <tr key={i}>
+              order.products.map((item) => (
+                <tr key={item.product._id}>
                   <td>
                     <div className="d-flex-center-center">
                       <img
@@ -134,7 +134,7 @@ const SingleOrder = ({ order }) => {
                   <td>
                     <div className="single_order_color_wrapper">
                       {item.colors.length > 0 &&
-                        item.colors.map((color, i) => (
+                        item.colors.map((color,i) => (
                           <span
                             style={{
                               background: `#${color.colorHex}`,
@@ -144,7 +144,7 @@ const SingleOrder = ({ order }) => {
                                   : "black",
                             }}
                             className="single_order_color tooltip"
-                            key={i}
+                            key={`${color._id}-${i}`}
                           >
                             <span className="tooltip_text">
                               {color.colorName}

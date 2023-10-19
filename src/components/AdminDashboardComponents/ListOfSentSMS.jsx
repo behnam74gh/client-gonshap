@@ -175,8 +175,8 @@ const ListOfSentSMS = () => {
             </thead>
             <tbody>
               {messages.length > 0 ? (
-                messages.map((m, i) => (
-                  <tr key={i}>
+                messages.map((m) => (
+                  <tr key={m._id}>
                     <td className="font-sm">{m.groupId}</td>
                     <td className="font-sm">
                       {m.level === "one"
