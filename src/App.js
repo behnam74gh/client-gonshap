@@ -92,8 +92,8 @@ const App = () => {
 
   return (
     <Suspense fallback={<LazyLoad />}>
+      <ToastContainer rtl={true} draggable={false} />
       <Layout>
-        <ToastContainer rtl={true} draggable={false} />
         <Switch>
           <Route path="/" exact component={Home} />
           <Route

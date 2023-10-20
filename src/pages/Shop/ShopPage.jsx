@@ -200,6 +200,7 @@ const ShopPage = () => {
     }else{
       db.shopPage.toArray().then(items => {
         setProducts(items)
+        toast.warn('شما آفلاین هستید')
       })
     }
   }, [searchProductsByTextQuery, searchProductsBySearchConfig, text]);

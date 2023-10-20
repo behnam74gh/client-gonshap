@@ -20,6 +20,8 @@ const HomePageUrls = [
     '/static/js/vendors-node_modules_react-slick_lib_index_js.chunk.js',
     '/static/js/vendors-node_modules_react-icons_hi_index_esm_js.chunk.js',
     '/static/js/vendors-node_modules_react-icons_ai_index_esm_js.chunk.js',
+    '/static/js/src_components_Home_Section6_Section6_jsx-src_components_UI_FormElement_Input_css-src_assets_-8ac3c3.chunk.js',
+    '/static/js/src_components_Home_Section3_Section3_css-node_modules_react-intersection-observer_index_mjs.chunk.js',
     '/static/js/vendors-node_modules_react-icons_fi_index_esm_js.chunk.js',
     '/static/js/src_layout_Layout_jsx-node_modules_react-icons_lib_esm_index_js.chunk.js',
     '/static/js/vendors-node_modules_react-icons_vsc_index_esm_js.chunk.js',
@@ -57,6 +59,7 @@ const HomePageUrls = [
     'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon.png',
     'https://unpkg.com/leaflet@1.6.0/dist/images/marker-icon-2x.png',
     'https://unpkg.com/leaflet@1.6.0/dist/images/marker-shadow.png',
+    '/static/media/logo-alternative.b3911f0301d2cbd299d2.png',
 ]
 const CartPageUrls = [
     '/cart',

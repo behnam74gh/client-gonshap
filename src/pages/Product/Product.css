@@ -1,7 +1,7 @@
 #product_details {
   display: flex;
   flex-flow: column wrap;
-  min-height: 100vh;
+  min-height: 50vh;
   width: 100%;
 }
 .product_content {

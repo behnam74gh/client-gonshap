@@ -12,6 +12,7 @@ import Backdrop from "../components/UI/Backdrop/Backdrop";
 import { db } from "../util/indexedDB";
 import { toast } from "react-toastify";
 import "./Layout.css";
+import OfflineStatus from "../pages/OfflineStatus";
 
 const Layout = (props) => {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -22,6 +23,7 @@ const Layout = (props) => {
 
   const dispatch = useDispatch();
   const { isSubmenuOpen } = useSelector((state) => state.subMenu);
+  const { isOnline } = useSelector((state) => state);
 
   const openDrawerHandler = () => setShowDrawer(!showDrawer);
 
@@ -164,7 +166,7 @@ const Layout = (props) => {
       <SubMenu />
       <Backdrop show={isSubmenuOpen} onMouseOver={subMenuHandler} />
       <main className="main-body" onMouseOver={subMenuHandler}>
-        {props.children}
+        {isOnline ? props.children : <OfflineStatus />}
       </main>
       <Brands />
       <Footer companyInfo={companyInfo} />

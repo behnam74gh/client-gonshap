@@ -61,9 +61,11 @@ const RecentViews = ({productId,numberOfSlides,setNumberOfSlides}) => {
     autoplaySpeed: 2000,
     pauseOnHover: true,
   };
+
+  let showIt = recentViews.length > 0 && navigator.onLine;
   return (
-    <div ref={ref} style={{minHeight: recentViews.length > 0 ? "150px" : "0"}} className="list_of_products">
-        {recentViews.length > 0 && <h3 className="column_item">بازدید های اخیر</h3>}
+    <div ref={ref} style={{minHeight: showIt ? "150px" : "0"}} className="list_of_products">
+        {showIt && <h3 className="column_item">بازدید های اخیر</h3>}
         {recentLoading ? (
             <LoadingSkeletonCard count={numberOfSlides === 1 ? 1 : numberOfSlides}/>
         ) : recentViews?.length > 0 ? (

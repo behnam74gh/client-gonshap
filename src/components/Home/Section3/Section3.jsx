@@ -38,9 +38,12 @@ const Section3 = () => {
   useEffect(() => {
     setLoading(true)
     if(!navigator.onLine){
+      console.log('offline sec 3');
       db.newestProducts.toArray()
       .then(items => {
         if(items?.length > 0){
+          console.log('products got from indexed db');
+          setLoading(false)
           setProducts(items)
         }
       }) 
@@ -78,7 +81,7 @@ const Section3 = () => {
   }, []);
   
   useEffect(() => {
-    if (!activeCategory.length > 0) {
+    if (!activeCategory.length > 0 || !navigator.onLine) {
       return;
     }
     setLoading(true);
@@ -104,7 +107,6 @@ const Section3 = () => {
       })
       .catch((err) => {
         setLoading(false)
-        setProducts([])
         if (typeof err.response.data.message === "object") {
           setErrorText(err.response.data.message[0]);
           setProducts([]);

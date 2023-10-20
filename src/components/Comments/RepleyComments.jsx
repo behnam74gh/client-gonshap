@@ -20,12 +20,13 @@ const RepleyComments = (props) => {
         comment.responseTo === parentCommentId && (
           <React.Fragment key={comment._id}>
             <div className="reply_comment">
-              <SingleComment comment={comment} category={props.category} />
+              <SingleComment comment={comment} category={props.category} goSignin={props.goSignin} />
               <RepleyComments
                 postId={props.postId}
                 commentList={props.commentList}
                 parentCommentId={comment._id}
                 category={props.category}
+                goSignin={props.goSignin}
               />
             </div>
           </React.Fragment>

@@ -48,12 +48,13 @@ const SupplierSlider = () => {
   const setting = {
     dots: false,
     infinite: true,
-    speed: 1300,
+    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     pauseOnHover: true,
     arrows: true,
     autoplay: true,
+    lazyLoad: true,
     fade: true,
   };
 

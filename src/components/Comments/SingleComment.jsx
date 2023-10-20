@@ -17,7 +17,7 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../util/validators";
 
-const SingleComment = ({ comment,category }) => {
+const SingleComment = ({ comment,category,goSignin }) => {
   const [showForm, setShowForm] = useState(false);
   const [reRenderComponent, setReRenderComponent] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -47,6 +47,11 @@ const SingleComment = ({ comment,category }) => {
 
   const submitCommentHandler = (e) => {
     e.preventDefault();
+
+    if(userInfo.userId.length < 15){
+      return goSignin();
+    }
+
     setLoading(true);
     const data = {
       commentContent: formState.inputs.repleyComment.value,
@@ -75,6 +80,8 @@ const SingleComment = ({ comment,category }) => {
       });
   };
 
+  let disableBtn = !formState.inputs.repleyComment.isValid || loading || userInfo.isBan || !navigator.onLine; 
+  
   return (
     <div className="comment_wrapper">
       <div className="single_comment_wrapper">
@@ -148,19 +155,14 @@ const SingleComment = ({ comment,category }) => {
 
           <Button
             type="submit"
-            disabled={
-              !formState.inputs.repleyComment.isValid ||
-              loading ||
-              userInfo === null ||
-              userInfo === undefined || userInfo.isBan
-            }
+            disabled={disableBtn}
           >
             {loading ? (
               <VscLoading className="loader" />
             ) : userInfo && userInfo.userId ? (
               "ثبت پاسخ"
             ) : (
-              "ابتدا وارد شوید"
+              "ابتدا وارد حساب شوید"
             )}
           </Button>
         </form>

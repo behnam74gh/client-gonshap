@@ -168,6 +168,8 @@ const Product = ({ match }) => {
       existRatingObject && setStarValue({ star: existRatingObject.star });
     }
   }, [product, userInfo]);
+
+  let showIt = releatedProducts.length > 0 && navigator.onLine;
   
   return (
     <section id="product_details">
@@ -202,8 +204,8 @@ const Product = ({ match }) => {
 
             <Section6 />
   
-            <div className="list_of_products">
-              <h4 className="column_item">محصولات مشابه</h4>
+            <div style={{minHeight: showIt ? "150px" : "0"}} className="list_of_products">
+              {showIt && <h4 className="column_item">محصولات مشابه</h4>}
               {
                 loading ? (
                   <LoadingSkeletonCard

@@ -18,9 +18,10 @@ const Brands = () => {
   }, [])
 
   useEffect(() => {
+    const ac = new AbortController();
    if (navigator.onLine){
       axios
-      .get("/get-all-brands")
+      .get("/get-all-brands",{signal: ac.signal})
       .then((response) => {
         if (response.data.success) {
           const {brands} = response.data
@@ -50,6 +51,9 @@ const Brands = () => {
       })
     }
 
+    return () => {
+      ac.abort()
+    }
   }, []);
 
   const setting = {

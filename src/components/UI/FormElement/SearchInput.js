@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,20 +15,30 @@ const SearchInput = () => {
   const [showSuggests, setShowSuggests] = useState(false);
 
   const { search: {text} } = useSelector((state) => ({...state}));
-  
+  const inputRef = useRef()
   const history = useHistory();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const ac = new AbortController()
     axios
-      .get("/fetch/all-products-name")
+      .get("/fetch/all-products-name",{signal: ac.signal})
       .then((response) => {
         const { success, productsName } = response.data;
         if (success) {
           setProductsName(productsName);
         }
       })
+      .catch(err => {
+        if(err){
+          setProductsName([])
+        }
+      })
+
+      return () => {
+        ac.abort()
+      }
   }, []);
 
   const setKeywordHandler = (e) => {
@@ -41,21 +51,30 @@ const SearchInput = () => {
   };
 
   const submitSearchKeywordHandler = () => {
+    setShowSuggests(false);
     if (!navigator.onLine){
       toast.warning('شما به اینترنت دسترسی ندارید')
       return
     }
     if (text.length > 2) {
       dispatch({ type: SUBMIT_QUERY });
+      inputRef.current.blur()
       history.push("/shop");
     } else {
       toast.info("محصولی بااین نام وجود ندارد");
     }
   };
 
+  const keyPressedHandler = (e) => {
+    if(e.keyCode === 13){
+      submitSearchKeywordHandler()
+    };
+  }
+
   const setTextToInputHandler = (name) => {
     dispatch({ type: SEARCH_QUERY, payload: { keyword: name } });
     setShowSuggests(false);
+    inputRef.current.focus()
   };
 
   const searched = (text) => (name) => name.toLowerCase().includes(text);
@@ -65,9 +84,11 @@ const SearchInput = () => {
       <div className="search_input_wrapper">
         <input
           value={text}
+          ref={inputRef}
           type="search"
           placeholder="جستوجو.."
           onChange={(e) => setKeywordHandler(e.target.value)}
+          onKeyDown={(e) => keyPressedHandler(e)}
         />
 
         {productsName.length > 0 && showSuggests && (

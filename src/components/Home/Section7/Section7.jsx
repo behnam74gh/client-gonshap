@@ -87,7 +87,7 @@ const Section7 = () => {
   }, [inView])
 
   useEffect(() => {
-    if (!activeCategory.length > 0) {
+    if (!activeCategory.length > 0 || !navigator.onLine) {
       return;
     }
     if(inView && !isViewed){
@@ -113,7 +113,6 @@ const Section7 = () => {
       })
       .catch((err) => {
         setLoading(false)
-        setProducts([])
         if (typeof err.response.data.message === "object") {
           setErrorText(err.response.data.message[0]);
           setProducts([]);

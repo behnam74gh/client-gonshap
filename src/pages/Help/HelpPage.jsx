@@ -48,10 +48,9 @@ const HelpPage = ({ match }) => {
             {help.photos && help.photos.length > 0 && (
               <div className="help_imgs_wrapper">
                 {help.photos.map((photo, i) => (
-                  <React.Fragment>
+                  <React.Fragment key={i}>
                     <span className="my-2 font-sm">{`مرحله ${i + 1} :`}</span>
-                    <img
-                      key={i}
+                    <img 
                       src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${photo}`}
                       alt={help.title}
                       className="mb-3"

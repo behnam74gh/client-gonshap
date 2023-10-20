@@ -53,7 +53,7 @@ const SupplierIntroduce = ({ match }) => {
   const setting = {
     dots: false,
     infinite: true,
-    speed: 1300,
+    speed: 300,
     slidesToShow: 1,
     slidesToScroll: 1,
     pauseOnHover: true,

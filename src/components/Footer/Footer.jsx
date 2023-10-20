@@ -9,8 +9,8 @@ import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
 import Nemad1 from "../../assets/images/nemad-logo-1.png";
 import Nemad2 from "../../assets/images/nemad-logo-2.png";
 import Nemad3 from "../../assets/images/nemad-logo-3.png";
-import "./Footer.css";
 import { toast } from "react-toastify";
+import "./Footer.css";
 
 const Footer = ({ companyInfo }) => {
   const [deferredPrompt,setDeferredPrompt] = useState(null);

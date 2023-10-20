@@ -13,6 +13,7 @@ import axios from "../../util/axios";
 import SearchInput from "../UI/FormElement/SearchInput";
 import { USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
+import altenativeLogo from '../../assets/images/logo-alternative.png'
 import "./Navbar.css";
 
 const Navbar = (props) => {
@@ -66,15 +67,14 @@ const Navbar = (props) => {
     <header className="c-navbar" id="header">
       <div className="header-wrapper" onMouseOver={subMenuHandler}>
         <Link to="/" className='logo_Img'>
-          {props.companyInfo?.logo?.length > 0 ? (
-            <img
-              src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${props.companyInfo.logo}`}
-              alt={props.companyInfo.companyTitle}
-              className="company_logo_navbar"
-            />
-          ) : (
-            <h2 className="logo">{props.companyInfo.companyTitle}</h2>
-          )}
+          <img
+            src={(isOnline && props?.companyInfo?.logo?.length > 0) ?
+              `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${props.companyInfo.logo}` :
+              altenativeLogo
+            }
+            alt={props.companyInfo.companyTitle}
+            className="company_logo_navbar"
+          />
         </Link>
         <div className="search-input">
           <SearchInput />

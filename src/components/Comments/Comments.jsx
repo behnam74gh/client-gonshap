@@ -81,7 +81,7 @@ const Comments = ({postId,category,commentList}) => {
 
   return (
     <div className="comment_box_wrapper">
-      {!userInfo.userId && <span className="d-flex-center-center mt-3">
+      {!userInfo.userId && navigator.onLine && <span className="d-flex-center-center mt-3">
         جهت ثبت دیدگاه، ابتدا
       <strong onClick={goSigninHandler} className="text-blue mx-1" style={{cursor: "pointer"}}>وارد حساب  </strong> شوید
       </span>}
@@ -128,12 +128,13 @@ const Comments = ({postId,category,commentList}) => {
           (comment) =>
             !comment.responseTo && (
               <React.Fragment key={comment._id}>
-                <SingleComment comment={comment} category={category} />
+                <SingleComment comment={comment} category={category} goSignin={goSigninHandler} />
                 <RepleyComments
                   postId={postId}
                   commentList={commentList}
                   parentCommentId={comment._id}
                   category={category}
+                  goSignin={goSigninHandler}
                 />
               </React.Fragment>
             )

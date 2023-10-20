@@ -302,7 +302,9 @@
 }
 @media (max-width: 376px) {
   .company_logo_navbar {
-    width: 60px;
+    width: 50px;
+    max-width: 50px;
+    max-height: 50px;
   }
   .toggle-btn {
     right: 30px;
@@ -318,9 +320,6 @@
 }
 @media (max-width: 290px) {
   .logo_Img {
-    width: 50px;
-  }
-  .company_logo_navbar {
     width: 50px;
   }
   .header-wrapper {
