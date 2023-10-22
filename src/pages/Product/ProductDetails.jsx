@@ -254,7 +254,7 @@ const ProductDetails = ({
             </strong>
           </div>
           <div className="info_wrapper text-purple">
-            <strong className="question_info">قیمت فروش بازارک : </strong>
+            <strong className="question_info">قیمت فروش بازارچک : </strong>
             <strong className="answer_info">
               <strong className="mx-1">
                 {finallyPrice.toLocaleString("fa-IR")}

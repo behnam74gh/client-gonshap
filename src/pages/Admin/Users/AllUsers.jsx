@@ -125,7 +125,7 @@ const AllUsers = () => {
 
   return (
     <div className="admin-panel-wrapper">
-      <h4>فهرست اعضای بازارک</h4>
+      <h4>فهرست اعضای بازارچک</h4>
       <div className="table-wrapper">
         <table>
           <thead>

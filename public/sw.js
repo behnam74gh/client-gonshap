@@ -1,6 +1,6 @@
 const self = this
 
-const cacheName = `bazarak-static-v-${0.01}` 
+const cacheName = `bazarchak-static-v-${0.01}` 
 
 const HomePageUrls = [
     '/',

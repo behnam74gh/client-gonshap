@@ -146,7 +146,7 @@ const Product = ({ match }) => {
       .then((response) => {
         if (response.data.success) {
           dispatch({ type: CLOSE_STAR_RATING_MODAL });
-          toast.info("از توجه شما متشکریم ،مدیریت بازارک!");
+          toast.info("از توجه شما متشکریم ،مدیریت بازارچک!");
           loadCurrentProduct();
         }
       })

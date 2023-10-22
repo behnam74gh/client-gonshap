@@ -39,7 +39,7 @@ const StoreAdminDashboard = ({history}) => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>بازارک</title>
+        <title>بازارچک</title>
       </Helmet>
         <Link to='/store-admin/dashboard/home' ref={dashboardHomeLionkref} />
 

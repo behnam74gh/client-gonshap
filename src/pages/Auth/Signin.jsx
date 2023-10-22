@@ -138,7 +138,7 @@ const Signin = ({ history, location }) => {
       </Helmet>
       {registered && (
         <h3 className="success-message">
-          تبریک! شما عضو خانواده بازارک شدید.
+          تبریک! شما عضو خانواده بازارچک شدید.
         </h3>
       )}
       {history?.location?.state?.from.includes('/product/details/') ? 

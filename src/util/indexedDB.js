@@ -2,7 +2,7 @@ import Dexie from "dexie";
 
 const dbVersion = 1
 
-export const db = new Dexie('bazarak_db');
+export const db = new Dexie('bazarchak_db');
 
 db.version(dbVersion).stores({
     supplierList: 'phoneNumber, &phoneNumber',

@@ -151,7 +151,7 @@ const Tickets = () => {
 
   return (
     <div className="admin-panel-wrapper">
-      <h4>فهرست تیکت های دریافتی از کاربران بازارک</h4>
+      <h4>فهرست تیکت های دریافتی از کاربران بازارچک</h4>
       {loading ? (
         <VscLoading className="loader" />
       ) : (

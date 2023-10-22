@@ -39,7 +39,7 @@ const CartTotalInfo = ({cartItemsInfo}) => {
     );
 
     if (colorNeededItem || activeCartItems.length < 1) {
-      return colorNeededItem ? toast.warning("رنگ کالا را مشخص نکردید") : toast.warning('ثبت نشد، محصول موجود نمی باشد');
+      return colorNeededItem ? toast.warning("رنگ کالا را مشخص نکردید") : toast.warning('محصول ناموجود شده است و امکان ثبت سفارش وجود ندارد');
     } else {
       setLoading2(true);
 

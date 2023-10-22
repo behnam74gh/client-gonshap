@@ -68,7 +68,7 @@ const AdminDashboard = ({ history }) => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>بازارک</title>
+        <title>بازارچک</title>
       </Helmet>
       <Link to="/admin/dashboard/home" ref={dashHomeLinkRef} />
       <AdminDashboardLayout>

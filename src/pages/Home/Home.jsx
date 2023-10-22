@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>بازارک</title>
+        <title>بازارچک</title>
       </Helmet>
       <Section1 />
       <Section3 />
