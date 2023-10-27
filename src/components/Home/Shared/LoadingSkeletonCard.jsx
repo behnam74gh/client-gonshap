@@ -5,8 +5,8 @@ import "./ProductCard.css";
 const LoadingSkeletonCard = ({ count }) => {
   useEffect(() => {
     const singleSkeleton = document.querySelector(".single_skeleton");
-    const wrapper = singleSkeleton.parentElement;
-    if (!wrapper.classList.contains("skeleton_wrapper")) {
+    const wrapper = singleSkeleton?.parentElement;
+    if (wrapper && !wrapper.classList.contains("skeleton_wrapper")) {
       wrapper.classList.add("skeleton_wrapper");
     }
   }, []);
