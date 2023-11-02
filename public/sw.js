@@ -1,6 +1,6 @@
 const self = this
 
-const cacheName = `bazarchak-static-v-${0.01}` 
+const cacheName = `bazarchak-static-v-${0.01}`
 
 const HomePageUrls = [
     '/',
@@ -35,7 +35,6 @@ const HomePageUrls = [
     '/static/js/src_components_Home_Section2_Section2_jsx-src_components_UI_LoadingSkeleton_LoadingSkeleton_j-9b1f61.chunk.js',
     '/static/js/src_redux_Actions_shopActions_js-src_components_Home_Section3_Section3_css.chunk.js',
     '/logo192.png',
-    'http://localhost:8000/uploads/images/77e05f70-4101-11ee-9418-51da708c68fd.png',
     '/static/js/src_components_Home_Section5_Section5_jsx-src_components_Home_Section8_Section8_jsx.chunk.js',
     '/static/js/src_components_Home_Section13_Section13_jsx.chunk.js',
     '/static/js/src_components_Home_Section6_Section6_jsx.chunk.js',
@@ -74,18 +73,18 @@ const FavoritesPageUrls = [
 self.addEventListener('install', e => {
     e.waitUntil(
         caches.open(cacheName)
-        .then(cache => {
-            cache.addAll([
-                ...HomePageUrls,
-                ...CartPageUrls,
-                ...FavoritesPageUrls,
-                '/static/js/src_pages_Product_Product_jsx.chunk.js',
-                '/shop',
-                '/static/js/src_pages_Shop_ShopPage_jsx.chunk.js',
-                '/static/js/src_layout_Layout_jsx.chunk.js',
-                '/static/js/vendors-node_modules_react-icons_lib_esm_index_js-node_modules_react-input-range-rtl_lib_js_i-426034.chunk.js',
-            ])
-        })
+            .then(cache => {
+                cache.addAll([
+                    ...HomePageUrls,
+                    ...CartPageUrls,
+                    ...FavoritesPageUrls,
+                    '/static/js/src_pages_Product_Product_jsx.chunk.js',
+                    '/shop',
+                    '/static/js/src_pages_Shop_ShopPage_jsx.chunk.js',
+                    '/static/js/src_layout_Layout_jsx.chunk.js',
+                    '/static/js/vendors-node_modules_react-icons_lib_esm_index_js-node_modules_react-input-range-rtl_lib_js_i-426034.chunk.js',
+                ])
+            })
     )
 })
 
@@ -94,31 +93,31 @@ self.addEventListener('activate', e => {
         caches.keys().then(existedCacheNames => {
             return Promise.all(
                 existedCacheNames.forEach(ExistedcacheName => {
-                    if (ExistedcacheName !== cacheName){
+                    if (ExistedcacheName !== cacheName) {
                         return caches.delete(ExistedcacheName)
                     }
                 })
             )
         })
     )
-    
+
 })
 
 self.addEventListener('fetch', e => {
     const validDestination = e.request.destination.length > 1;
     const invalidUrl = e.request.url.includes('/uploads/images/') || e.request.url.includes('/leaflet') || e.request.url.includes('openstreetmap')
 
-    if(e.request.method === 'GET' && !invalidUrl && validDestination){
+    if (e.request.method === 'GET' && !invalidUrl && validDestination) {
         e.respondWith(
             caches.match(e.request)
-            .then(response => {
-                if (response) {
-                    return response;
-                }else{
-                    return fetch(e.request)
-                } 
-            })
+                .then(response => {
+                    if (response) {
+                        return response;
+                    } else {
+                        return fetch(e.request)
+                    }
+                })
         )
     }
-    
+
 })
