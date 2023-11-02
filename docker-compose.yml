@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  nginx:
+    container_name: client_nginx
+    image: nginx:stable-alpine
+    command: nginx -g "daemon off;"
+    ports:
+      - "3000:80"
+    volumes:
+      - ./build:/usr/share/nginx/html/
+    restart: always
