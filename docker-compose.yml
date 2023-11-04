@@ -2,7 +2,7 @@ version: '3'
 services:
   nginx:
     container_name: client_nginx
-    image: nginx
+    image: docker.arvancloud.ir/nginx
     command: nginx -g "daemon off;"
     ports:
       - "80:80"
