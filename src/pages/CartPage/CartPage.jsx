@@ -7,7 +7,6 @@ import CartTotalInfo from "./CartTotalInfo";
 import defPic from "../../assets/images/def.jpg";
 import Backdrop from "../../components/UI/Backdrop/Backdrop";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
-import Section5 from "../../components/Home/Section5/Section5";
 import Section8 from "../../components/Home/Section8/Section8";
 import { db } from "../../util/indexedDB";
 import { Helmet } from "react-helmet-async";
@@ -41,7 +40,7 @@ const CartPage = () => {
         }
       })
     }
-  }, [dispatch,isOnline,cartItems]);
+  }, [dispatch,isOnline]);
 
   useEffect(() => {
     if (deprecatedItems && deprecatedItems.length > 0) {
@@ -66,7 +65,7 @@ const CartPage = () => {
             <React.Fragment>
               {cartItems &&
                 cartItems.length > 0 &&
-                cartItems.map((item, i) => <LoadingSkeleton key={i} />)}
+                cartItems.map((item) => <LoadingSkeleton key={item.id} />)}
             </React.Fragment>
           ) : errorText && errorText.length > 0 ? (
             <p className="warning-message">{errorText}</p>
@@ -125,7 +124,6 @@ const CartPage = () => {
         </div>
       )}
       <Section8 />
-      <Section5 />
     </section>
   );
 };

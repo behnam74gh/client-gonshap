@@ -1,11 +1,20 @@
 version: '3'
 services:
   nginx:
-    container_name: client_nginx
-    image: docker.arvancloud.ir/nginx
+    container_name: nginx
+    image: docker.arvancloud.ir/nginx:stable-alpine
     command: nginx -g "daemon off;"
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./build:/usr/share/nginx/html/
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro 
+      - /etc/ssl:/etc/ssl
     restart: always
+    networks:
+      - bazarchak
+
+networks:
+  bazarchak:
+    external: true
