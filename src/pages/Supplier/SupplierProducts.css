@@ -68,6 +68,14 @@
   }
   .supplier_products_wrapper {
     gap: 20px 10px;
-    margin: 50px 0 10px;
+    margin: 10px 0;
+  }
+}
+@media (max-width: 370px) {
+  .suppliers_list_of_products_wrapper p:first-of-type {
+    margin: 0;
+  }
+  .suppliers_list_of_products_wrapper p:first-of-type > strong {
+    margin: 0;
   }
 }

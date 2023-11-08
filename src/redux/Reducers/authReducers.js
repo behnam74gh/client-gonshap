@@ -29,6 +29,7 @@ export const userSigninReducer = (state = initialState, action) => {
       return { ...state, loading: true };
     case USER_SIGNIN_SUCCESS:
       return {
+        ...state,
         loading: false,
         userInfo: {
           firstName: action.payload.firstName,
@@ -43,6 +44,7 @@ export const userSigninReducer = (state = initialState, action) => {
       return { ...state,loading: false };
     case UPDATE_USER_INFO:
       return {
+        ...state,
         loading: false,
         userInfo: {
           ...state.userInfo,

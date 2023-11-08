@@ -98,37 +98,37 @@ const Signin = ({ history, location }) => {
     dispatch({ type: USER_SIGNIN_REQUEST });
     const { phoneNumber, password } = formState.inputs;
     setError("");
-    if (!expired) {
-      axios
-        .post("/signin", {
-          phoneNumber: phoneNumber.value,
-          password: password.value,
-          saveInfo: remindMe,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            const { firstName, avatar, role, isBan, userId, supplierFor, csrfToken } =  getCookie('userInfoBZ');
-            
-            dispatch({
-              type: USER_SIGNIN_SUCCESS,
-              payload: { firstName, role, isBan, supplierFor, userId, csrfToken },
-            });
-            dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: avatar });
+    
+    axios
+      .post("/signin", {
+        phoneNumber: phoneNumber.value,
+        password: password.value,
+        saveInfo: remindMe,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          const { firstName, avatar, role, isBan, userId, supplierFor, csrfToken } =  getCookie('userInfoBZ');
+          
+          dispatch({
+            type: USER_SIGNIN_SUCCESS,
+            payload: { firstName, role, isBan, supplierFor, userId, csrfToken },
+          });
+          dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: avatar });
 
-            roleBasedRedirect(role);
-          }else{
-            setError('ارتباط با سرور برقرار نشد')
-          }
-        })
-        .catch((err) => {
-          if (typeof err.response.data.message === "object") {
-            setError(err.response.data.message[0]);
-          } else {
-            setError(err.response.data.message);
-          }
+          roleBasedRedirect(role);
+        }else{
+          setError('ارتباط با سرور برقرار نشد')
           dispatch({ type: USER_SIGNIN_FAIL });
-        });
-    }
+        }
+      })
+      .catch((err) => {
+        if (typeof err.response.data.message === "object") {
+          setError(err.response.data.message[0]);
+        } else {
+          setError(err.response.data.message);
+        }
+        dispatch({ type: USER_SIGNIN_FAIL });
+      });
   };
 
   return (

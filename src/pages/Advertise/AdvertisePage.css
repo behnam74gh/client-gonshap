@@ -25,4 +25,7 @@
     #advertise_page {
         padding-top: 15px;
     }
+    .social_address_wrapper span {
+        font-size: 10px;
+    }
 }

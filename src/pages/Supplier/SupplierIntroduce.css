@@ -272,4 +272,15 @@
     height: 60px;
     margin: 10px 0px 5px 10px;
   }
+  .info_box strong {
+    font-size: 12px;
+  }
+}
+@media (max-width: 370px) {
+  .info_box strong {
+    font-size: 10px;
+  }
+  .info_box span {
+    font-size: 10px;
+  }
 }

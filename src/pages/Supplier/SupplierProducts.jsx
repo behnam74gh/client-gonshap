@@ -96,10 +96,9 @@ const SupplierProducts = ({ backupFor,storeName }) => {
     <div className="suppliers_list_of_products_wrapper">
       <div className="supplier_subcategory_wrapper">
         <p className="font-sm my-1 mx-2">
-          محصولات <strong className="mx-1">{backupFor?.name}</strong>{" "}
+        تامین محصولات <strong className="mx-1">{backupFor?.name}</strong>{" "}
           از فروشگاه{" "}    
-          <strong className="mx-1">{storeName}</strong> {" "}
-            تامین میشوند.
+          <strong>{storeName}</strong>
         </p>
         {subcategories.length > 0 && navigator.onLine &&
           <select className="categories_wrapper_select" onChange={(e) => switchSubcategoryHandler(e.target.value)}>
