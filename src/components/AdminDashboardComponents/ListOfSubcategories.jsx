@@ -3,11 +3,13 @@ import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import LocalSearch from "../UI/FormElement/LocalSearch";
 import Pagination from "../UI/Pagination/Pagination";
+import { VscLoading } from "react-icons/vsc";
 
 const ListOfSubcategories = ({
   subcategories,
   categories,
-  role
+  role,
+  loading
 }) => {
   const [currentSubs, setCurrentSubs] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -84,7 +86,15 @@ const ListOfSubcategories = ({
               </tr>
             </thead>
             <tbody>
-              {currentSubs.length > 0 &&
+              {loading ? (
+              <tr>
+                <td colSpan="5">
+                  <div className="loader_wrapper">
+                    <VscLoading className="loader" />
+                  </div>
+                </td>
+              </tr>
+              )  : currentSubs.length > 0 &&
                 currentSubs.filter(searched(keyword)).map((s) => (
                   <tr key={s._id}>
                     <td className="font-sm">{s.name}</td>

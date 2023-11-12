@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
-
 import { useForm } from "../../../util/hooks/formHook";
 import axios from "../../../util/axios";
 import { useSelector } from "react-redux";
@@ -17,6 +16,7 @@ import "./SubCategory.css";
 
 const SubCategory = () => {
   const [loading, setLoading] = useState(false);
+  const [subsLoading, setSubsLoading] = useState(false);
   const [subcategories, setSubcategories] = useState([]);
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState();
@@ -47,9 +47,11 @@ const SubCategory = () => {
   };
 
   const loadAllSubcategories = () => {
+    setSubsLoading(true)
     axios
       .get("/get-all-subcategories")
       .then((response) => {
+        setSubsLoading(false)
         if(role === 2 && supplierFor){
           const newSubs = response.data.subcategories.filter((s) => s.parent === supplierFor);
           setSubcategories(newSubs);
@@ -58,6 +60,7 @@ const SubCategory = () => {
         }
       })
       .catch((err) => {
+        setSubsLoading(false)
         if (err.response) {
           toast.warning(err.response.data.message);
         }
@@ -134,11 +137,12 @@ const SubCategory = () => {
         </Button>
       </form>
       <hr />
-      {subcategories?.length > 0 && <ListOfSubcategories
+      <ListOfSubcategories
         subcategories={subcategories}
         categories={categories}
         role={role}
-      />}
+        loading={subsLoading}
+      />
     </div>
   );
 };

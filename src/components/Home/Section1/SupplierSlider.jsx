@@ -14,17 +14,17 @@ const SupplierSlider = () => {
     const ac = new AbortController()
     let mounted = true;
     setLoading(true);
+    const currentRegion = localStorage.getItem("activeRegion") || 'all';
     axios
-      .get("/all-suppliers",{signal: ac.signal})
+      .get(`/region-suppliers/${currentRegion}`,{signal: ac.signal})
       .then((response) => {
         if (response.data.success && mounted) {
           setLoading(false);
-          const activeSuppliers = response.data.allSuppliers.filter(s => !s.isBan)
-          setSuppliers(activeSuppliers);
+          setSuppliers(response.data.allSuppliers);
           setErrorText("");
 
           db.supplierList.clear()
-          db.supplierList.bulkPut(activeSuppliers)
+          db.supplierList.bulkPut(response.data.allSuppliers)
         }
       })
       .catch((err) => {

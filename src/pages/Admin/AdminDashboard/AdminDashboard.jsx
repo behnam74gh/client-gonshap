@@ -53,6 +53,8 @@ const UpdateProfileInfo = lazy(() =>
 const ChangeUserPassword = lazy(() =>
   import("../UpdateProfileInfo/ChangeUserPassword")
 );
+const Region = lazy(() => import("../Region/Region"));
+const RegionUpdate = lazy(() => import("../Region/RegionUpdate"));
 const Location = lazy(() => import("../Location/Location"));
 const Helps = lazy(() => import("../Helps/Helps"));
 
@@ -170,7 +172,12 @@ const AdminDashboard = ({ history }) => {
             path="/admin/dashboard/update/user-password"
             component={ChangeUserPassword}
           />
-          <AdminRoute path="/admin/dashboard/location" component={Location} />
+          <AdminRoute path="/admin/dashboard/region" component={Region} />
+          <AdminRoute
+            path="/admin/dashboard/regions/:id"
+            component={RegionUpdate}
+          />
+          <AdminRoute path="/admin/dashboard/info" component={Location} />
           <AdminRoute path="/admin/dashboard/help" component={Helps} />
         </Switch>
       </AdminDashboardLayout>

@@ -64,11 +64,15 @@
     border-radius: 2px;
   }
   #supplier_page select{
-    width: 100%;
+    width: 40%;
   }
   .supplier_products_wrapper {
     gap: 20px 10px;
     margin: 10px 0;
+  }
+  .supplier_subcategory_wrapper select {
+    font-size: 12px;
+    padding: 5px;
   }
 }
 @media (max-width: 370px) {

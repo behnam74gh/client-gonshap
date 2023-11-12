@@ -39,11 +39,10 @@ const Layout = (props) => {
     axios
       .get("/get-all-categories")
       .then((response) => {
-        const activeCategories = response.data.categories.filter(c => c.storeProvider !== null)
-        setCategories(activeCategories);
+        setCategories(response.data.categories);
 
         db.activeCategories.clear()
-        db.activeCategories.bulkPut(activeCategories)
+        db.activeCategories.bulkPut(response.data.categories)
       })
       .catch((err) => {
         if (err.response) {

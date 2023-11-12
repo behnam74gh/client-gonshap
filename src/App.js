@@ -39,6 +39,7 @@ const Product = lazy(() => import("./pages/Product/Product"));
 const CartPage = lazy(() => import("./pages/CartPage/CartPage"));
 const MyFavoritePage = lazy(() => import("./pages/MyFavorites/MyFavoritePage"));
 const ComparePage = lazy(() => import("./pages/Compare/ComparePage"));
+const Stores = lazy(() => import("./pages/Stores/Stores.jsx"));
 const ShopPage = lazy(() => import("./pages/Shop/ShopPage"));
 const Checkout = lazy(() => import("./pages/Checkout/Checkout"));
 const HelpPage = lazy(() => import("./pages/Help/HelpPage"));
@@ -105,6 +106,7 @@ const App = () => {
           <Route path="/cart" component={CartPage} />
           <Route path="/favorites" component={MyFavoritePage} />
           <Route path="/compares/:id" component={ComparePage} />
+          <Route path="/stores" component={Stores} />
           <Route path="/shop" component={ShopPage} />
           <Route path="/signin" component={Signin} />
           <Route path="/register" component={Register} />

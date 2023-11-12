@@ -8,6 +8,7 @@ import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
 
 const oldStates = {
+  region: "",
   title: "",
   storePhoneNumber: "",
   phoneNumber: "",
@@ -19,6 +20,7 @@ const oldStates = {
   instagramId: "",
   telegramId: "",
   whatsupId: "",
+  authentic: false,
 };
 
 const CarouselUpdate = ({ history, match }) => {
@@ -30,6 +32,7 @@ const CarouselUpdate = ({ history, match }) => {
   const [values, setValues] = useState(oldStates);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [regions, setRegions] = useState([]);
 
   const { slug } = match.params;
   const loadAllCategories = () => {
@@ -40,13 +43,27 @@ const CarouselUpdate = ({ history, match }) => {
       })
       .catch((err) => {
         if (err.response) {
-          toast.warn(err.response.data.message);
+          toast.warning(err.response.data.message);
         }
       });
   };
-
+  const loadAllRegions = () => {
+    axios
+      .get("/get-all-regions")
+      .then((response) => {
+        if (response.data.success) {
+            setRegions(response.data.regions);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.warning(err.response.data.message);
+        }
+      });
+  };
   useEffect(() => {
     loadAllCategories();
+    loadAllRegions()
   }, []);
 
   useEffect(() => {
@@ -54,6 +71,7 @@ const CarouselUpdate = ({ history, match }) => {
       .get(`/current-supplier/${slug}`)
       .then((response) => {
         const {
+          region,
           title,
           storePhoneNumber,
           phoneNumber,
@@ -66,9 +84,12 @@ const CarouselUpdate = ({ history, match }) => {
           whatsupId,
           backupFor,
           photos,
+          authentic,
         } = response.data.thisSupplier;
+        
         if (response.data.success) {
           setValues({
+            region,
             title,
             storePhoneNumber,
             phoneNumber,
@@ -80,6 +101,7 @@ const CarouselUpdate = ({ history, match }) => {
             whatsupId,
             description,
             backupFor: backupFor._id,
+            authentic: Boolean(authentic),
           });
           setOldPhotos(photos);
         }
@@ -145,6 +167,7 @@ const CarouselUpdate = ({ history, match }) => {
     e.preventDefault();
 
     const {
+      region,
       title,
       storePhoneNumber,
       backupFor,
@@ -157,6 +180,7 @@ const CarouselUpdate = ({ history, match }) => {
 
     const formData = new FormData();
 
+    formData.append("region", region);
     formData.append("title", title);
     formData.append("storePhoneNumber", storePhoneNumber);
     formData.append("phoneNumber", phoneNumber);
@@ -167,6 +191,7 @@ const CarouselUpdate = ({ history, match }) => {
     formData.append("instagramId", values.instagramId);
     formData.append("telegramId", values.telegramId);
     formData.append("whatsupId", values.whatsupId);
+    formData.append("authentic", values.authentic);
     formData.append("description", description);
 
     formData.append("deletedPhotos", deletedPhotos);
@@ -206,9 +231,7 @@ const CarouselUpdate = ({ history, match }) => {
         <div className="d-flex-around mb-2">
           <h4 className="my-0">
             ویرایش اطلاعات فروشگاه{" "}
-            <strong className="text-blue">{values.title}</strong> که تامین کننده
-            محصولات
-            <strong className="text-blue">&nbsp;{values.backupFor}</strong> است.
+            <strong className="text-blue">{values.title}</strong>
           </h4>
           <Link
             to="/admin/dashboard/carousel"
@@ -265,7 +288,23 @@ const CarouselUpdate = ({ history, match }) => {
               </div>
             ))}
         </div>
-        <label className="auth-label" htmlFor="category">
+        <label className="auth-label">
+          منطقه (شهر) :
+        </label>
+        <select
+          name="region"
+          value={values.region}
+          onChange={(e) => changeInputHandler(e)}
+        >
+          <option>منطقه را انتخاب کنید</option>
+          {regions.length > 0 &&
+            regions.map((r) => (
+              <option key={r._id} value={r._id}>
+                {r.name}
+              </option>
+            ))}
+        </select>
+        <label className="auth-label">
           عنوان فروشگاه :
         </label>
         <input
@@ -281,7 +320,7 @@ const CarouselUpdate = ({ history, match }) => {
           type="text"
           disabled={true}
         />
-        <label className="auth-label" htmlFor="category">
+        <label className="auth-label">
           محصولات پشتیبانی :
         </label>
         <select
@@ -346,6 +385,15 @@ const CarouselUpdate = ({ history, match }) => {
           type="text"
           onChange={(e) => changeInputHandler(e)}
         />
+        <label className="auth-label">تیک آبی :</label>
+          <select
+            name="authentic"
+            value={values.authentic}
+            onChange={(e) => changeInputHandler(e)}
+          >
+            <option value={true}>داشته باشد</option>
+            <option value={false}>نداشته باشد</option>
+          </select>
         <textarea
           type="text"
           name="description"

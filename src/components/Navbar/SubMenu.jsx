@@ -10,7 +10,7 @@ import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
 import "./SubMenu.css";
 
 const SubMenu = () => {
-  const [activeCategoryName, setActiveCategoryName] = useState("لوازم خانگی");
+  const [activeCategoryName, setActiveCategoryName] = useState("");
   const [activeSubs, setActiveSubs] = useState([]);
 
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ const SubMenu = () => {
 
   useEffect(() => {
     if (categories && subcategories && subcategories.length > 0) {
+      setActiveCategoryName(categories[0].name)
       const subs = subcategories.filter((s) => s.parent === categories[0]._id);
       if (subs.length > 0) {
         setActiveSubs(subs);
@@ -35,7 +36,7 @@ const SubMenu = () => {
     const subMenu = subMenuContainer.current;
     const { centerNavItem,bottomNavItem } = location;
     subMenu.style.left = `${centerNavItem - (subMenu.offsetWidth / 2)}px`;
-    subMenu.style.top = `${bottomNavItem}px`;
+    subMenu.style.top = `${bottomNavItem + window.scrollY}px`;
   }, [location]);
 
   const displaySubCategories = (categoryName, _id) => {

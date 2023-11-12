@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { RiLogoutBoxLine, RiLogoutBoxRLine } from "react-icons/ri";
 import { FaBars } from "react-icons/fa";
 import { AiOutlineUser } from "react-icons/ai";
@@ -14,9 +14,11 @@ import SearchInput from "../UI/FormElement/SearchInput";
 import { USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
 import altenativeLogo from '../../assets/images/logo-alternative.png'
+import { VscLoading } from "react-icons/vsc";
 import "./Navbar.css";
 
 const Navbar = (props) => {
+  const [ loading,setLoading ] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory()
 
@@ -49,14 +51,16 @@ const Navbar = (props) => {
       toast.warn('شما آفلاین هستید')
       return;
     }
-
+    setLoading(true)
     axios.get('/sign-out/user').then(res => {
+      setLoading(false)
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
         localStorage.removeItem("BZ_User_Info");
         history.push('/')
       }
     }).catch(err => {
+      setLoading(false)
       if(err.response.status !== 401){
         toast.warn('خروج ناموفق بود')
       }
@@ -95,7 +99,7 @@ const Navbar = (props) => {
                     </span>
                     <span onClick={signoutHandler}>
                       <RiLogoutBoxRLine />
-                      خروج از حساب
+                      {loading ? <VscLoading className="loader" /> : "خروج از حساب"}
                     </span>
                   </div>
                 </div>

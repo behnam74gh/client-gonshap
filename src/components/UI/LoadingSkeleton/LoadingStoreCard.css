@@ -1,0 +1,35 @@
+.store_card_skeleton{
+    width: 200px !important;
+    height: 225px;
+}
+.store_card_wrapper{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+@media (max-width: 450px) {
+    .store_card_skeleton{
+        width: 150px !important;
+        height: 200px;
+    }
+}
+@media (max-width: 365px) {
+    .store_card_skeleton{
+        width: 135px !important;
+        height: 165px;
+    }
+}
+@media (max-width: 330px) {
+    .store_card_skeleton{
+        width: 120px !important;
+        height: 160px;
+    }
+}
+@media (max-width: 300px) {
+    .store_card_skeleton{
+        width: 110px !important;
+        height: 150px;
+    }
+}

@@ -185,9 +185,6 @@ const ProductDetails = ({
             {ratings && ratings.length > 0 ? (
               <div className="product_rating_wrapper_info">
                 {ShowRatingAverage(product)}
-                <span className="mr-1 font-sm d-flex-center-center">
-                  از<span className="mx-1">({ratings.length})</span>امتیاز
-                </span>
               </div>
             ) : (
               <p className="font-sm">امتیازی داده نشده است</p>

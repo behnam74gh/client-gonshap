@@ -493,7 +493,7 @@ const ProductCreate = () => {
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(10),
-              VALIDATOR_MINLENGTH(6),
+              VALIDATOR_MINLENGTH(5),
               VALIDATOR_NUMBER(),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
@@ -507,7 +507,7 @@ const ProductCreate = () => {
             focusHandler={clearFinallyPriceHandler}
             validators={[
               VALIDATOR_MAXLENGTH(10),
-              VALIDATOR_MINLENGTH(6),
+              VALIDATOR_MINLENGTH(5),
               VALIDATOR_NUMBER(),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}

@@ -21,6 +21,19 @@
         margin: 10px 0 0;
     }
 }
+@media (max-width: 930px) {
+    .social_address_wrapper span {
+        font-size: 12px;
+    }
+    .social_address_wrapper {
+        margin: 4px 0 0;
+    }
+}
+@media (max-width: 850px) {
+    .social_address_wrapper span {
+        font-size: 10px;
+    }
+}
 @media (max-width: 460px) {
     #advertise_page {
         padding-top: 15px;

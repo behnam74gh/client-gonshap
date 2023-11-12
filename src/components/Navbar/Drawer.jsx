@@ -90,6 +90,9 @@ const Drawer = (props) => {
               <li onClick={props.backdropClick}>
                 <Link to="/shop">ویترین</Link>
               </li>
+              <li onClick={props.backdropClick}>
+                <Link to="/stores">فروشگاه ها</Link>
+              </li>
               <li
                 className={
                   activeOrder === "reviewsCount"

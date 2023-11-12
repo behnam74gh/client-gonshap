@@ -120,8 +120,7 @@ const ShopPage = () => {
       .get("/get-all-categories")
       .then((response) => {
         if (response.data.success) {
-          const activeCategories = response.data.categories.filter(c => c.storeProvider !== null)
-          setCategories(activeCategories);
+          setCategories(response.data.categories);
         }
       })
       .catch((err) => {
@@ -381,7 +380,7 @@ const ShopPage = () => {
             className="filter_btn"
             onClick={() => setOpenMobileFiltering(!openMobileFiltering)}
           >
-            فیلترینگ
+            {openMobileFiltering ? "بستن فیلتر" : "فیلتر کن"}
           </span>
 
           <select

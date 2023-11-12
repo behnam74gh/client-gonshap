@@ -69,3 +69,11 @@
     padding: 0 0 0 15px;
   }
 }
+@media (max-width: 1060px) {
+  .nav-items li {
+    padding: 0 6px;
+  }
+  .nav-items li:first-child {
+    padding: 0 0 0 10px;
+  }
+}

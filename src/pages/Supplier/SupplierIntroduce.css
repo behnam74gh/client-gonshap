@@ -63,7 +63,7 @@
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
-  margin: 10px 0;
+  margin: 5px 0;
   gap: 0 10px;
   font-size: 14px;
 }
@@ -90,6 +90,7 @@
 .map_supp {
   height: 100%;
   border-radius: 10px;
+  z-index: 99;
 }
 
 /* supplier_content_wrapper */
@@ -141,7 +142,7 @@
     padding: 0;
   }
   .info_box {
-    margin: 5px 0;
+    margin: 2px 0;
   }
   .info_box strong {
     font-size: 14px;
@@ -158,6 +159,9 @@
   .store_carousel_wrapper {
     flex-basis: 63%;
     width: 63%;
+  }
+  .info_box span {
+    font-size: 10px;
   }
 }
 
@@ -179,7 +183,10 @@
   }
   .info_box {
     font-size: 12px;
-    margin: 6px 0;
+    margin: 1px 0;
+  }
+  .info_box strong {
+    font-size: 12px;
   }
   .supplier_map {
     height: 220px;
@@ -242,6 +249,10 @@
   .supplier_information_wrapper {
     margin: 15px 0;
   }
+  .supplier_subcategory_wrapper {
+    justify-content: center;
+    gap: 0 10px;
+  }
   .supplier_info_box {
     flex-basis: 100%;
     min-height: 100px;
@@ -250,6 +261,7 @@
   .info_box {
     font-size: 10px;
     justify-content: space-between;
+    margin: 3px 0;
   }
   .supplier_location_box {
     flex-basis: 100%;

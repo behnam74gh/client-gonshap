@@ -60,9 +60,8 @@ const Section3 = () => {
           if (response.data.success && mounted) {
             const { categories } = response.data;
             if (categories?.length > 0) {
-              const activeCategories = categories.filter(c => c.storeProvider !== null)
-              setCategories(activeCategories);
-              setActiveCategory(activeCategories[0]._id);
+              setCategories(categories);
+              setActiveCategory(categories[0]._id);
             }
           }
         })

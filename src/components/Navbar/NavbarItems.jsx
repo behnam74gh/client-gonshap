@@ -38,6 +38,9 @@ const NavbarItems = ({ categories, subcategories, helps }) => {
       <li>
         <Link to="/shop">ویترین</Link>
       </li>
+      <li>
+        <Link to="/stores" className="text-purple">فروشگاه ها</Link>
+      </li>
       <li className="submenu-link">
         <FaTh className="submenu-link" style={{ marginLeft: "10px" }} />
         <span

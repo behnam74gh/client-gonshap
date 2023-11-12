@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { MdEdit,MdOutlineToggleOn,MdToggleOff } from "react-icons/md";
-import { RiSearchLine, RiDeleteBin2Fill } from "react-icons/ri";
-import { HiBadgeCheck } from "react-icons/hi";
-import { TiDelete } from "react-icons/ti";
+import { RiSearchLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
 import { useSelector } from "react-redux";
@@ -26,8 +24,9 @@ const Products = () => {
   const [activeCount, setActiveCount] = useState("none");
   const [reRender,setReRender] = useState(false)
   const [loading, setLoading] = useState(false);
+  const [toggleLoading, setToggleLoading] = useState(false);
   const [products, setProducts] = useState([]);
-  const [perPage, setPerPage] = useState(50);
+  const [perPage] = useState(50);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -35,6 +34,10 @@ const Products = () => {
   const [oPage, setOPage] = useState(1);
   const [activeFilterConfig, setActiveFilterConfig] = useState("none");
   const [errorText, setErrorText] = useState("");
+  const [generate, setGenerate] = useState({
+    id: null,
+    value: true
+  });
   
   const getProductsLength = () =>
     axios
@@ -101,8 +104,8 @@ const Products = () => {
         perPage,
       })
       .then((response) => {
+        setLoading(false);
         if (response.data.success) {
-          setLoading(false);
           setProducts(response.data.products);
         }
       })
@@ -176,6 +179,7 @@ const Products = () => {
   }, []);
 
   const searchProductsByQueryText = () => {
+    setLoading(true)
     setOPage(1);
     setOrderConfig("none");
     setActiveSell("none");
@@ -187,12 +191,14 @@ const Products = () => {
     axios
       .post("/products/search/filters", { query: queryText })
       .then((response) => {
+        setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
           setOtherFilterings(true);
         }
       })
       .catch((err) => {
+        setLoading(false)
         setProducts([]);
         if (typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
@@ -221,6 +227,7 @@ const Products = () => {
     if (!otherFilterings) {
       setOtherFilterings(true);
     }
+    setLoading(true)
     setOPage(1);
     setQueryText("");
     setOrderConfig("none");
@@ -235,11 +242,13 @@ const Products = () => {
     axios
       .post("/products/search/filters", { category: e })
       .then((response) => {
+        setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
         }
       })
       .catch((err) => {
+        setLoading(false)
         setProducts([]);
         if (typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
@@ -268,6 +277,7 @@ const Products = () => {
     if (!otherFilterings) {
       setOtherFilterings(true);
     }
+    setLoading(true)
     setOPage(1);
     setQueryText("");
     setOrderConfig("none");
@@ -282,11 +292,13 @@ const Products = () => {
     axios
       .post("/products/search/filters", { subcategory: e })
       .then((response) => {
+        setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
         }
       })
       .catch((err) => {
+        setLoading(false)
         setProducts([]);
         if (typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
@@ -304,6 +316,7 @@ const Products = () => {
     if (!otherFilterings) {
       setOtherFilterings(true);
     }
+    setLoading(true)
     setOPage(1);
     setQueryText("");
     setOrderConfig("none");
@@ -318,11 +331,13 @@ const Products = () => {
     axios
       .post("/products/search/filters", { brand: e })
       .then((response) => {
+        setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
         }
       })
       .catch((err) => {
+        setLoading(false)
         setProducts([]);
         if (typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
@@ -340,7 +355,7 @@ const Products = () => {
     if (!otherFilterings) {
       setOtherFilterings(true);
     }
-
+    setLoading(true)
     setOPage(1);
     setQueryText("");
     setOrderConfig("none");
@@ -357,11 +372,13 @@ const Products = () => {
     axios
       .post("/products/search/filters", config)
       .then((response) => {
+        setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
         }
       })
       .catch((err) => {
+        setLoading(false)
         setProducts([]);
         if (typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
@@ -379,7 +396,7 @@ const Products = () => {
     if (!otherFilterings) {
       setOtherFilterings(true);
     }
-
+    setLoading(true)
     setOPage(1);
     setQueryText("");
     setOrderConfig("none");
@@ -411,11 +428,13 @@ const Products = () => {
     axios
       .post("/products/search/filters", config)
       .then((response) => {
+        setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
         }
       })
       .catch((err) => {
+        setLoading(false)
         setProducts([]);
         if (typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
@@ -432,26 +451,35 @@ const Products = () => {
     indexOfLastProducts
   );
 
-  const toggleProductSellHandler = (_id, sell, title) => {
+  const toggleProductSellHandler = (_id, sell, title,i) => {
     if (
       window.confirm(
         `میخواهید محصول با عنوان "${title}" را ${sell ? "از فهرست کالاهای قابل فروش بردارید" : "به حالت امکان فروش برگردانید"}؟`
       )
     ) {
+      setToggleLoading(true)
+      setGenerate({
+        ...generate,
+        id: _id
+      })
       axios
-        .put('/product/sell/toggle', { _id,sell })
+        .put('/product/sell/toggle', { _id, sell })
         .then((response) => {
+          setToggleLoading(false)
           if (response.data.success) {
             toast.success(response.data.message);
-            if (
-              productsLength === products.length ||
-              productsLength > products.length
-            ) {
-              perPage < 50 ? setPerPage(50) : setPerPage(49);
-            }
+            let oldProducts = products;
+            const p = oldProducts.find(p => p._id === _id);
+            p.sell = !sell; 
+            setProducts(oldProducts)
+            setGenerate({
+              ...generate,
+              value: false
+            })
           }
         })
         .catch((err) => {
+          setToggleLoading(false)
           if (typeof err.response.data.message === "object") {
             toast.error(err.response.data.message[0]);
           } else {
@@ -548,314 +576,314 @@ const Products = () => {
     toast.info(`کد محصول با نام "${title}" کپی شد`)
   }
 
+  const keyPressedHandler = (e) => {
+    if(e.keyCode === 13){
+      searchProductsByQueryText()
+    };
+  }
+
+  useEffect(() => {
+    setGenerate({
+      ...generate,
+      value: true
+    })
+  }, [generate.value])
+
   return (
     <div className="admin-panel-wrapper">
-      {!otherFilterings ? (
-        <h4>
-          تعداد " <strong className="text-blue">{productsLength}</strong> "
-          محصول در لیست محصولات وجود دارد!
-        </h4>
-      ) : (
-        <h4>
-          تعداد " <strong className="text-blue">{products.length}</strong> "
-          محصول در مرتب سازی جدید وجود دارد!
-        </h4>
-      )}
+      <h4>
+        تعداد " <strong className="text-blue">{!otherFilterings ? productsLength : products.length}</strong> "
+        محصول در لیست محصولات وجود دارد!
+      </h4>
+      
       {errorText.length > 0 && (
         <p className="warning-message my-1">{errorText}</p>
       )}
-      {loading ? (
-        <VscLoading className="loader" />
-      ) : (
-        <div className="table-wrapper">
-          <table>
-            <thead className="heading-table">
-              {role === 1 && <tr>
-                <th colSpan="5">
-                  <select
-                    value={orderConfig}
-                    onChange={(e) => searchProductsByCreated(e.target.value)}
-                  >
-                    <option value="none" className="text-white bg-orange">
-                      ⬆⬇ ترتیب مرتب سازی (کلی)
-                    </option>
-                    <option value="1">جدیدترین محصولات</option>
-                    <option value="2">قدیمی ترین محصولات</option>
-                    <option value="3">پرفروش ترین محصولات</option>
-                    <option value="4">کم فروش ترین محصولات</option>
-                    <option value="5">بالاترین تخفیفها</option>
-                    <option value="6">پایین ترین تخفیفها</option>
-                  </select>
-                </th>
-                <th colSpan="10">
-                  <div className="dashboard-search">
-                    <input
-                      type="search"
-                      value={queryText}
-                      placeholder="جستوجو براساس نامِ محصول.."
-                      onChange={(e) => setQueryText(e.target.value)}
-                    />
-                    <span onClick={searchProductsByQueryText}>
-                      <RiSearchLine />
-                    </span>
+      
+      <div className="table-wrapper">
+        <table>
+          <thead className="heading-table">
+            {role === 1 && <tr>
+              <th colSpan="4">
+                <select
+                  value={orderConfig}
+                  onChange={(e) => searchProductsByCreated(e.target.value)}
+                >
+                  <option value="none" className="text-white bg-orange">
+                    ⬆⬇ ترتیب مرتب سازی (کلی)
+                  </option>
+                  <option value="1">جدیدترین محصولات</option>
+                  <option value="2">قدیمی ترین محصولات</option>
+                  <option value="3">پرفروش ترین محصولات</option>
+                  <option value="4">کم فروش ترین محصولات</option>
+                  <option value="5">بالاترین تخفیفها</option>
+                  <option value="6">پایین ترین تخفیفها</option>
+                </select>
+              </th>
+              <th colSpan="10">
+                <div className="dashboard-search">
+                  <input
+                    type="search"
+                    value={queryText}
+                    placeholder="جستوجو براساس نامِ محصول.."
+                    onChange={(e) => setQueryText(e.target.value)}
+                    onKeyDown={(e) => keyPressedHandler(e)}
+                  />
+                  <span onClick={searchProductsByQueryText}>
+                    <RiSearchLine />
+                  </span>
+                </div>
+              </th>
+            </tr>}
+            <tr
+              style={{
+                backgroundColor: "var(--firstColorPalete)",
+                color: "white",
+              }}
+            >
+              
+              {role === 1 && <th colSpan="2">
+                <select
+                  value={activeCategory}
+                  onChange={(e) => searchProductsByCategory(e.target.value)}
+                >
+                  <option value="none">دسته بندی</option>
+                  {categories.length > 0 &&
+                    categories.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.name}
+                      </option>
+                    ))}
+                </select>
+              </th>}
+              <th colSpan={role === 1 ? "2" : "4"}>
+                <select
+                  value={activeSubcategory}
+                  onChange={(e) =>
+                    searchProductsBySubcategory(e.target.value)
+                  }
+                >
+                  <option value="none">برچسب (همه)</option>
+                  {subcategories.length > 0 &&
+                    subcategories.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.name}
+                      </option>
+                    ))}
+                </select>
+              </th>
+              <th colSpan="2">
+                <select
+                  value={activeBrand}
+                  onChange={(e) => searchProductsByBrand(e.target.value)}
+                >
+                  <option value="none">برند</option>
+                  {brands.length > 0 &&
+                    brands.map((b) => (
+                      <option key={b._id} value={b._id}>
+                        {b.brandName}
+                      </option>
+                    ))}
+                </select>
+              </th>
+              <th colSpan="2">
+                <select
+                  value={activeSell}
+                  onChange={(e) => searchProductsBySell(e.target.value)}
+                >
+                  <option value="none">وضعیت فروش (کلی)</option>
+                  <option value={true}>ارائه میشود</option>
+                  <option value={false}>ارائه نمیشود</option>
+                </select>
+              </th>
+              <th colSpan="2">
+                <select
+                  value={activeCount}
+                  onChange={(e) =>
+                    searchProductsByCountInStock(e.target.value)
+                  }
+                >
+                  <option value="none">تعداد کالا (کلی)</option>
+                  <option value="1">0 تا 5</option>
+                  <option value="2">5 تا 20</option>
+                  <option value="3">20 به بالا</option>
+                </select>
+              </th>
+              <th colSpan={role === 1 ? "4" : "3"}>
+                <select
+                  value={activeFilterConfig}
+                  onChange={(e) =>
+                    setActiveFilterConfigHandler(e.target.value)
+                  }
+                >
+                  <option value="none" disabled className="text-white bg-orange">
+                    ⬆⬇ مرتب سازی محصولات به دست آمده براساس:
+                  </option>
+                  <option value="newest">جدیدترین ها</option>
+                  <option value="oldest">قدیمی ترین ها</option>
+                  <option value="moreSold">بیشترین فروش</option>
+                  <option value="lessSold">کمترین فروش</option>
+                  <option value="moreDiscount">بیشترین تخفیف</option>
+                  <option value="lessDiscount">کمترین تخفیف</option>
+                  <option value="moreCountInStock">بیشترین موجودی</option>
+                  <option value="lessCountInStock">کمترین موجودی</option>
+                  <option value="haveSell">ارائه میشود</option>
+                  <option value="haveNotSell">ارائه نمیشود</option>
+                </select>
+              </th>
+            </tr>
+            <tr
+              style={{
+                backgroundColor: "var(--firstColorPalete)",
+                color: "white",
+              }}
+            >
+              <th className="th-titles">تصویر</th>
+              <th className="th-titles">عنوان محصول</th>
+              {role === 1 && <th className="th-titles">دسته بندی</th>}
+              <th className="th-titles">برچسب</th>
+              <th className="th-titles">برند</th>
+              <th className="th-titles">فی فاکتور</th>
+              <th className="th-titles">فروش</th>
+              <th className="th-titles">فی فروش</th>
+              <th className="th-titles">تخفیف</th>
+              <th className="th-titles">فی نهایی</th>
+              <th className="th-titles">تعداد</th>
+              <th className="th-titles">رنگ ها</th>
+              <th className="th-titles">ویرایش</th>
+              <th className="th-titles">فعالیت</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={role === 2 ? "13" : "14"}>
+                  <div className="loader_wrapper">
+                    <VscLoading className="loader" />
                   </div>
-                </th>
-              </tr>}
-              <tr
-                style={{
-                  backgroundColor: "var(--firstColorPalete)",
-                  color: "white",
-                }}
-              >
-                
-                {role === 1 && <th colSpan="2">
-                  <select
-                    value={activeCategory}
-                    onChange={(e) => searchProductsByCategory(e.target.value)}
-                  >
-                    <option value="none">دسته بندی</option>
-                    {categories.length > 0 &&
-                      categories.map((c) => (
-                        <option key={c._id} value={c._id}>
-                          {c.name}
-                        </option>
-                      ))}
-                  </select>
-                </th>}
-                <th colSpan={role === 1 ? "2" : "4"}>
-                  <select
-                    value={activeSubcategory}
-                    onChange={(e) =>
-                      searchProductsBySubcategory(e.target.value)
-                    }
-                  >
-                    <option value="none">برچسب (همه)</option>
-                    {subcategories.length > 0 &&
-                      subcategories.map((s) => (
-                        <option key={s._id} value={s._id}>
-                          {s.name}
-                        </option>
-                      ))}
-                  </select>
-                </th>
-                <th colSpan="2">
-                  <select
-                    value={activeBrand}
-                    onChange={(e) => searchProductsByBrand(e.target.value)}
-                  >
-                    <option value="none">برند</option>
-                    {brands.length > 0 &&
-                      brands.map((b) => (
-                        <option key={b._id} value={b._id}>
-                          {b.brandName}
-                        </option>
-                      ))}
-                  </select>
-                </th>
-                <th colSpan="3">
-                  <select
-                    value={activeSell}
-                    onChange={(e) => searchProductsBySell(e.target.value)}
-                  >
-                    <option value="none">وضعیت فروش (کلی)</option>
-                    <option value={true}>ارائه میشود</option>
-                    <option value={false}>ارائه نمیشود</option>
-                  </select>
-                </th>
-                <th colSpan="2">
-                  <select
-                    value={activeCount}
-                    onChange={(e) =>
-                      searchProductsByCountInStock(e.target.value)
-                    }
-                  >
-                    <option value="none">تعداد کالا (کلی)</option>
-                    <option value="1">0 تا 5</option>
-                    <option value="2">5 تا 20</option>
-                    <option value="3">20 به بالا</option>
-                  </select>
-                </th>
-                <th colSpan={role === 1 ? "4" : "3"}>
-                  <select
-                    value={activeFilterConfig}
-                    onChange={(e) =>
-                      setActiveFilterConfigHandler(e.target.value)
-                    }
-                  >
-                    <option value="none" disabled className="text-white bg-orange">
-                      ⬆⬇ مرتب سازی محصولات به دست آمده براساس:
-                    </option>
-                    <option value="newest">جدیدترین ها</option>
-                    <option value="oldest">قدیمی ترین ها</option>
-                    <option value="moreSold">بیشترین فروش</option>
-                    <option value="lessSold">کمترین فروش</option>
-                    <option value="moreDiscount">بیشترین تخفیف</option>
-                    <option value="lessDiscount">کمترین تخفیف</option>
-                    <option value="moreCountInStock">بیشترین موجودی</option>
-                    <option value="lessCountInStock">کمترین موجودی</option>
-                    <option value="haveSell">ارائه میشود</option>
-                    <option value="haveNotSell">ارائه نمیشود</option>
-                  </select>
-                </th>
+                </td>
               </tr>
-              <tr
-                style={{
-                  backgroundColor: "var(--firstColorPalete)",
-                  color: "white",
-                }}
-              >
-                <th className="th-titles">تصویر</th>
-                <th className="th-titles">عنوان محصول</th>
-                {role === 1 && <th className="th-titles">دسته بندی</th>}
-                <th className="th-titles">برچسب</th>
-                <th className="th-titles">برند</th>
-                <th className="th-titles">قیمت فاکتور</th>
-                <th className="th-titles">فروش</th>
-                <th className="th-titles">قیمت فروش</th>
-                <th className="th-titles">تخفیف</th>
-                <th className="th-titles">قیمت نهایی</th>
-                <th className="th-titles">وضعیت ارائه</th>
-                <th className="th-titles">تعداد</th>
-                <th className="th-titles">رنگ ها</th>
-                <th className="th-titles">ویرایش</th>
-                <th className="th-titles">فعالیت</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.length > 0 ? (
-                (!otherFilterings ? products : currentProducts).map((p) => (
-                  <tr key={p._id}>
-                    <td>
-                      <div className="d-flex-center-center">
-                        <img
-                          className="table-img"
-                          src={
-                            !p.photos.length
-                              ? `${defPic}`
-                              : `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${p.photos[0]}`
-                          }
-                          alt={p.title}
-                        />
-                      </div>
-                    </td>
-                    <td onClick={() => copyIdToClipBoard(p._id,p.title)} className="font-sm tooltip" style={{display: "table-cell",cursor: "copy"}}>
-                        <span className="tooltip_text">
-                          کپی کد محصول
-                        </span>
-                        {p.title.length > 14 ? `${p.title.substring(0,14)}..` : p.title}
-                    </td>
-                    {role === 1 && <td className="font-sm">{p.category.name}</td>}
-                    <td className="font-sm">{p.subcategory.name}</td>
-                    <td className="font-sm">{p.brand.brandName}</td>
-                    <td className="font-sm">{p.factorPrice.toLocaleString("fa")}&nbsp;تومان</td>
-                    <td className="font-sm">{p.sold}</td>
-                    <td className="font-sm">
-                      {p.price.toLocaleString("fa")}&nbsp;تومان
-                    </td>
-                    <td
-                      className="font-sm"
-                      style={
-                        p.discount > 20
-                          ? {
-                              background: "var(--firstColorPalete)",
-                              color: "var(--secondColorPalete)",
-                            }
-                          : null
-                      }
-                    >
-                      {p.discount ? p.discount : "0"}&nbsp;%
-                    </td>
-                    <td className="font-sm">
-                      {p.finallyPrice
-                        ? p.finallyPrice.toLocaleString("fa")
-                        : "0"}
-                      &nbsp;تومان
-                    </td>
-                    <td className="font-sm">
-                      <span className="d-flex-center-center">
-                        {p.sell ? "داریم" : "نداریم"}
-                        {p.sell ? (
-                          <HiBadgeCheck
-                            style={{ marginRight: "5px", color: "#00a800" }}
-                          />
-                        ) : (
-                          <TiDelete
-                            style={{ marginRight: "5px", color: "red" }}
-                          />
-                        )}
+            ): products.length > 0 ? (
+              (!otherFilterings ? products : currentProducts).map((p,i) => (
+                <tr key={p._id}>
+                  <td>
+                    <Link to={`/product/details/${p._id}`} className="d-flex-center-center">
+                      <img
+                        className="table-img"
+                        src={
+                          !p.photos.length
+                            ? `${defPic}`
+                            : `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${p.photos[0]}`
+                        }
+                        alt={p.title}
+                      />
+                    </Link>
+                  </td>
+                  <td onClick={() => copyIdToClipBoard(p._id,p.title)} className="font-sm tooltip" style={{display: "table-cell",cursor: "copy"}}>
+                      <span className="tooltip_text">
+                        کپی کد محصول
                       </span>
-                    </td>
-                    <td className="font-sm">{p.countInStock}</td>
-                    <td className="font-sm">
-                      {p.colors.length > 0 && (
-                        <div className="products_active_colors">
-                          {p.colors.map((c) => (
-                            <span
-                              key={c._id}
-                              style={{ background: `#${c.colorHex}` }}
-                            ></span>
-                          ))}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      <Link
-                        to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/product/${p.slug}`}
-                        className="d-flex-center-center"
-                      >
-                        <MdEdit className="text-blue" />
-                      </Link>
-                    </td>
-                    <td>
+                      {p.title.length > 14 ? `${p.title.substring(0,14)}..` : p.title}
+                  </td>
+                  {role === 1 && <td className="font-sm">{p.category.name}</td>}
+                  <td className="font-sm">{p.subcategory.name}</td>
+                  <td className="font-sm">{p.brand.brandName}</td>
+                  <td className="font-sm">{p.factorPrice.toLocaleString("fa")}&nbsp;تومان</td>
+                  <td className="font-sm">{p.sold}</td>
+                  <td className="font-sm">
+                    {p.price.toLocaleString("fa")}&nbsp;تومان
+                  </td>
+                  <td
+                    className="font-sm"
+                    style={
+                      p.discount > 20
+                        ? {
+                            background: "var(--firstColorPalete)",
+                            color: "var(--secondColorPalete)",
+                          }
+                        : null
+                    }
+                  >
+                    {p.discount ? p.discount : "0"}&nbsp;%
+                  </td>
+                  <td className="font-sm">
+                    {p.finallyPrice
+                      ? p.finallyPrice.toLocaleString("fa")
+                      : "0"}
+                    &nbsp;تومان
+                  </td>
+                  <td className="font-sm">{p.countInStock}</td>
+                  <td className="font-sm">
+                    {p.colors.length > 0 && (
+                      <div className="products_active_colors">
+                        {p.colors.map((c) => (
+                          <span
+                            key={c._id}
+                            style={{ background: `#${c.colorHex}` }}
+                          ></span>
+                        ))}
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    <Link
+                      to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/product/${p.slug}`}
+                      className="d-flex-center-center"
+                    >
+                      <MdEdit className="text-blue" />
+                    </Link>
+                  </td>
+                  <td>
+                    {toggleLoading && generate.id === p._id ?  <VscLoading className="loader" /> : generate.value && (
                       <span
-                        className="d-flex-center-center"
-                        onClick={() => toggleProductSellHandler(p._id,p.sell, p.title)}
+                      className="d-flex-center-center"
+                      onClick={() => toggleProductSellHandler(p._id,p.sell, p.title,i)}
                       >
                         {p.sell ? <MdToggleOff className="text-blue" /> : <MdOutlineToggleOn className="text-red" /> }
                       </span>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={role === 2 ? "14" : "15"}>
-                    <p
-                      className="warning-message"
-                      style={{ textAlign: "center" }}
-                    >
-                      محصولی یافت نشد!
-                    </p>
+                    )}
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-          {productsLength > perPage && (
-            <div>
-              {!otherFilterings && (
-                <Pagination
-                  perPage={perPage}
-                  productsLength={productsLength}
-                  setPage={setPage}
-                  page={page}
-                />
-              )}
-            </div>
-          )}
-          {products.length > perPage && (
-            <div>
-              {otherFilterings && (
-                <Pagination
-                  perPage={perPage}
-                  productsLength={products.length}
-                  setPage={setOPage}
-                  page={oPage}
-                />
-              )}
-            </div>
-          )}
-        </div>
-      )}
+              ))
+            ) : (
+              <tr>
+                <td colSpan={role === 2 ? "14" : "15"}>
+                  <p
+                    className="warning-message"
+                    style={{ textAlign: "center" }}
+                  >
+                    محصولی یافت نشد!
+                  </p>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        {productsLength > perPage && (
+          <div>
+            {!otherFilterings && (
+              <Pagination
+                perPage={perPage}
+                productsLength={productsLength}
+                setPage={setPage}
+                page={page}
+              />
+            )}
+          </div>
+        )}
+        {products.length > perPage && (
+          <div>
+            {otherFilterings && (
+              <Pagination
+                perPage={perPage}
+                productsLength={products.length}
+                setPage={setOPage}
+                page={oPage}
+              />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

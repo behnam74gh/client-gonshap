@@ -70,6 +70,9 @@ ul {
 .w-100 {
   width: 100% !important;
 }
+.w-75 {
+  width: 75% !important;
+}
 .w-50 {
   width: 50% !important;
 }
@@ -543,5 +546,10 @@ td {
   }
   .err_boundary_wrapper.info-message {
     width: 100% !important;
+  }
+}
+@media (max-width: 370px) {
+  .font-sm {
+    font-size: 10px;
   }
 }

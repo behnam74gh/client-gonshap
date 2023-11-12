@@ -103,6 +103,8 @@
   }
   .admin-panel-wrapper select{
     font-size: 10px;
+    margin: 0;
+    padding: 4px 8px;
   }
   #sidebar-dashboard {
     flex-basis: 10%;

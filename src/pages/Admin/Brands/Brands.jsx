@@ -19,6 +19,7 @@ import "./Brands.css";
 const Brands = () => {
   const [createBrand, setCreateBrand] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [brandsLoading, setBrandsLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [brands, setBrands] = useState([]);
   const [file, setFile] = useState();
@@ -57,9 +58,11 @@ const Brands = () => {
   };
 
   const loadAllBrands = () => {
+    setBrandsLoading(true)
     axios
       .get("/get-all-brands")
       .then((response) => {
+        setBrandsLoading(false)
         if (response.data.success) {
           if(role === 2){
             const currentBrands = response.data.brands.filter((b) => b.backupFor._id === supplierFor);
@@ -70,6 +73,7 @@ const Brands = () => {
         }
       })
       .catch((err) => {
+        setBrandsLoading(false)
         if (err.response) {
           setErrorText(err.response.data.message);
         }
@@ -327,7 +331,7 @@ const Brands = () => {
           <hr />
         </React.Fragment>
       )}
-      <ListOfBrands brands={brands} categories={categories} role={role} />
+      <ListOfBrands brands={brands} categories={categories} role={role} loading={brandsLoading} />
     </div>
   );
 };

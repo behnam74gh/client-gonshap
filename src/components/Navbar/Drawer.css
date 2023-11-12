@@ -20,9 +20,10 @@
 
 .drawer-wrapper {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column;
   height: 100%;
   padding-right: 5px;
+  overflow-y: auto;
 }
 .drawer-items {
   flex: 30%;
@@ -60,7 +61,7 @@
 .company_logo_drawer {
   width: 100%;
   height: auto;
-  max-width: 70px;
+  max-width: 50px;
 }
 .drawer-logo span {
   display: flex;
@@ -136,7 +137,7 @@
 .rahnama-in-drawer:hover .rahnama-in-drawer-dropdown {
   display: block;
 }
-@media (min-width: 770px) {
+@media (min-width: 790px) {
   .drawer {
     display: none;
   }

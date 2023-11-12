@@ -258,7 +258,7 @@ const CartItem = ({ product }) => {
         <div
           className="selected_colors_wrapper"
         >
-          {activeColors.length > 0 ? (
+          {activeColors.length > 0 && (
             activeColors.map((c, i) => {
               const thisColor =
                 product.colors.length > 0 &&
@@ -289,8 +289,6 @@ const CartItem = ({ product }) => {
                 return `به تعداد ${currentItem.count} رنگ انتخاب کنید`;
               }
             })
-          ) : (
-            <p className="font-sm">رنگ کالا را مشخص کنید</p>
           )}
           {currentItem.count > activeColors.length ? (
             <span className="d-flex-center-center font-md">

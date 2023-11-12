@@ -220,6 +220,10 @@
   .search-input {
     margin-left: -70px;
   }
+  .company_logo_navbar {
+    max-width: 50px;
+    max-height: 50px;
+  }
 }
 
 @media (max-width: 790px) {
@@ -257,7 +261,7 @@
     display: block;
     align-self: center;
     position: absolute;
-    top: 85px;
+    top: 90px;
     right: 60px;
     padding: 0;
   }
@@ -302,9 +306,9 @@
 }
 @media (max-width: 376px) {
   .company_logo_navbar {
-    width: 50px;
-    max-width: 50px;
-    max-height: 50px;
+    width: 40px;
+    max-width: 40px;
+    max-height: 40px;
   }
   .toggle-btn {
     right: 30px;

@@ -135,3 +135,13 @@
     margin: 2px;
   }
 }
+@media (max-width: 950px) {
+  .submenu {
+    width: 420px;
+  }
+}
+@media (max-width: 850px) {
+  .submenu {
+    width: 350px;
+  }
+}

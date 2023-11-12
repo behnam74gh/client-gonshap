@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
-
 import { useForm } from "../../../util/hooks/formHook";
 import axios from "../../../util/axios";
 import {
@@ -24,7 +23,9 @@ const CarouselCreate = ({ history }) => {
   const [urls, setUrls] = useState([]);
   const [categories, setCategories] = useState([]);
   const [backupFor, setBackupFor] = useState("");
+  const [region, setRegion] = useState("");
   const [loading, setLoading] = useState(false);
+  const [regions, setRegions] = useState([]);
 
   const [formState, inputHandler] = useForm(
     {
@@ -80,13 +81,28 @@ const CarouselCreate = ({ history }) => {
       })
       .catch((err) => {
         if (err.response) {
-          toast.warn(err.response.data.message);
+          toast.warning(err.response.data.message);
+        }
+      });
+  };
+  const loadAllRegions = () => {
+    axios
+      .get("/get-all-regions")
+      .then((response) => {
+        if (response.data.success) {
+            setRegions(response.data.regions);
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          toast.warning(err.response.data.message);
         }
       });
   };
 
   useEffect(() => {
     loadAllCategories();
+    loadAllRegions()
   }, []);
 
   //image-picker-codes
@@ -147,6 +163,7 @@ const CarouselCreate = ({ history }) => {
     formData.append("whatsupId", formState.inputs.whatsupId.value);
     formData.append("description", formState.inputs.description.value);
 
+    formData.append("region", region);
     formData.append("backupFor", backupFor);
 
     let filesLength = files.length;
@@ -218,7 +235,19 @@ const CarouselCreate = ({ history }) => {
               </div>
             ))}
         </div>
-        <label className="auth-label" htmlFor="category">
+        <label className="auth-label">
+          منطقه (شهر) :
+        </label>
+        <select onChange={(e) => setRegion(e.target.value)}>
+          <option>منطقه را انتخاب کنید</option>
+          {regions.length > 0 &&
+            regions.map((r) => (
+              <option key={r._id} value={r._id}>
+                {r.name}
+              </option>
+            ))}
+        </select>
+        <label className="auth-label" htmlFor="title">
           عنوان فروشگاه :
         </label>
         <Input
@@ -232,7 +261,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
-        <label className="auth-label">شماره تلفن مالک :</label>
+        <label className="auth-label" htmlFor="phoneNumber">شماره تلفن مالک :</label>
         <Input
           id="phoneNumber"
           element="input"
@@ -245,7 +274,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_MAXLENGTH(11),
           ]}
         />
-        <label className="auth-label" htmlFor="category">
+        <label className="auth-label">
           محصولات پشتیبانی :
         </label>
         <select onChange={(e) => setBackupFor(e.target.value)}>
@@ -257,7 +286,7 @@ const CarouselCreate = ({ history }) => {
               </option>
             ))}
         </select>
-        <label className="auth-label">شماره تلفن فروشگاه :</label>
+        <label className="auth-label" htmlFor="storePhoneNumber">شماره تلفن فروشگاه :</label>
         <Input
           id="storePhoneNumber"
           element="input"
@@ -268,7 +297,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_CONSTANTNUMBER(),
           ]}
         />
-        <label className="auth-label">آدرس فروشگاه :</label>
+        <label className="auth-label" htmlFor="address">آدرس فروشگاه :</label>
         <Input
           id="address"
           element="input"
@@ -280,7 +309,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
-        <label className="auth-label">مختصات محل فروشگاه (longitude) :</label>
+        <label className="auth-label" htmlFor="longitude">مختصات محل فروشگاه (longitude) :</label>
         <Input
           id="longitude"
           element="input"
@@ -289,7 +318,7 @@ const CarouselCreate = ({ history }) => {
           onInput={inputHandler}
           validators={[VALIDATOR_NUMBER()]}
         />
-        <label className="auth-label">مختصات محل فروشگاه (latitude) :</label>
+        <label className="auth-label" htmlFor="latitude">مختصات محل فروشگاه (latitude) :</label>
         <Input
           id="latitude"
           element="input"
@@ -298,7 +327,7 @@ const CarouselCreate = ({ history }) => {
           onInput={inputHandler}
           validators={[VALIDATOR_NUMBER()]}
         />
-        <label className="auth-label">آدرس اینستاگرام :</label>
+        <label className="auth-label" htmlFor="instagramId">آدرس اینستاگرام :</label>
         <Input
           id="instagramId"
           element="input"
@@ -310,7 +339,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
-        <label className="auth-label">آدرس تلگرام :</label>
+        <label className="auth-label" htmlFor="telegramId">آدرس تلگرام :</label>
         <Input
           id="telegramId"
           element="input"
@@ -322,7 +351,7 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
-        <label className="auth-label">آدرس واتساپ :</label>
+        <label className="auth-label" htmlFor="whatsupId">آدرس واتساپ :</label>
         <Input
           id="whatsupId"
           element="input"

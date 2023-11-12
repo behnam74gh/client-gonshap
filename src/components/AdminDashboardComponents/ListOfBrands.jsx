@@ -3,8 +3,9 @@ import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import LocalSearch from "../UI/FormElement/LocalSearch";
 import defPic from "../../assets/images/def.jpg";
+import { VscLoading } from "react-icons/vsc";
 
-const ListOfBrands = ({ brands, categories,role }) => {
+const ListOfBrands = ({ brands, categories,role,loading }) => {
   const [keywordSearch, setKeywordSearch] = useState(true);
   const [activeCategory, setActiveCategory] = useState("none");
   const [sortedBrands, setSortedBrands] = useState([]);
@@ -87,7 +88,16 @@ const ListOfBrands = ({ brands, categories,role }) => {
             </tr>
           </thead>
           <tbody>
-            {brands.length > 0 && keywordSearch ? (
+            {loading ? (
+              <tr>
+              <td colSpan="5">
+                <div className="loader_wrapper">
+                  <VscLoading className="loader" />
+                </div>
+              </td>
+            </tr>
+            ) 
+            : brands.length > 0 && keywordSearch ? (
               brands.filter(searched(keyword)).map((b) => (
                 <tr key={b._id}>
                   <td className="font-sm">{b.brandName}</td>

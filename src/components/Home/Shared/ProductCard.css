@@ -341,7 +341,7 @@
     width: 160px;
   }
 }
-@media (max-width: 376px) {
+@media (max-width: 387px) {
   .product_wrapper {
     width: 144px;
   }
@@ -365,7 +365,12 @@
     margin: 10px;
   }
 }
-@media (max-width: 325px) {
+@media (max-width: 365px) {
+  .product_wrapper {
+    width: 140px;
+  }
+}
+@media (max-width: 350px) {
   .product_wrapper {
     width: 125px;
   }

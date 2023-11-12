@@ -4,12 +4,15 @@ import axios from "../../../util/axios";
 import DatePicker,{DateObject} from "react-multi-date-picker";
 import { useSelector } from 'react-redux';
 import "./Notices.css";
+import { toast } from "react-toastify";
+import { HiBadgeCheck } from "react-icons/hi";
 
 const Notices1 = ({date,setParticularDateHandler}) => {
   const [todaysTasks, setTodaysTasks] = useState([]);
   const [tasksError, setTasksError] = useState("");
   const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [errorText, setErrorText] = useState("");
+  const [supplier, setSupplier] = useState({});
 
   const {userInfo : {role,supplierFor}} = useSelector(state => state.userSignin)
 
@@ -54,6 +57,28 @@ const Notices1 = ({date,setParticularDateHandler}) => {
     }
   }, [role,supplierFor])
 
+  useEffect(() => {
+    const ac = new AbortController();
+    let mounted = true;
+    if(role === 1){
+      return;
+    }
+    axios
+      .get("/get/current-supplier",{signal: ac.signal})
+      .then((response) => {
+        if (response.data.success && mounted) {
+          setSupplier(response.data.supplier);
+        }
+      })
+      .catch((err) => {
+        if (err.response && mounted) toast.warning(err.response.data.message);
+      });
+
+    return () => {
+      ac.abort()
+      mounted = false;
+    }
+  }, [role])
   
   const setDateHandler = (value) => {
     if (value instanceof DateObject) value = value.toDate();
@@ -62,7 +87,23 @@ const Notices1 = ({date,setParticularDateHandler}) => {
 
   return (
     <div className="notice1_wrapper">
-      <div className="notice_1">
+      {role === 2 && <div className="notice">
+        <div className="notice_title">
+        <strong>داشبورد فروشگاه {supplier.title}</strong>
+        {supplier.authentic && <HiBadgeCheck className="text-blue font-md mr-1" />}
+        </div>
+        <div className="notice_point">
+          <span>تعداد فروش : </span>
+          <strong>{supplier.soldCount > 999 ? (supplier.soldCount/1000).toFixed(1) : supplier.soldCount}</strong>
+          {supplier.soldCount > 999 && <span className='ml-1'>K</span>}
+        </div>
+        <div className="notice_point">
+          <span>امتیاز : </span>
+          <strong>{supplier.point > 999999 ? (supplier.point/1000000).toFixed(1) : supplier.point > 999 ? (supplier.point/1000).toFixed(1) : supplier.point}</strong>
+          {supplier.point > 999999 ? <span className='ml-1'>M</span> : supplier.point > 999 && <span className='ml-1'>K</span>}
+        </div>
+      </div>}
+      <div className="notice_1" style={{flexBasis: role === 1 && "100%"}}>
         <span>وظایف امروز :</span>
         <strong>
           {tasksError.length > 0 ? (

@@ -123,14 +123,16 @@ const Footer = ({ companyInfo }) => {
             </a>
           </div>
         </div>
-        <div className="nemads_wrapper">
-          <h4>نمادهای اعتماد الکترونیک</h4>
-          <div className="nemads">
-           {signENemad?.length > 0 && <a href={`https://www.${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
-           {signUnion?.length > 0 && <a href={`https://www.${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
-           {signMedia?.length > 0 && <a href={`https://www.${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
+        {(signENemad || signUnion || signMedia) && (
+          <div className="nemads_wrapper">
+            <h4>نمادهای اعتماد الکترونیک</h4>
+            <div className="nemads">
+            {signENemad?.length > 0 && <a href={`https://www.${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
+            {signUnion?.length > 0 && <a href={`https://www.${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
+            {signMedia?.length > 0 && <a href={`https://www.${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       <div className="pos-rel">

@@ -16,7 +16,7 @@ import { TiMessages } from "react-icons/ti";
 import { SiBrandfolder } from "react-icons/si";
 import { IoColorPaletteSharp } from "react-icons/io5";
 import { GoMail, GoPlus } from "react-icons/go";
-import { BsCardChecklist, BsFillQuestionCircleFill } from "react-icons/bs";
+import { BsCardChecklist, BsFillQuestionCircleFill,BsInfoCircleFill } from "react-icons/bs";
 import { HiSpeakerphone, HiLocationMarker } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -128,8 +128,11 @@ const AdminDashboardLayout = ({ children }) => {
       case "/admin/dashboard/update/user-password":
         setActiveRoute("تغییر رمزعبور");
         break;
-      case "/admin/dashboard/location":
-        setActiveRoute("نقشه");
+      case "/admin/dashboard/info":
+        setActiveRoute("مشخصات");
+        break;
+      case "/admin/dashboard/region":
+        setActiveRoute("منطقه");
         break;
       case "/admin/dashboard/help":
         setActiveRoute("راهنما");
@@ -332,12 +335,21 @@ const AdminDashboardLayout = ({ children }) => {
               </Link>
             </li>
             <li
-              onClick={() => setActiveRoute("نقشه")}
-              className={activeRoute === "نقشه" ? "active" : ""}
+              onClick={() => setActiveRoute("منطقه")}
+              className={activeRoute === "منطقه" ? "active" : ""}
             >
-              <Link to="/admin/dashboard/location">
+              <Link to="/admin/dashboard/region">
                 <HiLocationMarker />
-                <span className="sidebar-text-link">نقشه</span>
+                <span className="sidebar-text-link">منطقه</span>
+              </Link>
+            </li>
+            <li
+              onClick={() => setActiveRoute("مشخصات")}
+              className={activeRoute === "مشخصات" ? "active" : ""}
+            >
+              <Link to="/admin/dashboard/info">
+                <BsInfoCircleFill />
+                <span className="sidebar-text-link">مشخصات</span>
               </Link>
             </li>
             <li
