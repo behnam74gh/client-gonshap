@@ -11,8 +11,9 @@ import Brands from "../components/Brands/Brands";
 import Backdrop from "../components/UI/Backdrop/Backdrop";
 import { db } from "../util/indexedDB";
 import { toast } from "react-toastify";
-import "./Layout.css";
 import OfflineStatus from "../pages/OfflineStatus";
+import { SEARCH_QUERY, SUGGEST_CLOSE } from "../redux/Types/searchInputTypes";
+import "./Layout.css";
 
 const Layout = (props) => {
   const [showDrawer, setShowDrawer] = useState(false);
@@ -23,7 +24,7 @@ const Layout = (props) => {
 
   const dispatch = useDispatch();
   const { isSubmenuOpen } = useSelector((state) => state.subMenu);
-  const { isOnline } = useSelector((state) => state);
+  const { isOnline, search: { text, dropdown, submited } } = useSelector((state) => state);
 
   const openDrawerHandler = () => setShowDrawer(!showDrawer);
 
@@ -142,7 +143,16 @@ const Layout = (props) => {
   
   useEffect(() => {
     window.scrollTo(0, 0);
+    if(text.length > 0 && !submited && pathname !== "/shop"){
+      dispatch({ type: SEARCH_QUERY, payload: { keyword: "" } });
+    }
   }, [pathname]);
+
+  const closeDropdownHandler = () => {
+    if(dropdown){
+      dispatch({type: SUGGEST_CLOSE})
+    }
+  }
 
   return (
     <React.Fragment>
@@ -164,7 +174,7 @@ const Layout = (props) => {
       />
       <SubMenu />
       <Backdrop show={isSubmenuOpen} onMouseOver={subMenuHandler} />
-      <main className="main-body" onMouseOver={subMenuHandler}>
+      <main className="main-body" onMouseOver={subMenuHandler} onClick={closeDropdownHandler}>
         {isOnline ? props.children : <OfflineStatus />}
       </main>
       <Brands />

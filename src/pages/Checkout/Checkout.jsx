@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 import "../CartPage/CartPage"
 import "./Checkout.css";
+import { toast } from "react-toastify";
 
 const Checkout = ({history}) => {
   const [loading, setLoading] = useState(false);
@@ -25,8 +26,7 @@ const Checkout = ({history}) => {
   const { userInfo } = userSignin;
 
   useEffect(() => {
-    const {from} = history.location.state
-    if(from === '/cart'){
+    if(history.location.state !== undefined && history.location.state.from === '/cart'){
       setLoading(true);
       axios
         .get("/read/user/cart")
@@ -52,11 +52,13 @@ const Checkout = ({history}) => {
         .catch((err) => {
           setLoading(false);
           if (err.response) {
+            toast.warning(err.response.data.message);
             setErrorText(err.response.data.message);
+            history.push('/');
           }
         });
     }else{
-      history.push('/')
+      history.push('/');
     }
   }, [history]);
   

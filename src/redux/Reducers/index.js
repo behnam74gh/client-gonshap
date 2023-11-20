@@ -9,6 +9,9 @@ import { shopReducer } from "./shopReducers";
 import { advertiseReducer } from "./advertise";
 import { isMobileReducer } from "./isMobileReduser";
 import { isOnlineReducer } from "./isOnlineReducer";
+import { searchedItemReducer } from "./searchedItemReducer";
+import { supplierItemReducer } from "./supplierItemReducer";
+import { rangeInputReduser } from "./rangeInputReduser";
 
 const rootReducer = combineReducers({
   userSignin: userSigninReducer,
@@ -21,6 +24,9 @@ const rootReducer = combineReducers({
   advertise: advertiseReducer,
   isMobile: isMobileReducer,
   isOnline: isOnlineReducer,
+  searchedItem: searchedItemReducer,
+  supplierItem: supplierItemReducer,
+  rangeValues: rangeInputReduser,
 });
 
 export default rootReducer;

@@ -11,23 +11,37 @@ import { BsCardChecklist } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import axios from "../../util/axios";
 import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { UPDATE_DASHBOARD_IMAGE, USER_SIGNOUT } from "../../redux/Types/authTypes";
+import { db } from "../../util/indexedDB";
 import "../Admin/TemplateAdminDashboard.css";
 
 const StoreAdminDashboardLayout = ({ children }) => {
   const [activeRoute, setActiveRoute] = useState("پیشخوان");
+  const [storeId, setStoreId] = useState("");
 
-  const { userInfo, userImage } = useSelector((state) => state.userSignin);
+  const { userInfo, userImage,phoneNumber } = useSelector((state) => state.userSignin);
   const dispatch = useDispatch();
 
   const history = useHistory();
 
   useEffect(() => {
+    db.supplierList.toArray().then(items => {
+      if(items.length > 0 && phoneNumber?.length > 0){
+        const stores = items.filter(s => s.backupFor._id === userInfo.supplierFor);
+        if(stores?.length > 0){
+          const store = stores.find(s => s.phoneNumber === phoneNumber)
+          setStoreId(store._id)
+        }
+      }
+    })
+  }, [phoneNumber,userInfo.supplierFor]);
+
+  useEffect(() => {
+    const ac = new AbortController();
     axios
-      .get("/users/dashboard/profile-image")
+      .get("/users/dashboard/profile-image",{signal: ac.signal})
       .then((response) => {
         if (response.data.success) {
           dispatch({
@@ -36,8 +50,12 @@ const StoreAdminDashboardLayout = ({ children }) => {
           });
         }
       })
-  }, [dispatch]);
 
+      return () => {
+        ac.abort()
+      }
+  }, [dispatch])
+  
   useEffect(() => {
     switch (history.location.pathname) {
       case "/store-admin/dashboard/home":
@@ -64,8 +82,8 @@ const StoreAdminDashboardLayout = ({ children }) => {
       case "/store-admin/dashboard/tickets":
         setActiveRoute("تیکت ها");
         break;
-      case "/store-admin/dashboard/update/profile-info":
-        setActiveRoute("ویرایش پروفایل");
+      case "/store-admin/dashboard/carousel-update/:id":
+        setActiveRoute("ویرایش پنل");
         break;
       case "/store-admin/dashboard/update/user-password":
         setActiveRoute("تغییر رمزعبور");
@@ -185,12 +203,12 @@ const StoreAdminDashboardLayout = ({ children }) => {
             </Link>
           </li>
           <li
-            onClick={() => setActiveRoute("ویرایش پروفایل")}
-            className={activeRoute === "ویرایش پروفایل" ? "active" : ""}
+            onClick={() => setActiveRoute("ویرایش پنل")}
+            className={activeRoute === "ویرایش پنل" ? "active" : ""}
           >
-            <Link to="/store-admin/dashboard/update/profile-info">
+            <Link to={`/store-admin/dashboard/carousel-update/${storeId}`}>
               <GoPlus />
-              <span className="sidebar-text-link">ویرایش پروفایل</span>
+              <span className="sidebar-text-link">ویرایش پنل</span>
             </Link>
           </li>
           <li

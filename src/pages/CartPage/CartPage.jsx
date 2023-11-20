@@ -7,7 +7,6 @@ import CartTotalInfo from "./CartTotalInfo";
 import defPic from "../../assets/images/def.jpg";
 import Backdrop from "../../components/UI/Backdrop/Backdrop";
 import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton";
-import Section8 from "../../components/Home/Section8/Section8";
 import { db } from "../../util/indexedDB";
 import { Helmet } from "react-helmet-async";
 import { ReactComponent as EmptyCartSvg } from '../../assets/images/empty_cart.svg'
@@ -57,10 +56,10 @@ const CartPage = () => {
       </Helmet>
       <div className="cart_wrapper">
         <div className="cart_items_wrapper">
-          <h2 className="text-mute">
+          <h4 className="text-mute">
             خلاصه سبد خرید
             <strong className="cart_length">{cartItems.length}</strong>
-          </h2>
+          </h4>
           {loading ? (
             <React.Fragment>
               {cartItems &&
@@ -80,7 +79,7 @@ const CartPage = () => {
         </div>
        {(cartItemsInfo || oldCartItemsInfo).length > 0 && <div className="cart_details_wrapper">
           <div className="text-mute">
-            <h2>خلاصه سفارش</h2>
+            <h4>خلاصه سفارش</h4>
           </div>
           <CartTotalInfo cartItemsInfo={isOnline ? cartItemsInfo : oldCartItemsInfo} />
         </div>}
@@ -123,7 +122,6 @@ const CartPage = () => {
           </div>
         </div>
       )}
-      <Section8 />
     </section>
   );
 };

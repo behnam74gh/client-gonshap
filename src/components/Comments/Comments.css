@@ -72,6 +72,8 @@
   font-size: 14px;
   cursor: pointer;
   margin: 0 5px;
+  display: flex;
+  align-items: center;
 }
 .like_dislike_info:first-child:hover > svg {
   color: #00bc00;
@@ -135,12 +137,21 @@
     font-size: 12px;
   }
   .comment_box_wrapper>p.my-2{
-    font-size: 14px;
+    font-size: 12px;
     margin: 12px 0;
   }
 }
 
 @media (max-width: 450px) {
+  .comment_content_wrapper {
+    flex: 90% 1;
+  }
+  .writer_photo_wrapper{
+    flex: 10% 1;
+  }
+  .product_header_info h1 {
+    font-size: 12px;
+  }
   .comment_box_wrapper::-webkit-scrollbar {
     width: 5px;
   }
@@ -156,7 +167,7 @@
     margin: 10px 0;
   }
   .single_comment_wrapper {
-    padding: 8px 5px 8px 5px;
+    padding: 6px 5px 4px 5px;
     margin: 10px 0;
   }
   .comment_content_wrapper {
@@ -166,7 +177,9 @@
     font-size: 8px;
   }
   .comment_content {
-    font-size: 8px;
+    font-size: 9px;
+    line-height: 1.4;
+    margin: 4px 0;
   }
   .reply_btn {
     padding: 2px 8px;
@@ -183,8 +196,8 @@
     margin: 0 4px;
   }
   .writer_photo_wrapper img {
-    width: 30px;
-    height: 30px;
-    max-height: 30px;
+    width: 25px;
+    height: 25px;
+    max-height: 25px;
   }
 }

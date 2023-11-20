@@ -18,11 +18,14 @@ import Modal from "../../components/UI/Modal/Modal";
 import { FaTimesCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { ShowRatingAverage } from "../../components/Home/Shared/ShowRatingAverage";
+import { HiBadgeCheck } from "react-icons/hi";
+import { POP_STORE_ITEM } from "../../redux/Types/supplierItemTypes";
+import { BsFillCartCheckFill } from "react-icons/bs";
+import { calculateResultHandler } from "../../util/customFunctions";
 import "../Advertise/AdvertisePage.css"
 import "../Product/ProductDetails.css"
 import "../../pages/Admin/CommentsList/CommentsList.css";
 import "./SupplierIntroduce.css";
-import { HiBadgeCheck } from "react-icons/hi";
 
 const SupplierIntroduce = ({ match }) => {
   const [loading, setLoading] = useState(false);
@@ -39,18 +42,27 @@ const SupplierIntroduce = ({ match }) => {
   const [lastVote,setLastVote] = useState(0)
   const [rateLoading,setRateLoading] = useState(false)
   const [ratingResult, setRatingResult] = useState(0);
+  const [soldResult, setSoldResult] = useState(0);
 
-  const { slug } = match.params;
+  const { id } = match.params;
   const dispatch = useDispatch();
   const history = useHistory();
-  const { userSignin : { userInfo }, ratingModal,isOnline } = useSelector((state) => ({
+  const { userSignin : { userInfo }, ratingModal,isOnline,supplierItem: {storeItem} } = useSelector((state) => ({
     ...state,
   }));
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`/supplier/${slug}`)
+
+    if(storeItem && storeItem !== null){
+      setSupplier(storeItem);
+      setCoordinates({
+        latitude: storeItem.latitude,
+        longitude: storeItem.longitude,
+      });
+      setLoading(false);
+    }else{
+      axios.get(`/supplier/${id}`)
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -72,15 +84,18 @@ const SupplierIntroduce = ({ match }) => {
           setErrorText(err.response.data.message);
         }
       });
+    }
+    
 
-      return () => {
-        setStarValue({
-          star: 0,
-          storeId: "",
-        })
-        setLastVote(0)
-      }
-  }, [slug]);
+    return () => {
+      setStarValue({
+        star: 0,
+        storeId: "",
+      })
+      setLastVote(0)
+      dispatch({type: POP_STORE_ITEM })
+    }
+  }, [id,storeItem]);
 
   useEffect(() => {
     if (supplier?.ratings && userInfo?.userId) {
@@ -96,12 +111,9 @@ const SupplierIntroduce = ({ match }) => {
   }, [supplier, userInfo]);
 
   useEffect(() => {
-    if(supplier?.point > 999999){
-      setRatingResult((supplier.point/1000000).toFixed(1))
-    }else if(supplier?.point > 999){
-      setRatingResult((supplier.point/1000).toFixed(1))
-    }else if (supplier?.point > 0){
-     setRatingResult(supplier.point)
+    if(supplier && supplier._id?.length > 0){
+      calculateResultHandler(supplier?.point,setRatingResult)
+      calculateResultHandler(supplier?.soldCount,setSoldResult)
     }
   }, [supplier])
 
@@ -112,7 +124,7 @@ const SupplierIntroduce = ({ match }) => {
       history.push({
         pathname: "/signin",
         state: {
-          from: `/supplier/introduce/${slug}`,
+          from: `/supplier/introduce/${id}`,
         },
       });
     }
@@ -203,6 +215,17 @@ const SupplierIntroduce = ({ match }) => {
                 <strong>نشانی :</strong>
                 <span>{supplier.address}</span>
               </div>
+              <div className="info_box">
+                <strong>تعداد فروش :</strong>
+                <span>
+                  {soldResult}
+                  {supplier.soldCount > 999999 ? <span className='ml-1'>M</span> : supplier.soldCount > 999 && <span className='ml-1'>K</span>}
+                </span>
+                
+                <BsFillCartCheckFill className={
+                  supplier.soldResult < 1 ? "text-silver" : "text-blue"
+                } />
+              </div>
 
               <div className="rating_compare_wrapper">
                 {supplier.ratings?.length > 0 ? (
@@ -288,7 +311,7 @@ const SupplierIntroduce = ({ match }) => {
         )
       }
       {supplier?.backupFor && (
-        <SupplierProducts backupFor={supplier.backupFor} storeName={supplier.title} />
+        <SupplierProducts backupFor={supplier.backupFor} storeName={supplier.title} ownerPhoneNumber={supplier.phoneNumber} />
       )}
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>

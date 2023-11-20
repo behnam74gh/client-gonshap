@@ -20,7 +20,6 @@
   #favorites_page h2 {
     font-size: 14px;
     text-align: center;
-    margin-top: 0;
-    margin-bottom: 20px;
+    margin: 5px 0;
   }
 }

@@ -5,6 +5,7 @@ import {
   UPDATE_DASHBOARD_IMAGE,
   UPDATE_USER_INFO,
   USER_SIGNOUT,
+  STORE_ADMIN_PHONENUMBER,
 } from "../Types/authTypes";
 import { getCookie } from '../../util/customFunctions';
 
@@ -21,6 +22,7 @@ const initialState = {
     },
   loading: false,
   userImage: savedInfoData?.avatar || "",
+  phoneNumber: "",
 };
 
 export const userSigninReducer = (state = initialState, action) => {
@@ -60,6 +62,11 @@ export const userSigninReducer = (state = initialState, action) => {
         ...state,
         userImage: action.payload,
       };
+    case STORE_ADMIN_PHONENUMBER:
+      return {
+        ...state,
+        phoneNumber: action.payload
+      }
     case USER_SIGNOUT:
       return {
         userInfo : {
@@ -71,7 +78,8 @@ export const userSigninReducer = (state = initialState, action) => {
           csrfToken: null
         },
         loading: false,
-        userImage: ""
+        userImage: "",
+        phoneNumber: "",
       };
     default:
       return state;

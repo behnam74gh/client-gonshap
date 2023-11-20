@@ -13,14 +13,15 @@ import { VscLoading } from "react-icons/vsc";
 import { db } from "../../util/indexedDB";
 import {Helmet} from 'react-helmet-async'
 import { deleteSearchConfig } from "../../redux/Actions/shopActions";
-import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
 import {setCountOfSlidersHandler} from '../../util/customFunctions';
 import RecentViews from "./RecentViews";
+import { POP_ITEM } from "../../redux/Types/searchedItemTypes";
 import "../../components/Home/Section3/Section3.css";
 import "./Product.css";
 
 const Product = ({ match }) => {
   const [loading, setLoading] = useState(false);
+  const [releatedLoading, setReleatedLoading] = useState(false);
   const [product, setProduct] = useState(null);
   const [errorText, setErrorText] = useState("");
   const [commentsError, setCommentsError] = useState("");
@@ -34,7 +35,7 @@ const Product = ({ match }) => {
   });
 
   const productId = match.params.id;
-  const { userInfo } = useSelector((state) => state.userSignin);
+  const { userSignin : {userInfo},searchedItem: {productItem} } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -60,9 +61,6 @@ const Product = ({ match }) => {
         setLoading(false);
         if (response.data.success) {
           setProduct(response.data.thisProduct);
-          const produtsLength = response.data.releatedProducts.length;
-          setSecondNumberOfSlides(setCountOfSlidersHandler(produtsLength))
-          setReleatedProducts(response.data.releatedProducts);
           setErrorText("");
         }
       })
@@ -74,18 +72,51 @@ const Product = ({ match }) => {
       });
   }, [productId]);
 
+  const loadReleatedProducts = useCallback(() => {
+    if(!product?.subcategory?._id){
+      return;
+    }
+    axios.get(`/current-product/releateds/${productId}`,{ params:{ sub: product?.subcategory?._id }}).then((response) => {
+      setReleatedLoading(false);
+      if (response.data.success) {
+        const produtsLength = response.data.releatedProducts.length;
+        setSecondNumberOfSlides(setCountOfSlidersHandler(produtsLength))
+        setReleatedProducts(response.data.releatedProducts);
+      }
+    })
+    .catch((err) => {
+      setReleatedLoading(false);
+      if (err.response) {
+        return;
+      }
+    });
+  }, [productId,product])
+
   useEffect(() => {
     setLoading(true);
     if(navigator.onLine){
-      loadCurrentProduct();
+      if(productItem && productItem !== null){
+        setProduct(productItem);
+        setLoading(false);
+      }else{
+        loadCurrentProduct();
+      }
     }else{
       setLoading(false)
       db.productDetailes.toArray().then(items => {
         setProduct(items[0])
       })
     }
-  }, [loadCurrentProduct,productId]);
+  }, [loadCurrentProduct,productId,productItem]);
 
+  useEffect(() => {
+    if(product && productId === product?._id){
+      setReleatedLoading(true)
+      loadReleatedProducts();
+    }else{
+      return;
+    }
+  }, [product,loadReleatedProducts,productId])
 
   useEffect(() => {
     if(navigator.onLine){
@@ -113,9 +144,10 @@ const Product = ({ match }) => {
       })
       if(!window.location.href.includes('/shop')){
         dispatch(deleteSearchConfig());
-        dispatch({ type: UNSUBMIT_QUERY });
       }
-
+      if(!window.location.href.includes('/product/details/')){
+        dispatch({ type: POP_ITEM })
+      }
       if(!window.location.href.includes('/supplier/introduce')){
         localStorage.removeItem("gonshapSupplierActiveSub");
         localStorage.removeItem("gonshapSupplierPageNumber");
@@ -199,15 +231,10 @@ const Product = ({ match }) => {
               commentsError={commentsError}
               productDetails={product.details}
             />
-            
-            <RecentViews numberOfSlides={numberOfSlides} productId={productId} setNumberOfSlides={setNumberOfSlides} />
-
-            <Section6 />
-  
-            <div style={{minHeight: showIt ? "150px" : "0"}} className="list_of_products">
-              {showIt && <h4 className="column_item">محصولات مشابه</h4>}
+            <div style={{minHeight: showIt ? "150px" : "0",marginBottom: "10px"}} className="list_of_products">
+              {showIt && <h4 className="w-100 text-center mt-0">محصولات مشابه</h4>}
               {
-                loading ? (
+                releatedLoading ? (
                   <LoadingSkeletonCard
                     count={secondNumberOfSlides < 1 ? 1 : secondNumberOfSlides}
                   />
@@ -224,6 +251,8 @@ const Product = ({ match }) => {
                 ) : null
               }
             </div>
+            <Section6 />
+            <RecentViews numberOfSlides={numberOfSlides} productId={productId} setNumberOfSlides={setNumberOfSlides} />
           </React.Fragment>
         )
       )}

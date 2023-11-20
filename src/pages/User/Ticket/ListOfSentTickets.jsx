@@ -36,32 +36,32 @@ const ListOfSentTickets = () => {
   const spreadStatusInSelect = (s) => {
     let status;
     switch (s) {
-      case 1:
-        status = "فرایند خرید (ایجاد سفارش)";
+      case "1":
+        status = "نحوه ایجاد سفارش";
         break;
-      case 2:
-        status = "پرداخت الکترونیکی";
+      case "2":
+        status = "نحوه پرداخت وجه";
         break;
-      case 3:
-        status = "پرداخت در محل";
-        break;
-      case 4:
+      case "3":
         status = "بازگشت وجه";
         break;
-      case 5:
+      case "4":
         status = "پس فرستادن کالا";
         break;
-      case 6:
+      case "5":
         status = "نحوه تحویل کالا";
         break;
-      case 7:
+      case "6":
         status = "کیفیت کالا";
         break;
-      case 8:
+      case "7":
         status = "قیمت کالا";
         break;
-      case 9:
+      case "8":
         status = "ویرایش اطلاعات حساب کاربری";
+        break;
+      case "9":
+        status = "موارد دیگر";
         break;
       default:
         return;

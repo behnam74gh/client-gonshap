@@ -67,29 +67,29 @@ const SubMenu = () => {
       case 1:
        return (
         <>
-          <MdDiscount className="text-purple" />
-          <span className="text-purple font-sm my-1">برچسب های <span>{activeCategoryName}</span></span>
+          <MdDiscount className="text-blue" />
+          <span className="text-blue font-sm my-1">برچسب های <span>{activeCategoryName}</span></span>
         </>
        );
       case 2:
        return (
         <>
-          <BsFillRocketTakeoffFill className="text-purple" />
-          <span className="text-purple font-sm my-1">جدیدترین محصولات <span>{activeCategoryName}</span></span>
+          <BsFillRocketTakeoffFill className="text-blue" />
+          <span className="text-blue font-sm my-1">جدیدترین محصولات <span>{activeCategoryName}</span></span>
         </>
        );
       case 3:
        return (
         <>
-          <BsFillCartCheckFill className="text-purple" />
-          <span className="text-purple font-sm my-1">پرفروش ترین محصولات <span>{activeCategoryName}</span></span>
+          <BsFillCartCheckFill className="text-blue" />
+          <span className="text-blue font-sm my-1">پرفروش ترین محصولات <span>{activeCategoryName}</span></span>
         </>
        );
       default:
         return (
           <>
-            <SiHotjar className="text-purple" />
-            <span className="text-purple font-sm my-1">محصولات  <span>{activeCategoryName}</span> با بالاترین تخفیف ها</span>
+            <SiHotjar className="text-blue" />
+            <span className="text-blue font-sm my-1">محصولات  <span>{activeCategoryName}</span> با بالاترین تخفیف ها</span>
           </>
          );
     }

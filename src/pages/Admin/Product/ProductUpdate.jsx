@@ -8,10 +8,10 @@ import { useSelector } from "react-redux";
 
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
-import "./Product.css";
 import { useForm } from "../../../util/hooks/formHook";
 import Input from "../../../components/UI/FormElement/Input";
 import { VALIDATOR_MAXLENGTH, VALIDATOR_MINLENGTH, VALIDATOR_SPECIAL_CHARACTERS, VALIDATOR_SPECIAL_CHARACTERS_2 } from "../../../util/validators";
+import "./Product.css";
 
 const oldStates = {
   title: "",
@@ -554,7 +554,7 @@ const ProductUpdate = ({ history }) => {
           type="number"
           onChange={(e) => changeInputHandler(e)}
         />}
-        <label className="auth-label"> قیمت فروش کالا (تومان) : </label>
+        <label className="auth-label"> قیمت فروش کالا در بازار (تومان) : </label>
         <input
           name="price"
           value={values.price}
@@ -714,7 +714,7 @@ const ProductUpdate = ({ history }) => {
               formState.inputs.question.value.length === 0
             }
           >
-              {!loading ? "افزودن" : <VscLoading className="loader" />}
+            افزودن
           </Button>
 
           {values.details?.length > 0 && <div className="details_wrapper">

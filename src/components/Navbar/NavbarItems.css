@@ -15,6 +15,7 @@
   align-self: stretch;
   padding: 0 15px;
   font-size: 14px;
+  user-select: none;
 }
 .nav-items li:nth-child(1) {
   border-left: 1px solid black;

@@ -67,10 +67,10 @@ const CreateTicket = ({ history }) => {
     let status;
     switch (s) {
       case "1":
-        status = "فرایند خرید (ایجاد سفارش)";
+        status = "نحوه ایجاد سفارش";
         break;
       case "2":
-        status = "پرداخت در محل";
+        status = "نحوه پرداخت وجه";
         break;
       case "3":
         status = "بازگشت وجه";

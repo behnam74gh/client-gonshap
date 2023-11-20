@@ -38,11 +38,9 @@ const Section3 = () => {
   useEffect(() => {
     setLoading(true)
     if(!navigator.onLine){
-      console.log('offline sec 3');
       db.newestProducts.toArray()
       .then(items => {
         if(items?.length > 0){
-          console.log('products got from indexed db');
           setLoading(false)
           setProducts(items)
         }
@@ -133,7 +131,7 @@ const Section3 = () => {
     <section className="list_of_products">
       {categories?.length > 0 && navigator.onLine && <div className="column_item">
         <h1>جدیدترین محصولات</h1>
-        <select className="categories_wrapper_select" onChange={(e) => changeCategoryHandler(e.target.value)}>
+        <select className="categories_wrapper_select" value={activeCategory} onChange={(e) => changeCategoryHandler(e.target.value)}>
           {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
         </select>
       </div>}

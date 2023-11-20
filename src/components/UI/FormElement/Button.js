@@ -18,6 +18,7 @@ const Button = (props) => {
         exact={props.exact}
         className={`button`}
         style={props.style}
+        onClick={props.click}
       >
         {props.children}
       </Link>

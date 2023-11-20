@@ -136,6 +136,25 @@ footer {
   height: auto;
 }
 
+.store_section{
+  position: fixed;
+  right: 30px;
+  bottom: 70px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  z-index: 30;
+}
+.store_section svg {
+  cursor: pointer;
+  width: 80%;
+  height: auto;
+}
+
 @media (min-width: 2500px) {
   .arrow_up{
     left: 20% !important;
@@ -200,12 +219,20 @@ footer {
   .arrow_up svg {
     font-size: 30px;
   }
+  .store_section {
+    right: 15px;
+  }
 }
 
 @media (max-width: 550px) {
   .install_app {
     right: 5px;
     width: 25px;
+  }
+  .store_section {
+    right: 5px;
+    width: 25px;
+    bottom: 50px;
   }
   .arrow_up {
     left: 5px;
@@ -256,6 +283,9 @@ footer {
   }
   .call_us_info_box span:last-of-type {
     font-size: 10px;
+  }
+  .install_app,.store_section {
+    right: 2px;
   }
 }
 

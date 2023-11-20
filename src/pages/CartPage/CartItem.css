@@ -239,10 +239,22 @@
 }
 
 @media (max-width: 450px) {
+  .select_color_wrapper select {
+    width: 100%;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 5px 0;
+  }
+  .item_info_wrapper {
+    padding: 0 10px;
+  }
+  .item_price_wrapper {
+    padding: 0 10px 10px 10px;
+  }
   .item_rating_wrapper {
     top: 0;
   }
   .item_color_wrapper {
-    padding-right: 20px;
+    padding: 0 10px;
   }
 }

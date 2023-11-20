@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowDown } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { searchByUserFilter } from "../../redux/Actions/shopActions";
 import Backdrop from "../UI/Backdrop/Backdrop";
@@ -13,6 +13,8 @@ const Drawer = (props) => {
   const [activeCategory, setActiveCategory] = useState("");
   const [activeOrder, setActiveOrder] = useState("");
   const [activeSubcategories, setActiveSubcategories] = useState([]);
+
+  const { pathname } = useLocation();
 
   const dispatch = useDispatch();
 
@@ -88,7 +90,12 @@ const Drawer = (props) => {
                 </Link>
               </li>
               <li onClick={props.backdropClick}>
-                <Link to="/shop">ویترین</Link>
+                <Link to="/shop" onClick={() => pathname !== "/shop" && dispatch(
+                searchByUserFilter({
+                  level: 3,
+                  order: "createdAt",
+                })
+              )}>ویترین</Link>
               </li>
               <li onClick={props.backdropClick}>
                 <Link to="/stores">فروشگاه ها</Link>

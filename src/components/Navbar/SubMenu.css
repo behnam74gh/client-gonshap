@@ -8,6 +8,7 @@
   z-index: 103;
   transition: all ease-in-out 0.4s;
   box-shadow: var(--mainBoxShadow);
+  user-select: none;
 }
 .submenu::before {
   content: "";
@@ -80,7 +81,7 @@
   font-size: 16px;
 }
 .empty_sub_text{
-  color: var(--firstColorPalete);
+  color: var(--thirdColorPalete);
   font-size: 10px;
   text-align: center;
   width: 100%;
@@ -103,7 +104,8 @@
   width: 70px;
   padding: 4px 0;
   font-size: 10px;
-  background-color: var(--secondColorPalete);
+  background-color: var(--thirdColorPalete);
+  border-radius: 100px;
   margin: 4px;
   color: #ffffff;
   display: flex;

@@ -1,6 +1,6 @@
 .store_card_skeleton{
     width: 200px !important;
-    height: 225px;
+    height: 250px;
 }
 .store_card_wrapper{
     display: flex;
@@ -12,19 +12,19 @@
 @media (max-width: 450px) {
     .store_card_skeleton{
         width: 150px !important;
-        height: 200px;
+        height: 220px;
     }
 }
 @media (max-width: 365px) {
     .store_card_skeleton{
         width: 135px !important;
-        height: 165px;
+        height: 185px;
     }
 }
 @media (max-width: 330px) {
     .store_card_skeleton{
         width: 120px !important;
-        height: 160px;
+        height: 170px;
     }
 }
 @media (max-width: 300px) {

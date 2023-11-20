@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { MdEdit,MdOutlineToggleOn,MdToggleOff } from "react-icons/md";
 import { RiSearchLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
 import { useSelector } from "react-redux";
+import {db} from '../../../util/indexedDB'
 import axios from "../../../util/axios";
 import Pagination from "../../../components/UI/Pagination/Pagination";
 import defPic from "../../../assets/images/def.jpg";
@@ -50,8 +51,10 @@ const Products = () => {
       .catch((err) => err.response && toast.error(err.response.data.message));
 
   useEffect(() => {
-    getProductsLength();
-  }, []);
+    if(role === 1){
+      getProductsLength();
+    }
+  }, [role]);
 
   useEffect(() => {
     if (orderConfig === "none") {
@@ -119,64 +122,93 @@ const Products = () => {
       });
   }, [page, perPage, orderConfig]);
 
-  const loadAllCategories = () => {
+  const loadAllCategories = useCallback(() => {
     if(role === 2){
       return
     }
-    axios
-      .get("/get-all-categories")
-      .then((response) => {
-        setCategories(response.data.categories);
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrorText(err.response.data.message);
-        }
-      });
-  };
-  const loadAllSubcategories = () => {
-      axios
-      .get("/get-all-subcategories")
-      .then((response) => {
-        if(role === 2 && supplierFor){
-            const newSubs = response.data.subcategories.filter((s) => s.parent === supplierFor);
-            setSubcategories(newSubs);
-        }else{
-          setSubcategories(response.data.subcategories);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrorText(err.response.data.message);
-        }
-      });
-  };
-
-  const loadAllBrands = () => {
-    axios
-      .get("/get-all-brands")
-      .then((response) => {
-        if (response.data.success) {
-          if(role === 2 && supplierFor){
-            const particularBrands = response.data.brands.filter((c) => c.backupFor._id === supplierFor);
-            setBrands(particularBrands)
-          }else{
-            setBrands(response.data.brands);
+    db.activeCategories.toArray().then(items => {
+      if(items.length > 0){
+        setCategories(items);
+      }else{
+        axios
+        .get("/get-all-categories")
+        .then((response) => {
+          setCategories(response.data.categories);
+        })
+        .catch((err) => {
+          if (err.response) {
+            setErrorText(err.response.data.message);
           }
+        });
+      }
+    });
+  }, [role])
+  const loadAllSubcategories = useCallback(() => {
+    db.subCategories.toArray().then(items => {
+      if(items.length > 0) {
+        if(role === 2 && supplierFor){
+          const newSubs = items.filter((s) => s.parent === supplierFor);
+          setSubcategories(newSubs);
+        }else{
+          setSubcategories(items)
         }
-      })
-      .catch((err) => {
-        if (err.response) {
-          setErrorText(err.response.data.message);
+      }else{
+        axios.get("/get-all-subcategories")
+        .then((response) => {
+          if(role === 2 && supplierFor){
+              const newSubs = response.data.subcategories.filter((s) => s.parent === supplierFor);
+              setSubcategories(newSubs);
+          }else{
+            setSubcategories(response.data.subcategories);
+          }
+        })
+        .catch((err) => {
+          if (err.response) {
+            setErrorText(err.response.data.message);
+          }
+        });
+      }
+    })
+      
+  }, [role]);
+
+  const loadAllBrands = useCallback(() => {
+    db.brands.toArray().then(items => {
+      if(items.length > 0){
+        if(role === 2 && supplierFor){
+          const particularBrands = items.filter((c) => c.backupFor._id === supplierFor);
+          setBrands(particularBrands)
+        }else{
+          setBrands(items)
         }
-      });
-  };
+      }else{
+        axios
+        .get("/get-all-brands")
+        .then((response) => {
+          if (response.data.success) {
+            if(role === 2 && supplierFor){
+              const particularBrands = response.data.brands.filter((c) => c.backupFor._id === supplierFor);
+              setBrands(particularBrands)
+            }else{
+              setBrands(response.data.brands);
+            }
+          }
+        })
+        .catch((err) => {
+          if (err.response) {
+            setErrorText(err.response.data.message);
+          }
+        });
+      }
+    })
+    
+  }, [role]);
 
   useEffect(() => {
     loadAllCategories();
     loadAllSubcategories();
     loadAllBrands();
-  }, []);
+  }, [loadAllBrands,loadAllCategories,loadAllSubcategories]);
 
   const searchProductsByQueryText = () => {
     setLoading(true)
@@ -245,6 +277,16 @@ const Products = () => {
         setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
+
+          if(role === 1){
+            db.subCategories.toArray().then(items => {
+              if(items.length > 0) {
+                const newSubs = items.filter((s) => s.parent === e);
+                setSubcategories(newSubs);
+              }
+            })
+          }
+          
         }
       })
       .catch((err) => {
@@ -295,6 +337,16 @@ const Products = () => {
         setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
+          
+          if(role === 1){
+            const currentSub = subcategories.find(s => s._id === e )
+            db.brands.toArray().then(items => {
+              if(items.length > 0) {
+                const particularBrands = items.filter((c) => c.backupFor._id === currentSub.parent);
+                setBrands(particularBrands)
+              }
+            })
+          }
         }
       })
       .catch((err) => {
@@ -745,7 +797,7 @@ const Products = () => {
               <th className="th-titles">برند</th>
               <th className="th-titles">فی فاکتور</th>
               <th className="th-titles">فروش</th>
-              <th className="th-titles">فی فروش</th>
+              <th className="th-titles">فی فروش (بازار)</th>
               <th className="th-titles">تخفیف</th>
               <th className="th-titles">فی نهایی</th>
               <th className="th-titles">تعداد</th>

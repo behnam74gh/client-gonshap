@@ -7,6 +7,7 @@ import {
   AiFillLike,
   AiOutlineLike,
 } from "react-icons/ai";
+import { VscLoading } from "react-icons/vsc";
 import { toast } from "react-toastify";
 
 const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
@@ -14,6 +15,8 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
   const [dislikes, setDisikes] = useState(0);
   const [likeAction, setLikeAction] = useState(null);
   const [dislikeAction, setDislikeAction] = useState(null);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const [disLoading, setDisLoading] = useState(false);
 
   const { userInfo } = useSelector((state) => state.userSignin);
 
@@ -48,11 +51,15 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
       toast.warning('ابتدا وارد حسابتان شوید')
       return;
     }
+
+    setLikeLoading(true);
+
     if (likeAction === null) {
       axios
         .post("/up-like", { commentId })
         .then((res) => {
           if (res.data.success) {
+            setLikeLoading(false);
             setLikes(likes + 1);
             setLikeAction("liked");
 
@@ -64,6 +71,7 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
           }
         })
         .catch((err) => {
+          setLikeLoading(false);
           if (typeof err.response.data.message === "object") {
             toast.warning(err.response.data.message[0]);
           } else {
@@ -75,11 +83,13 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
         .post("/un-like", { commentId })
         .then((res) => {
           if (res.data.success) {
+            setLikeLoading(false);
             setLikes(likes - 1);
             setLikeAction(null);
           }
         })
         .catch((err) => {
+          setLikeLoading(false);
           if (typeof err.response.data.message === "object") {
             toast.warning(err.response.data.message[0]);
           } else {
@@ -94,11 +104,15 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
       toast.warning('ابتدا وارد حسابتان شوید')
       return;
     }
+
+    setDisLoading(true);
+
     if (dislikeAction === null) {
       axios
         .post("/up-dislike", { commentId })
         .then((res) => {
           if (res.data.success) {
+            setDisLoading(false);
             setDisikes(dislikes + 1);
             setDislikeAction("disliked");
 
@@ -110,6 +124,7 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
           }
         })
         .catch((err) => {
+          setDisLoading(false);
           if (typeof err.response.data.message === "object") {
             toast.warning(err.response.data.message[0]);
           } else {
@@ -121,11 +136,13 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
         .post("/un-dislike", { commentId })
         .then((res) => {
           if (res.data.success) {
+            setDisLoading(false);
             setDisikes(dislikes - 1);
             setDislikeAction(null);
           }
         })
         .catch((err) => {
+          setDisLoading(false);
           if (typeof err.response.data.message === "object") {
             toast.warning(err.response.data.message[0]);
           } else {
@@ -138,7 +155,7 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
   return (
     <div>
       <span onClick={onLikeHandler} className="like_dislike_info">
-        {likeAction === "liked" ? (
+        {likeLoading ? <VscLoading className="loader" /> : likeAction === "liked" ? (
           <AiFillLike className="text-green" />
         ) : (
           <AiOutlineLike />
@@ -146,7 +163,7 @@ const LikeDislike = ({ commentId,commentLikes,commentDislikes }) => {
         <span className="mx-1">{likes}</span>
       </span>
       <span onClick={onDislikeHandler} className="like_dislike_info">
-        {dislikeAction === "disliked" ? (
+        {disLoading ? <VscLoading className="loader" /> : dislikeAction === "disliked" ? (
           <AiFillDislike className="text-red" />
         ) : (
           <AiOutlineDislike />

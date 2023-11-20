@@ -18,7 +18,14 @@
 
 @media (max-width: 1060px) {
     .social_address_wrapper {
-        margin: 10px 0 0;
+        margin: 4px 0 0;
+    }
+    .social_address_wrapper span {
+        font-size: 12px;
+    }
+    .social_address_wrapper img {
+        width: 20px !important;
+        height: 20px !important;
     }
 }
 @media (max-width: 930px) {

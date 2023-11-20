@@ -58,6 +58,7 @@ const Section9 = () => {
           db.reviewedProducts.clear()
           db.reviewedProducts.bulkPut(foundedProducts)
 
+          setIsviewed(true);
         }
       })
       .catch((err) => {
@@ -79,7 +80,6 @@ const Section9 = () => {
         }
       });
 
-      setIsviewed(true);
     }
 
       return () => {

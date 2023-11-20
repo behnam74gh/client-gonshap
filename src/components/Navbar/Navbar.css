@@ -48,6 +48,7 @@
   background-color: transparent;
   padding: 12px 0 0;
   z-index: 210;
+  user-select: none;
 }
 .wrapper-dropdown {
   background-color: #ffffff;
@@ -77,6 +78,7 @@
   border: none;
   display: flex;
   align-items: center;
+  user-select: none;
   padding: 4px 12px;
   margin-right: 10px;
   transition: all 0.3s ease-in-out;
@@ -303,6 +305,12 @@
   .search-input input {
     height: 30px;
   }
+  .logged-user{
+    font-size: 12px;
+  }
+  .search-input input::placeholder {
+    font-size: 10px;
+  }
 }
 @media (max-width: 376px) {
   .company_logo_navbar {
@@ -320,6 +328,9 @@
     padding: 3px 5px;
     margin-right: 8px;
     font-size: 10px;
+  }
+  .search-input input::placeholder {
+    font-size: 8px;
   }
 }
 @media (max-width: 290px) {

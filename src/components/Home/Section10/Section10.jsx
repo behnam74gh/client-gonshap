@@ -34,6 +34,8 @@ const Section10 = () => {
 
             db.suggests.clear()
             db.suggests.bulkPut(response.data.suggests)
+
+            setIsviewed(true)
           }
         })
         .catch((err) => {
@@ -51,7 +53,6 @@ const Section10 = () => {
         })
       }
 
-      setIsviewed(true)
     }
 
     return () => {

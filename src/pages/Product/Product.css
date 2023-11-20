@@ -11,7 +11,7 @@
   text-align: justify;
   width: 100%;
   overflow: hidden;
-  word-break: break-all;
+  word-break: break-word;
 }
 .details_info_wrapper {
   display: flex;
@@ -61,6 +61,11 @@
   justify-content: center;
 }
 
+@media (max-width: 850px) {
+  .comment_attributes {
+    margin: 5px 0 0;
+  }
+}
 @media (max-width: 780px) {
   .details_info {
     margin: 4px 0;

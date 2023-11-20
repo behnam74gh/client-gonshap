@@ -56,14 +56,14 @@
   display: flex;
   flex-flow: column wrap;
   min-height: 200px;
-  padding: 20px 0;
+  padding: 10px 0;
 }
 .info_box {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
-  margin: 5px 0;
+  margin: 2px 0;
   gap: 0 10px;
   font-size: 14px;
 }
@@ -142,10 +142,10 @@
     padding: 0;
   }
   .info_box {
-    margin: 2px 0;
+    margin: 1px 0;
   }
   .info_box strong {
-    font-size: 14px;
+    font-size: 12px;
   }
   .info_box span {
     font-size: 12px;
@@ -202,7 +202,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .store_info_wrapper {
     flex-flow: wrap;
   }
@@ -260,8 +260,9 @@
   }
   .info_box {
     font-size: 10px;
-    justify-content: space-between;
-    margin: 3px 0;
+  }
+  .info_box:nth-child(5) svg {
+    font-size: 14px;
   }
   .supplier_location_box {
     flex-basis: 100%;

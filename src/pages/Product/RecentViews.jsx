@@ -49,6 +49,11 @@ const RecentViews = ({productId,numberOfSlides,setNumberOfSlides}) => {
 
         setIsviewed(true);
     }
+
+    return () => {
+      setIsviewed(false);
+      setNumberOfSlides(4);
+    }
   }, [productId, userInfo,setNumberOfSlides,inView]);
 
   

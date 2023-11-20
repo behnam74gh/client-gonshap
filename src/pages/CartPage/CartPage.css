@@ -17,7 +17,6 @@
   display: flex;
   flex-flow: row wrap;
   min-height: 400px;
-  margin-bottom: 80px;
 }
 .cart_items_wrapper {
   flex: 1 1 700px;
@@ -165,7 +164,7 @@
   .cart_items_wrapper {
     flex-basis: 100%;
   }
-  .cart_details_wrapper h2 {
+  .cart_details_wrapper h4 {
     font-size: 14px;
     margin: 5px 0;
   }
@@ -173,7 +172,7 @@
     font-size: 12px;
     margin: 0;
   }
-  .cart_items_wrapper h2 {
+  .cart_items_wrapper h4 {
     font-size: 14px;
   }
   .cart_length {

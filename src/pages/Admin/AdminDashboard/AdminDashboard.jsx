@@ -123,7 +123,7 @@ const AdminDashboard = ({ history }) => {
             component={CarouselCreate}
           />
           <AdminRoute
-            path="/admin/dashboard/carousel-update/:slug"
+            path="/admin/dashboard/carousel-update/:id"
             component={CarouselUpdate}
           />
           <AdminRoute path="/admin/dashboard/ads" component={Ads} />

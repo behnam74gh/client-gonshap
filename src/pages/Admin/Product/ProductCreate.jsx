@@ -498,7 +498,7 @@ const ProductCreate = () => {
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
           />
-          <label className="auth-label"> قیمت فروش کالا (تومان) : </label>
+          <label className="auth-label"> قیمت فروش کالا در بازار (تومان) : </label>
           <Input
             id="price"
             element="input"
@@ -669,7 +669,7 @@ const ProductCreate = () => {
             }
             onClick={appendDetailHandler}
           >
-              {!loading ? "افزودن" : <VscLoading className="loader" />}
+            افزودن
           </Button>
 
           {values.details?.length > 0 && <div className="details_wrapper">

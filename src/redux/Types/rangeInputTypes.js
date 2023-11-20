@@ -1,0 +1,2 @@
+export const PUT_RANGE_VALUES = "PUT_RANGE_VALUES";
+export const POP_RANGE_VALUES = "POP_RANGE_VALUES";

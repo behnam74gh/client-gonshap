@@ -5,7 +5,7 @@ import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCar
 import Pagination from "../../components/UI/Pagination/Pagination";
 import "./SupplierProducts.css";
 
-const SupplierProducts = ({ backupFor,storeName }) => {
+const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
   const [subcategories, setSubcategories] = useState([]);
   const [activeSub, setActiveSub] = useState(
     JSON.parse(localStorage.getItem("gonshapSupplierActiveSub")) || ""
@@ -44,17 +44,18 @@ const SupplierProducts = ({ backupFor,storeName }) => {
           }
         });
     }
-  }, [backupFor, activeSub.length]);
+  }, [backupFor]);
 
   useEffect(() => {
     if (!activeSub.length > 0) {
       return;
     }
 
-    setLoading(true);
+    !loading && setLoading(true);
     axios
       .post("/find/suppliers-products/by-subcategory", {
         sub: activeSub,
+        ownerPhoneNumber,
         page,
         perPage,
       })
@@ -74,7 +75,7 @@ const SupplierProducts = ({ backupFor,storeName }) => {
           setErrorText(err.response.data.message);
         }
       });
-  }, [activeSub, page, perPage]);
+  }, [activeSub, page, perPage,ownerPhoneNumber]);
 
   const switchSubcategoryHandler = (id) => {
     setActiveSub(id);
@@ -113,9 +114,13 @@ const SupplierProducts = ({ backupFor,storeName }) => {
           products.map((product) => (
             <ProductCard key={product._id} product={product} showSold={true} />
           ))
-        ) : (
+        ) : subcategories.length > 0 ? (
           <p className="info-message text-center w-100">
             براساس این برچسب محصولی وجود ندارد
+          </p>
+        ) : (
+          <p className="info-message text-center w-100">
+            محصولی ثبت نشده است
           </p>
         )}
       </div>

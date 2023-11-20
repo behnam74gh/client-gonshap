@@ -15,6 +15,7 @@ import { USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
 import altenativeLogo from '../../assets/images/logo-alternative.png'
 import { VscLoading } from "react-icons/vsc";
+import { SUGGEST_CLOSE } from "../../redux/Types/searchInputTypes";
 import "./Navbar.css";
 
 const Navbar = (props) => {
@@ -22,7 +23,7 @@ const Navbar = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const { subMenu, userSignin, cart, favorites,isOnline } = useSelector((state) => ({
+  const { subMenu, userSignin, cart, favorites,isOnline,search: { dropdown } } = useSelector((state) => ({
     ...state,
   }));
 
@@ -62,7 +63,7 @@ const Navbar = (props) => {
     }).catch(err => {
       setLoading(false)
       if(err.response.status !== 401){
-        toast.warn('خروج ناموفق بود')
+        toast.warning('خروج ناموفق بود')
       }
     })
   };
@@ -70,7 +71,7 @@ const Navbar = (props) => {
   return (
     <header className="c-navbar" id="header">
       <div className="header-wrapper" onMouseOver={subMenuHandler}>
-        <Link to="/" className='logo_Img'>
+        <Link to="/" className='logo_Img' onClick={() => dropdown && dispatch({type: SUGGEST_CLOSE})}>
           <img
             src={(isOnline && props?.companyInfo?.logo?.length > 0) ?
               `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${props.companyInfo.logo}` :
@@ -83,7 +84,7 @@ const Navbar = (props) => {
         <div className="search-input">
           <SearchInput />
         </div>
-        <div className="header-feature">
+        <div className="header-feature" onClick={() => dropdown && dispatch({type: SUGGEST_CLOSE})}>
           <ul>
             {userInfo?.userId?.length > 0 ? (
               <li className="logged-user">
@@ -139,7 +140,7 @@ const Navbar = (props) => {
         </div>
       </div>
 
-      <nav className="desktop-only">
+      <nav className="desktop-only" onClick={() => dropdown && dispatch({type: SUGGEST_CLOSE})}>
         <NavbarItems
           categories={props.categories}
           subcategories={props.subcategories}

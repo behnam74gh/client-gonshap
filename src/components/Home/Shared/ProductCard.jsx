@@ -15,20 +15,21 @@ import {
 import { toast } from "react-toastify";
 import { db } from "../../../util/indexedDB";
 import "./ProductCard.css";
+import { PUSH_ITEM } from "../../../redux/Types/searchedItemTypes";
 
-const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
+const ProductCard = ({ product, showSold, showReviews }) => {
   const [inCart, setInCart] = useState(false);
   const [inFavorites, setInFavorites] = useState(false);
 
   const {
     title,
     discount,
+    price,
     finallyPrice,
     photos,
     ratings,
     _id,
     sold,
-    countInStock,
     reviewsCount,
   } = product;
 
@@ -98,8 +99,12 @@ const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
   };
 
   const cacheProductDetailsHandler = () => {
-     db.productDetailes.clear()
-     db.productDetailes.add(product)
+    dispatch({
+      type: PUSH_ITEM,
+      payload: product
+    })
+    db.productDetailes.clear()
+    db.productDetailes.add(product)
   }
 
   return (
@@ -118,33 +123,29 @@ const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
       </Link>
       <div className="product_info_box">
         <Link to={`/product/details/${_id}`} onClick={cacheProductDetailsHandler}>
-          <h3 className={`${(showReviews || showSold || showDiscount) ? "has_Second_att" : "my-0"}`}>
+          <h3 className={`${window.innerWidth < 450 && (showReviews || showSold) ? "has_Second_att" : "my-0"}`}>
             {title.length > 22 ? `${title.substring(0,22)}...` : title}
           </h3>
         </Link>
 
-        <div className="font-sm mt-2" style={{textAlign: (showReviews || showSold || showDiscount) && "center"}}>
+        <div className="product_card_title" style={{textAlign: window.innerWidth < 450 && (showReviews || showSold) && "center"}}>
           {finallyPrice.toLocaleString("fa")}
           <span className="mx-1">تومان</span>
+          <del className="deleted_price">{price.toLocaleString("fa-IR")}</del>
         </div>
-        <div className="show_ratings_wrapper tooltip">
-          {ratings.length > 0 && (
-            <span className="tooltip_text">
-              از <strong className="mx-1">( {ratings.length} )</strong>امتیاز
-            </span>
-          )}
+        <div className="show_ratings_wrapper">
           {ratings && ratings.length > 0 ? (
             ShowRatingAverage(product)
           ) : (
-            <p className="no_ratings_yet">امتیازی داده نشده</p>
+            <p className="no_ratings_yet">امتیازی ثبت نشده</p>
           )}
         </div>
       </div>
-      {!showDiscount && discount > 10 && (
+      {discount > 10 && (
         <div className="special_discount">
           <div className="discount_shape">
             <span>
-              <strong className="ml-1">%{discount}</strong> off
+              فروش ویژه
             </span>
           </div>
         </div>
@@ -152,19 +153,13 @@ const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
       {showSold && (
         <div className="products_sold_count">
           <span className="font-sm">{sold}</span>
-          <span>فروش</span>
+          <span className="f_s_title">فروش</span>
         </div>
       )}
       {showReviews && (
         <div className="products_sold_count">
           <span className="font-sm">{reviewsCount}</span>
-          <span>بازدید</span>
-        </div>
-      )}
-      {showDiscount && (
-        <div className="products_sold_count tooltip">
-          <span className="tooltip_text">off</span>
-          <i className="text-purple">%{discount}</i>
+          <span className="f_s_title">بازدید</span>
         </div>
       )}
       <div className="products_icons_wrapper">
@@ -180,12 +175,10 @@ const ProductCard = ({ product, showSold, showReviews,showDiscount }) => {
       </div>
       <div
         className="products_count"
-        style={{ background: !countInStock > 0 && "red" }}
       >
-        <span className="font-sm">
-          {countInStock > 0 ? countInStock : "ناموجود"}
+        <span style={{fontSize: "14px"}}>
+        %{discount}
         </span>
-        {countInStock > 0 && <span>موجود</span>}
       </div>
     </div>
   );

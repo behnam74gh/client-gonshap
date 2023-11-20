@@ -63,9 +63,40 @@ export const VALIDATOR_ENGLISH_NUMERIC = () => ({
   type: VALIDATOR_TYPE_ENGLISH,
 });
 
+const changeToEnHandler = (value) => {
+  const newValue = value.split("").map(char => {
+    switch (char.charCodeAt()) {
+      case 1776:
+        return 0;
+      case 1777:
+        return 1;
+      case 1778:
+        return 2;
+      case 1779:
+        return 3;
+      case 1780:
+        return 4;
+      case 1781:
+        return 5;
+      case 1782:
+        return 6;
+      case 1783:
+        return 7;
+      case 1784:
+        return 8;
+      case 1785:
+        return 9;
+      default:
+        return char;
+    }
+  })
+  return newValue.join("");
+}
+
 export const validate = (value, validators) => {
   let isValid = true;
   let errorMessages = [];
+  let validatedValue = value;
 
   for (const validator of validators) {
     if (validator.type === VALIDATOR_TYPE_REQUIRE) {
@@ -147,7 +178,7 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_SPECIAL_CHARACTERS_3_LINK) {
       let validatorTypeIsValid = false;
-      if(!/[~`$^_={}[\];÷|"';×,!:<>+?]/.test(value) && !/[\u0600-\u06FF\s]+$/.test(value)){
+      if(!/[~`$^={}[\];÷|"';×,!:<>+?]/.test(value) && !/[\u0600-\u06FF\s]+$/.test(value)){
         validatorTypeIsValid = true;
         errorMessages = errorMessages.filter(item => item.type !== "special-ch-3")
       }else{
@@ -158,7 +189,9 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_NUMBER) {
       let validatorTypeIsValid = false;
-      if(/[0-9]*$/.test(value) && value > 0){
+      const changedToENvalue = changeToEnHandler(value);
+      if(/[0-9]*$/.test(changedToENvalue) && changedToENvalue > 0){
+        validatedValue = changedToENvalue;
         validatorTypeIsValid = true;
         errorMessages = errorMessages.filter(item => item.type !== "number")
       }else{
@@ -169,7 +202,9 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_AUTHNUMBER) {
       let validatorTypeIsValid = false;
-      if(/^(?=^.{6,7}$)[0-9]*$/.test(value)){
+      const changedToENvalue = changeToEnHandler(value);
+      if(/^(?=^.{6,7}$)[0-9]*$/.test(changedToENvalue)){
+        validatedValue = changedToENvalue;
         validatorTypeIsValid = true;
         errorMessages = errorMessages.filter(item => item.type !== "authNumber")
       }else{
@@ -180,7 +215,9 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_PASSWORD) {
       let validatorTypeIsValid = false;
-      if(/^(?=^.{6,14}$)((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.*$/.test(value) && !/\s{1,}/.test(value) && /^[A-Za-z0-9]*$/.test(value)){
+      const changedToENvalue = changeToEnHandler(value);
+      if(/^(?=^.{6,14}$)((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.*$/.test(changedToENvalue) && !/\s{1,}/.test(changedToENvalue) && /^[A-Za-z0-9]*$/.test(changedToENvalue)){
+        validatedValue = changedToENvalue;
         validatorTypeIsValid = true;
         errorMessages = errorMessages.filter(item => item.type !== "password")
       }else{
@@ -191,7 +228,9 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_REPEAT_PASSWORD) {
       let validatorTypeIsValid = false;
-      if(value === validator.val){
+      const changedToENvalue = changeToEnHandler(value);
+      if(changedToENvalue === validator.val){
+        validatedValue = changedToENvalue;
         validatorTypeIsValid = true;
         errorMessages = errorMessages.filter(item => item.type !== "repeat_password")
       }else{
@@ -216,9 +255,11 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_PHONENUMBER) {
       let validatorTypeIsValid = false;
-      if(/09([0-9]{2})-?[0-9]{3}-?[0-9]{4}/.test(value)){
+      const changedToENvalue = changeToEnHandler(value);
+      if(/09([0-9]{2})-?[0-9]{3}-?[0-9]{4}/.test(changedToENvalue)){
+        validatedValue = changedToENvalue;
         validatorTypeIsValid = true;
-        errorMessages = errorMessages.filter(item => item.type !== "phoneNumber")
+        errorMessages = errorMessages.filter(item => item.type !== "phoneNumber");
       }else{
         validatorTypeIsValid = false;
         errorMessages.push({type: "phoneNumber" , message: "شماره باید با 09 شروع شود و 11 رقم باشد"})
@@ -227,7 +268,9 @@ export const validate = (value, validators) => {
     }
     if (validator.type === VALIDATOR_TYPE_CONSTANTNUMBER) {
       let validatorTypeIsValid = false;
-      if(/^0[1-9]{2}[0-9]{8}$/.test(value)){
+      const changedToENvalue = changeToEnHandler(value);
+      if(/^0[1-9]{2}[0-9]{8}$/.test(changedToENvalue)){
+        validatedValue = changedToENvalue;
         validatorTypeIsValid = true;
         errorMessages = errorMessages.filter(item => item.type !== "constantNumber")
       }else{
@@ -248,9 +291,10 @@ export const validate = (value, validators) => {
       isValid = isValid && validatorTypeIsValid;
     }
   }
-  return {isValid,errorMessages};
+  return {validatedValue,isValid,errorMessages};
 };
 
+//[0-9\u0660-\u0669] تشخیص عدد فارسی و انگلیسی
 // برای حروف فارسی /^[\u0600-\u06FF\uFB8A\u067E\u0686\u06AF]+$/.test(value);
 
 //برای رمز عبور /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/

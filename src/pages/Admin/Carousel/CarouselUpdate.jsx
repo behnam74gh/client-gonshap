@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
+import { useSelector } from "react-redux";
 
 const oldStates = {
   region: "",
@@ -31,10 +32,13 @@ const CarouselUpdate = ({ history, match }) => {
   const [urls, setUrls] = useState([]);
   const [values, setValues] = useState(oldStates);
   const [categories, setCategories] = useState([]);
+  const [firstLoading, setFirstLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [regions, setRegions] = useState([]);
 
-  const { slug } = match.params;
+  const { id } = match.params;
+  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin);
+
   const loadAllCategories = () => {
     axios
       .get("/get-all-categories")
@@ -67,8 +71,9 @@ const CarouselUpdate = ({ history, match }) => {
   }, []);
 
   useEffect(() => {
+    setFirstLoading(true)
     axios
-      .get(`/current-supplier/${slug}`)
+      .get(`/current-supplier/${id}`)
       .then((response) => {
         const {
           region,
@@ -86,7 +91,7 @@ const CarouselUpdate = ({ history, match }) => {
           photos,
           authentic,
         } = response.data.thisSupplier;
-        
+        setFirstLoading(false)
         if (response.data.success) {
           setValues({
             region,
@@ -107,11 +112,12 @@ const CarouselUpdate = ({ history, match }) => {
         }
       })
       .catch((err) => {
+        setFirstLoading(false)
         if (err.response) {
           setError(err.response.data.message);
         }
       });
-  }, [slug]);
+  }, [id]);
 
   //image-picker-codes
   const filePickerRef = useRef();
@@ -205,7 +211,7 @@ const CarouselUpdate = ({ history, match }) => {
 
     setLoading(true);
     axios
-      .put(`/supplier/update/${slug}`, formData)
+      .put(`/supplier/update/${id}`, formData)
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -223,11 +229,15 @@ const CarouselUpdate = ({ history, match }) => {
       });
   };
 
-  return (
+  return firstLoading ? (
+    <div className="loader_wrapper">
+      <VscLoading className="loader" />
+    </div>
+  ) : (
     <div className="admin-panel-wrapper">
       {error.length > 0 ? (
         <h4 className="warning-message">{error}</h4>
-      ) : (
+      ) : role === 1 && (
         <div className="d-flex-around mb-2">
           <h4 className="my-0">
             ویرایش اطلاعات فروشگاه{" "}
@@ -244,7 +254,7 @@ const CarouselUpdate = ({ history, match }) => {
           </Link>
         </div>
       )}
-      <hr />
+      {role === 1 && <hr /> }  
       <form
         className="auth-form"
         encType="multipart/form-data"
@@ -288,10 +298,10 @@ const CarouselUpdate = ({ history, match }) => {
               </div>
             ))}
         </div>
-        <label className="auth-label">
+        {role === 1 && <label className="auth-label">
           منطقه (شهر) :
-        </label>
-        <select
+        </label>}
+        {role === 1 && <select
           name="region"
           value={values.region}
           onChange={(e) => changeInputHandler(e)}
@@ -303,7 +313,7 @@ const CarouselUpdate = ({ history, match }) => {
                 {r.name}
               </option>
             ))}
-        </select>
+        </select>}
         <label className="auth-label">
           عنوان فروشگاه :
         </label>
@@ -313,17 +323,17 @@ const CarouselUpdate = ({ history, match }) => {
           type="text"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label">شماره تلفن مالک :</label>
-        <input
+        {role === 1 && <label className="auth-label">شماره تلفن مالک :</label>}
+        {role === 1 && <input
           name="phoneNumber"
           value={values.phoneNumber}
           type="text"
           disabled={true}
-        />
-        <label className="auth-label">
+        />}
+        {role === 1 && <label className="auth-label">
           محصولات پشتیبانی :
-        </label>
-        <select
+        </label>}
+        {role === 1 && <select
           name="backupFor"
           value={values.backupFor}
           onChange={(e) => changeInputHandler(e)}
@@ -335,7 +345,7 @@ const CarouselUpdate = ({ history, match }) => {
                 {c.name}
               </option>
             ))}
-        </select>
+        </select>}
         <label className="auth-label">شماره تلفن فروشگاه :</label>
         <input
           name="storePhoneNumber"
@@ -385,15 +395,15 @@ const CarouselUpdate = ({ history, match }) => {
           type="text"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label">تیک آبی :</label>
-          <select
-            name="authentic"
-            value={values.authentic}
-            onChange={(e) => changeInputHandler(e)}
-          >
-            <option value={true}>داشته باشد</option>
-            <option value={false}>نداشته باشد</option>
-          </select>
+        {role === 1 && <label className="auth-label">تیک آبی :</label>}
+        {role === 1 && <select
+          name="authentic"
+          value={values.authentic}
+          onChange={(e) => changeInputHandler(e)}
+        >
+          <option value={true}>داشته باشد</option>
+          <option value={false}>نداشته باشد</option>
+        </select>}
         <textarea
           type="text"
           name="description"

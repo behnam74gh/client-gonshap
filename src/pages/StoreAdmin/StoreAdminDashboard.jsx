@@ -24,7 +24,7 @@ const ToDoList = lazy(() => import("../Admin/ToDo/ToDoList"));
 const ToDoCreate = lazy(() => import("../Admin/ToDo/ToDoCreate"));
 const UserTickets = lazy(() => import('../User/Ticket/UserTickets'))
 const CreateTicket = lazy(() => import('../User/Ticket/CreateTicket'))
-const UpdateProfileInfo = lazy(() => import('../Admin/UpdateProfileInfo/UpdateProfileInfo'))
+const CarouselUpdate = lazy(() => import('../Admin/Carousel/CarouselUpdate'))
 const ChangeUserPassword = lazy(() => import('../Admin/UpdateProfileInfo/ChangeUserPassword'))
 
 const StoreAdminDashboard = ({history}) => {
@@ -59,7 +59,7 @@ const StoreAdminDashboard = ({history}) => {
                 <StoreAdminRoute path='/store-admin/dashboard/brand-update/:id' component={BrandUpdate} />
                 <StoreAdminRoute path='/store-admin/dashboard/tickets' component={UserTickets} />
                 <StoreAdminRoute path='/store-admin/dashboard/create-ticket' component={CreateTicket} />
-                <StoreAdminRoute path='/store-admin/dashboard/update/profile-info' component={UpdateProfileInfo} />
+                <StoreAdminRoute path='/store-admin/dashboard/carousel-update/:id' component={CarouselUpdate} />
                 <StoreAdminRoute path='/store-admin/dashboard/update/user-password' component={ChangeUserPassword} />
             </Switch>
         </StoreAdminDashboardLayout>

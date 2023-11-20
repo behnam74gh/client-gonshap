@@ -89,7 +89,7 @@ const Section7 = () => {
     if (!activeCategory.length > 0 || !navigator.onLine) {
       return;
     }
-    if(inView){
+    if(inView && !isViewed){
       setLoading(true);
       axios
       .post("/find/products/by-category-and/order", {
@@ -108,6 +108,7 @@ const Section7 = () => {
           db.soldProducts.clear()
           db.soldProducts.bulkPut(foundedProducts)
 
+          setIsviewed(true);
         }
       })
       .catch((err) => {
@@ -120,12 +121,12 @@ const Section7 = () => {
         }
       });
 
-      setIsviewed(true);
     }
-  }, [activeCategory,inView]);
+  }, [activeCategory,inView,isViewed]);
 
   const changeCategoryHandler = (id) => {
     setActiveCategory(id);
+    setIsviewed(false)
   };
 
   const setting = {
@@ -146,7 +147,7 @@ const Section7 = () => {
         {categoryErrorText.length > 0 && (
           <p className="warning-message">{categoryErrorText}</p>
         )}
-        {isOnline && <select className="categories_wrapper_select" onChange={(e) => changeCategoryHandler(e.target.value)}>
+        {isOnline && <select className="categories_wrapper_select" value={activeCategory} onChange={(e) => changeCategoryHandler(e.target.value)}>
           {categories?.length > 0 && categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
         </select>}
       </div>

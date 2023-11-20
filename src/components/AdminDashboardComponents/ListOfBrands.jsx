@@ -175,7 +175,7 @@ const ListOfBrands = ({ brands, categories,role,loading }) => {
               <tr>
                 <td colSpan="5">
                   <p className="warning-message">
-                    براساس این جستوجو، برندی یافت نشد!
+                    فهرست برند خالی است
                   </p>
                 </td>
               </tr>

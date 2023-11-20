@@ -292,7 +292,13 @@ const Carousels = () => {
           </thead>
           <tbody>
             {loading ? (
-              <VscLoading className="loader" />
+             <tr>
+              <td colSpan="12">
+                <div className="loader_wrapper">
+                  <VscLoading className="loader" />
+                </div>
+              </td>
+             </tr>
             ) : suppliers.length > 0 ?
               suppliers.map((s) => (
                 <tr key={s._id}>
@@ -336,7 +342,7 @@ const Carousels = () => {
                   </td>
                   <td>
                     <Link
-                      to={`/admin/dashboard/carousel-update/${s.slug}`}
+                      to={`/admin/dashboard/carousel-update/${s._id}`}
                       className="d-flex-center-center"
                     >
                       <MdEdit className="text-blue" />

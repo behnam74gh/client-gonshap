@@ -68,6 +68,15 @@
     .rating_wrapper a.button {
         font-size: 10px;
     }
+    .store_card_info{
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 340px) {
+    .store_card_container {
+        width: 130px;
+    }
 }
 
 @media (max-width: 330px) {
@@ -75,8 +84,17 @@
         width: 120px;
     }
 }
-@media (max-width: 290px) {
+@media (max-width: 300px) {
     .store_card_container {
         width: 110px;
+    }
+    .store_card_info{
+        margin-top: 5px;
+        padding: 0 2px;
+    }
+}
+@media (max-width: 275px) {
+    .store_card_container {
+        width: 160px;
     }
 }

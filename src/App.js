@@ -98,7 +98,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route
-            path="/supplier/introduce/:slug"
+            path="/supplier/introduce/:id"
             component={SupplierIntroduce}
           />
           <Route path="/advertise-page/:slug" component={AdvertisePage} />

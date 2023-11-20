@@ -3,6 +3,7 @@ import LoadingSkeleton from "../../components/UI/LoadingSkeleton/LoadingSkeleton
 import axios from "../../util/axios";
 import { Helmet } from "react-helmet-async";
 import CompareItem from "./CompareItem";
+import Slider from "react-slick";
 import "./ComparePage.css";
 
 const ComparePage = ({ match }) => {
@@ -42,39 +43,54 @@ const ComparePage = ({ match }) => {
    
   }, [id]);
 
+  const setting = {
+    dots: true,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    pauseOnHover: true,
+    arrows: true,
+    autoplay: false,
+    lazyLoad: true,
+    fade: false,
+  };
+  
   return (
     <section id="compare_products">
       <Helmet>
         <title>مقایسه محصولات</title>
       </Helmet>
       {currentProduct?._id.length > 0 && (
-        <h4>
-          مقایسه و بررسی دقیق تر{" "}
-          <strong className="mx-2 text-blue">
+        <h5 className="my-0">
+          مقایسه و بررسی جزئیات{" "}
+          <strong className="mx-1 text-blue">
             {currentProduct.subcategory.name}
           </strong>{" "}
           ها با یکدیگر
-        </h4>
+        </h5>
       )}
-      <p className="my-1 font-sm">محصول مورد نظر :</p>
+      
       {loading ? (
         <LoadingSkeleton />
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (currentProduct?._id?.length > 0 && (
-          <CompareItem item={currentProduct} />
+          <CompareItem item={currentProduct} comparedId={id} />
         )
       )}
-      {navigator.onLine && <p className="my-1 font-sm">محصولات مشابه :</p>}
+      {navigator.onLine && <p className="my-0 font-sm">محصولات مشابه :</p>}
       {loading ? (
         <React.Fragment>
           <LoadingSkeleton />
           <LoadingSkeleton />
         </React.Fragment>
       ) : similarProducts?.length > 0 ? (
-          similarProducts.map((item) => <CompareItem key={item._id} item={item} />)
+        <Slider {...setting}>
+          {similarProducts.map((item) => <CompareItem key={item._id} item={item} />)}
+        </Slider>
       ) : navigator.onLine && (
-        <p className="warning-message">محصول مشابه ای جهت مقایسه ، یافت نشد!</p>
+        <p className="w-100 font-sm text-mute">محصول مشابه ای جهت مقایسه ، یافت نشد!</p>
       )}
     </section>
   );

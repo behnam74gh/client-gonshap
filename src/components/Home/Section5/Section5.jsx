@@ -57,6 +57,7 @@ const Section5 = () => {
           db.discountProducts.clear()
           db.discountProducts.bulkPut(foundedProducts)
 
+          setIsviewed(true);
         }
       })
       .catch((err) => {
@@ -78,7 +79,6 @@ const Section5 = () => {
         }
       });
 
-      setIsviewed(true);
     }
 
     return () => {
@@ -99,7 +99,7 @@ const Section5 = () => {
 
   return (
     <section ref={ref} className="list_of_products">
-      <h2 className="d-flex-center-center my-1 singleTitle">تخفیف های ویژه</h2>
+      <h2 className="d-flex-center-center my-1 singleTitle">فروش ویژه</h2>
       {errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : loading ? (

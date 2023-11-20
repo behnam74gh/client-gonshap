@@ -77,16 +77,21 @@
   align-self: flex-start;
   flex: 30%;
   display: flex;
-  flex-flow: column wrap;
-  background-color: var(--firstColorPalete);
+  flex-flow: column;
+  max-height: 300px;
+  overflow-y: auto;
   color: #ffffff;
+  gap: 4px 0;
 }
 
 .drawer-category-name {
   font-size: 10px;
-  padding: 6px 8px 6px 0;
-  border-bottom: 2px solid #ffffff;
+  padding: 4px 8px;
+  background-color: var(--thirdColorPalete);
+  border-radius: 100px;
   cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
 }
 .drawer-category-name:hover {
   border-color: var(--secondColorPalete);
@@ -97,8 +102,9 @@
 }
 .drawer-subCategories_wrapper {
   flex: 40%;
-  height: 250px;
+  height: 280px;
   overflow-y: auto;
+  margin-top: 5px;
 }
 .drawer-subCategories {
   display: flex;
@@ -165,13 +171,13 @@
     max-width: 310px;
   }
   .drawer-items {
-    flex: 60%;
+    flex: 50%;
   }
   .drawer-items li {
     font-size: 10px;
   }
   .drawer-categories {
-    flex: 40%;
+    flex: 45%;
   }
   .drawer-subCategories_wrapper {
     flex: 100%;
@@ -186,12 +192,15 @@
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 370px) {
   .drawer {
-    max-width: 220px;
+    max-width: 240px;
   }
   .drawer-sublinks {
     font-size: 10px;
     border-radius: 15px;
+  }
+  .drawer-items li a {
+    font-size: 12px;
   }
 }

@@ -40,3 +40,13 @@ export const getCookie = (cookieName) => {
     }
   }
 }
+
+export const calculateResultHandler = (count,setCount) => {
+  if(count > 999999){
+    setCount((count/1000000).toFixed(1))
+  }else if(count > 999){
+    setCount((count/1000).toFixed(1))
+  }else if (count > 0){
+    setCount(count)
+  }
+}

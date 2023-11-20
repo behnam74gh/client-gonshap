@@ -4,11 +4,15 @@ import Slider from "react-slick";
 import axios from "../../../util/axios";
 import LoadingSkeleton from "../../UI/LoadingSkeleton/LoadingSkeleton";
 import { db } from "../../../util/indexedDB";
+import { useDispatch } from "react-redux";
+import { PUSH_STORE_ITEM } from "../../../redux/Types/supplierItemTypes";
 
 const SupplierSlider = () => {
   const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
   const [errorText, setErrorText] = useState("");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const ac = new AbortController()
@@ -70,8 +74,9 @@ const SupplierSlider = () => {
             suppliers.map((s) => (
               <Link
                 key={s._id}
-                to={`/supplier/introduce/${s.slug}`}
+                to={`/supplier/introduce/${s._id}`}
                 className="supplier_button"
+                onClick={() => dispatch({type: PUSH_STORE_ITEM,payload: s})}
               >
                 <img
                   src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${s.photos[0]}`}

@@ -32,6 +32,8 @@ const Section12 = () => {
             
             db.faq.clear()
             db.faq.bulkPut(response.data.allFaqs)
+
+            setIsviewed(true)
           }
         })
         .catch((err) => {
@@ -49,7 +51,6 @@ const Section12 = () => {
         })
       }
 
-      setIsviewed(true)
     }
 
     return () => {
@@ -68,7 +69,7 @@ const Section12 = () => {
 
   return (
     <section ref={ref} id="sec12">
-      <h2 className="text-center">سوالات متداول</h2>
+      <h2 className="text-center">سوالات پرتکرار</h2>
       <div className="temporary_questions_wrapper">
         <div className="accordion">
           {loading ? (

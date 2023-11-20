@@ -26,7 +26,7 @@ const CheckoutHistory = ({
       .delete("/empty/user/cart")
       .then((response) => {
         if (response.data.success) {
-          toast.info(response.data.message);
+          return;
         }
       })
       .catch((err) => {
@@ -102,7 +102,7 @@ const CheckoutHistory = ({
         <Button
           type="button"
           disabled={
-            !userInfo || !addressSaved || !totalPrice || totalPrice === 0
+            !userInfo || userInfo.isBan || !addressSaved || !totalPrice || totalPrice === 0
           }
           onClick={purchaseOrderHandler}
         >

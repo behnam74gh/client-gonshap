@@ -164,10 +164,11 @@ const CartItem = ({ product }) => {
             {product.title}
           </Link>
         </h3>
-        <h6 className="my-1">{product.brand.brandName}</h6>
-        <p className="my-0 font-sm text-mute">{product.attr1}</p>
-        <p className="my-0 font-sm text-mute">{product.attr2}</p>
-        <p className="my-0 font-sm text-mute">{product.attr3}</p>
+        <h6 className="my-0">برند : {product.brand.brandName}</h6>
+        {product.countInStock > 0 && <p className="my-0 font-sm text-mute">موجودی : {product.countInStock}</p>}
+        {product.attr1?.length > 0 && <p className="my-0 font-sm text-mute">{product.attr1}</p>}
+        {product.attr2?.length > 0 &&  <p className="my-0 font-sm text-mute">{product.attr2}</p>}
+        {product.attr3?.length > 0 && <p className="my-0 font-sm text-mute">{product.attr3}</p>}
         <span className="cart_item_discount_wrapper">
           تخیف کالا :
           <span className="cart_item_discount">%{product.discount}</span>
@@ -214,7 +215,7 @@ const CartItem = ({ product }) => {
             <span className="cart_item_count">{currentItem.count}</span>
             <span onClick={decCartItemCountHandler}>
               {currentItem.count > 1 ? (
-                <FaMinus className="text-blue" />
+                <FaMinus className="text-red" />
               ) : (
                 <FaTrashAlt className="text-red" />
               )}

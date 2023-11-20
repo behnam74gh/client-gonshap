@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { VscLoading } from "react-icons/vsc";
 import { RiSearchLine } from "react-icons/ri";
-import { MdRemoveRedEye } from "react-icons/md";
+import { MdDelete, MdRemoveRedEye } from "react-icons/md";
 import axios from "../../../util/axios";
 import defPic from "../../../assets/images/pro-8.png";
 import Pagination from "../../../components/UI/Pagination/Pagination";
@@ -30,7 +30,7 @@ const Orders = () => {
     phoneNumber: "",
     orderId: ""
   });
-  const [perPage, setPerPage] = useState(50);
+  const [perPage] = useState(50);
   const [queryPhoneNumber, setQueryPhoneNumber] = useState("");
   const [queryOrderId, setQueryOrderId] = useState("");
   const [dates, setDates] = useState(
@@ -46,15 +46,21 @@ const Orders = () => {
     id: null,
     value: true
   });
+  const [delConfig, setDelConfig] = useState({
+    id: null,
+    loading: false
+  });
 
-  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin)
+  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin);
   
   useEffect(() => {
-    axios.get('/all-suppliers/list').then(res => {
-      if(res.data.success){
-        setSuppliers(res.data.suppliers)
-      }
-    }).catch(err => toast.warning(err))
+    if(role === 1){
+      axios.get('/all-suppliers/list').then(res => {
+        if(res.data.success){
+          setSuppliers(res.data.suppliers)
+        }
+      }).catch(err => toast.warning(err))
+    }
 
     return () => {
       if(!window.location.href.includes('/order/')){
@@ -143,6 +149,7 @@ const Orders = () => {
     if (e === "none") {
       return;
     }
+
     const isQuery = ['orderId','phoneNumber'].includes(orderConfig.config)
     setOrderConfig({
       ...orderConfig,
@@ -317,6 +324,38 @@ const Orders = () => {
     };
   }
 
+  const deleteOrderHandler = (id) => {
+    if (window.confirm("سفارش را حذف میکنید؟")){
+      setDelConfig({
+        id,
+        loading: true
+      })
+      axios.delete(`/order/delete/${id}`)
+      .then(res => {
+        setDelConfig({
+          ...delConfig,
+          loading: false
+        })
+        if(res.data.success){
+          toast.success(res.data.message);
+          const oldOrders = orders;
+          const newOrders = oldOrders.filter(order => order._id !== id);
+          setOrders(newOrders)
+        }
+      })
+      .catch(err => {
+        setDelConfig({
+          ...delConfig,
+          loading: false
+        })
+        if(err.response){
+          toast.warning(err.response.data.message)
+        }
+      })
+    }
+    
+  }
+
   return (
     <div className="admin-panel-wrapper">
       <div className="profitWrapper"> 
@@ -338,6 +377,19 @@ const Orders = () => {
                 color: "white",
               }}
             >
+              <th colSpan={role === 2 ? "3" : "2"}>
+                <DatePicker
+                  value={dates}
+                  onChange={setDateHandler}
+                  placeholder="جستوجو بر اساس تاریخ"
+                  calendar="persian"
+                  range
+                  locale="fa"
+                  calendarPosition="bottom-right"
+                  style={{ height: window.innerWidth > 450 ? "40px" : "30px" }}         
+                />
+              </th>
+              
               {role === 1 && <th colSpan="2">
                 <select
                   value={orderConfig.currentSupplier}
@@ -349,13 +401,14 @@ const Orders = () => {
                   <option value="All">همه سفارش ها</option>
                   {suppliers?.length > 0 && suppliers.map(item => {
                     return (
-                      <option key={item._id} value={item.backupFor}>
+                      <option key={item._id} value={item.phoneNumber}>
                         {item.title}
                       </option>
                     )
                   })}
                 </select>
               </th>}
+
               <th colSpan={role === 2 ? "3" : "2"}>
                 <select
                   value={orderConfig.activeOrderStatus}
@@ -371,19 +424,8 @@ const Orders = () => {
                   <option value="4">رد شده ها</option>
                 </select>
               </th>
-              <th colSpan={role === 2 ? "3" : "2"}>
-                <DatePicker
-                  value={dates}
-                  onChange={setDateHandler}
-                  placeholder="جستوجو بر اساس تاریخ"
-                  calendar="persian"
-                  range
-                  locale="fa"
-                  calendarPosition="bottom-right"
-                  style={{ height: window.innerWidth > 450 ? "40px" : "30px" }}         
-                />
-              </th>
-              <th colSpan="5">
+          
+              <th colSpan={role === 1 ? "6" : "5"}>
                 <div className="dashboard-search">
                   <input
                     type="search"
@@ -432,7 +474,7 @@ const Orders = () => {
                   <option value="3">برگشتی ها</option>
                 </select>
               </th>
-              <th colSpan="5">
+              <th colSpan={role === 1 ? "6" : "5"}>
                 <div className="dashboard-search">
                   <input
                     type="search"
@@ -464,12 +506,13 @@ const Orders = () => {
               <th className="th-titles">وضعیت پرداخت</th>
               <th className="th-titles">سود مجموع</th>
               <th className="th-titles">مشاهده</th>
+              {role === 1 && <th className="th-titles">حذف</th>}
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="13">
+                <td colSpan={role === 1 ? "12" : "11"}>
                   <div className="loader_wrapper">
                     <VscLoading className="loader" />
                   </div>
@@ -589,11 +632,20 @@ const Orders = () => {
                       <MdRemoveRedEye className="font-md text-blue" />
                     </Link>
                   </td>
+                  {role === 1 && <td>
+                    {
+                      delConfig.loading && delConfig.id === order._id ? (
+                        <VscLoading className="loader" />
+                      ) : (
+                        <MdDelete style={{cursor: "pointer"}} className="text-red" onClick={() => deleteOrderHandler(order._id)} />
+                      )
+                    }
+                  </td>}
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="13">
+                <td colSpan={role === 1 ? "12" : "11"}>
                   <p
                     className="warning-message"
                     style={{ textAlign: "center" }}

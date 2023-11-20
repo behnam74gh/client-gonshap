@@ -168,9 +168,9 @@ const ProductDetails = ({
       <div className="product_images">
         <Slider {...settings}>
           {photos.length > 0 &&
-            photos.map((p, i) => (
+            photos.map((p) => (
               <img
-                key={i}
+                key={p}
                 src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${p}`}
                 alt={title}
                 className="carousel_img"
@@ -251,7 +251,7 @@ const ProductDetails = ({
             </strong>
           </div>
           <div className="info_wrapper text-purple">
-            <strong className="question_info">قیمت فروش بازارچک : </strong>
+            <strong className="question_info">قیمت فروش در بازارچک : </strong>
             <strong className="answer_info">
               <strong className="mx-1">
                 {finallyPrice.toLocaleString("fa-IR")}
@@ -274,7 +274,7 @@ const ProductDetails = ({
             <span className="question_info">موجودی : </span>
             {countInStock > 0 ? (
               <strong className="answer_info text-purple">
-                <strong className="mx-1">{countInStock}</strong>عدد
+                <strong className="mx-1">{countInStock}</strong>{countInStock > 9 ? "عدد" : "عدد باقی مانده"}
               </strong>
             ) : (
               <span className="answer_info">

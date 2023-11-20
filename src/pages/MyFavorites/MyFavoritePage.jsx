@@ -62,7 +62,7 @@ const MyFavoritePage = () => {
         {favoriteItems?.length < 1 && <EmptyFavoriteSvg style={{maxWidth: "250px"}} />}
       </div>
       {favoriteItems?.length > 0 ?
-        <span style={{display: "block",fontSize: "14px"}}>شما تعداد {favoriteItems.length} محصول را پسندیده اید</span> :
+        <span style={{display: "block",fontSize: "12px"}}>شما تعداد {favoriteItems.length} محصول را پسندیده اید</span> :
         <span style={{display: "block"}} className="warning-message">شما محصولی را پسند نکرده اید</span>
       }
       <div className="my_favorites_wrapper">

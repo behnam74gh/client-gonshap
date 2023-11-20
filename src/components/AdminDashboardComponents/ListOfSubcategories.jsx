@@ -88,13 +88,13 @@ const ListOfSubcategories = ({
             <tbody>
               {loading ? (
               <tr>
-                <td colSpan="5">
+                <td colSpan="3">
                   <div className="loader_wrapper">
                     <VscLoading className="loader" />
                   </div>
                 </td>
               </tr>
-              )  : currentSubs.length > 0 &&
+              )  : currentSubs.length > 0 ?
                 currentSubs.filter(searched(keyword)).map((s) => (
                   <tr key={s._id}>
                     <td className="font-sm">{s.name}</td>
@@ -110,7 +110,13 @@ const ListOfSubcategories = ({
                       </Link>
                     </td>
                   </tr>
-                ))}
+                )) : (
+                  <tr>
+                    <td colSpan="3">
+                      <p className="warning-message w-100">فهرست برچسب خالی است</p>
+                    </td>
+                  </tr>
+                )}
             </tbody>
           </table>
           {showPagination && subcategories.length > perPage && (

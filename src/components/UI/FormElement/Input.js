@@ -8,10 +8,10 @@ import "./Input.css";
 const inputReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE":
-      const {isValid,errorMessages} = validate(action.val, action.validators)
+      const {validatedValue,isValid,errorMessages} = validate(action.val, action.validators)
       return {
         ...state,
-        value: action.val,
+        value: validatedValue,
         isValid: isValid,
         errMessages: errorMessages
       };

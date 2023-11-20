@@ -9,7 +9,6 @@ import Button from "../UI/FormElement/Button";
 import Input from "../UI/FormElement/Input";
 import { useForm } from "../../util/hooks/formHook";
 import {
-  VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
   VALIDATOR_MAXLENGTH,
   VALIDATOR_SPECIAL_CHARACTERS,
@@ -97,7 +96,6 @@ const Comments = ({postId,category,commentList}) => {
             row={6}
             onInput={inputHandler}
             validators={[
-              VALIDATOR_REQUIRE(),
               VALIDATOR_MINLENGTH(10),
               VALIDATOR_MAXLENGTH(2000),
               VALIDATOR_SPECIAL_CHARACTERS(),

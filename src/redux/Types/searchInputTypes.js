@@ -1,3 +1,8 @@
 export const SEARCH_QUERY = "SEARCH_QUERY";
 export const SUBMIT_QUERY = "SUBMIT_QUERY";
 export const UNSUBMIT_QUERY = "UNSUBMIT_QUERY";
+export const UNSUBMIT = "UNSUBMIT";
+export const SUGGEST_OPEN = "SUGGEST_OPEN";
+export const SUGGEST_CLOSE = "SUGGEST_CLOSE";
+export const PUSH_QUERY = "PUSH_QUERY";
+export const TOGGLE_SEARCH_OPTION = "TOGGLE_SEARCH_OPTION";

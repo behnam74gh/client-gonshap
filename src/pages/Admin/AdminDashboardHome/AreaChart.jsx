@@ -62,7 +62,9 @@ const AreaChartComponent = ({date}) => {
         میزان فروش در روزهای گذشته
       </h5>
       {loading ? (
-        <VscLoading className="loader" />
+        <div className="loader_wrapper">
+          <VscLoading className="loader" />
+        </div>
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (

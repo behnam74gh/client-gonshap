@@ -29,7 +29,7 @@ const Signin = ({ history, location }) => {
   const [remindMe, setRemindMe] = useState(false);
   const [error, setError] = useState("");
   
-  const [expired, setExpired] = useState(false);
+  const [expired, setExpired] = useState(true);
   const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   const dispatch = useDispatch();
@@ -188,7 +188,7 @@ const Signin = ({ history, location }) => {
           theme="dark"
           onExpired={() => setExpired(true)}
         />
-        <Button type="submit" disabled={!formState.isValid || loading}>
+        <Button type="submit" disabled={!formState.isValid || loading || expired}>
           {!loading ? "ورود" : <VscLoading className="loader" />}
         </Button>
         {error && <p className="warning-message">{error}</p>}

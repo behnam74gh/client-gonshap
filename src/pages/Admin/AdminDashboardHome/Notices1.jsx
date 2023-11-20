@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import Typewriter from "typewriter-effect";
 import axios from "../../../util/axios";
 import DatePicker,{DateObject} from "react-multi-date-picker";
-import { useSelector } from 'react-redux';
-import "./Notices.css";
+import { useSelector,useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
 import { HiBadgeCheck } from "react-icons/hi";
+import "./Notices.css";
+import { STORE_ADMIN_PHONENUMBER } from "../../../redux/Types/authTypes";
 
 const Notices1 = ({date,setParticularDateHandler}) => {
   const [todaysTasks, setTodaysTasks] = useState([]);
@@ -14,7 +15,8 @@ const Notices1 = ({date,setParticularDateHandler}) => {
   const [errorText, setErrorText] = useState("");
   const [supplier, setSupplier] = useState({});
 
-  const {userInfo : {role,supplierFor}} = useSelector(state => state.userSignin)
+  const {userInfo : {role,supplierFor}, phoneNumber} = useSelector(state => state.userSignin)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const ac = new AbortController();
@@ -68,6 +70,12 @@ const Notices1 = ({date,setParticularDateHandler}) => {
       .then((response) => {
         if (response.data.success && mounted) {
           setSupplier(response.data.supplier);
+          if(phoneNumber?.length < 1){
+            dispatch({
+              type: STORE_ADMIN_PHONENUMBER,
+              payload: response.data.supplier.phoneNumber
+            })
+          }
         }
       })
       .catch((err) => {
@@ -94,7 +102,9 @@ const Notices1 = ({date,setParticularDateHandler}) => {
         </div>
         <div className="notice_point">
           <span>تعداد فروش : </span>
-          <strong>{supplier.soldCount > 999 ? (supplier.soldCount/1000).toFixed(1) : supplier.soldCount}</strong>
+          <strong>{supplier.soldCount > 999 ? (supplier.soldCount/1000).toFixed(1) :
+           supplier.soldCount > 0 ? supplier.soldCount : 0}
+           </strong>
           {supplier.soldCount > 999 && <span className='ml-1'>K</span>}
         </div>
         <div className="notice_point">
