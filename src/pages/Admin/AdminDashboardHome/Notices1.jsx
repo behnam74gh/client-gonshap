@@ -75,6 +75,7 @@ const Notices1 = ({date,setParticularDateHandler}) => {
               type: STORE_ADMIN_PHONENUMBER,
               payload: response.data.supplier.phoneNumber
             })
+            localStorage.setItem("storeOwnerPhoneNumber",response.data.supplier.phoneNumber)
           }
         }
       })

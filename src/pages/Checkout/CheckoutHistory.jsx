@@ -47,7 +47,7 @@ const CheckoutHistory = ({
           toast.success(response.data.message);
           setTimeout(() => {
             history.push("/user/dashboard");
-           }, 300);
+           }, 100);
         }
       })
       .catch((err) => {
@@ -106,7 +106,7 @@ const CheckoutHistory = ({
           }
           onClick={purchaseOrderHandler}
         >
-          {loading ? <VscLoading className="loader" /> : "ثبت سفارش"}
+          {loading ? <VscLoading className="loader" /> : "تایید سفارش"}
         </Button>
       </div>
       {errorText.length > 0 && <p className="warning-message">{errorText}</p>}

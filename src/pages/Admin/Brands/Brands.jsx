@@ -60,7 +60,7 @@ const Brands = () => {
   const loadAllBrands = () => {
     setBrandsLoading(true)
     axios
-      .get("/get-all-brands")
+      .get("/get-brands")
       .then((response) => {
         setBrandsLoading(false)
         if (response.data.success) {
@@ -87,7 +87,9 @@ const Brands = () => {
   }, [reRenderForm]);
 
   useEffect(() => {
-    loadAllCategories();
+    if(role === 1){
+      loadAllCategories();
+    }
     loadAllBrands();
   }, []);
 

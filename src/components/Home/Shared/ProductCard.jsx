@@ -118,6 +118,7 @@ const ProductCard = ({ product, showSold, showReviews }) => {
                 : `${defPic}`
             }
             alt={title}
+            loading="lazy"
           />
         </figure>
       </Link>

@@ -165,6 +165,7 @@ const CartItem = ({ product }) => {
           </Link>
         </h3>
         <h6 className="my-0">برند : {product.brand.brandName}</h6>
+        {product.supplierStore && <p className="my-0 font-sm text-mute">محصول را فروشگاه : {product.supplierStore.info}</p>}
         {product.countInStock > 0 && <p className="my-0 font-sm text-mute">موجودی : {product.countInStock}</p>}
         {product.attr1?.length > 0 && <p className="my-0 font-sm text-mute">{product.attr1}</p>}
         {product.attr2?.length > 0 &&  <p className="my-0 font-sm text-mute">{product.attr2}</p>}
@@ -293,11 +294,11 @@ const CartItem = ({ product }) => {
           )}
           {currentItem.count > activeColors.length ? (
             <span className="d-flex-center-center font-md">
-              <HiBadgeCheck className="text-red" />
+              <HiBadgeCheck className="text-red valid_color" />
             </span>
           ) : (
             <span className="d-flex-center-center font-md">
-              <HiBadgeCheck className="text-green" />
+              <HiBadgeCheck className="text-green valid_color" />
             </span>
           )}
         </div>

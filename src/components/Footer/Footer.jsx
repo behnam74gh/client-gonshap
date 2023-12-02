@@ -67,7 +67,7 @@ const Footer = ({ companyInfo }) => {
           <p className="about_us_description">{aboutUs}</p>
         </div>}
         <div className="call_us">
-          <h4>تماس با ما</h4>
+          {window.innerWidth > 780 && <h4>تماس با ما</h4>}
           <div className="call_us_info_wrapper">
             {storePhoneNumber1 && <div className="call_us_info_box">
               <FiPhoneCall className="text-red font-md" />
@@ -82,7 +82,7 @@ const Footer = ({ companyInfo }) => {
               <span className="font-sm">{address}</span>
             </div>}
           </div>
-          {(instagramId || telegramId || whatsupId) && <span className="font-sm my-2">مارادنبال کنید در :</span>}
+          {(instagramId || telegramId || whatsupId) && window.innerWidth > 780 && <span className="font-sm my-2">اطلاعیه های ما را دنبال کنید در :</span>}
           {(instagramId || telegramId || whatsupId) && <div className="company_social_icons">
             {instagramId?.length > 0 && <a
               href={`https://instagram.com/${instagramId}`}
@@ -124,17 +124,19 @@ const Footer = ({ companyInfo }) => {
               />
             </a>}
           </div>}
-        </div>
-        {(signENemad || signUnion || signMedia) && (
-          <div className="nemads_wrapper">
-            <h4>نمادهای اعتماد الکترونیک</h4>
-            <div className="nemads">
-            {signENemad?.length > 0 && <a href={`https://www.${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
-            {signUnion?.length > 0 && <a href={`https://www.${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
-            {signMedia?.length > 0 && <a href={`https://www.${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
+
+          {(signENemad || signUnion || signMedia) && (
+            <div className="nemads_wrapper">
+              <h4>نمادهای اعتماد الکترونیک</h4>
+              <div className="nemads">
+              {signENemad?.length > 0 && <a href={`https://www.${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
+              {signUnion?.length > 0 && <a href={`https://www.${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
+              {signMedia?.length > 0 && <a href={`https://www.${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        
       </section>
 
       <div className="pos-rel">
@@ -143,13 +145,14 @@ const Footer = ({ companyInfo }) => {
         </a>
       </div>
       
-      {window.innerWidth < 780 && history.location.pathname !== "/stores" && <div className="pos-rel">
+      {window.innerWidth < 780 && !history.location.pathname.includes('/stores')
+       && !history.location.pathname.includes('/dashboard/') && <div className="pos-rel">
         <span className="store_section" style={{bottom: alreadyInstalled && "20px"}} onClick={() => history.push('/stores')}>
           <IoMdAppstore  color="var(--firstColorPalete)" />
         </span>
       </div>}
 
-      {!alreadyInstalled && <div className="pos-rel">
+      {!alreadyInstalled && !history.location.pathname.includes('/dashboard/') && <div className="pos-rel">
         <span className="install_app" onClick={installBannerHandler}>
            <MdOutlinePhonelinkSetup color="var(--firstColorPalete)" />
         </span>

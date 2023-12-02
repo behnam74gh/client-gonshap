@@ -130,7 +130,7 @@ const Signin = ({ history, location }) => {
         dispatch({ type: USER_SIGNIN_FAIL });
       });
   };
-
+  const showTheNotice = history?.location?.state?.from.includes('/product/details/') || history?.location?.state?.from.includes('/supplier/introduce/');
   return (
     <div className="auth-section">
       <Helmet>
@@ -141,8 +141,8 @@ const Signin = ({ history, location }) => {
           تبریک! شما عضو خانواده بازارچک شدید.
         </h3>
       )}
-      {history?.location?.state?.from.includes('/product/details/') ? 
-      <span className="back_to_product_text" style={{fontSize: "14px"}}>جهت ثبت دیدگاه یا امتیازدهی به محصول ابتدا باید وارد حساب کاربری شوید</span>
+      {showTheNotice ? 
+      <span className="back_to_product_text font-md">جهت امتیازدهی یا ثبت دیدگاه ابتدا باید وارد حساب کاربری شوید</span>
        :<h4>
         برای <strong className="text-blue">ورود</strong> به حساب، اطلاعات زیر را
         وارد کنید!
@@ -176,10 +176,7 @@ const Signin = ({ history, location }) => {
           focusHandler={() => setError("")}
           validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
         />
-        <label className="auth-label" id="saveInfo">
-          مرا به خاطر بسپار
-          <input type="checkbox" onChange={() => setRemindMe(!remindMe)} />
-        </label>
+        
         <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
@@ -188,6 +185,12 @@ const Signin = ({ history, location }) => {
           theme="dark"
           onExpired={() => setExpired(true)}
         />
+
+        <label className="auth-label" id="saveInfo">
+          مرا به خاطر بسپار
+          <input type="checkbox" onChange={() => setRemindMe(!remindMe)} />
+        </label>
+
         <Button type="submit" disabled={!formState.isValid || loading || expired}>
           {!loading ? "ورود" : <VscLoading className="loader" />}
         </Button>

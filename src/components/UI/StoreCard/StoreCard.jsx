@@ -4,8 +4,9 @@ import { HiBadgeCheck, HiLocationMarker } from 'react-icons/hi';
 import {BsFillCartCheckFill} from 'react-icons/bs';
 import { FaStar } from 'react-icons/fa';
 import { useDispatch } from "react-redux";
-import {PUSH_STORE_ITEM} from '../../../redux/Types/supplierItemTypes';
+import { PUSH_STORE_ITEM} from '../../../redux/Types/supplierItemTypes';
 import { calculateResultHandler } from '../../../util/customFunctions';
+import { CLEAR_SUPPLIER_PRODUCTS } from '../../../redux/Types/supplierProductsTypes';
 import './StoreCard.css';
 
 const StoreCard = ({item}) => {
@@ -14,12 +15,18 @@ const StoreCard = ({item}) => {
   
   const dispatch = useDispatch();
 
-
-
   useEffect(() => {
     calculateResultHandler(item.point,setRatingResult)
     calculateResultHandler(item.soldCount,setSoldResult)
   }, [item]);
+
+  const seeStoreHandler = () => {
+    dispatch({type: PUSH_STORE_ITEM,payload: item});
+    dispatch({type: CLEAR_SUPPLIER_PRODUCTS});
+    localStorage.removeItem("gonshapSupplierActiveSub");
+    localStorage.removeItem("bazarchakSupplierActiveorder");
+    localStorage.removeItem("gonshapSupplierPageNumber");
+  }
 
   return (
     <div className='store_card_container'>
@@ -27,6 +34,7 @@ const StoreCard = ({item}) => {
         src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${item.photos[0]}`}
         alt={item.title}
         className="store_card_img"
+        loading="lazy"
         />
         <div className='store_card_info'>
         <strong className='store_title'>{item.title} {item.authentic && <HiBadgeCheck className="text-blue font-md mr-1" />}</strong>
@@ -55,7 +63,7 @@ const StoreCard = ({item}) => {
             <span className="text-mute mr-1">امتیاز</span>
           </span>
 
-          <Button to={`/supplier/introduce/${item._id}`} click={() => dispatch({type: PUSH_STORE_ITEM,payload: item})} 
+          <Button to={`/supplier/introduce/${item._id}`} click={seeStoreHandler} 
             style={{alignSelf: "flex-end",marginRight: "auto",minHeight: "unset",padding: "2px 8px 4px"}}
           >دیدن</Button>
         </div>

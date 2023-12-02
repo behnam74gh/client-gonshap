@@ -91,7 +91,7 @@ const AdminDashboard = ({ history }) => {
             component={ProductCreate}
           />
           <AdminRoute
-            path="/admin/dashboard/product/:slug"
+            path="/admin/dashboard/product/:id"
             component={ProductUpdate}
           />
           <AdminRoute path="/admin/dashboard/categories" component={Category} />

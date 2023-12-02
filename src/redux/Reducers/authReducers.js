@@ -22,7 +22,7 @@ const initialState = {
     },
   loading: false,
   userImage: savedInfoData?.avatar || "",
-  phoneNumber: "",
+  phoneNumber: localStorage.getItem("storeOwnerPhoneNumber") || "",
 };
 
 export const userSigninReducer = (state = initialState, action) => {

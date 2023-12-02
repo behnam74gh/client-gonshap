@@ -10,19 +10,23 @@ import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { db } from "../../../util/indexedDB";
 import {setCountOfSlidersHandler} from '../../../util/customFunctions';
 import { useInView } from "react-intersection-observer";
+import { UPDATE_ALL_BRANDS } from "../../../redux/Types/shopProductsTypes";
+import { POP_RANGE_VALUES } from "../../../redux/Types/rangeInputTypes";
+import { CLEAR_SOLD_PRODUCTS, SAVE_SOLD_PRODUCTS } from "../../../redux/Types/homeApiTypes";
 import "../Section3/Section3.css";
 
 const Section7 = () => {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [errorText, setErrorText] = useState("");
   const [categoryErrorText, setCategoryErrorText] = useState("");
-  const [activeCategory, setActiveCategory] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(4);
   const [isViewed,setIsviewed] = useState(false);
+  const [firstLoad,setFirstLoad] = useState(true);
+  const { isOnline, cachedHomeApis: { soldProducts: {items,validTime,configData} } } = useSelector((state) => state)
+  const [activeCategory, setActiveCategory] = useState(configData || "");
 
-  const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
   const {ref, inView} = useInView({threshold: 0});
 
@@ -39,13 +43,32 @@ const Section7 = () => {
   } , [])
 
   useEffect(() => {
+    if(products.length > 0 && activeCategory?.length > 0 && !firstLoad){
+      dispatch({
+        type: SAVE_SOLD_PRODUCTS,
+        payload: {
+          items: products,
+          configData: activeCategory 
+        }
+      })
+    }
+    if(products.length > 0 && firstLoad){
+      setFirstLoad(false);
+    }
+  }, [products])
+
+  useEffect(() => {
     const ac = new AbortController();
     let mounted = true;
     if(inView && !isViewed){
-      db.activeCategories.toArray().then(items => {
-        if(items.length > 0 && mounted){
-          setCategories(items);
-          setActiveCategory(items[0]._id);
+      db.activeCategories.toArray().then(oldCategories => {
+        if(oldCategories.length > 0 && mounted){
+          setCategories(oldCategories);
+          if(items.length > 0 && configData?.length > 0){
+            setActiveCategory(configData)
+          }else{
+            setActiveCategory(oldCategories[0]._id);
+          }
         }else{
           axios.get("/get-all-categories",{signal: ac.signal})
           .then((response) => {
@@ -73,61 +96,79 @@ const Section7 = () => {
     }
   }, [inView]);
 
-  
-  useEffect(() => {
-    if(inView && !isViewed && !navigator.onLine){
-      db.soldProducts.toArray()
-      .then(items => {
-        if(items?.length > 0){
-          setProducts(items)
-        }
-      })
-  }
-  }, [inView])
 
   useEffect(() => {
-    if (!activeCategory.length > 0 || !navigator.onLine) {
+    if (!activeCategory.length > 0) {
       return;
     }
     if(inView && !isViewed){
-      setLoading(true);
-      axios
-      .post("/find/products/by-category-and/order", {
-        order: "sold",
-        activeCategory,
-      })
-      .then((response) => {
+      if(firstLoad &&  items.length > 0 && Date.now() < validTime){
         setLoading(false);
-        if (response.data.success) {
-          const { foundedProducts } = response.data;
-          const produtsLength = foundedProducts.length;
-          setNumberOfSlides(setCountOfSlidersHandler(produtsLength));
-          setProducts(foundedProducts);
-          setErrorText("");
+        const produtsLength = items.length;
+        setNumberOfSlides(setCountOfSlidersHandler(produtsLength))
+        setProducts(items);
 
-          db.soldProducts.clear()
-          db.soldProducts.bulkPut(foundedProducts)
+        setIsviewed(true);
+      }else{
+        axios
+        .post("/find/products/by-category-and/order", {
+          order: "sold",
+          activeCategory,
+        })
+        .then((response) => {
+          setLoading(false);
+          if (response.data.success) {
+            const { foundedProducts } = response.data;
+            const produtsLength = foundedProducts.length;
+            setFirstLoad(false);
+            setNumberOfSlides(setCountOfSlidersHandler(produtsLength));
+            setProducts(foundedProducts);
+            setErrorText("");
 
-          setIsviewed(true);
-        }
-      })
-      .catch((err) => {
-        setLoading(false)
-        if (typeof err.response.data.message === "object") {
-          setErrorText(err.response.data.message[0]);
-          setProducts([]);
-        } else {
-          setErrorText(err.response.data.message);
-        }
-      });
-
+            setIsviewed(true);
+          }
+        })
+        .catch((err) => {
+          setLoading(false)
+          if (typeof err.response.data.message === "object") {
+            setErrorText(err.response.data.message[0]);
+            setProducts([]);
+          } else {
+            setErrorText(err.response.data.message);
+          }
+        });
+      }
     }
   }, [activeCategory,inView,isViewed]);
 
   const changeCategoryHandler = (id) => {
     setActiveCategory(id);
+    dispatch({type: CLEAR_SOLD_PRODUCTS});
     setIsviewed(false)
   };
+
+  const showAllHandler = () => {
+    dispatch(
+      searchByUserFilter({
+        level: 2,
+        order: "sold",
+        category: activeCategory,
+      })
+    )
+    dispatch({type: POP_RANGE_VALUES});
+    localStorage.setItem("gonshapPageNumber", JSON.stringify(1));
+    db.brands.toArray().then(items => {
+      if(items.length > 0){
+        const categoryBrands = items.filter((b) => b.backupFor._id === activeCategory);
+        dispatch({
+          type: UPDATE_ALL_BRANDS,
+          payload: {
+            brands: categoryBrands
+          }
+        })
+      }
+    })
+  }
 
   const setting = {
     dots: false,
@@ -175,15 +216,7 @@ const Section7 = () => {
       {(isOnline && products.length > 0) && <div className="column_item">
         <Link
           to="/shop"
-          onClick={() =>
-            dispatch(
-              searchByUserFilter({
-                level: 2,
-                order: "sold",
-                category: activeCategory,
-              })
-            )
-          }
+          onClick={showAllHandler}
         >
           <span className="d-flex-center-center text-blue">
             مشاهده همه

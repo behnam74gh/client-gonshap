@@ -7,6 +7,8 @@ import {MdDiscount} from 'react-icons/md';
 import {BsFillRocketTakeoffFill,BsFillCartCheckFill} from 'react-icons/bs';
 import {SiHotjar} from 'react-icons/si';
 import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
+import { SET_ALL_BRANDS, UPDATE_ALL_BRANDS } from "../../redux/Types/shopProductsTypes";
+import { db } from "../../util/indexedDB";
 import "./SubMenu.css";
 
 const SubMenu = () => {
@@ -14,14 +16,12 @@ const SubMenu = () => {
   const [activeSubs, setActiveSubs] = useState([]);
 
   const dispatch = useDispatch();
-  const { isSubmenuOpen, location, navItem } = useSelector(
-    (state) => state.subMenu
-  );
+  const { subMenu : { isSubmenuOpen, location, navItem },shopProducts: { items } } = useSelector((state) => state);
 
   const { categories, subcategories, order,count } = navItem;
     
   const subMenuContainer = useRef(null);
-
+  
   useEffect(() => {
     if (categories && subcategories && subcategories.length > 0) {
       setActiveCategoryName(categories[0].name)
@@ -60,6 +60,20 @@ const SubMenu = () => {
     );
     dispatch(closeSubmenu());
     dispatch({ type: UNSUBMIT_QUERY });
+    localStorage.setItem("gonshapPageNumber", JSON.stringify(1));
+    const currentType = items.length > 0 ? UPDATE_ALL_BRANDS : SET_ALL_BRANDS;
+    
+    db.brands.toArray().then(items => {
+      if(items.length > 0){
+        const categoryBrands = items.filter((b) => b.backupFor._id === parent);
+        dispatch({
+          type: currentType,
+          payload: {
+            brands: categoryBrands
+          }
+        })
+      }
+    })
   };
 
   const setCountTextHandler = (count) => {

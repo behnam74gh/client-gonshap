@@ -22,11 +22,16 @@ import {
 } from "../../redux/Types/ratingModalType";
 import "../Admin/CommentsList/CommentsList.css";
 import "./ProductDetails.css";
+import { db } from "../../util/indexedDB";
+import { UPDATE_ALL_BRANDS } from "../../redux/Types/shopProductsTypes";
+import { CLEAR_SUPPLIER_PRODUCTS } from "../../redux/Types/supplierProductsTypes";
+import { VscLoading } from "react-icons/vsc";
 
 const ProductDetails = ({
   product,
   setStarHandler,
   setStarRatingHandler,
+  ratingLoading,
   starValue,
 }) => {
   const [windoInnerWidth, setWindowInnerWidth] = useState();
@@ -51,6 +56,7 @@ const ProductDetails = ({
     attr1,
     attr2,
     attr3,
+    supplierStore,
   } = product;
 
   const dispatch = useDispatch();
@@ -115,12 +121,14 @@ const ProductDetails = ({
     if (userInfo?.userId?.length > 0) {
       dispatch({ type: OPEN_STAR_RATING_MODAL });
     } else {
-      history.push({
-        pathname: "/signin",
-        state: {
-          from: `/product/details/${id}`,
-        },
-      });
+      if(window.confirm("ابتدا باید وارد حساب کاربری خود شوید")){
+        history.push({
+          pathname: "/signin",
+          state: {
+            from: `/product/details/${id}`,
+          },
+        });
+      }
     }
   };
 
@@ -156,7 +164,26 @@ const ProductDetails = ({
         category: category,
       })
     );
+
+    localStorage.setItem("gonshapPageNumber", JSON.stringify(1));
+    db.brands.toArray().then(items => {
+      if(items.length > 0){
+        const categoryBrands = items.filter((b) => b.backupFor._id === subcategory.parent);
+        dispatch({
+          type: UPDATE_ALL_BRANDS,
+          payload: {
+            brands: categoryBrands
+          }
+        })
+      }
+    })
   };
+
+  const goToStoreHandler = () => {
+    dispatch({type: CLEAR_SUPPLIER_PRODUCTS});
+    localStorage.removeItem("gonshapSupplierActiveSub");
+    localStorage.removeItem("gonshapSupplierPageNumber");
+  }
 
   const copyUrlToClipBoardHandler = () => {
     navigator.clipboard.writeText(window.location.href)
@@ -174,6 +201,7 @@ const ProductDetails = ({
                 src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${p}`}
                 alt={title}
                 className="carousel_img"
+                loading="lazy"
               />
             ))}
         </Slider>
@@ -229,7 +257,7 @@ const ProductDetails = ({
                 onClick={setStarRatingHandler}
                 className="modal_btn bg-purple"
               >
-                ثبت
+                {ratingLoading ? <VscLoading className="loader" fontSize={window.innerWidth < 450 ? 14 : 20} /> : "ثبت"}
               </button>
             </div>
           </div>
@@ -238,15 +266,15 @@ const ProductDetails = ({
         <hr className="my-1" />
         <div className="product_info_wrapper">
           <div className="info_wrapper">
-            <span className="question_info">قیمت بازار : </span>
+            <span className="question_info">قیمت در بازار : </span>
             <strong className="answer_info text-silver">
               <del className="mx-1">{price.toLocaleString("fa-IR")}</del>
               تومان
             </strong>
           </div>
           <div className="info_wrapper">
-            <span className="question_info">تخفیف :</span>
-            <strong className="answer_info text-purple">
+            <span className="question_info">با تخفیف :</span>
+            <strong className="answer_info">
               <span className="mx-1">{discount}</span>%
             </strong>
           </div>
@@ -271,9 +299,9 @@ const ProductDetails = ({
             </div>
           )}
           <div className="info_wrapper">
-            <span className="question_info">موجودی : </span>
+            <span className="question_info">موجودی انبار : </span>
             {countInStock > 0 ? (
-              <strong className="answer_info text-purple">
+              <strong className="answer_info">
                 <strong className="mx-1">{countInStock}</strong>{countInStock > 9 ? "عدد" : "عدد باقی مانده"}
               </strong>
             ) : (
@@ -283,14 +311,14 @@ const ProductDetails = ({
             )}
           </div>
           <div className="info_wrapper">
-            <span className="question_info">برند : </span>
+            <span className="question_info">برند محصول : </span>
             <span className="answer_info">
-              <strong className="mx-1 text-purple">{brand.brandName}</strong>
+              <strong className="mx-1">{brand.brandName}</strong>
             </span>
           </div>
           <div className="info_wrapper">
             <span className="question_info">تعداد فروش : </span>
-            <strong className="answer_info text-purple">
+            <strong className="answer_info">
               <strong className="mx-1">{sold}</strong>عدد
             </strong>
           </div>
@@ -309,6 +337,17 @@ const ProductDetails = ({
                 ))}
             </div>
           </div>
+          {supplierStore && <div className="info_wrapper">
+            <span className="question_info">محصول را فروشگاهِ : </span>
+            <Link
+              to={`/supplier/introduce/${supplierStore.id}`}
+              onClick={goToStoreHandler}
+              className="answer_info text-blue"
+              style={{textDecoration: "underline"}}
+            >
+              {supplierStore.info}
+            </Link>
+          </div>}
           <div className="info_wrapper_Attr">
             <strong className="my-1">ویژگی های محصول: </strong>
             <ul className="attr_wrapper">

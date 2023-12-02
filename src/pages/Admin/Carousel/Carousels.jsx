@@ -17,7 +17,7 @@ const Carousels = () => {
   const [gettingSuppliersError, setGettingSuppliersError] = useState("");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [perPage] = useState(20);
+  const [perPage] = useState(30);
   const [supplierslength,setSuppliersLength] = useState(0);
   const [queryPhoneNumber, setQueryPhoneNumber] = useState("");
   const [regions, setRegions] = useState([]);

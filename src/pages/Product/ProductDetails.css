@@ -62,13 +62,13 @@
   height: 40px;
 }
 .product_info_wrapper .info_wrapper .question_info {
-  flex: 40%;
+  flex: 30%;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
 }
 .product_info_wrapper .info_wrapper .answer_info {
-  flex: 60%;
+  flex: 70%;
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -76,8 +76,8 @@
 }
 
 .answer_info span.tooltip {
-  width: 30px;
-  height: 30px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   margin: 2px 4px;
   border: 1px solid #c6c6c6;
@@ -264,8 +264,8 @@ svg.hovered path.star {
     height: 23px;
   }
   .answer_info span.tooltip {
-    width: 25px;
-    height: 25px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     margin: 2px;
   }
@@ -282,17 +282,20 @@ svg.hovered path.star {
     height: 20px;
   }
   .answer_info span.tooltip {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
   }
   .attr_wrapper li {
     margin: 1px 0;
   }
 }
 @media (max-width: 780px) {
-  .product_info_wrapper .info_wrapper .question_info,
+  .product_info_wrapper .info_wrapper .question_info {
+    flex: 40%;
+  }
+
   .product_info_wrapper .info_wrapper .answer_info {
-    flex: 50%;
+    flex: 60%;
   }
   .product_info_wrapper {
     font-size: 12px;
@@ -366,11 +369,16 @@ svg.hovered path.star {
   .cart_btn_wrapper {
     flex: 40%;
     width: 100%;
-    z-index: 99;
+    z-index: 19;
     position: fixed;
     bottom: -8px;
     left: 0;
     padding: 8px 0;
+  }
+  .cart_btn_wrapper button {
+    font-size: 16px;
+    padding: 10px 0;
+    font-weight: 600;
   }
   .rating_btn_wrapper {
     flex: 30%;
@@ -393,15 +401,25 @@ svg.hovered path.star {
   .product_header_info h1 {
     font-size: 16px;
   }
-  .cart_btn_wrapper button,
   .favorite_btn_wrapper button,
   .rating_btn_wrapper button {
    gap: 0 10px;
   }
+  .cart_btn_wrapper button svg {
+    margin-right: 10px;
+  }
 }
 
 @media (max-width: 450px) {
-  .cart_btn_wrapper button,
+  .product_info_wrapper .info_wrapper .question_info {
+    flex: 40%;
+  }
+  .product_info_wrapper .info_wrapper .answer_info {
+    flex: 60%;
+  }
+  .cart_btn_wrapper button {
+    font-size: 14px;
+  }
   .favorite_btn_wrapper button,
   .rating_btn_wrapper button {
    font-size: 10px;
@@ -430,7 +448,7 @@ svg.hovered path.star {
   .rating_compare_wrapper {
     gap: 5px;
   }
-  .cart_btn_wrapper button,
+
   .favorite_btn_wrapper button,
   .rating_btn_wrapper button {
    gap: 0 4px;

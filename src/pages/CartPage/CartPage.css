@@ -214,17 +214,18 @@
     bottom: 60px;
     left: 0;
     background: white;
-    z-index: 30;
+    z-index: 35;
     width: 100vw;
     box-shadow: 0 2px 14px rgb(0 0 0 / 40%);
     padding: 10px 0;
     margin: 0;
   }
   .finaly_total_price_digit {
-    font-size: 16px;
+    font-size: 16px !important;
     background-color: transparent;
     font-weight: 700;
     color: var(--firstColorPalete);
+    padding: 2px 5px;
   }
   hr ~ strong.font-sm {
     font-size: 10px;
@@ -236,7 +237,7 @@
     left: 0;
     width: 100vw;
     background: #ffffff;
-    z-index: 30;
+    z-index: 35;
     padding: 10px 5px;
     justify-content: center;
     height: 60px;
@@ -270,5 +271,12 @@
   }
   .deprecated_close svg {
     font-size: 14px;
+  }
+  .cart_items_wrapper h4 {
+    font-size: 12px;
+    margin: 8px 0 0;
+  }
+  .valid_color{
+    font-size: 20px;
   }
 }

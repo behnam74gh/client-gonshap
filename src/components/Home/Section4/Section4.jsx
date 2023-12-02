@@ -50,21 +50,21 @@ const Section4 = () => {
         </svg>
       </div>
       <div className="call_us_desc">
-        <p>اگر هنگام کارکردن با سایت سوالی برای شما پیش آمده، با ما تماس بگیرید</p>
+        <p>اگر هنگام کارکردن با سایت سوالی برای شما پیش آمد، با ما تماس بگیرید</p>
         <p>
-          برای ارتباط با مدیریت از تیکت پشتیبانی در حساب کاربری خود استفاده
+          برای ارتباط با مدیریت، از تیکت پشتیبانی در حساب کاربری خود استفاده
           کنید
         </p>
       </div>
       <div className="call_us_phone_numbers_wrapper">
-        <div className="call_us_phone_numbers">
+        {companyInfo.storePhoneNumber1?.length > 0 && <div className="call_us_phone_numbers" style={{justifyContent: !companyInfo.storePhoneNumber2?.length > 0 && "center"}}>
           <strong>{companyInfo.storePhoneNumber1}</strong>
           <FiPhoneCall className="phone_icon" />
-        </div>
-        <div className="call_us_phone_numbers">
+        </div>}
+        {companyInfo.storePhoneNumber2?.length > 0 && <div className="call_us_phone_numbers">
           <strong>{companyInfo.storePhoneNumber2}</strong>
           <FiPhoneCall className="phone_icon" />
-        </div>
+        </div>}
       </div>
     </section>
   );

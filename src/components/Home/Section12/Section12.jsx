@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FaCircle, FaPlus, FaMinus } from "react-icons/fa";
 import axios from "../../../util/axios";
-import { db } from "../../../util/indexedDB";
 import { useInView } from "react-intersection-observer";
 import { VscLoading } from "react-icons/vsc";
+import { useDispatch,useSelector } from "react-redux";
+import { SAVE_FAQ } from "../../../redux/Types/homeApiTypes";
 import "./Section12.css";
 
 const Section12 = () => {
@@ -11,8 +12,11 @@ const Section12 = () => {
   const [activeAccItem, setActiveAccItem] = useState("");
   const [error, setError] = useState("");
   const [isViewed,setIsviewed] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  const { cachedHomeApis: { faq: { items,validTime } } } = useSelector((state) => state);
+
+  const dispatch = useDispatch();
   const {ref, inView} = useInView({threshold: 0});
 
   useEffect(() => {
@@ -20,8 +24,13 @@ const Section12 = () => {
     let mounted = true;
 
     if(inView && !isViewed){
-      setLoading(true)
-      if(navigator.onLine){
+      if(items.length > 0 && Date.now() < validTime){
+        setLoading(false);
+        setFaqs(items);
+        setActiveAccItem(items[0]._id);
+
+        setIsviewed(true);
+      }else{
         axios
         .get("/get-all-faqs",{signal: ac.signal})
         .then((response) => {
@@ -29,11 +38,14 @@ const Section12 = () => {
             setLoading(false)
             setFaqs(response.data.allFaqs);
             setActiveAccItem(response.data.allFaqs[0]._id);
-            
-            db.faq.clear()
-            db.faq.bulkPut(response.data.allFaqs)
+            dispatch({
+              type: SAVE_FAQ,
+              payload: {
+                items: response.data.allFaqs,
+              }
+            })
 
-            setIsviewed(true)
+            setIsviewed(true);
           }
         })
         .catch((err) => {
@@ -41,16 +53,7 @@ const Section12 = () => {
             setError(err.response.data.message);
           }
         });
-      }else{
-        db.faq.toArray().then(items => {
-          if(items.length > 0 && mounted){
-            setLoading(false)
-            setFaqs(items)
-            setActiveAccItem(items[0]._id);
-          }
-        })
       }
-
     }
 
     return () => {
@@ -67,11 +70,20 @@ const Section12 = () => {
     }
   };
 
+  let accordionMinHeight;
+  if(window.innerWidth < 451){
+    accordionMinHeight = `${(faqs.length*30)+28+10}px`;
+  }else if(window.innerWidth < 781){
+    accordionMinHeight = `${(faqs.length*40)+32+10}px`
+  }else{
+    accordionMinHeight = `${(faqs.length*50)+40+26}px`;
+  }
+
   return (
     <section ref={ref} id="sec12">
       <h2 className="text-center">سوالات پرتکرار</h2>
       <div className="temporary_questions_wrapper">
-        <div className="accordion">
+        <div className="accordion" style={{minHeight: activeAccItem.length > 0 && accordionMinHeight }}>
           {loading ? (
             <div className="w-100 d-flex-center-center my-2">
               <VscLoading className="loader" fontSize={window.innerWidth < 450 ? 20 : 40} />

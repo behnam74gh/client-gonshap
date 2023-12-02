@@ -90,8 +90,11 @@
     font-size: 10px;
   }
   .detail_question {
-    flex: 35%;
+    flex: 50%;
     margin-left: 6px;
+  }
+  .detail_answer {
+    flex: 46%;
   }
   .details_info p {
     font-size: 8px;

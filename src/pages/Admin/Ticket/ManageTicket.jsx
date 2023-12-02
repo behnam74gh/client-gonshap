@@ -68,6 +68,10 @@ const ManageTicket = ({ match, history }) => {
     let pickedFile;
     if (e.target.files && e.target.files.length === 1) {
       pickedFile = e.target.files[0];
+      if(pickedFile.size > 500000){
+        toast.warning('سایز عکس بیشتر از 500 کیلوبایت است')
+        return;
+      }
       setFile(pickedFile);
     } else {
       return;

@@ -3,29 +3,47 @@ import { FaHome } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowDown } from "react-icons/md";
 import { Link,useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { searchByUserFilter } from "../../redux/Actions/shopActions";
 import Backdrop from "../UI/Backdrop/Backdrop";
 import { UNSUBMIT_QUERY } from "../../redux/Types/searchInputTypes";
+import { SET_ALL_BRANDS, UPDATE_ALL_BRANDS } from "../../redux/Types/shopProductsTypes";
+import { db } from "../../util/indexedDB";
 import "./Drawer.css";
 
 const Drawer = (props) => {
-  const [activeCategory, setActiveCategory] = useState("");
-  const [activeOrder, setActiveOrder] = useState("");
+  const [activeCategory, setActiveCategory] = useState({
+    id: "",
+    name: ""
+  });
+  const [activeOrder, setActiveOrder] = useState({
+    config: "",
+    title: "",
+  });
   const [activeSubcategories, setActiveSubcategories] = useState([]);
 
   const { pathname } = useLocation();
+  const { shopProducts: { items } } = useSelector((state) => state);
 
   const dispatch = useDispatch();
 
-  const setActiveOrderHandler = (order) => {
-    setActiveOrder(order);
+  const setActiveOrderHandler = (order,title) => {
+    setActiveOrder({
+      config: order,
+      title 
+    });
     setActiveSubcategories([]);
-    setActiveCategory("");
+    setActiveCategory({
+      id: "",
+      name: ""
+    });
   };
 
   const setSubcategoriesHandler = (category) => {
-    setActiveCategory(category._id);
+    setActiveCategory({
+      id: category._id,
+      name: category.name
+    });
     const activeSubs =
       props.subcategories.length > 0 &&
       props.subcategories.filter((s) => s.parent === category._id);
@@ -36,22 +54,47 @@ const Drawer = (props) => {
     dispatch(
       searchByUserFilter({
         level: 1,
-        order: activeOrder,
+        order: activeOrder.config,
         subcategory: sub._id,
         category: sub.parent,
       })
     );
 
     dispatch({ type: UNSUBMIT_QUERY });
-    setActiveCategory("");
-    setActiveOrder("");
+    setActiveCategory({
+      id: "",
+      name: ""
+    });
+    setActiveOrder({
+      config: "",
+      title: ""
+    });
     setActiveSubcategories([]);
+    localStorage.setItem("gonshapPageNumber", JSON.stringify(1));
+    const currentType = items.length > 0 ? UPDATE_ALL_BRANDS : SET_ALL_BRANDS;
+    db.brands.toArray().then(items => {
+      if(items.length > 0){
+        const categoryBrands = items.filter((b) => b.backupFor._id === sub.parent);
+        dispatch({
+          type: currentType,
+          payload: {
+            brands: categoryBrands
+          }
+        })
+      }
+    })
     props.backdropClick();
   };
 
   const unMountDrawerHandler = () => {
-    setActiveCategory('')
-    setActiveOrder('')
+    setActiveCategory({
+      id: "",
+      name: ""
+    })
+    setActiveOrder({
+      config: "",
+      title: ""
+    })
     setActiveSubcategories([])
     props.backdropClick()
   }
@@ -90,7 +133,7 @@ const Drawer = (props) => {
                 </Link>
               </li>
               <li onClick={props.backdropClick}>
-                <Link to="/shop" onClick={() => pathname !== "/shop" && dispatch(
+                <Link to="/shop" onClick={() => pathname !== "/shop" && items.length < 1 && dispatch(
                 searchByUserFilter({
                   level: 3,
                   order: "createdAt",
@@ -102,49 +145,49 @@ const Drawer = (props) => {
               </li>
               <li
                 className={
-                  activeOrder === "reviewsCount"
+                  activeOrder.config === "reviewsCount"
                     ? "submenu-drawer-link active"
                     : "submenu-drawer-link"
                 }
-                onClick={() => setActiveOrderHandler("reviewsCount")}
+                onClick={() => setActiveOrderHandler("reviewsCount","دسته بندی کالاها")}
               >
                 دسته بندی کالاها
                 <MdKeyboardArrowLeft />
               </li>
               <li
                 className={
-                  activeOrder === "createdAt"
+                  activeOrder.config === "createdAt"
                     ? "submenu-drawer-link active"
                     : "submenu-drawer-link"
                 }
-                onClick={() => setActiveOrderHandler("createdAt")}
+                onClick={() => setActiveOrderHandler("createdAt","تازه ها")}
               >
                 تازه ها
                 <MdKeyboardArrowLeft />
               </li>
               <li
                 className={
-                  activeOrder === "sold"
+                  activeOrder.config === "sold"
                     ? "submenu-drawer-link active"
                     : "submenu-drawer-link"
                 }
-                onClick={() => setActiveOrderHandler("sold")}
+                onClick={() => setActiveOrderHandler("sold","پرفروشترین ها")}
               >
                 پرفروشترین ها
                 <MdKeyboardArrowLeft />
               </li>
               <li
                 className={
-                  activeCategory === "discount"
+                  activeCategory.id === "discount"
                     ? "submenu-drawer-link active"
                     : "submenu-drawer-link"
                 }
-                onClick={() => setActiveOrderHandler("discount")}
+                onClick={() => setActiveOrderHandler("discount","تخفیف های ویژه")}
               >
                 تخفیف های ویژه
                 <MdKeyboardArrowLeft />
               </li>
-              <li className="rahnama-in-drawer">
+              <li className="rahnama-in-drawer" onClick={() => setActiveOrderHandler("","")}>
                 راهنما
                 <MdKeyboardArrowDown />
                 <div className="rahnama-in-drawer-dropdown">
@@ -161,13 +204,14 @@ const Drawer = (props) => {
               </li>
             </ul>
             <div className="drawer-categories">
-              {activeOrder.length > 0 &&
+              {activeOrder.config.length > 0 && <div className="drawer-category-name" style={{color: "var(--thirdColorPalete)",background: "none",fontWeight: 600}}>براساس {activeOrder.title}</div>}
+              {activeOrder.config.length > 0 &&
                 props.categories.length > 0 &&
                 props.categories.map((c) => {
                   return (
                     <div
                       className={
-                        activeCategory === c._id
+                        activeCategory.id === c._id
                           ? "drawer-category-name active"
                           : "drawer-category-name"
                       }
@@ -179,8 +223,11 @@ const Drawer = (props) => {
                   );
                 })}
             </div>
-            <div className="drawer-subCategories_wrapper">
+            {activeOrder.config.length > 0 && <div className="drawer-subCategories_wrapper">
               <div className="drawer-subCategories">
+                <span className="drawer-sublinks" style={{color: "var(--thirdColorPalete)",background: "none",fontWeight: 600}}>
+                  {activeCategory.id?.length > 0 ? `برچسب های ${activeCategory.name} :` : "برچسب ها"}
+                </span>
                 {activeSubcategories.length > 0 &&
                   activeSubcategories.map((s) => (
                     <Link
@@ -193,7 +240,7 @@ const Drawer = (props) => {
                     </Link>
                   ))}
               </div>
-            </div>
+            </div>}
           </div>
         </div>
       </div>

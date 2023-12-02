@@ -1,6 +1,6 @@
 const self = this
 
-const cacheName = `bazarchak-static-v-${0.02}`
+const cacheName = `bazarchak-static-v-${0.03}`
 
 self.addEventListener('install', e => {
     e.waitUntil(
@@ -20,6 +20,7 @@ self.addEventListener('install', e => {
                     '/static/js/vendors-node_modules_react-icons_si_index_esm_js.chunk.js',
                     '/static/js/vendors-node_modules_react-icons_ai_index_esm_js.chunk.js',
                     '/static/js/vendors-node_modules_react-icons_fi_index_esm_js.chunk.js',
+                    '/static/media/logo-alternative.37a93587bb8a948b9d36.png',
                     '/static/js/src_layout_Layout_jsx.chunk.js',
                     '/static/js/vendors-node_modules_react-icons_tb_index_esm_js.chunk.js',
                     '/static/js/vendors-node_modules_react-loading-skeleton_lib_index_js.chunk.js',
@@ -45,6 +46,16 @@ self.addEventListener('install', e => {
                     '/manifest.json',
                     '/static/media/instalogo.36b647f014e2b2952a7b.png',
                     '/static/media/telegram_PNG11.fddf2a3ec74d13e1ef9f.png',
+                    '/static/media/whatsapp-logo.ad253bf275e796b797e0.png',
+                    '/static/js/vendors-node_modules_classnames_index_js-node_modules_react-icons_lib_esm_index_js-node_modul-63c45c.chunk.js',
+                    '/static/js/src_pages_Shop_ShopPage_jsx.chunk.js',
+                    '/static/js/src_components_UI_Backdrop_Backdrop_jsx-src_pages_Admin_CommentsList_CommentsList_css.chunk.js',
+                    '/static/js/src_components_UI_Modal_Modal_jsx-src_pages_Product_ProductDetails_css-src_assets_images_pro-8_png.chunk.js',
+                    '/static/js/src_pages_Product_Product_jsx.chunk.js',
+                    '/static/js/src_pages_Stores_Stores_jsx-node_modules_react-icons_lib_esm_index_js.chunk.js',
+                    '/static/js/src_pages_Supplier_SupplierIntroduce_jsx.chunk.js',
+                    '/static/js/src_pages_CartPage_CartPage_jsx.chunk.js',
+                    '/static/js/src_pages_MyFavorites_MyFavoritePage_jsx.chunk.js',
                 ])
             })
     )

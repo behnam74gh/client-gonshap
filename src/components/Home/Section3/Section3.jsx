@@ -4,23 +4,26 @@ import { VscArrowLeft } from "react-icons/vsc";
 import Slider from "react-slick";
 import ProductCard from "../Shared/ProductCard";
 import LoadingSkeletonCard from "../Shared/LoadingSkeletonCard";
-import { searchByUserFilter } from "../../../redux/Actions/shopActions";
-import { useDispatch,useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useDispatch,useSelector } from "react-redux";
+import { searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { db } from "../../../util/indexedDB";
 import {setCountOfSlidersHandler} from '../../../util/customFunctions';
+import { UPDATE_ALL_BRANDS } from "../../../redux/Types/shopProductsTypes";
+import { POP_RANGE_VALUES } from "../../../redux/Types/rangeInputTypes";
+import { CLEAR_NEWEST_PRODUCTS, SAVE_NEWEST_PRODUCTS } from "../../../redux/Types/homeApiTypes";
 import "./Section3.css";
 
 const Section3 = () => {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [errorText, setErrorText] = useState("");
-  const [showEmptyMessage, setShowEmptyMessage] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("");
   const [numberOfSlides, setNumberOfSlides] = useState(4);
+  const { isOnline, cachedHomeApis: { newestProducts: {items,validTime,configData} } } = useSelector((state) => state);
+  const [activeCategory, setActiveCategory] = useState(configData || "");
+  const [firstLoad,setFirstLoad] = useState(true);
 
-  const isOnline = useSelector((state) => state.isOnline)
   const dispatch = useDispatch();
   
   useLayoutEffect(() => {
@@ -33,25 +36,41 @@ const Section3 = () => {
     }else {
       setNumberOfSlides(4)
     }
-  } , [])
+
+    if(firstLoad && items.length > 0 && Date.now() < validTime){
+      const produtsLength = items.length;
+      setNumberOfSlides(setCountOfSlidersHandler(produtsLength));
+      setProducts(items);
+      loading && setLoading(false);
+    }
+  } , []);
 
   useEffect(() => {
-    setLoading(true)
-    if(!navigator.onLine){
-      db.newestProducts.toArray()
-      .then(items => {
-        if(items?.length > 0){
-          setLoading(false)
-          setProducts(items)
+    if(products.length > 0 && activeCategory?.length > 0 && !firstLoad){
+      dispatch({
+        type: SAVE_NEWEST_PRODUCTS,
+        payload: {
+          items: products,
+          configData: activeCategory 
         }
-      }) 
+      })
     }
+    if(products.length > 0 && firstLoad){
+      setFirstLoad(false);
+    }
+  }, [products])
+
+  useEffect(() => {
     const ac = new AbortController();
     let mounted = true;
-    db.activeCategories.toArray().then(items => {
-      if(items.length > 0 && mounted){
-        setCategories(items);
-        setActiveCategory(items[0]._id);
+    db.activeCategories.toArray().then(oldCategories => {
+      if(oldCategories.length > 0 && mounted){
+        setCategories(oldCategories);
+        if(items.length > 0 && configData?.length > 0){
+          setActiveCategory(configData)
+        }else{
+          setActiveCategory(oldCategories[0]._id);
+        }
       }else{
         axios.get("/get-all-categories",{signal: ac.signal})
         .then((response) => {
@@ -78,7 +97,7 @@ const Section3 = () => {
   }, []);
   
   useEffect(() => {
-    if (!activeCategory.length > 0 || !navigator.onLine) {
+    if (!activeCategory.length > 0 || (items.length > 0 && Date.now() < validTime)) {
       return;
     }
     setLoading(true);
@@ -92,14 +111,10 @@ const Section3 = () => {
         if (response.data.success) {
           const { foundedProducts } = response.data;
           const produtsLength = foundedProducts.length;
-          setNumberOfSlides(setCountOfSlidersHandler(produtsLength))
+          setNumberOfSlides(setCountOfSlidersHandler(produtsLength));
+          setFirstLoad(false);
           setProducts(foundedProducts);
           setErrorText("");
-          foundedProducts.length === 0 && setShowEmptyMessage(true)
-
-          db.newestProducts.clear()
-          db.newestProducts.bulkPut(foundedProducts)
-
         }
       })
       .catch((err) => {
@@ -111,10 +126,34 @@ const Section3 = () => {
             setErrorText(err.response.data.message);
           }
       })
-  }, [activeCategory]);
+  }, [activeCategory,items]);
   
   const changeCategoryHandler = (id) => {
     setActiveCategory(id);
+    dispatch({type: CLEAR_NEWEST_PRODUCTS});
+  };
+
+  const showAllHandler = () => {
+    dispatch(
+      searchByUserFilter({
+        level: 2,
+        order: "createdAt",
+        category: activeCategory,
+      })
+    )
+    localStorage.setItem("gonshapPageNumber", JSON.stringify(1));
+    dispatch({type: POP_RANGE_VALUES});
+    db.brands.toArray().then(items => {
+      if(items.length > 0){
+        const categoryBrands = items.filter((b) => b.backupFor._id === activeCategory);
+        dispatch({
+          type: UPDATE_ALL_BRANDS,
+          payload: {
+            brands: categoryBrands
+          }
+        })
+      }
+    })
   };
 
   const setting = {
@@ -129,7 +168,7 @@ const Section3 = () => {
 
   return (
     <section className="list_of_products">
-      {categories?.length > 0 && navigator.onLine && <div className="column_item">
+      {categories?.length > 0 && navigator.onLine && <div className="column_item" style={{justifyContent: products.length < 1 && "center"}}>
         <h1>جدیدترین محصولات</h1>
         <select className="categories_wrapper_select" value={activeCategory} onChange={(e) => changeCategoryHandler(e.target.value)}>
           {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
@@ -149,21 +188,13 @@ const Section3 = () => {
             <ProductCard key={p._id} product={p} />
           ))}
         </Slider>
-      ) : showEmptyMessage && (
+      ) : (
         <p className="warning-message">محصولی یافت نشد!</p>
       )}
       {(isOnline && products.length > 4) && <div className="column_item">
         <Link
           to="/shop"
-          onClick={() =>
-            dispatch(
-              searchByUserFilter({
-                level: 2,
-                order: "createdAt",
-                category: activeCategory,
-              })
-            )
-          }
+          onClick={showAllHandler}
         >
           <span className="d-flex-center-center text-blue">
             مشاهده همه

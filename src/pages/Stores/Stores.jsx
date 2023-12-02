@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 import Pagination from '../../components/UI/Pagination/Pagination';
 import LoadingStoreCard from '../../components/UI/LoadingSkeleton/LoadingStoreCard';
 import { db } from '../../util/indexedDB';
-import Section8 from '../../components/Home/Section8/Section8'
+import Section8 from '../../components/Home/Section8/Section8';
+import { useDispatch, useSelector } from 'react-redux';
+import { CLEAR_STORE_ITEMS, SAVE_STORE_ITEMS } from '../../redux/Types/storeItemsTypes';
 import './Stores.css';
 
 const Stores = () => {
@@ -17,26 +19,38 @@ const Stores = () => {
   const [regions, setRegions] = useState([]);
   const [activeRegion, setActiveRegion] = useState(localStorage.getItem("activeRegion") || 'all');
   const [storesLength, setStoresLength] = useState(0);
-  const [perPage, setPerPage] = useState(30);
+  const [perPage] = useState(window.innerWidth < 450 ? 16 : 30);
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState("none");
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("storePage")) || 1
   );
+  const [firstLoad, setFirstLoad] = useState(true);
 
+  const { storeItems: { items,itemsLength,validTime } } = useSelector(state => state);
+  const dispatch = useDispatch();
+    
   const loadAllRegions = () => {
-    axios
-      .get("/get-all-regions")
-      .then((response) => {
-        if (response.data.success) {
-            setRegions(response.data.regions);
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          toast.warning(err.response.data.message);
-        }
-      });
+    db.regions.toArray().then(items => {
+      if(items.length > 0){
+        setRegions(items);
+      }else{
+        axios
+        .get("/get-all-regions")
+        .then((response) => {
+          if (response.data.success) {
+              setRegions(response.data.regions);
+              db.regions.clear()
+              db.regions.bulkPut(response.data.regions)
+          }
+        })
+        .catch((err) => {
+          if (err.response) {
+            toast.warning(err.response.data.message);
+          }
+        });
+      }
+    })
   };
 
   const loadAllCategories = () => {
@@ -63,36 +77,60 @@ const Stores = () => {
   }
 
   useEffect(() => {
-    loadAllRegions()
-    loadAllCategories()
-    if (window.innerWidth < 450) {
-      setPerPage(16);
+    loadAllRegions();
+    loadAllCategories();
+    
+    if(items?.length > 0 && firstLoad){
+      if(Date.now() < validTime){
+        setSuppliers(items);
+        setStoresLength(itemsLength);
+      }
     }
-  }, [])
+  }, []);
+  
+  useEffect(() => {
+    if(suppliers.length > 0 && !firstLoad){
+      dispatch({
+        type: SAVE_STORE_ITEMS,
+        payload: {
+          items: suppliers,
+          length: storesLength
+        } 
+      })
+    }
+
+    if(suppliers.length > 0 && firstLoad){
+      setFirstLoad(false);
+    }
+  }, [suppliers]);
 
   useEffect(() => {
-    setLoading(true)
-    setErrorText("");
-    localStorage.setItem("storePage", page)
-    axios
-    .post(`/region-suppliers/${activeRegion}`, {
-      page,
-      perPage,
-    })
-    .then((response) => {
-      if (response.data.success) {
+    if(items.length < 1){
+      setLoading(true);
+      setErrorText("");
+      localStorage.setItem("storePage", page)
+      axios
+      .post(`/region-suppliers/${activeRegion}`, {
+        page,
+        perPage,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          setLoading(false);
+          setFirstLoad(false);
+          setStoresLength(response.data.length);
+          setSuppliers(response.data.allSuppliers);
+        }
+      })
+      .catch((err) => {
         setLoading(false);
-        setSuppliers(response.data.allSuppliers);
-        setStoresLength(response.data.length)
-      }
-    })
-    .catch((err) => {
-      setLoading(false);
-      if (err.response) {
-        setErrorText(err.response.data.message);
-      }
-    });
-  }, [activeRegion,page,perPage])
+        if (err.response) {
+          setErrorText(err.response.data.message);
+        }
+      });
+    }
+    
+  }, [activeRegion,page,items]);
   
   const defineRegionHandler = (id) => {
     setActiveRegion(id);
@@ -101,7 +139,8 @@ const Stores = () => {
     setPage(1);
     localStorage.setItem("activeRegion", id);
     localStorage.setItem("storePage", 1);
-  }
+    dispatch({type: CLEAR_STORE_ITEMS});
+  };
 
   const changeCategoryHandler = (id) => {
     if(id === "none"){
@@ -112,11 +151,12 @@ const Stores = () => {
       return;
     }
     setActiveCategory(id);
-
+    setPage(1);
+    localStorage.setItem("storePage", 1);
     let sameCategorystores = suppliers.filter(store => store.backupFor._id === id);
     setComparedSuppliers(sameCategorystores);
   };
-
+  
   return (
     <>
       <Helmet>
@@ -162,12 +202,13 @@ const Stores = () => {
         ) : <p className='text-mute font-sm'>فروشگاهی وجود ندارد</p>}
       </div>
 
-      {storesLength > perPage && (
+      {storesLength > perPage && activeCategory === "none" && (
         <Pagination
           perPage={perPage}
           productsLength={storesLength}
           setPage={setPage}
           page={page}
+          isStoresPage={true}
         />
       )}
 

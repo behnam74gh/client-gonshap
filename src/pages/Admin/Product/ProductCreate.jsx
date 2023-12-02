@@ -14,6 +14,8 @@ import {
   VALIDATOR_MAX,
   VALIDATOR_SPECIAL_CHARACTERS,
   VALIDATOR_SPECIAL_CHARACTERS_2,
+  VALIDATOR_PHONENUMBER,
+  VALIDATOR_REQUIRE,
 } from "../../../util/validators";
 import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
@@ -88,12 +90,16 @@ const ProductCreate = () => {
       hostId: {
         value: "",
         isValid: false
+      },
+      storeOwnerPhoneNumber: {
+        value: "",
+        isValid: false
       }
     },
     false
   );
 
-  const {userInfo : {role,supplierFor}} = useSelector(state => state.userSignin)
+  const {userInfo : {role,supplierFor}, phoneNumber} = useSelector(state => state.userSignin)
     
   useEffect(() => {
     setReRenderParent(true);
@@ -306,6 +312,7 @@ const ProductCreate = () => {
 
     const formData = new FormData();
 
+    formData.append("storeOwnerPhoneNumber", role === 1 ? formState.inputs.storeOwnerPhoneNumber.value : phoneNumber);
     formData.append("validHostId", role === 1 ? formState.inputs.hostId.value : null);
     formData.append("title", formState.inputs.title.value);
     formData.append("countInStock", formState.inputs.countInStock.value);
@@ -410,6 +417,19 @@ const ProductCreate = () => {
               VALIDATOR_MAXLENGTH(30),
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+          />}
+          {role === 1 &&
+           <Input
+            id="storeOwnerPhoneNumber"
+            element="input"
+            type="text"
+            placeholder="شماره موبایل فروشنده"
+            onInput={inputHandler}
+            validators={[
+              VALIDATOR_REQUIRE(),
+              VALIDATOR_PHONENUMBER(),
+              VALIDATOR_MAXLENGTH(11),
             ]}
           />}
           <label className="auth-label" htmlFor="category">

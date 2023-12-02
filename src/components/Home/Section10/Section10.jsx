@@ -2,19 +2,23 @@ import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaQuoteRight } from "react-icons/fa";
 import axios from "../../../util/axios";
 import LoadingSuggest from "../../UI/LoadingSkeleton/LoadingSuggest";
-import defPic from "../../../assets/images/pro-8.png";
-import { db } from "../../../util/indexedDB";
 import { useInView } from "react-intersection-observer";
+import { useDispatch,useSelector } from "react-redux";
+import { SAVE_SUGGESTS } from "../../../redux/Types/homeApiTypes";
+import defPic from "../../../assets/images/pro-8.png";
 import "./Section10.css";
 
 const Section10 = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [bestSuggests, setBestSuggests] = useState([]);
   const [errorText, setErrorText] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeSuggest, setActiveSuggest] = useState({});
   const [isViewed,setIsviewed] = useState(false);
 
+  const { cachedHomeApis: { suggests: { items,validTime } } } = useSelector((state) => state);
+
+  const dispatch = useDispatch();
   const {ref, inView} = useInView({threshold: 0});
 
   useEffect(() => {
@@ -22,8 +26,12 @@ const Section10 = () => {
     let mounted = true;
     
     if(inView && !isViewed){
-      if(navigator.onLine){
-        setLoading(true);
+      if(items.length > 0 && Date.now() < validTime){
+        setLoading(false);
+        setBestSuggests(items);
+
+        setIsviewed(true);
+      }else{
         axios
         .get("/fetch/best-suggests",{signal: ac.signal})
         .then((response) => {
@@ -31,11 +39,14 @@ const Section10 = () => {
             setLoading(false);
             setBestSuggests(response.data.suggests);
             setErrorText("");
+            dispatch({
+              type: SAVE_SUGGESTS,
+              payload: {
+                items: response.data.suggests,
+              }
+            })
 
-            db.suggests.clear()
-            db.suggests.bulkPut(response.data.suggests)
-
-            setIsviewed(true)
+            setIsviewed(true);
           }
         })
         .catch((err) => {
@@ -44,15 +55,7 @@ const Section10 = () => {
             setErrorText(err.response.data.message);
           }
         });
-      }else{
-        db.suggests.toArray().then(items => {
-          if(items.length > 0 && mounted){
-            setBestSuggests(items)
-            setErrorText("")
-          }
-        })
       }
-
     }
 
     return () => {

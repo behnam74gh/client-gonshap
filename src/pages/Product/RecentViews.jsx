@@ -14,12 +14,12 @@ const RecentViews = ({productId,numberOfSlides,setNumberOfSlides}) => {
   const [recentLoading, setRecentLoading] = useState(false);
   const [recentViews, setRecentViews] = useState([]);
   const [isViewed,setIsviewed] = useState(false);
-
+  const [oldProductId,setOldProductID] = useState("");
   const { userInfo } = useSelector((state) => state.userSignin);
   const {ref, inView} = useInView({threshold: 0});
 
   useEffect(() => {
-    if (userInfo?.userId?.length > 0 && navigator.onLine && inView && !isViewed) {
+    if (userInfo?.userId?.length > 0 && navigator.onLine && inView && !isViewed && oldProductId !== productId) {
       setRecentLoading(true);
       axios
         .put(`/current-user/recent-views/upgrade/${userInfo.userId}`, {
@@ -36,6 +36,7 @@ const RecentViews = ({productId,numberOfSlides,setNumberOfSlides}) => {
             setNumberOfSlides(setCountOfSlidersHandler(produtsLength))
             setRecentViews(activeRecentViewsProducts);
             setRecentViewsError("");
+            setOldProductID(productId)
           }
         })
         .catch((err) => {

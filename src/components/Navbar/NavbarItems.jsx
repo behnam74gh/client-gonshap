@@ -11,7 +11,7 @@ import "./NavbarItems.css";
 const NavbarItems = ({ categories, subcategories, helps }) => {
   const dispatch = useDispatch();
 
-  const { subMenu : {isSubmenuOpen},search: { dropdown } } = useSelector((state) => state);
+  const { subMenu : {isSubmenuOpen},search: { dropdown },shopProducts: { items } } = useSelector((state) => state);
   const { pathname } = useLocation();
 
   const displaySubMenu = (e, order,count) => {
@@ -39,7 +39,7 @@ const NavbarItems = ({ categories, subcategories, helps }) => {
         <Link to="/">خانه</Link>
       </li>
       <li>
-        <Link to="/shop" onClick={() => pathname !== "/shop" && dispatch(
+        <Link to="/shop" onClick={() => pathname !== "/shop" && items.length < 1 && dispatch(
         searchByUserFilter({
           level: 3,
           order: "createdAt",

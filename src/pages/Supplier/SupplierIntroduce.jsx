@@ -19,7 +19,6 @@ import { FaTimesCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { ShowRatingAverage } from "../../components/Home/Shared/ShowRatingAverage";
 import { HiBadgeCheck } from "react-icons/hi";
-import { POP_STORE_ITEM } from "../../redux/Types/supplierItemTypes";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { calculateResultHandler } from "../../util/customFunctions";
 import "../Advertise/AdvertisePage.css"
@@ -85,15 +84,13 @@ const SupplierIntroduce = ({ match }) => {
         }
       });
     }
-    
 
     return () => {
       setStarValue({
         star: 0,
         storeId: "",
       })
-      setLastVote(0)
-      dispatch({type: POP_STORE_ITEM })
+      setLastVote(0);
     }
   }, [id,storeItem]);
 
@@ -121,12 +118,14 @@ const SupplierIntroduce = ({ match }) => {
     if (userInfo?.userId?.length > 0) {
       dispatch({ type: OPEN_STAR_RATING_MODAL });
     } else {
-      history.push({
-        pathname: "/signin",
-        state: {
-          from: `/supplier/introduce/${id}`,
-        },
-      });
+      if(window.confirm("ابتدا باید وارد حساب کاربری خود شوید")){
+        history.push({
+          pathname: "/signin",
+          state: {
+            from: `/supplier/introduce/${id}`,
+          },
+        });
+      }
     }
   };
 
@@ -196,7 +195,7 @@ const SupplierIntroduce = ({ match }) => {
         <div className="w-100 d-flex-center-center mt-3">
           <VscLoading className="loader" />
         </div>
-      ) : supplier?.photos?.length > 1 && (
+      ) : supplier?._id?.length > 1 && (
           <div className="store_info_wrapper">
             <div className="supplier_info_box">
               <div className="info_box">
@@ -303,6 +302,7 @@ const SupplierIntroduce = ({ match }) => {
                     src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${p}`}
                     alt={supplier.title}
                     className="supplier_carousel_img"
+                    loading="lazy"
                   />
                 ))}
               </Slider>
@@ -387,7 +387,7 @@ const SupplierIntroduce = ({ match }) => {
                 onClick={setStarRatingHandler}
                 className="modal_btn bg-purple"
               >
-                {rateLoading ? <VscLoading className="loader" /> : "ثبت"}
+                {rateLoading ? <VscLoading fontSize={window.innerWidth < 450 ? 14 : 20} className="loader" /> : "ثبت"}
               </button>
             </div>
           </div>

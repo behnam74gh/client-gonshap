@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { CLEAR_ITEMS } from "../../../redux/Types/shopProductsTypes";
+import { CLEAR_SUPPLIER_ACTIVE_PRODUCTS } from "../../../redux/Types/supplierProductsTypes";
+import { CLEAR_STORE_ITEMS } from "../../../redux/Types/storeItemsTypes";
 
 const Pagination = ({
   perPage,
@@ -8,8 +12,11 @@ const Pagination = ({
   setPage,
   isShopPage,
   isSupplierPage,
+  isStoresPage
 }) => {
   let [pagesAroundOfActivePage, setPagesAroundOfActivePage] = useState([]);
+
+  const dispatch = useDispatch()
 
   let pageNumbers = useMemo(() => {
     let pagesOfNumbers = [];
@@ -60,22 +67,92 @@ const Pagination = ({
   }, [page, setPage, dotsInitial, dotsLeft, dotsRight, pageNumbers]);
 
   const setActivePageHandler = (number) => {
-    if (number === dotsInitial || number === dotsLeft || number === dotsRight) {
+    if (number === dotsInitial || number === dotsLeft || number === dotsRight || page === number) {
       return;
     } else {
       setPage(number);
       if (isShopPage) {
+        dispatch({type: CLEAR_ITEMS});
         localStorage.setItem("gonshapPageNumber", JSON.stringify(number));
       }
       if (isSupplierPage) {
-        localStorage.setItem(
-          "gonshapSupplierPageNumber",
-          JSON.stringify(number)
-        );
+        dispatch({type: CLEAR_SUPPLIER_ACTIVE_PRODUCTS});
+        localStorage.setItem("gonshapSupplierPageNumber",JSON.stringify(number));
       }
+      if(isStoresPage){
+        dispatch({type:CLEAR_STORE_ITEMS});
+        localStorage.setItem("storePage",JSON.stringify(number));
+      }
+
       window.scrollTo(0, 0);
     }
   };
+
+  const leftArrowHandler = () => {
+    if(page === 1){
+      return;
+    }
+    setPage(page === 1 ? page : page - 1);
+    if (isShopPage) {
+      dispatch({type: CLEAR_ITEMS});
+      localStorage.setItem(
+        "gonshapPageNumber",
+        page === 1 ? JSON.stringify(page) : JSON.stringify(page - 1)
+      );
+    }
+    if (isSupplierPage) {
+      dispatch({type: CLEAR_SUPPLIER_ACTIVE_PRODUCTS});
+      localStorage.setItem(
+        "gonshapSupplierPageNumber",
+        page === 1 ? JSON.stringify(page) : JSON.stringify(page - 1)
+      );
+    }
+    if(isStoresPage){
+      dispatch({type:CLEAR_STORE_ITEMS});
+      localStorage.setItem(
+        "storePage",
+        page === 1 ? JSON.stringify(page) : JSON.stringify(page - 1)
+      );
+    }
+
+    window.scrollTo(0, 0);
+  }
+
+  const rightArrowHandler = () => {
+    if(page === pageNumbers.length){
+      return
+    }
+    setPage(page === pageNumbers.length ? page : page + 1);
+    if (isShopPage) {
+      dispatch({type: CLEAR_ITEMS});
+      localStorage.setItem(
+        "gonshapPageNumber",
+        page === pageNumbers.length
+          ? JSON.stringify(page)
+          : JSON.stringify(page + 1)
+      );
+    }
+    if (isSupplierPage) {
+      dispatch({type: CLEAR_SUPPLIER_ACTIVE_PRODUCTS});
+      localStorage.setItem(
+        "gonshapSupplierPageNumber",
+        page === pageNumbers.length
+          ? JSON.stringify(page)
+          : JSON.stringify(page + 1)
+      );
+    }
+    if(isStoresPage){
+      dispatch({type:CLEAR_STORE_ITEMS});
+      localStorage.setItem(
+        "storePage",
+        page === pageNumbers.length
+          ? JSON.stringify(page)
+          : JSON.stringify(page + 1)
+      );
+    }
+
+    window.scrollTo(0, 0);
+  }
 
   return (
     <nav className="pagination-wrapper">
@@ -86,22 +163,7 @@ const Pagination = ({
               ? "d-flex-center-center disabled"
               : "d-flex-center-center"
           }
-          onClick={() => {
-            setPage(page === 1 ? page : page - 1);
-            if (isShopPage) {
-              localStorage.setItem(
-                "gonshapPageNumber",
-                page === 1 ? JSON.stringify(page) : JSON.stringify(page - 1)
-              );
-            }
-            if (isSupplierPage) {
-              localStorage.setItem(
-                "gonshapSupplierPageNumber",
-                page === 1 ? JSON.stringify(page) : JSON.stringify(page - 1)
-              );
-            }
-            window.scrollTo(0, 0);
-          }}
+          onClick={leftArrowHandler}
           disabled={page === 1 ? true : false}
         >
           <RiArrowLeftSLine className="text-blue font-md" />
@@ -132,26 +194,7 @@ const Pagination = ({
               : "d-flex-center-center"
           }
           disabled={page === pageNumbers.length ? true : false}
-          onClick={() => {
-            setPage(page === pageNumbers.length ? page : page + 1);
-            if (isShopPage) {
-              localStorage.setItem(
-                "gonshapPageNumber",
-                page === pageNumbers.length
-                  ? JSON.stringify(page)
-                  : JSON.stringify(page + 1)
-              );
-            }
-            if (isSupplierPage) {
-              localStorage.setItem(
-                "gonshapSupplierPageNumber",
-                page === pageNumbers.length
-                  ? JSON.stringify(page)
-                  : JSON.stringify(page + 1)
-              );
-            }
-            window.scrollTo(0, 0);
-          }}
+          onClick={rightArrowHandler}
         >
           <RiArrowRightSLine className="text-blue font-md" />
         </li>

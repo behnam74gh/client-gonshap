@@ -3,6 +3,9 @@ import axios from "../../util/axios";
 import ProductCard from "../../components/Home/Shared/ProductCard";
 import LoadingSkeletonCard from "../../components/Home/Shared/LoadingSkeletonCard";
 import Pagination from "../../components/UI/Pagination/Pagination";
+import { db } from "../../util/indexedDB";
+import { useSelector,useDispatch } from "react-redux";
+import { CLEAR_SUPPLIER_PRODUCTS, SAVE_SUPPLIER_PRODUCTS } from "../../redux/Types/supplierProductsTypes";
 import "./SupplierProducts.css";
 
 const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
@@ -11,59 +14,95 @@ const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
     JSON.parse(localStorage.getItem("gonshapSupplierActiveSub")) || ""
   );
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [productsLength, setProductsLength] = useState(0);
   const [errorText, setErrorText] = useState("");
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("gonshapSupplierPageNumber")) || 1
+    );
+  const [perPage] = useState(window.innerWidth < 450 ? 18 : 32);
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [activeOrder, setActiveOrder] = useState(
+    JSON.parse(localStorage.getItem("bazarchakSupplierActiveorder")) || "createdAt"
   );
-  const [perPage, setPerPage] = useState(20);
 
+  const { supplierProducts : { items , itemsLength} } = useSelector(state => state);
+  const [productsLength, setProductsLength] = useState(itemsLength || 0);
+  const [products, setProducts] = useState(items || []);
+  const dispatch = useDispatch();
+  
   useEffect(() => {
-    if (window.innerWidth < 450) {
-      setPerPage(10);
+    if(items?.length > 0 && firstLoad){
+      setProducts(items);
+      setProductsLength(itemsLength);
+      setFirstLoad(false)
+    }else{
+      setFirstLoad(false);
     }
   }, []);
 
   useEffect(() => {
+    if(products.length > 0){
+      dispatch({
+        type: SAVE_SUPPLIER_PRODUCTS,
+        payload: {
+          items: products,
+          length: productsLength
+        } 
+      })
+    }
+  } ,[products])
+
+  useEffect(() => {
     let id = backupFor && backupFor._id;
+    
     if (id) {
-      axios
-        .get(`/category/subs/${id}`)
-        .then((response) => {
-          if (response.data.success) {
-            setSubcategories(response.data.subcategories);
-            if (!activeSub.length) {
-              setActiveSub(response.data.subcategories[0]._id);
-            }
+      db.subCategories.toArray().then(items => {
+        if(items.length > 0) {
+          const newSubs = items.filter((s) => s.parent === id);
+          setSubcategories(newSubs);
+          if (!activeSub.length && newSubs.length > 0) {
+            setActiveSub(newSubs[0]._id);
           }
-        })
-        .catch((err) => {
-          if (err.response) {
-            setErrorText(err.response.data.message);
-          }
-        });
+        }else{
+          axios
+            .get(`/category/subs/${id}`)
+            .then((response) => {
+              if (response.data.success) {
+                setSubcategories(response.data.subcategories);
+                if (!activeSub.length) {
+                  setActiveSub(response.data.subcategories[0]._id);
+                }
+              }
+            })
+            .catch((err) => {
+              if (err.response) {
+                setErrorText(err.response.data.message);
+              }
+            });
+      }
+      })
     }
   }, [backupFor]);
 
   useEffect(() => {
-    if (!activeSub.length > 0) {
+    if (!activeSub.length > 0 || firstLoad) {
       return;
     }
 
-    !loading && setLoading(true);
-    axios
+    if(!firstLoad && items.length < 1){
+      setLoading(true);
+      axios
       .post("/find/suppliers-products/by-subcategory", {
         sub: activeSub,
         ownerPhoneNumber,
         page,
         perPage,
+        order: activeOrder
       })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
-          setProducts(response.data.foundedProducts);
           setProductsLength(response.data.allCount);
+          setProducts(response.data.foundedProducts);
         }
       })
       .catch((err) => {
@@ -75,35 +114,48 @@ const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
           setErrorText(err.response.data.message);
         }
       });
-  }, [activeSub, page, perPage,ownerPhoneNumber]);
+    }
+  }, [activeSub, page, perPage,ownerPhoneNumber,items]);
 
   const switchSubcategoryHandler = (id) => {
     setActiveSub(id);
     localStorage.setItem("gonshapSupplierActiveSub", JSON.stringify(id));
     setPage(1);
     localStorage.removeItem("gonshapSupplierPageNumber");
+    dispatch({type: CLEAR_SUPPLIER_PRODUCTS});
   };
 
-  useEffect(() => {
-    return () => {
-      if(!window.location.href.includes('/product/details')){
-        localStorage.removeItem("gonshapSupplierActiveSub");
-        localStorage.removeItem("gonshapSupplierPageNumber");
-      }
-    };
-  }, []);
-
+  const baseFilteringHandler = (e) => {
+    setActiveOrder(e);
+    localStorage.setItem("bazarchakSupplierActiveorder", JSON.stringify(e));
+    setPage(1);
+    localStorage.removeItem("gonshapSupplierPageNumber");
+    dispatch({type: CLEAR_SUPPLIER_PRODUCTS});
+  };
+  
   return (
     <div className="suppliers_list_of_products_wrapper">
       <div className="supplier_subcategory_wrapper">
-        <p className="font-sm my-1 mx-2">
-        ارائه دهنده محصولات <strong className="mx-1">{backupFor?.name}</strong>
+        <p className="font-sm my-1">
+        ارائه دهنده محصولات <strong>{backupFor?.name}</strong>
         </p>
         {subcategories.length > 0 && navigator.onLine &&
-          <select className="categories_wrapper_select" onChange={(e) => switchSubcategoryHandler(e.target.value)}>
+          <select value={activeSub} onChange={(e) => switchSubcategoryHandler(e.target.value)}>
           {subcategories.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
           </select>
         }
+        {subcategories.length > 0 && navigator.onLine &&
+          <select
+            value={activeOrder}
+            onChange={(e) => baseFilteringHandler(e.target.value)}
+          >
+            <option value="createdAt">جدیدترین محصولات</option>
+            <option value="sold">پرفروش ترین محصولات</option>
+            <option value="discount">بالاترین تخفیف ها</option>
+            <option value="reviewsCount">پربازدید ترین محصولات</option>
+            <option value="expensive">گران ترین محصولات</option>
+            <option value="cheap">ارزان ترین محصولات</option>
+        </select>}
       </div>
       <div className="supplier_products_wrapper">
         {loading ? (
@@ -112,7 +164,12 @@ const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
           <p className="warning-message">{errorText}</p>
         ) : products.length > 0 ? (
           products.map((product) => (
-            <ProductCard key={product._id} product={product} showSold={true} />
+            <ProductCard 
+              key={product._id} 
+              product={product} 
+              showSold={activeOrder === "sold"} 
+              showReviews={activeOrder === "reviewsCount"}
+            />
           ))
         ) : subcategories.length > 0 ? (
           <p className="info-message text-center w-100">

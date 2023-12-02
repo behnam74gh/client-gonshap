@@ -174,7 +174,7 @@ const Layout = (props) => {
       />
       <SubMenu />
       <Backdrop show={isSubmenuOpen} onMouseOver={subMenuHandler} />
-      <main className="main-body" onMouseOver={subMenuHandler} onClick={closeDropdownHandler}>
+      <main className={window.innerWidth < 780 && pathname.includes('/dashboard') ? "w-100 main-body" : "main-body"} onMouseOver={subMenuHandler} onClick={closeDropdownHandler}>
         {isOnline ? props.children : <OfflineStatus />}
       </main>
       <Brands />

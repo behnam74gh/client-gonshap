@@ -91,6 +91,10 @@ const UpdateProfileInfo = ({ history }) => {
     let pickedFile;
     if (e.target.files && e.target.files.length === 1) {
       pickedFile = e.target.files[0];
+      if(pickedFile.size > 500000){
+        toast.warning('سایز عکس بیشتر از 500 کیلوبایت است')
+        return;
+      }
       if (oldPhoto.length > 0) {
         setDeletedPhoto(oldPhoto);
         setOldPhoto("");

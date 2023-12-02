@@ -2,10 +2,6 @@ import React, { lazy, Suspense, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import NProgress from "nprogress";
-import "nprogress/nprogress.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "react-toastify/dist/ReactToastify.css";
 import AdminRoute from "./util/routes/AdminRoute";
 import UserRoute from "./util/routes/UserRoute";
 import { withErrorBoundary } from "react-error-boundary";
@@ -15,6 +11,10 @@ import { useDispatch } from "react-redux";
 import {fetchActiveAdsHandler} from './redux/Actions/advertiseActions'
 import { db } from "./util/indexedDB";
 import { ADS_SUCCESS } from "./redux/Types/advertise";
+import "nprogress/nprogress.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const Layout = lazy(() => import("./layout/Layout"));
 const Home = lazy(() => import("./pages/Home/Home"));

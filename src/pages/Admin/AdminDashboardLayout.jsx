@@ -151,7 +151,7 @@ const AdminDashboardLayout = ({ children }) => {
     axios.get('/sign-out/user').then(res => {
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
-        localStorage.removeItem("BZ_User_Info");
+        localStorage.removeItem("storeOwnerPhoneNumber");
         history.push('/')
       }
     }).catch(err => {

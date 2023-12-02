@@ -14,10 +14,13 @@ import {
 import { useHistory } from "react-router-dom";
 import axios from "../../../util/axios";
 import { toast } from "react-toastify";
-import { searchByUserFilter } from "../../../redux/Actions/shopActions";
+import { deleteSearchConfig, searchByUserFilter } from "../../../redux/Actions/shopActions";
 import { VscLoading } from "react-icons/vsc";
 import { Link } from 'react-router-dom';
 import { PUSH_ITEM } from "../../../redux/Types/searchedItemTypes";
+import { CLEAR_SHOP_PRODUCTS, SET_ALL_BRANDS, UPDATE_ALL_BRANDS } from "../../../redux/Types/shopProductsTypes";
+import { POP_RANGE_VALUES } from "../../../redux/Types/rangeInputTypes";
+import { db } from "../../../util/indexedDB";
 import "./SearchInput.css";
 
 const SearchInput = () => {
@@ -31,7 +34,7 @@ const SearchInput = () => {
     parent: null
   });
 
-  const { search: { text,dropdown,submited,searchByText } } = useSelector((state) => ({...state}));
+  const { search: { text,dropdown,submited,searchByText }, shopProducts: { items } } = useSelector((state) => ({...state}));
   const btnRef = useRef();
   const inputRef = useRef();
   const history = useHistory();
@@ -125,13 +128,13 @@ const SearchInput = () => {
   }, [text])
 
   const submitSearchKeywordHandler = () => {
-    dispatch({type: SUGGEST_CLOSE})
-  
+    dispatch({type: SUGGEST_CLOSE})    
+
     if (!navigator.onLine){
       toast.warning('شما به اینترنت دسترسی ندارید')
       return
     }
-   
+    const currentType = items.length > 0 ? UPDATE_ALL_BRANDS : SET_ALL_BRANDS;
     if (text.length > 1) {
       switch (config.type) {
         case 1:
@@ -144,6 +147,17 @@ const SearchInput = () => {
               category: config.parent,
             })
           );
+          db.brands.toArray().then(items => {
+            if(items.length > 0){
+              const categoryBrands = items.filter((b) => b.backupFor._id === config.parent);
+              dispatch({
+                type: currentType,
+                payload: {
+                  brands: categoryBrands
+                }
+              })
+            }
+          })
           break;
         case 2:
           submited && dispatch({type: UNSUBMIT})
@@ -154,9 +168,23 @@ const SearchInput = () => {
               category: config.id,
             })
           )
+          db.brands.toArray().then(items => {
+            if(items.length > 0){
+              const categoryBrands = items.filter((b) => b.backupFor._id === config.id);
+              dispatch({
+                type: currentType,
+                payload: {
+                  brands: categoryBrands
+                }
+              })
+            }
+          })
           break;
         default:
           dispatch({ type: SUBMIT_QUERY });
+          dispatch(deleteSearchConfig());
+          dispatch({type: POP_RANGE_VALUES});
+          dispatch({type: CLEAR_SHOP_PRODUCTS});
           break;
       }
       setConfig({
@@ -164,6 +192,7 @@ const SearchInput = () => {
         type: null,
         parent: null
       })
+      localStorage.setItem("gonshapPageNumber", JSON.stringify(1));
       history.push("/shop");
     } else {
       toast.info("محصولی بااین نام وجود ندارد");
@@ -186,6 +215,7 @@ const SearchInput = () => {
     })    
 
   };
+
   const focusToInputHandler = () => {
     if((searchableItems.length > 0 || products.length > 0) && text.length > 0){
       dispatch({type: SUGGEST_OPEN})
@@ -198,7 +228,7 @@ const SearchInput = () => {
       type: PUSH_ITEM,
       payload: productItem
     })
-    dispatch({type: SUGGEST_CLOSE})
+    dispatch({type: SUGGEST_CLOSE});
   }
 
   return (

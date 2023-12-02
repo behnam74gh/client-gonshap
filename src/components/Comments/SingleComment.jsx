@@ -93,7 +93,7 @@ const SingleComment = ({ comment,category,goSignin }) => {
                 ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${writerImage}`
                 : defPic
             }
-            alt="تصویر نویسنده نظر"
+            alt="نویسنده"
           />
         </div>
 

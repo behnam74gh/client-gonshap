@@ -4,7 +4,7 @@ import { db } from '../../../util/indexedDB'
 
 const SingleAd = ({ad}) => {
     const [isStoreSupplier,setIsStoreSupplier] = useState(false)
-    const [supplierSlug,setSupplierSlug] = useState(null)
+    const [supplierId,setSupplierId] = useState(null)
 
     useEffect(() => {
         let mounted = true;
@@ -14,7 +14,7 @@ const SingleAd = ({ad}) => {
         
             if(supplier[0]?.phoneNumber === ad.phoneNumber && mounted){
                 setIsStoreSupplier(true)
-                setSupplierSlug(supplier[0].slug)
+                setSupplierId(supplier[0]._id)
             }
         }
         getSupplier()
@@ -25,7 +25,7 @@ const SingleAd = ({ad}) => {
     }, [isStoreSupplier,ad])
 
     return  isStoreSupplier ? (
-            <Link to={`/supplier/introduce/${supplierSlug}`} className="tooltip">
+            <Link to={`/supplier/introduce/${supplierId}`} className="tooltip">
                 <span className="tooltip_text">{ad.title}</span>
                 <img
                 src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${ad.photos[0]}`}

@@ -32,8 +32,14 @@ const Products = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [queryText, setQueryText] = useState("");
-  const [oPage, setOPage] = useState(1);
+  const [oPage, setOPage] = useState(JSON.parse(localStorage.getItem('otherFilterDashPage')) || 1);
+  const [firstLoad, setFirstLoad] = useState(true);
   const [activeFilterConfig, setActiveFilterConfig] = useState("none");
+  const [oldFilterConfig, setOldFilterConfig] = useState(JSON.parse(localStorage.getItem("dashProductsConf")) || {
+    type: "",
+    value: null,
+    secondValue: null
+  });
   const [errorText, setErrorText] = useState("");
   const [generate, setGenerate] = useState({
     id: null,
@@ -57,7 +63,7 @@ const Products = () => {
   }, [role]);
 
   useEffect(() => {
-    if (orderConfig === "none") {
+    if (orderConfig === "none" || oldFilterConfig.type.length > 0 || role === 2) {
       return;
     }
 
@@ -219,6 +225,13 @@ const Products = () => {
     setActiveCount("none");
     setActiveSubcategory("none");
     setActiveBrand("none");
+    localStorage.removeItem('dashProductsConf');
+    localStorage.removeItem('otherFilterDashPage');
+    setOldFilterConfig({
+      type: "",
+      value: null,
+      secondValue: null
+    })
 
     axios
       .post("/products/search/filters", { query: queryText })
@@ -227,6 +240,17 @@ const Products = () => {
         if (response.data.success) {
           setProducts(response.data.products);
           setOtherFilterings(true);
+          db.subCategories.toArray().then(items => {
+            if(items.length > 0) {
+              setSubcategories(items);
+            }
+          });
+      
+          db.brands.toArray().then(items => {
+            if(items.length > 0) {
+              setBrands(items)
+            }
+          })
         }
       })
       .catch((err) => {
@@ -245,10 +269,30 @@ const Products = () => {
     setActiveFilterConfig("none");
     setActiveSubcategory("none");
     setActiveBrand("none");
+    setActiveCategory("none")
 
     setPage(1);
-
+    localStorage.removeItem('dashProductsConf');
+    localStorage.removeItem('otherFilterDashPage');
+    setOldFilterConfig({
+      type: "",
+      value: null,
+      secondValue: null
+    })
+    setOPage(1);
     setOrderConfig(e);
+
+    db.subCategories.toArray().then(items => {
+      if(items.length > 0) {
+        setSubcategories(items);
+      }
+    });
+
+    db.brands.toArray().then(items => {
+      if(items.length > 0) {
+        setBrands(items)
+      }
+    })
   };
 
   const searchProductsByCategory = (e) => {
@@ -260,7 +304,7 @@ const Products = () => {
       setOtherFilterings(true);
     }
     setLoading(true)
-    setOPage(1);
+    !firstLoad && oldFilterConfig.type.length > 0 && setOPage(1);
     setQueryText("");
     setOrderConfig("none");
     setActiveSell("none");
@@ -284,9 +328,18 @@ const Products = () => {
                 const newSubs = items.filter((s) => s.parent === e);
                 setSubcategories(newSubs);
               }
+            });
+
+            db.brands.toArray().then(items => {
+              if(items.length > 0) {
+                const particularBrands = items.filter((b) => b.backupFor._id === e);
+                setBrands(particularBrands)
+              }
             })
           }
-          
+          setOldFilterConfig({type: "category", value: e});
+          localStorage.setItem("dashProductsConf",JSON.stringify({type: "category", value: e}));
+          firstLoad && setFirstLoad(false);
         }
       })
       .catch((err) => {
@@ -299,19 +352,53 @@ const Products = () => {
         }
       });
   };
+
 //for storeAdmin
  useEffect(() => {
-  const isStoreAdmin = role === 2 && supplierFor !== null
-    if(isStoreAdmin || (isStoreAdmin && reRender)){
-      searchProductsByCategory(supplierFor)
+  const isStoreAdmin = role === 2 && supplierFor !== null;
+ 
+    if(isStoreAdmin || (isStoreAdmin && reRender) || oldFilterConfig.type.length > 0){
+      if(oldFilterConfig.type.length > 0){
+        switch (oldFilterConfig.type) {
+          case "category":
+            searchProductsByCategory(oldFilterConfig.value);
+            break;
+          case "subcategory":
+            searchProductsBySubcategory(oldFilterConfig.value);
+            break;
+          case "brand":
+            searchProductsByBrand(oldFilterConfig.value);
+            break;
+          case "sell":
+            searchProductsBySell(oldFilterConfig.value);
+            break;
+          case "countInStuck":
+            searchProductsByCountInStock(oldFilterConfig.value);
+            break;
+          default:
+            break;
+        }
+
+      }else{
+        role === 2 && (reRender || firstLoad) && searchProductsByCategory(supplierFor);
+        reRender && setReRender(false);
+      }
     }
-    setReRender(false)
+   
   },[reRender])
 
   const searchProductsBySubcategory = (e) => {
     if (e === "none") {
       if(role === 2){
-        setReRender(true)
+        setReRender(true);
+        setOPage(1);
+        localStorage.removeItem('dashProductsConf');
+        localStorage.removeItem('otherFilterDashPage');
+        setOldFilterConfig({
+          type: "",
+          value: null,
+          secondValue: null
+        })
       }
       return;
     }
@@ -320,12 +407,11 @@ const Products = () => {
       setOtherFilterings(true);
     }
     setLoading(true)
-    setOPage(1);
+    !firstLoad && oldFilterConfig.type.length > 0 && setOPage(1);
     setQueryText("");
     setOrderConfig("none");
     setActiveSell("none");
     setActiveCount("none");
-    setActiveCategory("none");
     setActiveFilterConfig("none");
     setActiveBrand("none");
 
@@ -338,15 +424,26 @@ const Products = () => {
         if (response.data.success) {
           setProducts(response.data.products);
           
-          if(role === 1){
-            const currentSub = subcategories.find(s => s._id === e )
+          if(role === 1){ 
             db.brands.toArray().then(items => {
               if(items.length > 0) {
-                const particularBrands = items.filter((c) => c.backupFor._id === currentSub.parent);
-                setBrands(particularBrands)
+                let correctBrands = [];
+                for(let i = 0; i < items.length; i++){
+                  if(items[i].parents?.length > 0){
+                    const foundBrand = items[i].parents.find(p => p._id === e);
+                    if(foundBrand){
+                      correctBrands.push(items[i])
+                    }
+                  }
+                }
+                setBrands(correctBrands);
               }
             })
           }
+
+          setOldFilterConfig({type: "subcategory", value: e});
+          localStorage.setItem("dashProductsConf",JSON.stringify({type: "subcategory", value: e}));
+          firstLoad && setFirstLoad(false);
         }
       })
       .catch((err) => {
@@ -369,23 +466,29 @@ const Products = () => {
       setOtherFilterings(true);
     }
     setLoading(true)
-    setOPage(1);
+    !firstLoad && oldFilterConfig.type.length > 0 && setOPage(1);
     setQueryText("");
     setOrderConfig("none");
     setActiveSell("none");
     setActiveCount("none");
-    setActiveCategory("none");
     setActiveFilterConfig("none");
-    setActiveSubcategory("none");
 
     setActiveBrand(e);
+    oldFilterConfig.secondValue?.length > 0 && setActiveSubcategory(oldFilterConfig.secondValue);
 
     axios
-      .post("/products/search/filters", { brand: e })
+      .post("/products/search/filters", { 
+        brand: e,
+        ...(activeSubcategory !== 'none' ? {subcategory: activeSubcategory} : oldFilterConfig.secondValue?.length > 0 && {subcategory: oldFilterConfig.secondValue})
+       })
       .then((response) => {
         setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
+
+          setOldFilterConfig({type: "brand", value: e,...(activeSubcategory !== "none" && {secondValue: activeSubcategory})});
+          localStorage.setItem("dashProductsConf",JSON.stringify({type: "brand", value: e,...(activeSubcategory !== "none" && {secondValue: activeSubcategory})}));
+          firstLoad && setFirstLoad(false);
         }
       })
       .catch((err) => {
@@ -408,7 +511,7 @@ const Products = () => {
       setOtherFilterings(true);
     }
     setLoading(true)
-    setOPage(1);
+    !firstLoad && oldFilterConfig.type.length > 0 && setOPage(1);
     setQueryText("");
     setOrderConfig("none");
     setActiveCategory("none");
@@ -427,6 +530,10 @@ const Products = () => {
         setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
+
+          setOldFilterConfig({type: "sell", value: e});
+          localStorage.setItem("dashProductsConf",JSON.stringify({type: "sell", value: e}));
+          firstLoad && setFirstLoad(false);
         }
       })
       .catch((err) => {
@@ -449,7 +556,7 @@ const Products = () => {
       setOtherFilterings(true);
     }
     setLoading(true)
-    setOPage(1);
+    !firstLoad && oldFilterConfig.type.length > 0 && setOPage(1);
     setQueryText("");
     setOrderConfig("none");
     setActiveCategory("none");
@@ -483,6 +590,10 @@ const Products = () => {
         setLoading(false)
         if (response.data.success) {
           setProducts(response.data.products);
+
+          setOldFilterConfig({type: "countInStuck", value: e});
+          localStorage.setItem("dashProductsConf",JSON.stringify({type: "countInStuck", value: e}));
+          firstLoad && setFirstLoad(false);
         }
       })
       .catch((err) => {
@@ -495,13 +606,6 @@ const Products = () => {
         }
       });
   };
-
-  const indexOfLastProducts = oPage * perPage;
-  const indexOfFirstProducts = indexOfLastProducts - perPage;
-  const currentProducts = products.slice(
-    indexOfFirstProducts,
-    indexOfLastProducts
-  );
 
   const toggleProductSellHandler = (_id, sell, title,i) => {
     if (
@@ -640,6 +744,14 @@ const Products = () => {
       value: true
     })
   }, [generate.value])
+
+  const indexOfLastProducts = oPage * perPage;
+  localStorage.setItem("otherFilterDashPage",oPage);
+  const indexOfFirstProducts = indexOfLastProducts - perPage;
+  const currentProducts = products.slice(
+    indexOfFirstProducts,
+    indexOfLastProducts
+  );
 
   return (
     <div className="admin-panel-wrapper">
@@ -879,7 +991,7 @@ const Products = () => {
                   </td>
                   <td>
                     <Link
-                      to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/product/${p.slug}`}
+                      to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/product/${p._id}`}
                       className="d-flex-center-center"
                     >
                       <MdEdit className="text-blue" />
@@ -923,9 +1035,9 @@ const Products = () => {
             )}
           </div>
         )}
-        {products.length > perPage && (
+        {otherFilterings && (
           <div>
-            {otherFilterings && (
+            {products.length > perPage && (
               <Pagination
                 perPage={perPage}
                 productsLength={products.length}

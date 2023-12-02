@@ -52,7 +52,8 @@ const Orders = () => {
   });
 
   const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin);
-  
+  // const exelRef = useRef();
+  // const tableRef = useRef();
   useEffect(() => {
     if(role === 1){
       axios.get('/all-suppliers/list').then(res => {
@@ -355,6 +356,40 @@ const Orders = () => {
     }
     
   }
+
+  // const exportToExelFileHandler = () => {
+  //   console.log('lets take an exel file of these records');
+  //   var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+  //   var j = 0;
+  //   // var tab = document.getElementById('headerTable'); // id of table
+  //   // tableRef.current.dir = "ltr"
+  //   for (j = 0; j < tableRef.current.rows.length; j++) {
+  //       tab_text = tab_text + tableRef.current.rows[j].innerHTML + "</tr>";
+  //       //tab_text=tab_text+"</tr>";
+  //   }
+
+  //   tab_text = tab_text + "</table>";
+  //   tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+  //   tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+  //   tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+  //   var msie = window.navigator.userAgent.indexOf("MSIE ");
+  //   let sa;
+  //   // If Internet Explorer
+  //   if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+  //     exelRef.current.document.open("txt/html", "replace");
+  //     exelRef.current.document.write(tab_text);
+  //     exelRef.current.document.close();
+  //     exelRef.current.focus();
+
+  //       sa = exelRef.current.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+  //   } else {
+  //       // other browser not tested on IE 11
+  //       sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+  //   }
+
+  //   return sa;
+  // }
 
   return (
     <div className="admin-panel-wrapper">

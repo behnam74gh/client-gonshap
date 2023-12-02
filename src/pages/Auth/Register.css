@@ -22,8 +22,14 @@
 @media (max-width: 450px) {
   .register_heading {
     font-size: 12px;
+    margin-bottom: 8px !important;
   }
   .auth-code-wrapper {
     margin-top: 5px;
+  }
+}
+@media (max-width: 365px) {
+  .register_heading {
+    font-size: 10px;
   }
 }

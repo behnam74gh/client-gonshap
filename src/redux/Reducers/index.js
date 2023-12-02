@@ -12,6 +12,10 @@ import { isOnlineReducer } from "./isOnlineReducer";
 import { searchedItemReducer } from "./searchedItemReducer";
 import { supplierItemReducer } from "./supplierItemReducer";
 import { rangeInputReduser } from "./rangeInputReduser";
+import { storeItemsReducer } from "./storeItemsReducer";
+import { supplierProductsReducer } from "./supplierProductsReducer";
+import { shopProductsReducer } from "./shopProductsReducer";
+import { homeApiReducers } from "./homeApiReducers";
 
 const rootReducer = combineReducers({
   userSignin: userSigninReducer,
@@ -27,6 +31,10 @@ const rootReducer = combineReducers({
   searchedItem: searchedItemReducer,
   supplierItem: supplierItemReducer,
   rangeValues: rangeInputReduser,
+  storeItems: storeItemsReducer,
+  supplierProducts: supplierProductsReducer,
+  shopProducts: shopProductsReducer,
+  cachedHomeApis: homeApiReducers
 });
 
 export default rootReducer;

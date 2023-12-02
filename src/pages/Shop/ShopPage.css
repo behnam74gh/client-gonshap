@@ -160,7 +160,7 @@
   .shop_products_wrapper {
     justify-content: space-between;
     gap: 15px 0px;
-    padding: 10px 0;
+    padding: 15px 0 10px;
   }
   .base_filtering_wrapper {
     gap: 0 10px;
@@ -181,6 +181,10 @@
   }
   #shop_page select {
     font-size: 10px;
+    margin: 0;
+  }
+  .price_filtering_wrapper {
+    margin-top: 20px;
   }
 }
 

@@ -1,13 +1,14 @@
 .main-body {
-  width: 85.5% !important;
+  width: 85.5%;
   margin: 0 auto;
   height: 100%;
   padding-top: 26px;
+  min-height: 500px;
 }
 
 @media (min-width: 1537px) {
   .main-body {
-    width: 1305px !important;
+    width: 1305px;
     margin: 0 auto;
     height: 100%;
   }
@@ -22,12 +23,13 @@
  @media (max-width: 780px) {
   .main-body {
     padding-top: 0;
+    min-height: 300px;
   }
 } 
 
 @media (max-width: 335px) {
   .main-body {
-    width: 84% !important;
+    width: 84%;
   }
 }
 

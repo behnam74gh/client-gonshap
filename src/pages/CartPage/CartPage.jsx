@@ -58,7 +58,8 @@ const CartPage = () => {
         <div className="cart_items_wrapper">
           <h4 className="text-mute">
             خلاصه سبد خرید
-            <strong className="cart_length">{cartItems.length}</strong>
+            <strong className="cart_length ml-1">{cartItems.length}</strong>
+            محصول
           </h4>
           {loading ? (
             <React.Fragment>

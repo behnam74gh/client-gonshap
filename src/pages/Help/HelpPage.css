@@ -17,6 +17,9 @@
 .help_imgs_wrapper img {
   width: 80%;
 }
+.helpTitle {
+  margin-bottom: 0;
+}
 
 @media (max-width: 450px) {
   .help_description {

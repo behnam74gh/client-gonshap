@@ -1,0 +1,3 @@
+export const SAVE_STORE_ITEMS = "SAVE_STORE_ITEMS";
+export const CLEAR_STORE_ITEMS = "CLEAR_STORE_ITEMS";
+

@@ -2,6 +2,7 @@
   --firstColorPalete: #6a0093;
   --secondColorPalete: #ffd200;
   --thirdColorPalete: #2c6df0;
+  --fourthColorPalete: #dd0426;
   --mainBoxShadow: 0 6px 20px rgba(56, 125, 255, 0.17);
   -webkit-filter: drop-shadow(0 6px 20px rgba(56, 125, 255, 0.017));
   filter: drop-shadow(0 6px 20px rgba(56, 125, 255, 0.017));
@@ -33,7 +34,7 @@ html {
   height: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--thirdColorPalete);
+  background: var(--firstColorPalete);
   border-radius: 20px;
   transition: all 0.5s ease;
 }
@@ -54,7 +55,7 @@ input {
 a,
 a:hover,
 a:active {
-  text-decoration: none !important;
+  text-decoration: none;
 }
 ul {
   list-style: none;
@@ -507,6 +508,7 @@ td {
   .auth-section {
     width: 100%;
     margin: 20px auto;
+    min-height: 200px;
   }
   .auth-form {
     width: 100%;

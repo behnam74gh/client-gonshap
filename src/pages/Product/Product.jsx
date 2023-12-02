@@ -12,15 +12,16 @@ import { CLOSE_STAR_RATING_MODAL } from "../../redux/Types/ratingModalType";
 import { VscLoading } from "react-icons/vsc";
 import { db } from "../../util/indexedDB";
 import {Helmet} from 'react-helmet-async'
-import { deleteSearchConfig } from "../../redux/Actions/shopActions";
 import {setCountOfSlidersHandler} from '../../util/customFunctions';
 import RecentViews from "./RecentViews";
 import { POP_ITEM } from "../../redux/Types/searchedItemTypes";
+import { POP_STORE_ITEM } from "../../redux/Types/supplierItemTypes";
 import "../../components/Home/Section3/Section3.css";
 import "./Product.css";
 
 const Product = ({ match }) => {
   const [loading, setLoading] = useState(false);
+  const [ratingLoading, setRatingLoading] = useState(false);
   const [releatedLoading, setReleatedLoading] = useState(false);
   const [product, setProduct] = useState(null);
   const [errorText, setErrorText] = useState("");
@@ -142,15 +143,8 @@ const Product = ({ match }) => {
         star: 0,
         productId: "",
       })
-      if(!window.location.href.includes('/shop')){
-        dispatch(deleteSearchConfig());
-      }
       if(!window.location.href.includes('/product/details/')){
         dispatch({ type: POP_ITEM })
-      }
-      if(!window.location.href.includes('/supplier/introduce')){
-        localStorage.removeItem("gonshapSupplierActiveSub");
-        localStorage.removeItem("gonshapSupplierPageNumber");
       }
     }
   }, [productId,dispatch]);
@@ -171,11 +165,13 @@ const Product = ({ match }) => {
   };
 
   const setStarRatingHandler = () => {
+    setRatingLoading(true);
     axios
       .put(`/product/ratings-star/${productId}`, {
         star: starValue.star,
       })
       .then((response) => {
+        setRatingLoading(false);
         if (response.data.success) {
           dispatch({ type: CLOSE_STAR_RATING_MODAL });
           toast.info("از توجه شما متشکریم ،مدیریت بازارچک!");
@@ -183,6 +179,7 @@ const Product = ({ match }) => {
         }
       })
       .catch((err) => {
+        setRatingLoading(false);
         if (typeof err.response.data.message === "object") {
           toast.warning(err.response.data.message[0]);
         } else {
@@ -220,6 +217,7 @@ const Product = ({ match }) => {
             <ProductDetails
               product={product}
               setStarRatingHandler={setStarRatingHandler}
+              ratingLoading={ratingLoading}
               starValue={starValue}
               setStarHandler={setStarHandler}
             />

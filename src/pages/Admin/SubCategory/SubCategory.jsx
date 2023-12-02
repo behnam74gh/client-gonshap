@@ -68,7 +68,9 @@ const SubCategory = () => {
   };
 
   useEffect(() => {
-    loadAllCategories();
+    if(role === 1){
+      loadAllCategories();
+    }
     loadAllSubcategories();
   }, []);
 

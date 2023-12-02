@@ -57,14 +57,10 @@ const MyFavoritePage = () => {
       <Helmet>
         <title>مورد پسند های من</title>
       </Helmet>
-      <h2 className="text-purple">مورد پسندهای من</h2>
-      <div className="w-100 d-flex-center-center">
-        {favoriteItems?.length < 1 && <EmptyFavoriteSvg style={{maxWidth: "250px"}} />}
-      </div>
-      {favoriteItems?.length > 0 ?
-        <span style={{display: "block",fontSize: "12px"}}>شما تعداد {favoriteItems.length} محصول را پسندیده اید</span> :
-        <span style={{display: "block"}} className="warning-message">شما محصولی را پسند نکرده اید</span>
-      }
+      <h2 className="text-purple font-md">مورد پسندهای من : {favoriteItems.length > 0 && `${favoriteItems.length} تا محصول`}</h2>
+      {favoriteItems?.length < 1 && <div className="w-100 d-flex-center-center">
+        <EmptyFavoriteSvg style={{maxWidth: "250px"}} />
+      </div>}
       <div className="my_favorites_wrapper">
         {loading ? (
           <LoadingSkeletonCard count={favoriteItems.length} />

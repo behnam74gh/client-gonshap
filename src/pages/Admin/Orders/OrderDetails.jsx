@@ -242,13 +242,15 @@ const OrderDetails = ({ match }) => {
                   flexFlow: "row wrap",justifyContent: "center",alignItems: "center"
                 }} onClick={getPrintOrPdfHandler} type="button">pdf یا پرینت از سفارش</Button>
               </div>
+              <iframe ref={iframeRef}
+                style={{height: "0px", width: "0px",display: "flex",flexFlow: "column wrap", justifyContent: "center",alignItems: "center",
+                position: "absolute",background: "white"}} title="iframe for print">
+              </iframe>
             </div>
           </div>
         )
       )}
-      <iframe ref={iframeRef}
-       style={{height: "0px", width: "0px",display: "flex",flexFlow: "column wrap", justifyContent: "center",alignItems: "center",
-       position: "absolute",background: "white"}} title="iframe for print"></iframe>
+
     </div>
   );
 };

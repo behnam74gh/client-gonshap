@@ -50,7 +50,7 @@ const StoreAdminDashboard = ({history}) => {
                 <StoreAdminRoute path='/store-admin/dashboard/order/:id' component={OrderDetails} />
                 <StoreAdminRoute path='/store-admin/dashboard/products' component={Products} />
                 <StoreAdminRoute path='/store-admin/dashboard/create-product' component={ProductCreate} />
-                <StoreAdminRoute path='/store-admin/dashboard/product/:slug' component={ProductUpdate} />
+                <StoreAdminRoute path='/store-admin/dashboard/product/:id' component={ProductUpdate} />
                 <StoreAdminRoute path='/store-admin/dashboard/subcategories' component={SubCategory} />
                 <StoreAdminRoute path='/store-admin/dashboard/subcategory/:slug' component={SubCategoryUpdate} />
                 <StoreAdminRoute path='/store-admin/dashboard/todo' component={ToDoList} />

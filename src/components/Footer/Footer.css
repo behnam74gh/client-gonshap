@@ -1,7 +1,7 @@
 footer {
   width: 100%;
-  margin: 30px auto 0;
-  padding: 30px 0 0;
+  margin: 20px auto 0;
+  padding: 0;
   background-color: var(--firstColorPalete);
   color: #ffffff;
 }
@@ -11,44 +11,45 @@ footer {
   margin: 0 auto;
   min-height: 170px;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
   align-items: flex-start;
-  padding: 30px 0;
+  padding: 20px 0 10px;
+  gap: 0 20px;
 }
 
 .about_us {
-  flex: 45%;
+  flex: 70%;
   display: flex;
   flex-flow: column wrap;
-  padding: 0 0 0 40px;
 }
 
 .call_us {
-  flex: 25%;
-  display: flex;
-  flex-flow: column wrap;
-}
-
-.nemads_wrapper {
   flex: 30%;
   display: flex;
   flex-flow: column wrap;
 }
 
+.nemads_wrapper {
+  display: flex;
+  flex-flow: column wrap;
+  margin-top: 30px;
+}
+
 #sec_footer h4 {
   text-align: center;
-  font-weight: 500;
-  margin-bottom: 25px;
+  margin: 0 0 10px;
 }
 .about_us_description {
-  font-size: 12px;
+  font-size: 14px;
   text-align: justify;
   line-height: 2;
-  word-spacing: 1.3px;
+  word-spacing: 1.1px;
+  margin: 0;
 }
 .call_us_info_wrapper {
   display: flex;
   flex-flow: column wrap;
+  margin: 10px 0 20px;
 }
 .call_us_info_box {
   display: flex;
@@ -185,6 +186,15 @@ footer {
   .install_app{
     right: 15px;
   }
+  .about_us_description {
+    font-size: 12px;
+  }
+  #sec_footer h4 {
+    font-size: 14px;
+  }
+  .footer_nemad_img{
+    max-width: 60px;
+  }
 }
 
 @media (max-width: 780px) {
@@ -194,6 +204,7 @@ footer {
   }
 
   #sec_footer {
+    flex-wrap: wrap;
     padding: 15px 0 10px;
   }
   .about_us {
@@ -203,11 +214,20 @@ footer {
   }
 
   .call_us {
-    flex: 40%;
+    flex: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
-
-  .nemads_wrapper {
-    flex: 60%;
+  .call_us_info_wrapper{
+    flex-basis: 35%;
+  }
+  .company_social_icons{
+    flex-basis: 30%;
+    order: 3;
+  }
+  .nemads_wrapper{
+    flex-basis: 35%;
   }
 
   .call_us_info_box {
@@ -224,6 +244,44 @@ footer {
   }
 }
 
+@media (max-width: 600px) {
+  .arrow_up {
+    bottom: 50px;
+  }
+  .install_app {
+    bottom: 50%;
+    top: 54%;
+  }
+  .store_section {
+    bottom: 50%;
+    top: 50%;
+  }
+  .about_us {
+    margin-bottom: 15px;
+  }
+  .call_us_info_wrapper{
+    flex-basis: 45%;
+    margin: 0;
+  }
+  .company_social_icons{
+    flex-basis: 20%;
+    order: 3;
+  }
+  .nemads_wrapper{
+    flex-basis: 35%;
+    margin-top: 0;
+  }
+  .footer_nemad_img {
+    max-width: 45px;
+  }
+  .footer_social_icon {
+    max-width: 20px;
+  }
+  #sec_footer h4 {
+    font-size: 12px;
+  }
+}
+
 @media (max-width: 550px) {
   .install_app {
     right: 5px;
@@ -232,7 +290,6 @@ footer {
   .store_section {
     right: 5px;
     width: 25px;
-    bottom: 50px;
   }
   .arrow_up {
     left: 5px;
@@ -248,16 +305,23 @@ footer {
   footer {
     padding: 0;
   }
-  .nemads_wrapper {
-    flex: 100%;
+  .call_us_info_wrapper{
+    flex-basis: 65%;
+    align-items: flex-start;
+    margin: 0;
+  }
+  .company_social_icons{
+    flex-basis: 35%;
+    order: unset;
+  }
+  .nemads_wrapper{
+    flex-basis: 100%;
+    margin-top: 15px;
   }
   .call_us {
     flex: 100%;
     padding: 0;
     margin-bottom: 10px;
-  }
-  .nemads {
-    margin-top: 15px;
   }
   .protection p {
     font-size: 10px;
@@ -266,14 +330,14 @@ footer {
     margin: 0 3px;
   }
   #sec_footer h4 {
-    margin-bottom: 0;
     font-size: 12px;
   }
   .about_us_description {
     font-size: 10px;
   }
   .call_us_info_box{
-    justify-content: space-around;
+    justify-content: space-between;
+    width: 100%;
   }
   .call_us_info_box span {
     font-size: 12px;
@@ -288,4 +352,23 @@ footer {
     right: 2px;
   }
 }
-
+@media (max-width: 365px) {
+  #sec_footer {
+    padding-bottom: 0;
+  }
+  .call_us {
+    margin-bottom: 0;
+  }
+  .arrow_up {
+    left: 3px;
+    width: 20px;
+    height: 20px;
+  }
+  .call_us_info_wrapper{
+    flex-basis: 100%;
+  }
+  .company_social_icons{
+    flex-basis: 100%;
+    margin-top: 10px;
+  }
+}

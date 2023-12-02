@@ -89,11 +89,11 @@ const ProductUpdate = ({ history }) => {
 
   const {userInfo : {role}} = useSelector(state => state.userSignin)
   
-  const { slug } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     axios
-      .get(`/product/${slug}`)
+      .get(`/product/${id}`)
       .then((response) => {
         const {
           title,
@@ -149,7 +149,7 @@ const ProductUpdate = ({ history }) => {
           setError(err.response.data.message);
         }
       });
-  }, [slug]);
+  }, [id]);
 
   const loadAllCategories = () => {
     axios
@@ -371,7 +371,7 @@ const ProductUpdate = ({ history }) => {
 
     setLoading(true);
     axios
-      .put(`/product-update/${slug}`, formData)
+      .put(`/product-update/${id}`, formData)
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -397,8 +397,7 @@ const ProductUpdate = ({ history }) => {
         <div className="d-flex-around mb-2">
           <h4>
             ویرایش محصول با عنوان "{" "}
-            <strong className="text-blue">{slug}</strong> " از دسته بندیِ{" "}
-            <strong>{slug}</strong>
+            <strong className="text-blue">{values.title}</strong> "
           </h4>
           <Link
             to={role === 1 ? "/admin/dashboard/products" : "/store-admin/dashboard/products"}
@@ -452,7 +451,7 @@ const ProductUpdate = ({ history }) => {
               </div>
             ))}
         </div>
-        {role === 1 && <label className="auth-label" htmlFor="category">
+        {role === 1 && <label className="auth-label" htmlFor="hostId">
           کد کاربری فروشنده :
         </label>}
         {role === 1 &&
@@ -460,9 +459,9 @@ const ProductUpdate = ({ history }) => {
             id="hostId"
             element="input"
             type="text"
-            placeholder="کد کاربری فروشنده"
             onInput={inputHandler}
             defaultValue={values.hostId}
+            disabled={true}
             validators={[
               VALIDATOR_MAXLENGTH(30),
               VALIDATOR_MINLENGTH(3),
