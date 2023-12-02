@@ -10,6 +10,8 @@ import Pagination from "../../../components/UI/Pagination/Pagination";
 import { toast } from "react-toastify";
 import { DateObject } from "react-multi-date-picker";
 import DatePicker from "react-multi-date-picker";
+import Modal from "../../../components/UI/Modal/Modal";
+import ModalOrderDetails from "./ModalOrderDetails";
 import "./Orders.css";
 
 const Orders = () => {
@@ -50,6 +52,8 @@ const Orders = () => {
     id: null,
     loading: false
   });
+  const [open, setOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({});
 
   const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin);
   // const exelRef = useRef();
@@ -400,6 +404,11 @@ const Orders = () => {
           <strong className="profit_number">{profit.toLocaleString("fa")}</strong>
           تومان میباشد.
         </span>
+        {modalContent?._id?.length > 0 && (
+          <Modal open={open} closeHandler={() => setOpen(false)}>
+            <ModalOrderDetails order={modalContent} />
+          </Modal>
+        )}
       </div>
       {errorText.length > 0 && <p className="warning-message">{errorText}</p>}
        
@@ -663,9 +672,13 @@ const Orders = () => {
                     &nbsp;تومان
                   </td>
                   <td>
-                    <Link to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/order/${order._id}`}>
+                    {/* <Link to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/order/${order._id}`}>
                       <MdRemoveRedEye className="font-md text-blue" />
-                    </Link>
+                    </Link> */}
+                    <MdRemoveRedEye onClick={() => {
+                      setOpen(true);
+                      setModalContent(order)
+                    }} className="font-md text-blue" style={{cursor: "pointer"}} />
                   </td>
                   {role === 1 && <td>
                     {

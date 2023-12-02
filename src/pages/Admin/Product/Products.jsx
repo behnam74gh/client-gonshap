@@ -907,11 +907,11 @@ const Products = () => {
               {role === 1 && <th className="th-titles">دسته بندی</th>}
               <th className="th-titles">برچسب</th>
               <th className="th-titles">برند</th>
-              <th className="th-titles">فی فاکتور</th>
+              <th className="th-titles">في فاکتور</th>
               <th className="th-titles">فروش</th>
-              <th className="th-titles">فی فروش (بازار)</th>
+              <th className="th-titles">في فروش (بازار)</th>
               <th className="th-titles">تخفیف</th>
-              <th className="th-titles">فی نهایی</th>
+              <th className="th-titles">في نهایی</th>
               <th className="th-titles">تعداد</th>
               <th className="th-titles">رنگ ها</th>
               <th className="th-titles">ویرایش</th>
