@@ -6,6 +6,9 @@
   word-break: break-word;
   white-space: pre-wrap;
 }
+.modal_comment_wrapper {
+  padding: 20px 40px;
+}
 .comment_content_btn {
   cursor: pointer;
   padding: 2px 0 5px;

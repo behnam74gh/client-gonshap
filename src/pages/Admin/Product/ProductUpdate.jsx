@@ -546,13 +546,13 @@ const ProductUpdate = ({ history }) => {
               ))}
           </select>
         )}
-        {role === 1 && <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>}
-        {role === 1 && <input
+        <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>
+        <input
           name="factorPrice"
           value={values.factorPrice}
           type="number"
           onChange={(e) => changeInputHandler(e)}
-        />}
+        />
         <label className="auth-label"> قیمت فروش کالا در بازار (تومان) : </label>
         <input
           name="price"

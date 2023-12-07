@@ -352,10 +352,10 @@
     right: 0;
     font-size: 12px;
   }
-  .star-container>svg {
-    width: 15px !important;
-    height: 15px !important;
-  }
+  /* .rating_modal_wrapper > .star-container>svg {
+    width: 15px;
+    height: 15px;
+  } */
   .special_discount {
     right: -22px;
     top: 3px;

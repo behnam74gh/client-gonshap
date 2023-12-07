@@ -144,6 +144,9 @@ const CartItem = ({ product }) => {
             <span className="text-mute mr-1">امتیاز</span>
           </span>
         </div>
+        <div className="item_discount_wrapper">
+          <span>OFF % {product.discount}</span>
+        </div>
         <img
           src={
             !product.photos[0].length
@@ -177,14 +180,14 @@ const CartItem = ({ product }) => {
       </div>
       <div className="item_price_wrapper">
         <div className="cart_item_price_wrapper">
-          <span>قیمت کالا :</span>
+          <span>قیمت کالا در بازار :</span>
           <strong className="cart_item_price_after_discount">
             {product.price.toLocaleString("fa")}
           </strong>
           <span className="font-sm">تومان</span>
         </div>
         <div className="cart_item_price_wrapper">
-          <span>مبلغ تخفیف :</span>
+          <span>{currentItem.count > 1 ? "مجموع تخفیف :" : "مبلغ تخفیف :"}</span>
           <strong className="cart_item_price_after_discount">
             {(
               ((product.price * product.discount) / 100) *
@@ -195,7 +198,7 @@ const CartItem = ({ product }) => {
         </div>
 
         <div className="cart_item_price_wrapper">
-          <span>{currentItem.count > 1 ? "قیمت کُل :" : "قیمت نهایی :"}</span>
+          <span>{currentItem.count > 1 ? "قیمت تعداد کالا :" : "قیمت نهایی :"}</span>
           <strong className="cart_item_price_after_discount">
             {(currentItem.count * product.finallyPrice).toLocaleString("fa")}
           </strong>

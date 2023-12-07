@@ -8,7 +8,7 @@
   border-radius: 4px;
 }
 .item_img_wrapper {
-  flex: 1 1 150px;
+  flex-basis: 25%;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -22,6 +22,23 @@
   display: flex;
   flex-flow: row wrap;
   align-items: center;
+}
+.item_discount_wrapper {
+  position: absolute;
+  right: 5px;
+  bottom: 0;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--fourthColorPalete);
+  border-radius: 50px;
+  min-width: 60px;
+  font-size: 10px;
+  padding: 4px 8px;
+}
+.item_discount_wrapper span {
+  color: #ffffff;
 }
 
 /* if countInStock < 1 ==> not exist */
@@ -46,18 +63,19 @@
 }
 .item_img_wrapper img {
   width: 40%;
+  max-width: 100px;
 }
 .item_info_wrapper {
-  flex: 1 1 300px;
+  flex-basis: 45%;
   display: flex;
   flex-flow: column wrap;
   align-items: flex-start;
 }
 .item_price_wrapper {
-  flex: 2 1 150px;
+  flex-basis: 30%;
   display: flex;
   flex-flow: column wrap;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: flex-start;
 }
 .cart_item_discount_wrapper {
@@ -167,37 +185,34 @@
 }
 
 @media (max-width: 1060px) {
-  .item_price_wrapper {
-    flex-basis: 100px;
-  }
-  .item_info_wrapper {
-    flex-basis: 350px;
-  }
   .cart_item_price_after_discount {
     font-size: 14px;
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 780px) {
   .item_price_wrapper {
-    flex-basis: 150px;
-    padding-top: 10px;
+    flex-basis: 35%;
   }
-  .item_info_wrapper {
-    flex-basis: 300px;
+  .item_img_wrapper {
+    flex-basis: 20%;
   }
 }
 
 @media (max-width: 600px) {
   .item_img_wrapper {
-    padding-top: 20px;
+    flex-basis: 35%;
+  }
+  .item_info_wrapper {
+    flex-basis: 65%;
+    font-size: 12px;
+  }
+  .item_price_wrapper {
+    padding: 10px 20px 10px 0;
+    flex-basis: 100%;
   }
   .item_img_wrapper img {
     width: 80%;
-  }
-  .item_info_wrapper {
-    padding-right: 20px;
-    font-size: 12px;
   }
   .cart_item_price_wrapper {
     font-size: 12px;
@@ -206,11 +221,12 @@
     font-size: 12px;
     padding: 5px;
   }
+  .item_info_wrapper h3 {
+    font-size: 12px;
+    margin: 4px 0;
+  }
   .item_info_wrapper h6 {
     font-size: 12px;
-  }
-  .item_price_wrapper {
-    padding: 0 20px 10px 0;
   }
   .cart_item_discount_wrapper {
     font-size: 12px;
@@ -230,7 +246,7 @@
   }
   .selected_colors_wrapper {
     flex: 90%;
-    padding: 4px 12px;
+    padding: 4px 0;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
@@ -245,16 +261,16 @@
     padding: 4px 8px;
     margin: 5px 0;
   }
-  .item_info_wrapper {
-    padding: 0 10px;
-  }
   .item_price_wrapper {
-    padding: 0 10px 10px 10px;
+    padding: 10px 10px 0 0;
   }
   .item_rating_wrapper {
     top: 0;
   }
   .item_color_wrapper {
     padding: 0 10px;
+  }
+  .product_count_btns_wrapper {
+    padding: 5px 0 10px 0;
   }
 }

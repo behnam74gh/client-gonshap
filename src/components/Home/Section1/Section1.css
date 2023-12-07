@@ -266,9 +266,9 @@
   #supplier_wrapper {
     min-height: 80px;
   }
-  .supplier_img {
+  /* .supplier_img {
     height: 100px;
-  }
+  } */
   .supplier_info_wrapper {
     top: 15px;
     right: 15px;

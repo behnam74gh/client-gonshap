@@ -1,0 +1,30 @@
+@media (max-width: 450px) {
+    .order_details_wrapper {
+        padding: 0 !important;
+    }
+    .details_info_container {
+        margin-bottom: 10px !important;
+    }
+    .details_info_wrapper {
+        padding: 10px !important;
+    }
+    .details_info_wrapper h5 {
+        font-size: 10px !important;
+    }
+    .details_info_wrapper strong,.details_info_wrapper span {
+        font-size: 10px !important;
+    }
+    .details_info_wrapper hr {
+        margin: 0 !important;
+    }
+    .right_info {
+        padding: 0 0 0 5px !important;
+    }
+    .left_info {
+        padding: 0 5px 0 0 !important;
+    }
+    .right_info img {
+        max-width: 50px !important;
+        max-height: 50px !important;
+    }
+}

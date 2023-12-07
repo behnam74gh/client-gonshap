@@ -22,7 +22,7 @@ export const ShowRatingAverage = (p) => {
           <StarRating
             rating={result}
             starRatedColor="var(--secondColorPalete)"
-            starDimension={"18px"}
+            starDimension={window.innerWidth < 450 ? "15px" : "18px"}
             starSpacing={"2px"}
             isSelectable={false}
           />

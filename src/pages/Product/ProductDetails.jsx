@@ -248,7 +248,7 @@ const ProductDetails = ({
                 changeRating={setStarHandler}
                 isSelectable={true}
                 starRatedColor="var(--secondColorPalete)"
-                starDimension={windoInnerWidth < 450 ? "15px" : "50px"}
+                starDimension={windoInnerWidth < 450 ? "30px" : "50px"}
                 starSpacing={windoInnerWidth < 450 ? "2px" : "5px"}
               />
             </div>

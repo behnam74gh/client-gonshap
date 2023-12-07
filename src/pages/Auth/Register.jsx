@@ -261,9 +261,17 @@ const Register = ({ history }) => {
               VALIDATOR_MAXLENGTH(11),
             ]}
           />
+          <ReCAPTCHA
+            sitekey={reCaptchaSiteKey}
+            onChange={changeRecaptchaHandler}
+            theme="dark"
+            hl="fa"
+            className="recaptcha"
+            onExpired={() => setExpired(true)}
+          />
           <Button
             type="submit"
-            disabled={!formState.inputs.phoneNumber.isValid || phoneNumIsValid || pLoading}
+            disabled={!formState.inputs.phoneNumber.isValid || phoneNumIsValid || expired || pLoading}
           >
             {!pLoading ? "ثبت" : <VscLoading className="loader" />}
           </Button>
@@ -381,18 +389,10 @@ const Register = ({ history }) => {
               VALIDATOR_REPEAT_PASSWORD(formState.inputs.password.value),
             ]}
           />
-        <ReCAPTCHA
-          sitekey={reCaptchaSiteKey}
-          onChange={changeRecaptchaHandler}
-          theme="dark"
-          hl="fa"
-          className="recaptcha"
-          onExpired={() => setExpired(true)}
-        />
           <Button
             type="submit"
             disabled={
-              loading || expired ||
+              loading ||
               !formState.isValid ||
               formState.inputs.password.value !==
                 formState.inputs.repeatPassword.value 

@@ -211,7 +211,9 @@ svg.hovered path.star {
 .rating_modal_wrapper {
   display: flex;
   flex-flow: column wrap;
+  padding: 20px 40px;
 }
+
 .rating_modal_btn_wrapper {
   display: flex;
   width: 60%;

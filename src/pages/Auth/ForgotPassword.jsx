@@ -249,9 +249,17 @@ const ForgotPassword = ({ history }) => {
               VALIDATOR_MAXLENGTH(11),
             ]}
           />
+          <ReCAPTCHA
+            sitekey={reCaptchaSiteKey}
+            onChange={changeRecaptchaHandler}
+            theme="dark"
+            hl="fa"
+            className="recaptcha"
+            onExpired={() => setExpired(true)}
+          />
           <Button
             type="submit"
-            disabled={loading || !formState.inputs.phoneNumber.isValid || phoneNumIsValid}
+            disabled={loading || !formState.inputs.phoneNumber.isValid || expired || phoneNumIsValid}
           >
             {!loading ? "ثبت" : <VscLoading className="loader" />}
           </Button>
@@ -343,18 +351,10 @@ const ForgotPassword = ({ history }) => {
             onInput={inputHandler}
             validators={[VALIDATOR_REPEAT_PASSWORD(formState.inputs.password.value),]}
           />
-          <ReCAPTCHA
-            sitekey={reCaptchaSiteKey}
-            onChange={changeRecaptchaHandler}
-            theme="dark"
-            hl="fa"
-            className="recaptcha"
-            onExpired={() => setExpired(true)}
-          />
           <Button
             type="submit"
             disabled={
-              !formState.inputs.password.isValid || expired || nPLoading ||
+              !formState.inputs.password.isValid || nPLoading ||
               formState.inputs.password.value !== formState.inputs.repeatPassword.value 
             }
           >

@@ -378,7 +378,7 @@ const SupplierIntroduce = ({ match }) => {
                 changeRating={setStarHandler}
                 isSelectable={true}
                 starRatedColor="var(--secondColorPalete)"
-                starDimension={window.innerWidth < 450 ? "15px" : "50px"}
+                starDimension={window.innerWidth < 450 ? "30px" : "50px"}
                 starSpacing={window.innerWidth < 450 ? "2px" : "5px"}
               />
             </div>
