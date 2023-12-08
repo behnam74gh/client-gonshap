@@ -160,7 +160,12 @@ const Stores = () => {
   return (
     <>
       <Helmet>
-          <title>فهرست فروشگاه ها</title>
+        <title>فهرست فروشگاه ها</title>
+        <meta
+          name="description"
+          content="تمامی فروشگاه های فعال در بستر بازارچک را میتوانید در این صفحه پیدا کنید، همچنین امکان دسته بندی کرده فروشگاه های بازار یک شهر وجود دارد"
+        /> 
+        <link rel="canonical" href="/stores" />
       </Helmet>
 
       <div className='select_region' style={{flexWrap: activeRegion === "all" && window.innerWidth < 600 && "wrap"}}>

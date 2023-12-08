@@ -56,6 +56,10 @@ const MyFavoritePage = () => {
     <section id="favorites_page">
       <Helmet>
         <title>مورد پسند های من</title>
+        <meta
+          name="description"
+          content="محصولات مورد پسند کاربران در این صفحه نمایش داده میشوند"
+        />
       </Helmet>
       <h2 className="text-purple font-md">مورد پسندهای من : {favoriteItems.length > 0 && `${favoriteItems.length} تا محصول`}</h2>
       {favoriteItems?.length < 1 && <div className="w-100 d-flex-center-center">

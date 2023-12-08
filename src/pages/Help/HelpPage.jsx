@@ -33,6 +33,10 @@ const HelpPage = ({ match }) => {
     <section id="help_page">
       <Helmet>
         <title>{`راهنمای ${help?.title}`}</title>
+        <meta
+          name="description"
+          content={help?.description}
+        />
       </Helmet>
       {loading ? (
         <>

@@ -226,6 +226,10 @@ const ForgotPassword = ({ history }) => {
     <div className="auth-section">
       <Helmet>
         <title>بازگرداندن رمز عبور</title>
+        <meta
+          name="description"
+          content="بازگرداندن رمز عبور که فراموش کرده اید"
+        />
       </Helmet>
       {!authCodeIsValid && !phoneNumIsValid && (
         <form className="auth-form" onSubmit={sendPhoneNumberHandler}>

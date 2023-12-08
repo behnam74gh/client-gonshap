@@ -135,6 +135,10 @@ const Signin = ({ history, location }) => {
     <div className="auth-section">
       <Helmet>
         <title>صفحه ورود</title>
+        <meta
+          name="description"
+          content="صفحه ورود به حساب کاربری بازارچک جهت مشاهده پنل کاربری"
+        />
       </Helmet>
       {registered && (
         <h3 className="success-message">

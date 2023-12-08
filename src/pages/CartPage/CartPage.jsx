@@ -53,6 +53,10 @@ const CartPage = () => {
     <section id="cart_page">
       <Helmet>
         <title>سبد خرید</title>
+        <meta
+          name="description"
+          content="محصولاتی که در سبد خرید کاربر قرار دارند، به نمایش گذاشته میشوند جهت ثبت سفارش از فروشگاه های بازارچک"
+        />
       </Helmet>
       <div className="cart_wrapper">
         <div className="cart_items_wrapper">

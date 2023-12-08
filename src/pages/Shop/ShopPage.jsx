@@ -513,6 +513,11 @@ const ShopPage = () => {
     <section id="shop_page">
       <Helmet>
         <title>ویترین محصولات</title>
+        <meta
+          name="description"
+          content="صفحه ویترین مرکز جستوجوی محصولات در بازارچک است، کاربران میتوانند با فیلترینگ مختلف، محصولات مد نظر خود را  پیدا کنند"
+        />
+        <link rel="canonical" href="/shop" />
       </Helmet>
       {navigator.onLine && <div className="filtering_wrapper">
         <div className="base_filtering_wrapper">

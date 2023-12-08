@@ -60,6 +60,10 @@ const AdvertisePage = ({ match }) => {
     <div id="advertise_page">
       <Helmet>
         <title>{`فروشگاه ${advertise?.title}`}</title>
+        <meta
+          name="description"
+          content={advertise?.description}
+        />
       </Helmet>
       {loading ? (
         <div className="w-100 d-flex-center-center mt-3">

@@ -66,6 +66,7 @@ const Checkout = ({history}) => {
     <section id="checkout_page">
       <Helmet>
         <title>صفحه تایید سفارش</title>
+        <meta name="robots" content="noindex" />
       </Helmet>
       {loading ? (
         <div className="d-flex-center-center w-100">

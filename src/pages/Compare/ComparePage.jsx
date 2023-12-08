@@ -60,6 +60,10 @@ const ComparePage = ({ match }) => {
     <section id="compare_products">
       <Helmet>
         <title>مقایسه محصولات</title>
+        <meta
+          name="description"
+          content="مقایسه محصولات مشابه که قیمت نزدیکی به هم دارند، محصولات را میتوانید کاملا با هم مقایسه کرده و انتخاب کنید"
+        />
       </Helmet>
       {currentProduct?._id.length > 0 && (
         <h5 className="my-0">

@@ -237,6 +237,10 @@ const Register = ({ history }) => {
     <div className="auth-section">
       <Helmet>
         <title>صفحه ثبت نام</title>
+        <meta
+          name="description"
+          content="صفحه عضویت در بازارچک جهت انجام سفارشات آنلاین در بستر بازارچک"
+        />
       </Helmet>
       {!phoneNumIsValid && (
         <form className="auth-form" onSubmit={sendPhoneNumberHandler}>

@@ -15,7 +15,6 @@ import {Helmet} from 'react-helmet-async'
 import {setCountOfSlidersHandler} from '../../util/customFunctions';
 import RecentViews from "./RecentViews";
 import { POP_ITEM } from "../../redux/Types/searchedItemTypes";
-import { POP_STORE_ITEM } from "../../redux/Types/supplierItemTypes";
 import "../../components/Home/Section3/Section3.css";
 import "./Product.css";
 
