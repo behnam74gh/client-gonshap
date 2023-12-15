@@ -12,7 +12,7 @@ export const storeItemsReducer = (state = initialState, action) => {
         return {
           items: action.payload.items,
           itemsLength: action.payload.length,
-          validTime: Date.now()+(1000*60*60*2)
+          validTime: Date.now()+(1000*60*15)
         };
       case CLEAR_STORE_ITEMS:
         return {

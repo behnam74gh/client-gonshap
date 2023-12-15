@@ -140,7 +140,9 @@ const ProductDetails = ({
     } else {
       dispatch(addToCart(product._id));
       toast.info("محصول به سبد خرید اضافه شد!");
-      history.push("/cart");
+      if(window.confirm("رفتن به سبد خرید")){
+        history.push("/cart");
+      }
     }
   };
 

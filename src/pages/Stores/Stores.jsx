@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from '../../util/axios';
 import StoreCard from '../../components/UI/StoreCard/StoreCard';
 import { Helmet } from 'react-helmet-async';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import Pagination from '../../components/UI/Pagination/Pagination';
 import LoadingStoreCard from '../../components/UI/LoadingSkeleton/LoadingStoreCard';
-import { db } from '../../util/indexedDB';
+// import { db } from '../../util/indexedDB';
 import Section8 from '../../components/Home/Section8/Section8';
 import { useDispatch, useSelector } from 'react-redux';
 import { CLEAR_STORE_ITEMS, SAVE_STORE_ITEMS } from '../../redux/Types/storeItemsTypes';
@@ -14,14 +14,14 @@ import './Stores.css';
 const Stores = () => {
   const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
-  const [comparedSuppliers, setComparedSuppliers] = useState([]);
+  const [comparedSuppliers] = useState([]);
   const [errorText, setErrorText] = useState("");
-  const [regions, setRegions] = useState([]);
-  const [activeRegion, setActiveRegion] = useState(localStorage.getItem("activeRegion") || 'all');
+  // const [regions, setRegions] = useState([]);
+  const [activeRegion] = useState(localStorage.getItem("activeRegion") || 'all');
   const [storesLength, setStoresLength] = useState(0);
   const [perPage] = useState(window.innerWidth < 450 ? 16 : 30);
-  const [categories, setCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("none");
+  // const [categories, setCategories] = useState([]);
+  const [activeCategory] = useState("none");
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("storePage")) || 1
   );
@@ -30,60 +30,63 @@ const Stores = () => {
   const { storeItems: { items,itemsLength,validTime } } = useSelector(state => state);
   const dispatch = useDispatch();
     
-  const loadAllRegions = () => {
-    db.regions.toArray().then(items => {
-      if(items.length > 0){
-        setRegions(items);
-      }else{
-        axios
-        .get("/get-all-regions")
-        .then((response) => {
-          if (response.data.success) {
-              setRegions(response.data.regions);
-              db.regions.clear()
-              db.regions.bulkPut(response.data.regions)
-          }
-        })
-        .catch((err) => {
-          if (err.response) {
-            toast.warning(err.response.data.message);
-          }
-        });
-      }
-    })
-  };
+  // const loadAllRegions = () => {
+  //   db.regions.toArray().then(items => {
+  //     if(items.length > 0){
+  //       setRegions(items);
+  //     }else{
+  //       axios
+  //       .get("/get-all-regions")
+  //       .then((response) => {
+  //         if (response.data.success) {
+  //             setRegions(response.data.regions);
+  //             db.regions.clear()
+  //             db.regions.bulkPut(response.data.regions)
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         if (err.response) {
+  //           toast.warning(err.response.data.message);
+  //         }
+  //       });
+  //     }
+  //   })
+  // };
 
-  const loadAllCategories = () => {
-    db.activeCategories.toArray().then(items => {
-      if(items.length > 0){
-        setCategories(items);
-      }else{
-        axios.get("/get-all-categories")
-        .then((response) => {
-          if (response.data.success) {
-            const { categories } = response.data;
-            if (categories?.length > 0) {
-              setCategories(categories);
-            }
-          }
-        })
-        .catch(err => {
-          if(err){
-            return;
-          };
-        })
-      }
-    })
-  }
+  // const loadAllCategories = () => {
+  //   db.activeCategories.toArray().then(items => {
+  //     if(items.length > 0){
+  //       setCategories(items);
+  //     }else{
+  //       axios.get("/get-all-categories")
+  //       .then((response) => {
+  //         if (response.data.success) {
+  //           const { categories } = response.data;
+  //           if (categories?.length > 0) {
+  //             setCategories(categories);
+  //           }
+  //         }
+  //       })
+  //       .catch(err => {
+  //         if(err){
+  //           return;
+  //         };
+  //       })
+  //     }
+  //   })
+  // }
 
   useEffect(() => {
-    loadAllRegions();
-    loadAllCategories();
+    // loadAllRegions();
+    // loadAllCategories();
     
     if(items?.length > 0 && firstLoad){
       if(Date.now() < validTime){
         setSuppliers(items);
         setStoresLength(itemsLength);
+      }else{
+        localStorage.setItem("storePage", 1);
+        dispatch({type: CLEAR_STORE_ITEMS});
       }
     }
   }, []);
@@ -132,30 +135,30 @@ const Stores = () => {
     
   }, [activeRegion,page,items]);
   
-  const defineRegionHandler = (id) => {
-    setActiveRegion(id);
-    setActiveCategory("none");
-    setComparedSuppliers([]);
-    setPage(1);
-    localStorage.setItem("activeRegion", id);
-    localStorage.setItem("storePage", 1);
-    dispatch({type: CLEAR_STORE_ITEMS});
-  };
+  // const defineRegionHandler = (id) => {
+  //   setActiveRegion(id);
+  //   setActiveCategory("none");
+  //   setComparedSuppliers([]);
+  //   setPage(1);
+  //   localStorage.setItem("activeRegion", id);
+  //   localStorage.setItem("storePage", 1);
+  //   dispatch({type: CLEAR_STORE_ITEMS});
+  // };
 
-  const changeCategoryHandler = (id) => {
-    if(id === "none"){
-      return;
-    }else if(id === "all"){
-      setComparedSuppliers([]);
-      setActiveCategory("none");
-      return;
-    }
-    setActiveCategory(id);
-    setPage(1);
-    localStorage.setItem("storePage", 1);
-    let sameCategorystores = suppliers.filter(store => store.backupFor._id === id);
-    setComparedSuppliers(sameCategorystores);
-  };
+  // const changeCategoryHandler = (id) => {
+  //   if(id === "none"){
+  //     return;
+  //   }else if(id === "all"){
+  //     setComparedSuppliers([]);
+  //     setActiveCategory("none");
+  //     return;
+  //   }
+  //   setActiveCategory(id);
+  //   setPage(1);
+  //   localStorage.setItem("storePage", 1);
+  //   let sameCategorystores = suppliers.filter(store => store.backupFor._id === id);
+  //   setComparedSuppliers(sameCategorystores);
+  // };
   
   return (
     <>
@@ -168,7 +171,9 @@ const Stores = () => {
         <link rel="canonical" href="/stores" />
       </Helmet>
 
-      <div className='select_region' style={{flexWrap: activeRegion === "all" && window.innerWidth < 600 && "wrap"}}>
+      <p className='stores_title'>فروشگاه های فعال در بازار گنبد کاووس</p>
+
+      {/*<div className='select_region' style={{flexWrap: activeRegion === "all" && window.innerWidth < 600 && "wrap"}}>
         <span className='region_store_status'>
           فروشگاه های بازار هر منطقه :
         </span>
@@ -193,7 +198,7 @@ const Stores = () => {
             {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
           </select>
         }
-      </div>
+      </div>*/}
       
       <div className='stores_wrapper'> 
         {loading ? (
@@ -222,4 +227,4 @@ const Stores = () => {
   )
 }
 
-export default Stores
+export default Stores;

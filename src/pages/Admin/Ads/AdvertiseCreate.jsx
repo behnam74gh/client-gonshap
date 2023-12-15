@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
 import { Calendar, DateObject } from "react-multi-date-picker";
-
 import { useForm } from "../../../util/hooks/formHook";
 import axios from "../../../util/axios";
 import {
@@ -19,6 +18,7 @@ import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
 import { Link } from "react-router-dom";
 import { IoArrowUndoCircle } from "react-icons/io5";
+import { resizeFile } from "../../../util/customFunctions";
 
 const AdvertiseCreate = ({ history }) => {
   const [files, setFiles] = useState([]);
@@ -92,27 +92,43 @@ const AdvertiseCreate = ({ history }) => {
   const pickImageHandler = () => {
     filePickerRef.current.click();
   };
-  const pickedHandler = (e) => {
-    let longSizes = [...e.target.files].filter(file => file.size > 3000000);
+  const pickedHandler = async (e) => {
     if(e.target.files.length + files.length > 5){
       toast.warning('بیشتر از 5 عکس نمی توانید انتخاب کنید')
       return;
     }
-    if(longSizes.length > 0){
-      toast.warning('سایز عکس بیشتر از 3 مگابایت است')
-      return;
+
+    if (e.target.files.length > 0) {
+      let resizeddFiles = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        if(e.target.files[i].type.split("/")[1] !== "gif"){
+          const resizedImage = await resizeFile(e.target.files[i]);
+          if(resizedImage.size > 500000){
+            toast.warning('حجم عکس بیشتر از 4 MB است');
+            return;
+          }else{
+            resizeddFiles.push(resizedImage);
+          }
+        }else{
+          if(e.target.files[i].size > 3000000){
+            toast.warning('حجم gif بیشتر از 1 MB است');
+            return;
+          }else{
+            resizeddFiles.push(e.target.files[i])
+          }
+        };
+      }
+
+      setFiles([...files, ...resizeddFiles]);
+      setFileUrls(resizeddFiles);
     }
-    if (e.target.files) {
-      setFiles([...files, ...e.target.files]);
-    }
-    setFileUrls([...e.target.files]);
   };
   const setFileUrls = (files) => {
     const turnedUrls = files.map((file) => URL.createObjectURL(file));
     setUrls([...urls, ...turnedUrls]);
-    if (urls.length > 0) {
-      urls.forEach((url) => URL.revokeObjectURL(url));
-    }
+    // if (urls.length > 0) {
+    //   urls.forEach((url) => URL.revokeObjectURL(url));
+    // }
   };
   const removeImage = (index) => {
     const allUrls = [...urls];

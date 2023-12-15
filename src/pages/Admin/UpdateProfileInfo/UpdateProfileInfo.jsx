@@ -16,7 +16,7 @@ import {
 } from "../../../util/validators";
 import { useForm } from "../../../util/hooks/formHook";
 import defPro from "../../../assets/images/pro-8.png";
-import { getCookie } from '../../../util/customFunctions';
+import { getCookie, resizeFile } from '../../../util/customFunctions';
 import "../../../components/UI/FormElement/ImageUpload.css";
 import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
@@ -87,12 +87,12 @@ const UpdateProfileInfo = ({ history }) => {
     filePickerRef.current.click();
   };
 
-  const pickedHandler = (e) => {
+  const pickedHandler = async (e) => {
     let pickedFile;
     if (e.target.files && e.target.files.length === 1) {
-      pickedFile = e.target.files[0];
-      if(pickedFile.size > 500000){
-        toast.warning('سایز عکس بیشتر از 500 کیلوبایت است')
+      pickedFile = await resizeFile(e.target.files[0]);
+      if(pickedFile?.size > 500000){
+        toast.warning('سایز عکس بیشتر از 4 MB است')
         return;
       }
       if (oldPhoto.length > 0) {
@@ -100,11 +100,10 @@ const UpdateProfileInfo = ({ history }) => {
         setOldPhoto("");
       }
       setFile(pickedFile);
+      setFileUrl(pickedFile);
     } else {
       return;
     }
-
-    setFileUrl(e.target.files[0]);
   };
   const setFileUrl = (file) => {
     const turnedUrl = URL.createObjectURL(file);

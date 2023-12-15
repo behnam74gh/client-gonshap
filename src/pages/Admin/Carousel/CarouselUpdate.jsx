@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
 import { useSelector } from "react-redux";
+import { resizeFile } from "../../../util/customFunctions";
 
 const oldStates = {
   region: "",
@@ -37,7 +38,7 @@ const CarouselUpdate = ({ history, match }) => {
   const [regions, setRegions] = useState([]);
 
   const { id } = match.params;
-  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin);
+  const { userInfo: { role } } = useSelector(state => state.userSignin);
 
   const loadAllCategories = () => {
     axios
@@ -124,27 +125,35 @@ const CarouselUpdate = ({ history, match }) => {
   const pickImageHandler = () => {
     filePickerRef.current.click();
   };
-  const pickedHandler = (e) => {
-    let longSizes = [...e.target.files].filter(file => file.size > 600000);
+  const pickedHandler = async (e) => {
     if(e.target.files.length + files.length + oldPhotos.length > 6){
       toast.warning('بیشتر از 6 عکس نمی توانید انتخاب کنید')
       return;
     }
-    if(longSizes.length > 0){
-      toast.warning('سایز عکس بیشتر از 600 کیلوبایت است')
-      return;
+
+    if (e.target.files.length > 0) {
+      let resizeddFiles = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        const resizedImage = await resizeFile(e.target.files[i]);
+        
+        if(resizedImage.size > 500000){
+          toast.warning('سایز عکس بیشتر از 4 MB است')
+          return;
+        }else{
+          resizeddFiles.push(resizedImage);
+        }
+      }
+
+      setFiles([...files, ...resizeddFiles]);
+      setFileUrls(resizeddFiles);
     }
-    if (e.target.files) {
-      setFiles([...files, ...e.target.files]);
-    }
-    setFileUrls([...e.target.files]);
   };
   const setFileUrls = (files) => {
     const turnedUrls = files.map((file) => URL.createObjectURL(file));
     setUrls([...urls, ...turnedUrls]);
-    if (urls.length > 0) {
-      urls.forEach((url) => URL.revokeObjectURL(url));
-    }
+    // if (urls.length > 0) {
+    //   urls.forEach((url) => URL.revokeObjectURL(url));
+    // }
   };
   const removeImage = (index) => {
     const allUrls = [...urls];

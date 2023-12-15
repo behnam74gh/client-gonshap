@@ -17,6 +17,7 @@ import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
 import { Link } from "react-router-dom";
 import { IoArrowUndoCircle } from "react-icons/io5";
+import { resizeFile } from "../../../util/customFunctions";
 
 const CarouselCreate = ({ history }) => {
   const [files, setFiles] = useState([]);
@@ -110,27 +111,35 @@ const CarouselCreate = ({ history }) => {
   const pickImageHandler = () => {
     filePickerRef.current.click();
   };
-  const pickedHandler = (e) => {
-    let longSizes = [...e.target.files].filter(file => file.size > 600000);
+  const pickedHandler = async (e) => {
     if(e.target.files.length + files.length > 6){
       toast.warning('بیشتر از 6 عکس نمی توانید انتخاب کنید')
       return;
     }
-    if(longSizes.length > 0){
-      toast.warning('سایز عکس بیشتر از 600 کیلوبایت است')
-      return;
+
+    if (e.target.files.length > 0) {
+      let resizeddFiles = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        const resizedImage = await resizeFile(e.target.files[i]);
+        
+        if(resizedImage.size > 500000){
+          toast.warning('سایز عکس بیشتر از 4 MB است')
+          return;
+        }else{
+          resizeddFiles.push(resizedImage);
+        }
+      }
+
+      setFiles([...files, ...resizeddFiles]);
+      setFileUrls(resizeddFiles);
     }
-    if (e.target.files) {
-      setFiles([...files, ...e.target.files]);
-    }
-    setFileUrls([...e.target.files]);
   };
   const setFileUrls = (files) => {
     const turnedUrls = files.map((file) => URL.createObjectURL(file));
     setUrls([...urls, ...turnedUrls]);
-    if (urls.length > 0) {
-      urls.forEach((url) => URL.revokeObjectURL(url));
-    }
+    // if (urls.length > 0) {
+    //   urls.forEach((url) => URL.revokeObjectURL(url));
+    // }
   };
   const removeImage = (index) => {
     const allUrls = [...urls];

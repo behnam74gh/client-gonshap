@@ -31,6 +31,16 @@
 .region_select_store{
     flex-basis: 20%;
 }
+.stores_title{
+    width: 100%;
+    font-size: 14px;
+    margin: 0;
+    text-align: center;
+    white-space: wrap;
+    padding: 20px 0 10px;
+    word-break: break-word;
+}
+
 @media (max-width: 850px) {
     .region_store_status{
         flex-basis: 60%;
@@ -62,6 +72,10 @@
         gap: 10px;
         padding: 5px 0;
     }
+    .stores_title{
+        font-size: 12px;
+        padding: 10px 0 5px;
+    }
 }
 @media (max-width: 365px) {
     .region_store_status{
@@ -69,6 +83,9 @@
     }
     .region_select_store{
         flex-basis: 45%;
+        font-size: 10px;
+    }
+    .stores_title{
         font-size: 10px;
     }
 }

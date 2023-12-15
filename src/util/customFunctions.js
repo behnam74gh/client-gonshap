@@ -1,3 +1,5 @@
+import Resizer from "react-image-file-resizer";
+
 export const setCountOfSlidersHandler = (count) => {
     switch (count) {
       case 1:
@@ -50,3 +52,20 @@ export const calculateResultHandler = (count,setCount) => {
     setCount(count)
   }
 }
+
+export const resizeFile = (file) => new Promise((resolve) => {
+  Resizer.imageFileResizer(
+    file,
+    600,
+    600,
+    "JPEG",
+    100,
+    0,
+    (uri) => {
+      resolve(uri)
+    },
+    "file",
+    300,
+    300
+  );
+})

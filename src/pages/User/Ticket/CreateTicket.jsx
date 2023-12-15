@@ -12,6 +12,7 @@ import {
 import axios from "../../../util/axios";
 import Button from "../../../components/UI/FormElement/Button";
 import Input from "../../../components/UI/FormElement/Input";
+import { resizeFile } from "../../../util/customFunctions";
 
 const CreateTicket = ({ history }) => {
   const [loading, setLoading] = useState(false);
@@ -38,16 +39,19 @@ const CreateTicket = ({ history }) => {
     filePickerRef.current.click();
   };
 
-  const pickedHandler = (e) => {
+  const pickedHandler = async (e) => {
     let pickedFile;
     if (e.target.files && e.target.files.length === 1) {
-      pickedFile = e.target.files[0];
+      pickedFile = await resizeFile(e.target.files[0]);
+      if(pickedFile?.size > 500000){
+        toast.warning('سایز عکس بیشتر از 4 MB است')
+        return;
+      }
       setFile(pickedFile);
+      setFileUrl(pickedFile);
     } else {
       return;
     }
-
-    setFileUrl(e.target.files[0]);
   };
   const setFileUrl = (file) => {
     const turnedUrl = URL.createObjectURL(file);

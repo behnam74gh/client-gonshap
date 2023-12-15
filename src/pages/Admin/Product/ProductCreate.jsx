@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
 import { useSelector } from "react-redux";
-
 import { useForm } from "../../../util/hooks/formHook";
 import axios from "../../../util/axios";
 import {
@@ -19,6 +18,7 @@ import {
 } from "../../../util/validators";
 import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
+import { resizeFile } from "../../../util/customFunctions";
 import "./Product.css";
 
 const ProductCreate = () => {
@@ -168,29 +168,39 @@ const ProductCreate = () => {
   const pickImageHandler = () => {
     filePickerRef.current.click();
   };
-  const pickedHandler = (e) => {
-    let longSizes = [...e.target.files].filter(file => file.size > 500000);
+ 
+  const pickedHandler = async (e) => {
     if(e.target.files.length + files.length > 5){
       toast.warning('بیشتر از 5 عکس نمی توانید انتخاب کنید')
       return;
     }
-    if(longSizes.length > 0){
-      toast.warning('سایز عکس بیشتر از 500 کیلوبایت است')
-      return;
-    }
+
     if (e.target.files.length > 0) {
-      setFiles([...files, ...e.target.files]);
+      let resizeddFiles = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        const resizedImage = await resizeFile(e.target.files[i]);
+        
+        if(resizedImage.size > 500000){
+          toast.warning('حجم عکس بیشتر از 4 MB است');
+          return;
+        }else{
+          resizeddFiles.push(resizedImage);
+        }
+      }
+
+      setFiles([...files, ...resizeddFiles]);
+      setFileUrls(resizeddFiles);
     }
-    setFileUrls([...e.target.files]);
   };
   
   const setFileUrls = (files) => {
     const turnedUrls = files.map((file) => URL.createObjectURL(file));
     setUrls([...urls, ...turnedUrls]);
-    if (urls.length > 0) {
-      urls.forEach((url) => URL.revokeObjectURL(url));
-    }
+    // if (urls.length > 0) {
+    //   urls.forEach((url) => URL.revokeObjectURL(url));
+    // }
   };
+  
   const removeImage = (index) => {
     const allUrls = [...urls];
     allUrls.splice(index, 1);
