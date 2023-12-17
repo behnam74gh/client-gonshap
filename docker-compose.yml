@@ -1,10 +1,6 @@
 version: '3'
 services:
   nginx:
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: any
     container_name: nginx
     image: docker.arvancloud.ir/nginx:stable-alpine
     command: nginx -g "daemon off;"
