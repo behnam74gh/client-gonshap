@@ -26,6 +26,7 @@ import { getCookie } from "../../util/customFunctions";
 import "./Signin.css";
 
 const Signin = ({ history, location }) => {
+  const [captchaLoading, setCaptchaLoading] = useState(false);
   const [remindMe, setRemindMe] = useState(false);
   const [error, setError] = useState("");
   
@@ -78,14 +79,17 @@ const Signin = ({ history, location }) => {
 
   const changeRecaptchaHandler = (value) => {
     if (value !== null) {
+      setCaptchaLoading(true);
       axios
         .post("/recaptcha", { securityToken: value })
         .then((res) => {
+          setCaptchaLoading(false);
           if (res.data.success) {
             setExpired(false);
           }
         })
         .catch((err) => {
+          setCaptchaLoading(false);
           if (err || err.response) {
             toast.warning("خطایی رخ داده است،لطفا اینترنت خود را چک کنید");
           }
@@ -130,7 +134,11 @@ const Signin = ({ history, location }) => {
         dispatch({ type: USER_SIGNIN_FAIL });
       });
   };
+
+  const grecaptchaObject = window.grecaptcha;
+ 
   const showTheNotice = history?.location?.state?.from.includes('/product/details/') || history?.location?.state?.from.includes('/supplier/introduce/');
+  
   return (
     <div className="auth-section">
       <Helmet>
@@ -181,22 +189,23 @@ const Signin = ({ history, location }) => {
           validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
         />
         
-        <ReCAPTCHA
+        {captchaLoading ? <VscLoading className="loader" /> : <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           hl="fa"
           className="recaptcha"
           theme="dark"
           onExpired={() => setExpired(true)}
-        />
+          grecaptcha={grecaptchaObject}
+        />}
 
         <label className="auth-label" id="saveInfo">
           مرا به خاطر بسپار
           <input type="checkbox" onChange={() => setRemindMe(!remindMe)} />
         </label>
 
-        <Button type="submit" disabled={!formState.isValid || loading || expired}>
-          {!loading ? "ورود" : <VscLoading className="loader" />}
+        <Button type="submit" disabled={!formState.isValid || loading || captchaLoading || expired}>
+          {loading ? <VscLoading className="loader" /> :  "ورود"}
         </Button>
         {error && <p className="warning-message">{error}</p>}
         <Link to="/forgot-password" className="forgot-pass">

@@ -6,7 +6,7 @@ import { RiLockPasswordFill,RiTodoLine } from "react-icons/ri";
 import { TiMessages } from "react-icons/ti";
 import { GoPlus } from "react-icons/go";
 import { SiBrandfolder } from "react-icons/si";
-import { IoCreateOutline } from "react-icons/io5";
+import { IoColorPaletteSharp, IoCreateOutline } from "react-icons/io5";
 import { BsCardChecklist } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -15,11 +15,13 @@ import axios from "../../util/axios";
 import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { UPDATE_DASHBOARD_IMAGE, USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { db } from "../../util/indexedDB";
+import { VscLoading } from "react-icons/vsc";
 import "../Admin/TemplateAdminDashboard.css";
 
 const StoreAdminDashboardLayout = ({ children }) => {
   const [activeRoute, setActiveRoute] = useState("پیشخوان");
   const [storeId, setStoreId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { userInfo, userImage,phoneNumber } = useSelector((state) => state.userSignin);
   const dispatch = useDispatch();
@@ -76,6 +78,9 @@ const StoreAdminDashboardLayout = ({ children }) => {
       case "/store-admin/dashboard/brands":
         setActiveRoute("برند ها");
         break;
+      case "/store-admin/dashboard/colors":
+        setActiveRoute("رنگ ها");
+        break;
       case "/store-admin/dashboard/todo":
         setActiveRoute("یادداشت ها");
         break;
@@ -99,13 +104,16 @@ const StoreAdminDashboardLayout = ({ children }) => {
       return;
     }
 
+    setLoading(true);
     axios.get('/sign-out/user').then(res => {
+      setLoading(false);
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
         localStorage.removeItem("storeOwnerPhoneNumber");
         history.push('/')
       }
     }).catch(err => {
+      setLoading(false);
       if(err.response.status !== 401){
         toast.warn('خروج ناموفق بود')
       }
@@ -185,6 +193,15 @@ const StoreAdminDashboardLayout = ({ children }) => {
               </Link>
             </li>
             <li
+              onClick={() => setActiveRoute("رنگ ها")}
+              className={activeRoute === "رنگ ها" ? "active" : ""}
+            >
+              <Link to="/store-admin/dashboard/colors">
+                <IoColorPaletteSharp />
+                <span className="sidebar-text-link">رنگ ها</span>
+              </Link>
+            </li>
+            <li
               onClick={() => setActiveRoute("یادداشت ها")}
               className={activeRoute === "یادداشت ها" ? "active" : ""}
             >
@@ -222,7 +239,7 @@ const StoreAdminDashboardLayout = ({ children }) => {
           </li>
           <li onClick={signoutHandler}>
             <b>
-              <FaSignOutAlt />
+              {loading ? <VscLoading className="loader" /> : <FaSignOutAlt />}
               <span className="sidebar-text-link">خروج</span>
             </b>
           </li>

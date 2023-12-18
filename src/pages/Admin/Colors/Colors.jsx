@@ -15,6 +15,7 @@ import ListOfColors from "../../../components/AdminDashboardComponents/ListOfCol
 import "./Colors.css";
 
 const Colors = () => {
+  const [colorsLoading, setColorsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [colors, setColors] = useState([]);
@@ -35,12 +36,14 @@ const Colors = () => {
     axios
       .get("/get-all-colors")
       .then((response) => {
+        setColorsLoading(false);
         if (response.data.success) {
           setColors(response.data.colors);
           setErrorText("");
         }
       })
       .catch((err) => {
+        setColorsLoading(false);
         if (err.response) {
           setErrorText(err.response.data.message);
         }
@@ -131,7 +134,7 @@ const Colors = () => {
         </form>
       )}
       <hr />
-      <ListOfColors colors={colors} />
+      <ListOfColors colors={colors} loading={colorsLoading} />
     </div>
   );
 };

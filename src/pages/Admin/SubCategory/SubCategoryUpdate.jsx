@@ -14,6 +14,7 @@ import { useForm } from "../../../util/hooks/formHook";
 import "./SubCategory.css";
 
 const SubCategoryUpdate = ({ history, match }) => {
+  const [subLoading, setSubLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState();
   const [subcategory, setSubcategory] = useState("");
@@ -28,7 +29,7 @@ const SubCategoryUpdate = ({ history, match }) => {
     false
   );
 
-  const {userInfo : {role, supplierFor}} = useSelector(state => state.userSignin)
+  const { userInfo : { role, supplierFor } } = useSelector(state => state.userSignin);
 
   const { slug } = match.params;
 
@@ -46,10 +47,13 @@ const SubCategoryUpdate = ({ history, match }) => {
   };
 
   useEffect(() => {
-    loadAllCategories();
+    if(role === 1) {
+      loadAllCategories();
+    }
     axios
       .get(`/subcategory/${slug}`)
       .then((response) => {
+        setSubLoading(false);
         const { success, subcategory } = response.data;
         if (success) {
           setSubcategory(subcategory.name);
@@ -57,11 +61,12 @@ const SubCategoryUpdate = ({ history, match }) => {
         }
       })
       .catch((err) => {
+        setSubLoading(false);
         if (err.response) {
           toast.error(err.response.data.message);
         }
       });
-  }, [slug]);
+  }, [slug,role]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -90,47 +95,55 @@ const SubCategoryUpdate = ({ history, match }) => {
 
   return (
     <div className="admin-panel-wrapper">
-      <h4>ویرایش برچسب</h4>
-      <form className="auth-form" onSubmit={submitHandler}>
-        {role === 1 && <label className="auth-label" htmlFor="category">
-          دسته بندی :
-        </label>}
-       {role === 1 && <select
-          id="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option>انتخاب دسته بندی</option>
-          {categories.length > 0 &&
-            categories.map((c) => (
-              <option key={c._id} value={c._id}>
-                {c.name}
-              </option>
-            ))}
-        </select>}
-        <label className="auth-label" htmlFor="subcategoryName">
-          برچسب :
-        </label>
-        <Input
-          id="subcategoryName"
-          element="input"
-          type="text"
-          placeholder="مثال: یخچال"
-          onInput={inputHandler}
-          defaultValue={subcategory}
-          validators={[
-            VALIDATOR_MAXLENGTH(30),
-            VALIDATOR_MINLENGTH(3),
-            VALIDATOR_PERSIAN_ALPHABET(),
-          ]}
-        />
-        <Button
-          type="submit"
-          disabled={subcategory && subcategory.length === 0}
-        >
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
-        </Button>
-      </form>
+      {subLoading ? (
+      <div className="loader_wrapper">
+        <VscLoading className="loader" />
+      </div>
+      ) : (
+        <>
+          <h4>ویرایش برچسب</h4>
+          <form className="auth-form" onSubmit={submitHandler}>
+          {role === 1 && <label className="auth-label" htmlFor="category">
+            دسته بندی :
+          </label>}
+        {role === 1 && <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option>انتخاب دسته بندی</option>
+            {categories.length > 0 &&
+              categories.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}
+                </option>
+              ))}
+          </select>}
+          <label className="auth-label" htmlFor="subcategoryName">
+            برچسب :
+          </label>
+          <Input
+            id="subcategoryName"
+            element="input"
+            type="text"
+            placeholder="مثال: یخچال"
+            onInput={inputHandler}
+            defaultValue={subcategory}
+            validators={[
+              VALIDATOR_MAXLENGTH(30),
+              VALIDATOR_MINLENGTH(3),
+              VALIDATOR_PERSIAN_ALPHABET(),
+            ]}
+          />
+          <Button
+            type="submit"
+            disabled={subcategory && subcategory.length === 0}
+          >
+            {!loading ? "ثبت" : <VscLoading className="loader" />}
+          </Button>
+          </form>
+        </>
+      )}
     </div>
   );
 };

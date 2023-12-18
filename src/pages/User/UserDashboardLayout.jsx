@@ -12,10 +12,12 @@ import axios from "../../util/axios";
 import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
+import { VscLoading } from "react-icons/vsc";
 import "../Admin/TemplateAdminDashboard.css";
 
 const UserDashboardLayout = ({ children }) => {
   const [activeRoute, setActiveRoute] = useState("پیشخوان");
+  const [loading, setLoading] = useState(false);
 
   const { userInfo, userImage } = useSelector((state) => state.userSignin);
   const dispatch = useDispatch();
@@ -50,13 +52,16 @@ const UserDashboardLayout = ({ children }) => {
       return;
     }
 
+    setLoading(true);
     axios.get('/sign-out/user').then(res => {
+      setLoading(false);
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
         localStorage.removeItem("storeOwnerPhoneNumber");
         history.push('/')
       }
     }).catch(err => {
+      setLoading(false);
       if(err.response.status !== 401){
         toast.warn('خروج ناموفق بود')
       }
@@ -128,7 +133,7 @@ const UserDashboardLayout = ({ children }) => {
           </li>
           <li onClick={signoutHandler}>
             <b>
-              <FaSignOutAlt />
+              {loading ? <VscLoading className="loader" /> : <FaSignOutAlt />}
               <span className="sidebar-text-link">خروج</span>
             </b>
           </li>

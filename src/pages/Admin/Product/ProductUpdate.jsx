@@ -43,6 +43,7 @@ const ProductUpdate = ({ history }) => {
   const [values, setValues] = useState(oldStates);
   const [colors, setColors] = useState([]);
   const [defColors, setDefColors] = useState([]);
+  const [productLoading, setProductLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [brands, setBrands] = useState([]);
   const [showFinallyPrice, setShowFinallyPrice] = useState(false);
@@ -86,8 +87,7 @@ const ProductUpdate = ({ history }) => {
     false
   );
 
-
-  const {userInfo : {role}} = useSelector(state => state.userSignin)
+  const { userInfo : { role } } = useSelector(state => state.userSignin);
   
   const { id } = useParams();
 
@@ -95,6 +95,7 @@ const ProductUpdate = ({ history }) => {
     axios
       .get(`/product/${id}`)
       .then((response) => {
+        setProductLoading(false);
         const {
           title,
           factorPrice,
@@ -145,6 +146,7 @@ const ProductUpdate = ({ history }) => {
         }
       })
       .catch((err) => {
+        setProductLoading(false);
         if (err.response) {
           setError(err.response.data.message);
         }
@@ -399,338 +401,344 @@ const ProductUpdate = ({ history }) => {
 
   return (
     <div className="admin-panel-wrapper">
-      {error.length > 0 ? (
+      {productLoading ? (
+        <div className="loader_wrapper">
+          <VscLoading className="loader" />
+        </div>
+      ) : error.length > 0 ? (
         <h4 className="warning-message">{error}</h4>
       ) : (
-        <div className="d-flex-around mb-2">
-          <h4>
-            ویرایش محصول با عنوان "{" "}
-            <strong className="text-blue">{values.title}</strong> "
-          </h4>
-          <Link
-            to={role === 1 ? "/admin/dashboard/products" : "/store-admin/dashboard/products"}
-            className="create-new-slide-link"
-          >
-            <span className="sidebar-text-link">بازگشت به فهرست محصولات</span>
-            <IoArrowUndoCircle className="font-md" />
-          </Link>
-        </div>
-      )}
-      <form
-        className="auth-form"
-        encType="multipart/form-data"
-        onSubmit={submitHandler}
-      >
-        <div className="image-upload-wrapper">
-          <input
-            ref={filePickerRef}
-            type="file"
-            accept=".jpg,.png,.jpeg"
-            hidden
-            multiple
-            onChange={pickedHandler}
-          />
-          <div className="image-upload">
-            <Button type="button" onClick={pickImageHandler}>
-              انتخاب تصویر
-            </Button>
+        <>
+          <div className="d-flex-around mb-2">
+            <h4>
+              ویرایش محصول با عنوان "{" "}
+              <strong className="text-blue">{values.title}</strong> "
+            </h4>
+            <Link
+              to={role === 1 ? "/admin/dashboard/products" : "/store-admin/dashboard/products"}
+              className="create-new-slide-link"
+            >
+              <span className="sidebar-text-link">بازگشت به فهرست محصولات</span>
+              <IoArrowUndoCircle className="font-md" />
+            </Link>
           </div>
-        </div>
-        <div className="image-upload__preview">
-          {oldPhotos.length > 0 &&
-            oldPhotos.map((op, i) => (
-              <div className="preview_img_wrapper" key={i}>
-                <span className="delete_img" onClick={() => removeOldImage(i)}>
-                  <TiDelete />
-                </span>
-                <img
-                  src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${op}`}
-                  alt="preview"
-                />
-              </div>
-            ))}
-          {urls &&
-            urls.map((url, i) => (
-              <div className="preview_img_wrapper" key={i}>
-                <span className="delete_img" onClick={() => removeImage(i)}>
-                  <TiDelete />
-                </span>
-                <img src={url} alt="preview" />
-              </div>
-            ))}
-        </div>
-        {role === 1 && <label className="auth-label" htmlFor="hostId">
-          کد کاربری فروشنده :
-        </label>}
-        {role === 1 &&
+          <form
+          className="auth-form"
+          encType="multipart/form-data"
+          onSubmit={submitHandler}
+        >
+          <div className="image-upload-wrapper">
+            <input
+              ref={filePickerRef}
+              type="file"
+              accept=".jpg,.png,.jpeg"
+              hidden
+              multiple
+              onChange={pickedHandler}
+            />
+            <div className="image-upload">
+              <Button type="button" onClick={pickImageHandler}>
+                انتخاب تصویر
+              </Button>
+            </div>
+          </div>
+          <div className="image-upload__preview">
+            {oldPhotos.length > 0 &&
+              oldPhotos.map((op, i) => (
+                <div className="preview_img_wrapper" key={i}>
+                  <span className="delete_img" onClick={() => removeOldImage(i)}>
+                    <TiDelete />
+                  </span>
+                  <img
+                    src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${op}`}
+                    alt="preview"
+                  />
+                </div>
+              ))}
+            {urls &&
+              urls.map((url, i) => (
+                <div className="preview_img_wrapper" key={i}>
+                  <span className="delete_img" onClick={() => removeImage(i)}>
+                    <TiDelete />
+                  </span>
+                  <img src={url} alt="preview" />
+                </div>
+              ))}
+          </div>
+          {role === 1 && <label className="auth-label" htmlFor="hostId">
+            کد کاربری فروشنده :
+          </label>}
+          {role === 1 &&
+            <Input
+              id="hostId"
+              element="input"
+              type="text"
+              onInput={inputHandler}
+              defaultValue={values.hostId}
+              disabled={true}
+              validators={[
+                VALIDATOR_MAXLENGTH(30),
+                VALIDATOR_MINLENGTH(3),
+                VALIDATOR_SPECIAL_CHARACTERS(),
+              ]}
+          />
+          }
+          <label className="auth-label" htmlFor="category">
+            عنوان کالا :
+          </label>
           <Input
-            id="hostId"
+            id="title"
             element="input"
             type="text"
             onInput={inputHandler}
-            defaultValue={values.hostId}
-            disabled={true}
+            defaultValue={values.title}
             validators={[
               VALIDATOR_MAXLENGTH(30),
               VALIDATOR_MINLENGTH(3),
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
-        />
-        }
-        <label className="auth-label" htmlFor="category">
-          عنوان کالا :
-        </label>
-        <Input
-          id="title"
-          element="input"
-          type="text"
-          onInput={inputHandler}
-          defaultValue={values.title}
-          validators={[
-            VALIDATOR_MAXLENGTH(30),
-            VALIDATOR_MINLENGTH(3),
-            VALIDATOR_SPECIAL_CHARACTERS(),
-          ]}
-        />
-        {role === 1 && <label className="auth-label" htmlFor="category">
-          دسته بندی :
-        </label>}
-        {role === 1 && <select
-          name="category"
-          value={values.category}
-          onChange={(e) => setCategoryHandler(e.target.value)}
-        >
-          <option value="none">دسته بندی را انتخاب کنید</option>
-          {categories.length > 0 &&
-            categories.map((c) => (
-              <option key={c._id} value={c._id}>
-                {c.name}
-              </option>
-            ))}
-        </select>}
-        {showSub && (
-          <label className="auth-label" htmlFor="subcategory">
-            برچسب :
-          </label>
-        )}
-        {showSub && (
-          <select
-            name="subcategory"
-            value={values.subcategory}
-            onChange={(e) => setSubcategoryHandler(e.target.value)}
-          >
-            <option value="none">برچسب را انتخاب کنید</option>
-            {subcategories.length > 0 &&
-              subcategories.map((s) => (
-                <option key={s._id} value={s._id}>
-                  {s.name}
-                </option>
-              ))}
-          </select>
-        )}
-        {showBrand && (
-          <label className="auth-label" htmlFor="brand">
-            برند :
-          </label>
-        )}
-        {showBrand && (
-          <select
-            value={values.brand}
-            name="brand"
-            onChange={(e) => {
-              if (e.target.value === "none") {
-                setValues({ ...values, brand: "none" });
-                return;
-              }
-              changeInputHandler(e);
-            }}
-          >
-            <option value="none">برند را انتخاب کنید</option>
-            {brands.length > 0 &&
-              brands.map((b) => (
-                <option key={b._id} value={b._id}>
-                  {b.brandName}
-                </option>
-              ))}
-          </select>
-        )}
-        <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>
-        <input
-          name="factorPrice"
-          value={values.factorPrice}
-          type="number"
-          onChange={(e) => changeInputHandler(e)}
-        />
-        <label className="auth-label"> قیمت فروش کالا در بازار (تومان) : </label>
-        <input
-          name="price"
-          value={values.price}
-          type="number"
-          onFocus={clearFinallyPriceHandler}
-          onChange={(e) => changeInputHandler(e)}
-        />
-        <label className="auth-label">میزان تخفیف :</label>
-        <select
-          value={values.discount}
-          onChange={(e) => setFinallyPrice(e.target.value)}
-        >
-          <option value="none">لطفا میزان تخفیف را مشخص کنید</option>
-          {[...Array(51).keys()].map((d, i) => (
-            <option key={i} value={d}>
-              {d}%
-            </option>
-          ))}
-        </select>
-        {showFinallyPrice && (
-          <label className="auth-label"> قیمت نهایی :</label>
-        )}
-        {showFinallyPrice && (
-          <input type="number" value={values.finallyPrice} disabled />
-        )}
-        <label className="auth-label">فروش :</label>
-        <select
-          name="sell"
-          value={values.sell}
-          onChange={(e) => changeInputHandler(e)}
-        >
-          <option>لطفا وضعیت فروش را مشخص کنید</option>
-          <option value={true}>ارائه میشود</option>
-          <option value={false}>ارائه نمیشود</option>
-        </select>
-        <label className="auth-label">تعداد کالا :</label>
-        <input
-          name="countInStock"
-          value={values.countInStock}
-          type="number"
-          onChange={(e) => changeInputHandler(e)}
-        />
-        <label className="auth-label">رنگ ها</label>
-        <select value="none" onChange={(e) => setColorsHandler(e.target.value)}>
-          <option value="none">لطفا رنگ ها را انتخاب کنید</option>
-          {defColors.length > 0 &&
-            defColors.map((dc, i) => (
-              <option key={i} value={dc._id}>
-                {dc.colorName}
-              </option>
-            ))}
-        </select>
-        {colors && colors.length > 0 && (
-          <div className="image-upload__preview">
-            {colors.map((c, i) => (
-              <span
-                style={{
-                  color:
-                    `#${c.colorHex}` < "#1f101f"
-                      ? "white"
-                      : "var(--firstColorPalete)",
-                  background: `#${c.colorHex}`,
-                }}
-                className="color_wrapper"
-                key={i}
-              >
-                <span
-                  className="delete_color"
-                  onClick={() => removeColorHandler(c._id)}
-                >
-                  <TiDelete />
-                </span>
-                {c.colorName}
-              </span>
-            ))}
-          </div>
-        )}
-        <Input
-          id="attr1"
-          element="input"
-          type="text"
-          placeholder="مشخصات-1 :"
-          onInput={inputHandler}
-          defaultValue={values.attr1}
-          validators={[
-            VALIDATOR_MAXLENGTH(60),
-            VALIDATOR_SPECIAL_CHARACTERS(),
-          ]}
-        />
-        <Input
-          id="attr2"
-          element="input"
-          type="text"
-          placeholder="مشخصات-2 :"
-          onInput={inputHandler}
-          defaultValue={values.attr2}
-          validators={[
-            VALIDATOR_MAXLENGTH(60),
-            VALIDATOR_SPECIAL_CHARACTERS(),
-          ]}
-        />
-        <Input
-          id="attr3"
-          element="input"
-          type="text"
-          placeholder="مشخصات-3 :"
-          onInput={inputHandler}
-          defaultValue={values.attr3}
-          validators={[
-            VALIDATOR_MAXLENGTH(60),
-            VALIDATOR_SPECIAL_CHARACTERS(),
-          ]}
-        />
-        <label className="auth-label">توضیحات :</label>
-        <Input
-          id="description"
-          element="textarea"
-          type="text"
-          placeholder="توضیحات"
-          onInput={inputHandler}
-          defaultValue={values.description}
-          rows={10}
-          validators={[
-            VALIDATOR_MAXLENGTH(1000),
-            VALIDATOR_MINLENGTH(10),
-            VALIDATOR_SPECIAL_CHARACTERS_2(),
-          ]}
-        />
-        <label className="auth-label">ویژگی های محصول :</label>
-        <Input
-          id="question"
-          element="input"
-          type="text"
-          placeholder="بخش اول"
-          onInput={inputHandler}
-          validators={[
-            VALIDATOR_MAXLENGTH(100),
-            VALIDATOR_SPECIAL_CHARACTERS(),
-          ]}
-        />
-        <Input
-          id="answer"
-          element="input"
-          type="text"
-          placeholder="بخش دوم"
-          onInput={inputHandler}
-          validators={[
-            VALIDATOR_MAXLENGTH(100),
-            VALIDATOR_SPECIAL_CHARACTERS(),
-          ]}
           />
-          <Button type="button" 
-            onClick={appendDetailHandler}
-            disabled={
-              !formState.inputs.answer.isValid || !formState.inputs.question.isValid ||
-              formState.inputs.answer.value.length === 0 ||
-              formState.inputs.question.value.length === 0
-            }
+          {role === 1 && <label className="auth-label" htmlFor="category">
+            دسته بندی :
+          </label>}
+          {role === 1 && <select
+            name="category"
+            value={values.category}
+            onChange={(e) => setCategoryHandler(e.target.value)}
           >
-            افزودن
-          </Button>
+            <option value="none">دسته بندی را انتخاب کنید</option>
+            {categories.length > 0 &&
+              categories.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}
+                </option>
+              ))}
+          </select>}
+          {showSub && (
+            <label className="auth-label" htmlFor="subcategory">
+              برچسب :
+            </label>
+          )}
+          {showSub && (
+            <select
+              name="subcategory"
+              value={values.subcategory}
+              onChange={(e) => setSubcategoryHandler(e.target.value)}
+            >
+              <option value="none">برچسب را انتخاب کنید</option>
+              {subcategories.length > 0 &&
+                subcategories.map((s) => (
+                  <option key={s._id} value={s._id}>
+                    {s.name}
+                  </option>
+                ))}
+            </select>
+          )}
+          {showBrand && (
+            <label className="auth-label" htmlFor="brand">
+              برند :
+            </label>
+          )}
+          {showBrand && (
+            <select
+              value={values.brand}
+              name="brand"
+              onChange={(e) => {
+                if (e.target.value === "none") {
+                  setValues({ ...values, brand: "none" });
+                  return;
+                }
+                changeInputHandler(e);
+              }}
+            >
+              <option value="none">برند را انتخاب کنید</option>
+              {brands.length > 0 &&
+                brands.map((b) => (
+                  <option key={b._id} value={b._id}>
+                    {b.brandName}
+                  </option>
+                ))}
+            </select>
+          )}
+          <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>
+          <input
+            name="factorPrice"
+            value={values.factorPrice}
+            type="number"
+            onChange={(e) => changeInputHandler(e)}
+          />
+          <label className="auth-label"> قیمت فروش کالا در بازار (تومان) : </label>
+          <input
+            name="price"
+            value={values.price}
+            type="number"
+            onFocus={clearFinallyPriceHandler}
+            onChange={(e) => changeInputHandler(e)}
+          />
+          <label className="auth-label">میزان تخفیف :</label>
+          <select
+            value={values.discount}
+            onChange={(e) => setFinallyPrice(e.target.value)}
+          >
+            <option value="none">لطفا میزان تخفیف را مشخص کنید</option>
+            {[...Array(51).keys()].map((d, i) => (
+              <option key={i} value={d}>
+                {d}%
+              </option>
+            ))}
+          </select>
+          {showFinallyPrice && (
+            <label className="auth-label"> قیمت نهایی :</label>
+          )}
+          {showFinallyPrice && (
+            <input type="number" value={values.finallyPrice} disabled />
+          )}
+          <label className="auth-label">فروش :</label>
+          <select
+            name="sell"
+            value={values.sell}
+            onChange={(e) => changeInputHandler(e)}
+          >
+            <option>لطفا وضعیت فروش را مشخص کنید</option>
+            <option value={true}>ارائه میشود</option>
+            <option value={false}>ارائه نمیشود</option>
+          </select>
+          <label className="auth-label">تعداد کالا :</label>
+          <input
+            name="countInStock"
+            value={values.countInStock}
+            type="number"
+            onChange={(e) => changeInputHandler(e)}
+          />
+          <label className="auth-label">رنگ ها</label>
+          <select value="none" onChange={(e) => setColorsHandler(e.target.value)}>
+            <option value="none">لطفا رنگ ها را انتخاب کنید</option>
+            {defColors.length > 0 &&
+              defColors.map((dc, i) => (
+                <option key={i} value={dc._id}>
+                  {dc.colorName}
+                </option>
+              ))}
+          </select>
+          {colors && colors.length > 0 && (
+            <div className="image-upload__preview">
+              {colors.map((c, i) => (
+                <span
+                  style={{
+                    color:
+                      `#${c.colorHex}` < "#1f101f"
+                        ? "white"
+                        : "var(--firstColorPalete)",
+                    background: `#${c.colorHex}`,
+                  }}
+                  className="color_wrapper"
+                  key={i}
+                >
+                  <span
+                    className="delete_color"
+                    onClick={() => removeColorHandler(c._id)}
+                  >
+                    <TiDelete />
+                  </span>
+                  {c.colorName}
+                </span>
+              ))}
+            </div>
+          )}
+          <Input
+            id="attr1"
+            element="input"
+            type="text"
+            placeholder="مشخصات-1 :"
+            onInput={inputHandler}
+            defaultValue={values.attr1}
+            validators={[
+              VALIDATOR_MAXLENGTH(60),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+          />
+          <Input
+            id="attr2"
+            element="input"
+            type="text"
+            placeholder="مشخصات-2 :"
+            onInput={inputHandler}
+            defaultValue={values.attr2}
+            validators={[
+              VALIDATOR_MAXLENGTH(60),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+          />
+          <Input
+            id="attr3"
+            element="input"
+            type="text"
+            placeholder="مشخصات-3 :"
+            onInput={inputHandler}
+            defaultValue={values.attr3}
+            validators={[
+              VALIDATOR_MAXLENGTH(60),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+          />
+          <label className="auth-label">توضیحات :</label>
+          <Input
+            id="description"
+            element="textarea"
+            type="text"
+            placeholder="توضیحات"
+            onInput={inputHandler}
+            defaultValue={values.description}
+            rows={10}
+            validators={[
+              VALIDATOR_MAXLENGTH(1000),
+              VALIDATOR_MINLENGTH(10),
+              VALIDATOR_SPECIAL_CHARACTERS_2(),
+            ]}
+          />
+          <label className="auth-label">ویژگی های محصول :</label>
+          <Input
+            id="question"
+            element="input"
+            type="text"
+            placeholder="بخش اول"
+            onInput={inputHandler}
+            validators={[
+              VALIDATOR_MAXLENGTH(100),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+          />
+          <Input
+            id="answer"
+            element="input"
+            type="text"
+            placeholder="بخش دوم"
+            onInput={inputHandler}
+            validators={[
+              VALIDATOR_MAXLENGTH(100),
+              VALIDATOR_SPECIAL_CHARACTERS(),
+            ]}
+            />
+            <Button type="button" 
+              onClick={appendDetailHandler}
+              disabled={
+                !formState.inputs.answer.isValid || !formState.inputs.question.isValid ||
+                formState.inputs.answer.value.length === 0 ||
+                formState.inputs.question.value.length === 0
+              }
+            >
+              افزودن
+            </Button>
 
-          {values.details?.length > 0 && <div className="details_wrapper">
-            {values.details.map((detail,i) => <div className="detail" key={i}><span>{detail.question}؟ {detail.answer}</span><span className="delete_img" onClick={() => deleteDetailHandler(i)}><TiDelete /></span></div>)}
-          </div>}
-        <Button type="submit">
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
-        </Button>
-      </form>
+            {values.details?.length > 0 && <div className="details_wrapper">
+              {values.details.map((detail,i) => <div className="detail" key={i}><span>{detail.question}؟ {detail.answer}</span><span className="delete_img" onClick={() => deleteDetailHandler(i)}><TiDelete /></span></div>)}
+            </div>}
+          <Button type="submit">
+            {!loading ? "ثبت" : <VscLoading className="loader" />}
+          </Button>
+          </form>
+        </>
+      )}
     </div>
   );
 };

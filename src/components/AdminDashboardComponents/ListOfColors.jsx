@@ -2,18 +2,27 @@ import React, { useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import LocalSearch from "../UI/FormElement/LocalSearch";
+import { useSelector } from "react-redux";
+import { VscLoading } from "react-icons/vsc";
 
-const ListOfColors = ({ colors }) => {
+const ListOfColors = ({ colors,loading }) => {
   const [keyword, setKeyword] = useState("");
-  const searched = (keyword) => (c) =>
-    c.colorName.toLowerCase().includes(keyword);
+
+  const { userInfo : { role } } = useSelector(state => state.userSignin);
+
+  const searched = (keyword) => (c) => c.colorName.toLowerCase().includes(keyword);
+
   return (
     <div className="w-100">
       <h4 className="text-center">لیست دسته بندی ها </h4>
       <div className="local-search">
         <LocalSearch keyword={keyword} setKeyword={setKeyword} />
       </div>
-      {colors.length > 0 &&
+      {loading ? (
+        <div className="loader_wrapper">
+          <VscLoading className="loader" />
+        </div>
+      ) : colors.length > 0 &&
         colors.filter(searched(keyword)).map((c) => (
           <div
             className="single_color_wrapper"
@@ -29,7 +38,7 @@ const ListOfColors = ({ colors }) => {
               {c.colorName}
             </span>
             <Link
-              to={`/admin/dashboard/color-update/${c._id}`}
+              to={`/${role === 1 ? "admin" : "store-admin"}/dashboard/color-update/${c._id}`}
               className="d-flex-center-center"
             >
               <MdEdit className="text-blue font-md" />

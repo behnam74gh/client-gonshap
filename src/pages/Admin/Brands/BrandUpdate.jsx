@@ -15,8 +15,10 @@ import {
 } from "../../../util/validators";
 import { useForm } from "../../../util/hooks/formHook";
 import './Brands.css'
+import { resizeFile } from "../../../util/customFunctions";
 
 const BrandUpdate = ({ match, history }) => {
+  const [productLoading, setProductLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [oldPhoto, setOldPhoto] = useState("");
@@ -39,12 +41,13 @@ const BrandUpdate = ({ match, history }) => {
     },
     false
   );
-  const {userInfo: {role, supplierFor}} = useSelector(state => state.userSignin)
+  const {userInfo: { role, supplierFor }} = useSelector(state => state.userSignin)
 
   const { id } = match.params;
 
   useEffect(() => {
-    axios
+    if(role === 1){
+      axios
       .get("/get-all-categories")
       .then((response) => {
         setCategories(response.data.categories);
@@ -55,14 +58,14 @@ const BrandUpdate = ({ match, history }) => {
           setErrorText(err.response.data.message);
         }
       });
+    }
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     axios
       .get(`/read/current-brand/${id}`)
       .then((response) => {
-        setLoading(false);
+        setProductLoading(false);
         if (response.data.success) {
           const { thisBrand, subcategories } = response.data;
           setValues({
@@ -76,7 +79,7 @@ const BrandUpdate = ({ match, history }) => {
         }
       })
       .catch((err) => {
-        setLoading(false);
+        setProductLoading(false);
         if (err.response && err.response.data.message)
           setErrorText(err.response.data.message);
       });
@@ -89,20 +92,25 @@ const BrandUpdate = ({ match, history }) => {
     filePickerRef.current.click();
   };
 
-  const pickedHandler = (e) => {
+  const pickedHandler = async (e) => {
     let pickedFile;
     if (e.target.files && e.target.files.length === 1) {
-      pickedFile = e.target.files[0];
+      pickedFile = await resizeFile(e.target.files[0]);
+      if(pickedFile?.size > 500000){
+        toast.warning('سایز عکس بیشتر از 4 MB است')
+        return;
+      }
+
       if (oldPhoto.length > 0) {
         setDeletedPhoto(oldPhoto);
         setOldPhoto("");
       }
+
       setFile(pickedFile);
+      setFileUrl(pickedFile);
     } else {
       return;
     }
-
-    setFileUrl(e.target.files[0]);
   };
   const setFileUrl = (file) => {
     const turnedUrl = URL.createObjectURL(file);
@@ -200,24 +208,28 @@ const BrandUpdate = ({ match, history }) => {
 
   return (
     <div className="admin-panel-wrapper">
-      {errorText.length > 0 ? (
+      {productLoading ? (
+        <div className="loader_wrapper">
+          <VscLoading className="loader" />
+        </div>
+      ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (
-        <div className="d-flex-around mb-2">
-          <h4>
-            ویرایش برند با نام&nbsp;
-            <strong className="text-blue mx-2">
-              {values.brandName && values.brandName}
-            </strong>
-            را با دقت انجام دهید!
-          </h4>
-          <Link to="/admin/dashboard/brands" className="create-new-slide-link">
-            <span className="sidebar-text-link">بازگشت به فهرست برندها</span>
-            <IoArrowUndoCircle className="font-md" />
-          </Link>
-        </div>
-      )}
-      <form
+        <>
+          <div className="d-flex-around mb-2">
+            <h4>
+              ویرایش برند با نام&nbsp;
+              <strong className="text-blue mx-2">
+                {values.brandName && values.brandName}
+              </strong>
+              را با دقت انجام دهید!
+            </h4>
+            <Link to={role === 1 ? "/admin/dashboard/brands" : "/store-admin/dashboard/brands"} className="create-new-slide-link">
+              <span className="sidebar-text-link">بازگشت به فهرست برندها</span>
+              <IoArrowUndoCircle className="font-md" />
+            </Link>
+          </div>
+          <form
         className="auth-form edit-profile"
         encType="multipart/form-data"
         onSubmit={submitHandler}
@@ -340,7 +352,9 @@ const BrandUpdate = ({ match, history }) => {
         >
           {!loading ? "ثبت" : <VscLoading className="loader" />}
         </Button>
-      </form>
+          </form>
+        </>
+      )}
     </div>
   );
 };

@@ -20,6 +20,8 @@ const SubCategoryUpdate = lazy(() =>
 );
 const Brands = lazy(() => import("../Admin/Brands/Brands"));
 const BrandUpdate = lazy(() => import("../Admin/Brands/BrandUpdate"));
+const Colors = lazy(() => import("../Admin/Colors/Colors"));
+const ColorUpdate = lazy(() => import("../Admin/Colors/ColorUpdate"));
 const ToDoList = lazy(() => import("../Admin/ToDo/ToDoList"));
 const ToDoCreate = lazy(() => import("../Admin/ToDo/ToDoCreate"));
 const UserTickets = lazy(() => import('../User/Ticket/UserTickets'))
@@ -57,6 +59,8 @@ const StoreAdminDashboard = ({history}) => {
                 <StoreAdminRoute path='/store-admin/dashboard/create-todo' component={ToDoCreate} />
                 <StoreAdminRoute path='/store-admin/dashboard/brands' component={Brands} />
                 <StoreAdminRoute path='/store-admin/dashboard/brand-update/:id' component={BrandUpdate} />
+                <StoreAdminRoute path="/store-admin/dashboard/colors" component={Colors} />
+                <StoreAdminRoute path="/store-admin/dashboard/color-update/:id" component={ColorUpdate} />
                 <StoreAdminRoute path='/store-admin/dashboard/tickets' component={UserTickets} />
                 <StoreAdminRoute path='/store-admin/dashboard/create-ticket' component={CreateTicket} />
                 <StoreAdminRoute path='/store-admin/dashboard/carousel-update/:id' component={CarouselUpdate} />
