@@ -549,6 +549,9 @@ td {
   .err_boundary_wrapper.info-message {
     width: 100% !important;
   }
+  .local-search input {
+    width: 90%;
+  }
 }
 @media (max-width: 370px) {
   .font-sm {

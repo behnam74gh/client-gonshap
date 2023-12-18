@@ -14,10 +14,11 @@ const ListOfColors = ({ colors,loading }) => {
 
   return (
     <div className="w-100">
-      <h4 className="text-center">لیست دسته بندی ها </h4>
+      <h4 className="text-center">فهرست تمام رنگ های موجود </h4>
       <div className="local-search">
         <LocalSearch keyword={keyword} setKeyword={setKeyword} />
       </div>
+      <div className="colors_wrapper">
       {loading ? (
         <div className="loader_wrapper">
           <VscLoading className="loader" />
@@ -45,6 +46,7 @@ const ListOfColors = ({ colors,loading }) => {
             </Link>
           </div>
         ))}
+      </div>
     </div>
   );
 };

@@ -189,7 +189,12 @@ const Signin = ({ history, location }) => {
           validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
         />
         
-        {captchaLoading ? <VscLoading className="loader" /> : <ReCAPTCHA
+        <label className="auth-label" id="saveInfo">
+          مرا به خاطر بسپار
+          <input type="checkbox" onChange={() => setRemindMe(!remindMe)} />
+        </label>
+
+        <ReCAPTCHA
           sitekey={reCaptchaSiteKey}
           onChange={changeRecaptchaHandler}
           hl="fa"
@@ -197,15 +202,10 @@ const Signin = ({ history, location }) => {
           theme="dark"
           onExpired={() => setExpired(true)}
           grecaptcha={grecaptchaObject}
-        />}
-
-        <label className="auth-label" id="saveInfo">
-          مرا به خاطر بسپار
-          <input type="checkbox" onChange={() => setRemindMe(!remindMe)} />
-        </label>
+        />
 
         <Button type="submit" disabled={!formState.isValid || loading || captchaLoading || expired}>
-          {loading ? <VscLoading className="loader" /> :  "ورود"}
+          {(captchaLoading || loading) ? <VscLoading className="loader" /> : "ورود"}
         </Button>
         {error && <p className="warning-message">{error}</p>}
         <Link to="/forgot-password" className="forgot-pass">

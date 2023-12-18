@@ -23,6 +23,7 @@ import "./UpdateProfileInfo.css";
 
 const UpdateProfileInfo = ({ history }) => {
   const [expired, setExpired] = useState(true);
+  const [captchaLoading, setCaptchaLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [oldPhoto, setOldPhoto] = useState("");
@@ -118,14 +119,17 @@ const UpdateProfileInfo = ({ history }) => {
 
   const changeRecaptchaHandler = (value) => {
     if (value !== null) {
+      setCaptchaLoading(true);
       axios
         .post("/recaptcha", { securityToken: value })
         .then((res) => {
+          setCaptchaLoading(false);
           if (res.data.success) {
             setExpired(false);
           }
         })
         .catch((err) => {
+          setCaptchaLoading(false);
           if (err || err.response) {
             toast.warning("خطایی رخ داده است،لطفا اینترنت خود را چک کنید");
           }
@@ -203,6 +207,8 @@ const UpdateProfileInfo = ({ history }) => {
         });
     }
   };
+
+  const grecaptchaObject = window.grecaptcha;
 
   return (
     <div className="admin-panel-wrapper">
@@ -308,12 +314,13 @@ const UpdateProfileInfo = ({ history }) => {
           hl="fa"
           className="recaptcha"
           onExpired={() => setExpired(true)}
+          grecaptcha={grecaptchaObject}
         />
         <Button
           type="submit"
-          disabled={ loading || expired || !formState.isValid}
+          disabled={ loading || captchaLoading || expired || !formState.isValid}
         >
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
+          {(captchaLoading || loading) ? <VscLoading className="loader" /> : "ثبت"}
         </Button>
       </form>
     </div>

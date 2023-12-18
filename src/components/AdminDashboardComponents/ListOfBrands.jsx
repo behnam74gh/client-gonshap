@@ -80,11 +80,11 @@ const ListOfBrands = ({ brands, categories,role,loading }) => {
                 color: "white",
               }}
             >
+              <th className="th-titles">آرمِ برند</th>
               <th className="th-titles">نام</th>
               <th className="th-titles">پشتیبانی از</th>
               <th className="th-titles">برچسب ها</th>
               <th className="th-titles">ویرایش</th>
-              <th className="th-titles">آرمِ برند</th>
             </tr>
           </thead>
           <tbody>
@@ -100,6 +100,19 @@ const ListOfBrands = ({ brands, categories,role,loading }) => {
             : brands.length > 0 && keywordSearch ? (
               brands.filter(searched(keyword)).map((b) => (
                 <tr key={b._id}>
+                  <td>
+                    <div className="d-flex-center-center">
+                      <img
+                        className="table-img"
+                        src={
+                          b.image.length > 0
+                            ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${b.image}`
+                            : `${defPic}`
+                        }
+                        alt={b.brandName}
+                      />
+                    </div>
+                  </td>
                   <td className="font-sm">{b.brandName}</td>
                   <td className="font-sm">{b.backupFor.name}</td>
                   <td>
@@ -119,6 +132,11 @@ const ListOfBrands = ({ brands, categories,role,loading }) => {
                       <MdEdit className="text-blue" />
                     </Link>
                   </td>
+                </tr>
+              ))
+            ) : !keywordSearch && sortedBrands.length > 0 ? (
+              sortedBrands.map((b) => (
+                <tr key={b._id}>
                   <td>
                     <div className="d-flex-center-center">
                       <img
@@ -132,11 +150,6 @@ const ListOfBrands = ({ brands, categories,role,loading }) => {
                       />
                     </div>
                   </td>
-                </tr>
-              ))
-            ) : !keywordSearch && sortedBrands.length > 0 ? (
-              sortedBrands.map((b) => (
-                <tr key={b._id}>
                   <td className="font-sm">{b.brandName}</td>
                   <td className="font-sm">{b.backupFor.name}</td>
                   <td>
@@ -155,19 +168,6 @@ const ListOfBrands = ({ brands, categories,role,loading }) => {
                     >
                       <MdEdit className="text-blue" />
                     </Link>
-                  </td>
-                  <td>
-                    <div className="d-flex-center-center">
-                      <img
-                        className="table-img"
-                        src={
-                          b.image.length > 0
-                            ? `${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${b.image}`
-                            : `${defPic}`
-                        }
-                        alt={b.brandName}
-                      />
-                    </div>
                   </td>
                 </tr>
               ))

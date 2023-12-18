@@ -29,6 +29,7 @@ const ForgotPassword = ({ history }) => {
     success: false,
     message: "",
   });
+  const [captchaLoading, setCaptchaLoading] = useState(false);
   const [aAuthLoading, setAAuthLoading] = useState(false);
   const [aLoading, setALoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -176,14 +177,17 @@ const ForgotPassword = ({ history }) => {
 
   const changeRecaptchaHandler = (value) => {
     if (value !== null) {
+      setCaptchaLoading(true);
       axios
         .post("/recaptcha", { securityToken: value })
         .then((res) => {
+          setCaptchaLoading(false);
           if (res.data.success) {
             setExpired(false);
           }
         })
         .catch((err) => {
+          setCaptchaLoading(false);
           if (err || err.response) {
             toast.warning("خطایی رخ داده است،لطفا اینترنت خود را چک کنید");
           }
@@ -221,6 +225,8 @@ const ForgotPassword = ({ history }) => {
       return;
     }
   };
+
+  const grecaptchaObject = window.grecaptcha;
 
   return (
     <div className="auth-section">
@@ -260,12 +266,13 @@ const ForgotPassword = ({ history }) => {
             hl="fa"
             className="recaptcha"
             onExpired={() => setExpired(true)}
+            grecaptcha={grecaptchaObject}
           />
           <Button
             type="submit"
-            disabled={loading || !formState.inputs.phoneNumber.isValid || expired || phoneNumIsValid}
+            disabled={loading || !formState.inputs.phoneNumber.isValid || expired || phoneNumIsValid || captchaLoading}
           >
-            {!loading ? "ثبت" : <VscLoading className="loader" />}
+            {(captchaLoading || loading) ? <VscLoading className="loader" /> : "ثبت"}
           </Button>
           {phoneNumberMessage.message.length > 0 &&
             !phoneNumberMessage.success && (

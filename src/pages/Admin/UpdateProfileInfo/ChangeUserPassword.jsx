@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 
 const ChangeUserPassword = ({ history }) => {
   const [expired, setExpired] = useState(true);
+  const [captchaLoading, setCaptchaLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const { userInfo } = useSelector((state) => state.userSignin);
 
@@ -37,14 +38,17 @@ const ChangeUserPassword = ({ history }) => {
 
   const changeRecaptchaHandler = (value) => {
     if (value !== null) {
+      setCaptchaLoading(true);
       axios
         .post("/recaptcha", { securityToken: value })
         .then((res) => {
+          setCaptchaLoading(false);
           if (res.data.success) {
             setExpired(false);
           }
         })
         .catch((err) => {
+          setCaptchaLoading(false);
           if (err || err.response) {
             toast.warning("خطایی رخ داده است،لطفا اینترنت خود را چک کنید");
           }
@@ -85,6 +89,8 @@ const ChangeUserPassword = ({ history }) => {
     }
   };
 
+  const grecaptchaObject = window.grecaptcha;
+
   return (
     <div className="admin-panel-wrapper">
       <h4>تغییر رمز عبور</h4>
@@ -117,14 +123,15 @@ const ChangeUserPassword = ({ history }) => {
           hl="fa"
           theme="dark"
           onExpired={() => setExpired(true)}
+          grecaptcha={grecaptchaObject}
         />
         <Button
           type="submit"
-          disabled={ !formState.isValid || expired || loading ||
+          disabled={!formState.isValid || expired || captchaLoading || loading ||
             formState.inputs.password.value !== formState.inputs.repeatPassword.value
           }
         >
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
+          {(captchaLoading || loading) ? <VscLoading className="loader" /> : "ثبت"}
         </Button>
       </form>
     </div>
