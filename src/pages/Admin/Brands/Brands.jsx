@@ -222,7 +222,7 @@ const Brands = () => {
       </Button>
       {createBrand && (
         <React.Fragment>
-          <h4 className="mt-3">برند موردنظر را ایجاد کنید!</h4>
+          <h4 className="mt-3">برند موردنظر را ایجاد کنید</h4>
           {reRenderForm && (
             <form
               className="auth-form"

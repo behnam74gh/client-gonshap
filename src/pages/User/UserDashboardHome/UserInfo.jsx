@@ -1,40 +1,62 @@
 import React, { useEffect, useState } from "react";
 import LoadingOrderSkeleton from "../../../components/UI/LoadingSkeleton/LoadingOrderSkeleton";
 import axios from "../../../util/axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UPDATE_DASHBOARD_IMAGE } from "../../../redux/Types/authTypes";
+import { CUSTOMER_INFO } from "../../../redux/Types/ttlDataTypes";
 
 const UserInfo = () => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
 
+  const { customerInfo } = useSelector(state => state.ttlDatas);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get("/get/current-user/info")
-      .then((response) => {
-        setLoading(false);
-        if (response.data.success) {
-          setUser(response.data.wantedUser);
-          setErrorText("");
-          dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: response.data.wantedUser?.image });
+    if(Date.now() > customerInfo.ttlTime){
+      setLoading(true);
+      axios
+        .get("/get/current-user/info")
+        .then((response) => {
+          setLoading(false);
+          if (response.data.success) {
+            setUser(response.data.wantedUser);
+            setErrorText("");
+            if(response.data.wantedUser?.image){
+              dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: response.data.wantedUser.image });
+            }
+            dispatch({
+              type: CUSTOMER_INFO,
+              payload: {
+                ttlTime : Date.now()+(1000*60*60*24),
+                data: response.data.wantedUser
+              }
+            })
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          if (err.response) {
+            setErrorText(err.response.data.message);
+          }
+        });
+    }else{
+      if(customerInfo.data !== null){
+        setUser(customerInfo.data);
+        if(customerInfo.data?.image){
+          dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: customerInfo.data.image });
         }
-      })
-      .catch((err) => {
-        setLoading(false);
-        if (err.response) {
-          setErrorText(err.response.data.message);
-        }
-      });
+      }
+    }
   }, []);
 
   return (
     <React.Fragment>
       {loading ? (
-        <LoadingOrderSkeleton count={1} />
+        <div className="w-100" style={{background: "#FFF"}}>
+          <LoadingOrderSkeleton count={1} />
+        </div>
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (

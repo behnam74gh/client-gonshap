@@ -2,6 +2,8 @@ import React,{useState,useEffect} from 'react';
 import axios from "../../../util/axios";
 import defPic from "../../../assets/images/def.jpg";
 import LoadingSkeleton from "../../../components/UI/LoadingSkeleton/LoadingSkeleton";
+import { useDispatch, useSelector } from 'react-redux';
+import { CUSTOMER_ADS } from '../../../redux/Types/ttlDataTypes';
 import "./UserAds.css";
 
 const UserAds = () => {
@@ -9,23 +11,40 @@ const UserAds = () => {
     const [ads,setAds] = useState([])
     const [errorText,setErrorText] = useState('')
 
+    const { customerAds } = useSelector(state => state.ttlDatas);
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        setLoading(true)
-        axios.get('/user-ads')
-        .then(res => {
-            setLoading(false)
-            if(res.data?.success){
-                setAds(res.data.userAds)
-                setErrorText("")
+        if(Date.now() > customerAds.ttlTime){
+            setLoading(true)
+            axios.get('/user-ads')
+            .then(res => {
+                setLoading(false)
+                if(res.data?.success){
+                    setAds(res.data.userAds)
+                    setErrorText("")
+                    dispatch({
+                        type: CUSTOMER_ADS,
+                        payload: {
+                            ttlTime : Date.now()+(1000*60*15),
+                            data: res.data.userAds
+                        }
+                    })
+                }
+            })
+            .catch(err => {
+                setLoading(false)
+                if(err.response){
+                    setErrorText(err.response.data.message)
+                }
+            })
+        }else{
+            if(customerAds.data !== null){
+                setAds(customerAds.data);
             }
-        })
-        .catch(err => {
-            setLoading(false)
-            if(err.response){
-                setErrorText(err.response.data.message)
-            }
-        })
-    }, [])
+        }
+    }, []);
+
   return ads.length > 0 && (
     <div className='user_ads_container'>
         <h5 className='w-100'>فهرست تبلیغات شما</h5>

@@ -45,6 +45,7 @@ const ProductUpdate = ({ history }) => {
   const [defColors, setDefColors] = useState([]);
   const [productLoading, setProductLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
   const [brands, setBrands] = useState([]);
   const [showFinallyPrice, setShowFinallyPrice] = useState(false);
   const [showSub, setShowSub] = useState(false);
@@ -294,9 +295,11 @@ const ProductUpdate = ({ history }) => {
       setShowBrand(false);
       return;
     }
+    setSubLoading(true);
     axios
       .get(`/get/list-of-brands/by-parent/${e}`)
       .then((response) => {
+        setSubLoading(false);
         if (response.data.success) {
           setBrands(response.data.brands);
           setShowBrand(true);
@@ -304,6 +307,7 @@ const ProductUpdate = ({ history }) => {
         }
       })
       .catch((err) => {
+        setSubLoading(false);
         if (err.response) {
           setError(err.response.data.message);
         }
@@ -519,7 +523,11 @@ const ProductUpdate = ({ history }) => {
               برچسب :
             </label>
           )}
-          {showSub && (
+          {subLoading ? (
+            <div className="w-100 d-flex-center-center">
+              <VscLoading className="loader" />
+            </div>
+          ) : showSub && (
             <select
               name="subcategory"
               value={values.subcategory}

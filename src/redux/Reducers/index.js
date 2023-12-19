@@ -16,6 +16,7 @@ import { storeItemsReducer } from "./storeItemsReducer";
 import { supplierProductsReducer } from "./supplierProductsReducer";
 import { shopProductsReducer } from "./shopProductsReducer";
 import { homeApiReducers } from "./homeApiReducers";
+import { ttlDataReducers } from "./ttlDataReducers";
 
 const rootReducer = combineReducers({
   userSignin: userSigninReducer,
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
   storeItems: storeItemsReducer,
   supplierProducts: supplierProductsReducer,
   shopProducts: shopProductsReducer,
-  cachedHomeApis: homeApiReducers
+  cachedHomeApis: homeApiReducers,
+  ttlDatas: ttlDataReducers
 });
 
 export default rootReducer;

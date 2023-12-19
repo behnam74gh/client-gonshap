@@ -21,7 +21,7 @@ import Button from "../../../components/UI/FormElement/Button";
 import { resizeFile } from "../../../util/customFunctions";
 import "./Product.css";
 
-const ProductCreate = () => {
+const ProductCreate = ({history}) => {
   const [reRenderParent, setReRenderParent] = useState(true);
   const [files, setFiles] = useState([]);
   const [urls, setUrls] = useState([]);
@@ -42,6 +42,7 @@ const ProductCreate = () => {
   const [colors, setColors] = useState([]);
   const [defColors, setDefColors] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [brands, setBrands] = useState([]);
 
@@ -179,7 +180,7 @@ const ProductCreate = () => {
       let resizeddFiles = [];
       for (let i = 0; i < e.target.files.length; i++) {
         const resizedImage = await resizeFile(e.target.files[i]);
-        
+        console.log('file-size : ',e.target.files[i].size, "---" ,resizedImage.size);
         if(resizedImage.size > 500000){
           toast.warning('حجم عکس بیشتر از 4 MB است');
           return;
@@ -264,9 +265,11 @@ const ProductCreate = () => {
       setShowBrand(false);
       return;
     }
+    setSubLoading(true);
     axios
       .get(`/get/list-of-brands/by-parent/${e}`)
       .then((response) => {
+        setSubLoading(false);
         if (response.data.success) {
           setBrands(response.data.brands);
           setShowBrand(true);
@@ -274,6 +277,7 @@ const ProductCreate = () => {
         }
       })
       .catch((err) => {
+        setSubLoading(false);
         if (err.response) {
           setErrorText(err.response.data.message);
         }
@@ -366,6 +370,8 @@ const ProductCreate = () => {
           setUrls([]);
           setFiles([]);
           setColors([]);
+
+          history.push('/store-admin/dashboard/products');
         }
       })
       .catch((err) => {
@@ -473,7 +479,11 @@ const ProductCreate = () => {
               برچسب :
             </label>
           )}
-          {showSub && (
+          {subLoading ? (
+            <div className="w-100 d-flex-center-center">
+              <VscLoading className="loader" />
+            </div>
+          ) : showSub && (
             <select
               id="subcategory"
               value={values.subcategory}
@@ -488,6 +498,7 @@ const ProductCreate = () => {
                 ))}
             </select>
           )}
+          
           {showBrand && (
             <label className="auth-label" htmlFor="brand">
               برند :

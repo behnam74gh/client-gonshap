@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../../components/UI/FormElement/Button";
 import axios from "../../../util/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { resizeFile } from "../../../util/customFunctions";
+import { CURRENT_SUPPLIER } from "../../../redux/Types/ttlDataTypes";
 
 const oldStates = {
   region: "",
@@ -39,6 +40,7 @@ const CarouselUpdate = ({ history, match }) => {
 
   const { id } = match.params;
   const { userInfo: { role } } = useSelector(state => state.userSignin);
+  const dispatch = useDispatch();
 
   const loadAllCategories = () => {
     axios
@@ -224,6 +226,13 @@ const CarouselUpdate = ({ history, match }) => {
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
+          dispatch({
+            type: CURRENT_SUPPLIER,
+            payload: {
+              ttlTime : 0,
+              data: null
+            }
+          });
           toast.success(response.data.message);
           history.goBack();
         }

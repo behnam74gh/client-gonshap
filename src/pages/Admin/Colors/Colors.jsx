@@ -15,7 +15,7 @@ import ListOfColors from "../../../components/AdminDashboardComponents/ListOfCol
 import "./Colors.css";
 
 const Colors = () => {
-  const [colorsLoading, setColorsLoading] = useState(true);
+  const [colorsLoading, setColorsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [colors, setColors] = useState([]);
@@ -33,6 +33,7 @@ const Colors = () => {
   );
 
   const loadAllColors = () => {
+    setColorsLoading(true);
     axios
       .get("/get-all-colors")
       .then((response) => {
@@ -91,7 +92,7 @@ const Colors = () => {
   return (
     <div className="admin-panel-wrapper">
       {errorText.length > 0 && <p className="warning-message">{errorText}</p>}
-      <h4>برند موردنظر را ایجاد کنید!</h4>
+      <h4>رنگ موردنظر را ایجاد کنید</h4>
       {reRenderForm && (
         <form
           className="auth-form"

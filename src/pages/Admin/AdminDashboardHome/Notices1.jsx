@@ -5,8 +5,9 @@ import DatePicker,{DateObject} from "react-multi-date-picker";
 import { useSelector,useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
 import { HiBadgeCheck } from "react-icons/hi";
-import "./Notices.css";
 import { STORE_ADMIN_PHONENUMBER } from "../../../redux/Types/authTypes";
+import { CURRENT_SUPPLIER, ORDERS_COUNT, TASKS } from "../../../redux/Types/ttlDataTypes";
+import "./Notices.css";
 
 const Notices1 = ({date,setParticularDateHandler}) => {
   const [todaysTasks, setTodaysTasks] = useState([]);
@@ -15,23 +16,37 @@ const Notices1 = ({date,setParticularDateHandler}) => {
   const [errorText, setErrorText] = useState("");
   const [supplier, setSupplier] = useState({});
 
-  const {userInfo : {role,supplierFor}, phoneNumber} = useSelector(state => state.userSignin)
+  const {userInfo : {role,supplierFor}, phoneNumber} = useSelector(state => state.userSignin);
+  const { tasks, ordersCount, currentSupplier } = useSelector(state => state.ttlDatas);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const ac = new AbortController();
     let mounted = true;
-    axios
+    if(Date.now() > tasks.ttlTime){
+      axios
       .get("/get/todays-tasks",{signal: ac.signal})
       .then((response) => {
         if (response.data.success && mounted) {
           setTodaysTasks(response.data.tasks);
           setTasksError("");
+          dispatch({
+            type: TASKS,
+            payload: {
+              ttlTime : Date.now()+(1000*60*60*24),
+              data: response.data.tasks
+            }
+          });
         }
       })
       .catch((err) => {
         if (err.response && mounted) setTasksError(err.response.data.message);
       });
+    }else{
+      if(tasks.data !== null && mounted){
+        setTodaysTasks(tasks.data);
+      }
+    }
 
     return () => {
       ac.abort()
@@ -42,16 +57,29 @@ const Notices1 = ({date,setParticularDateHandler}) => {
   useEffect(() => {
     const ac = new AbortController();
     let mounted = true;
-    axios.post("/new-orders/count",{category: role === 2 ? supplierFor : null},{signal: ac.signal})
+    if(Date.now() > ordersCount.ttlTime) {
+      axios.post("/new-orders/count",{category: role === 2 ? supplierFor : null},{signal: ac.signal})
       .then((response) => {
         if (response.data.success && mounted) {
           setNewOrdersCount(response.data.count);
           setErrorText("");
+          dispatch({
+            type: ORDERS_COUNT,
+            payload: {
+              ttlTime : Date.now()+(1000*60*10),
+              data: response.data.count
+            }
+          });
         }
       })
       .catch((err) => {
         if (err.response && mounted) setErrorText(err.response.data.message);
       });
+    }else{
+      if(ordersCount.data !== null && mounted){
+        setNewOrdersCount(ordersCount.data);
+      }
+    }
 
     return () => {
       ac.abort()
@@ -65,11 +93,19 @@ const Notices1 = ({date,setParticularDateHandler}) => {
     if(role === 1){
       return;
     }
-    axios
+    if(Date.now() > currentSupplier.ttlTime) {
+      axios
       .get("/get/current-supplier",{signal: ac.signal})
       .then((response) => {
         if (response.data.success && mounted) {
           setSupplier(response.data.supplier);
+          dispatch({
+            type: CURRENT_SUPPLIER,
+            payload: {
+              ttlTime : Date.now()+(1000*60*60*24),
+              data: response.data.supplier
+            }
+          });
           if(phoneNumber?.length < 1){
             dispatch({
               type: STORE_ADMIN_PHONENUMBER,
@@ -82,6 +118,18 @@ const Notices1 = ({date,setParticularDateHandler}) => {
       .catch((err) => {
         if (err.response && mounted) toast.warning(err.response.data.message);
       });
+    }else{
+      if(currentSupplier.data !== null && mounted){
+        setSupplier(currentSupplier.data);
+        if(phoneNumber?.length < 1){
+          dispatch({
+            type: STORE_ADMIN_PHONENUMBER,
+            payload: currentSupplier.data.phoneNumber
+          })
+          localStorage.setItem("storeOwnerPhoneNumber",currentSupplier.data.phoneNumber)
+        }
+      }
+    } 
 
     return () => {
       ac.abort()
@@ -98,7 +146,7 @@ const Notices1 = ({date,setParticularDateHandler}) => {
     <div className="notice1_wrapper">
       {role === 2 && <div className="notice">
         <div className="notice_title">
-        <strong>داشبورد فروشگاه {supplier.title}</strong>
+        <strong>داشبورد فروشگاهِ {supplier.title}</strong>
         {supplier.authentic && <HiBadgeCheck className="text-blue font-md mr-1" />}
         </div>
         <div className="notice_point">

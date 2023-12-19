@@ -10,7 +10,8 @@ import {
 } from "recharts";
 import { VscLoading } from "react-icons/vsc";
 import axios from "../../../util/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AREA_CHART } from "../../../redux/Types/ttlDataTypes";
 import "./AreaChart.css";
 
 const AreaChartComponent = ({date}) => {
@@ -19,8 +20,11 @@ const AreaChartComponent = ({date}) => {
   const [errorText, setErrorText] = useState("");
   const [mobileScreen, setMobileScreen] = useState();
 
-  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin)
+  const {userInfo: {role,supplierFor}} = useSelector(state => state.userSignin);
+  const { areaChart } = useSelector(state => state.ttlDatas);
  
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (window.innerWidth < 450) {
       setMobileScreen(window.innerWidth);
@@ -30,8 +34,10 @@ const AreaChartComponent = ({date}) => {
   useEffect(() => {
     const ac = new AbortController();
     let mounted = true;
-    setLoading(true);
-    axios
+
+    if(Date.now() > areaChart.ttlTime){
+      setLoading(true);
+      axios
       .post("/orders/per-day/area-chart",
       {category: role === 2 ? supplierFor : null,dateValue: date},{signal: ac.signal})
       .then((response) => {
@@ -39,6 +45,13 @@ const AreaChartComponent = ({date}) => {
           setLoading(false);
           setOrderDays(response.data.daysOrders);
           setErrorText("");
+          dispatch({
+            type: AREA_CHART,
+            payload: {
+              ttlTime : Date.now()+(1000*60*60*24),
+              data: response.data.daysOrders
+            }
+          });
         }
       })
       .catch((err) => {
@@ -47,6 +60,11 @@ const AreaChartComponent = ({date}) => {
           setErrorText(err.response.data.message);
         }
       });
+    }else{
+      if(areaChart.data !== null && mounted){
+        setOrderDays(areaChart.data);
+      }
+    }
 
     return () => {
       ac.abort()

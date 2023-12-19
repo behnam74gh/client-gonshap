@@ -20,6 +20,7 @@ import { getCookie, resizeFile } from '../../../util/customFunctions';
 import "../../../components/UI/FormElement/ImageUpload.css";
 import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
+import { CUSTOMER_INFO } from "../../../redux/Types/ttlDataTypes";
 
 const UpdateProfileInfo = ({ history }) => {
   const [expired, setExpired] = useState(true);
@@ -186,6 +187,13 @@ const UpdateProfileInfo = ({ history }) => {
             });
             dispatch({ type: UPDATE_DASHBOARD_IMAGE, payload: avatar });
             toast.success(message);
+            dispatch({
+              type: CUSTOMER_INFO,
+              payload: {
+                ttlTime : 0,
+                data: null
+              }
+            })
 
             if (role === 1) {
               history.push("/admin/dashboard/home");
@@ -318,7 +326,8 @@ const UpdateProfileInfo = ({ history }) => {
         />
         <Button
           type="submit"
-          disabled={ loading || captchaLoading || expired || !formState.isValid}
+          disabled={ loading || captchaLoading || expired
+          || !formState.inputs.firstName.isValid || !formState.inputs.lastName.isValid}
         >
           {(captchaLoading || loading) ? <VscLoading className="loader" /> : "ثبت"}
         </Button>
