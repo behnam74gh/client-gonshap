@@ -110,6 +110,8 @@ const StoreAdminDashboardLayout = ({ children }) => {
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
         localStorage.removeItem("storeOwnerPhoneNumber");
+        localStorage.removeItem('dashProductsConf');
+        localStorage.removeItem('otherFilterDashPage');
         history.push('/')
       }
     }).catch(err => {
