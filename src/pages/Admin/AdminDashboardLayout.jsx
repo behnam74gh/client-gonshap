@@ -21,11 +21,11 @@ import { HiSpeakerphone, HiLocationMarker } from "react-icons/hi";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import axios from "../../util/axios";
 import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { UPDATE_DASHBOARD_IMAGE, USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { VscLoading } from "react-icons/vsc";
+import { LEAVE_DASHBOARD } from "../../redux/Types/ttlDataTypes";
 import "./TemplateAdminDashboard.css";
 
 const AdminDashboardLayout = ({ children }) => {
@@ -155,10 +155,11 @@ const AdminDashboardLayout = ({ children }) => {
       setLoading(false);
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
+        dispatch({type: LEAVE_DASHBOARD});
         localStorage.removeItem("storeOwnerPhoneNumber");
         localStorage.removeItem('dashProductsConf');
         localStorage.removeItem('otherFilterDashPage');
-        history.push('/')
+        history.push('/');
       }
     }).catch(err => {
       setLoading(false);

@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import altenativeLogo from '../../assets/images/logo-alternative.png'
 import { VscLoading } from "react-icons/vsc";
 import { SUGGEST_CLOSE } from "../../redux/Types/searchInputTypes";
+import { LEAVE_DASHBOARD } from "../../redux/Types/ttlDataTypes";
 import "./Navbar.css";
 
 const Navbar = (props) => {
@@ -57,10 +58,11 @@ const Navbar = (props) => {
       setLoading(false)
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
+        dispatch({type: LEAVE_DASHBOARD});
         localStorage.removeItem("storeOwnerPhoneNumber");
         localStorage.removeItem('dashProductsConf');
         localStorage.removeItem('otherFilterDashPage');
-        history.push('/')
+        history.push('/');
       }
     }).catch(err => {
       setLoading(false)

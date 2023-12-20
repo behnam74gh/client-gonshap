@@ -1,4 +1,4 @@
-import { TASKS,ORDERS_COUNT,CURRENT_SUPPLIER,AREA_CHART,CUSTOMER_ADS,CUSTOMER_INFO,CUSTOMER_LAST_ORDERS,CUSTOMER_LAST_TICKETS } from '../Types/ttlDataTypes';
+import { TASKS,ORDERS_COUNT,CURRENT_SUPPLIER,AREA_CHART,CUSTOMER_ADS,CUSTOMER_INFO,CUSTOMER_LAST_ORDERS,CUSTOMER_LAST_TICKETS,LEAVE_DASHBOARD } from '../Types/ttlDataTypes';
 
 const initialState = {
   tasks: {
@@ -101,7 +101,42 @@ export const ttlDataReducers = (state = initialState, action) => {
           data: action.payload.data
         }
       };
-        default:
+      case LEAVE_DASHBOARD:
+        return {
+          tasks: {
+            ttlTime: 0,
+            data: null
+          },
+          ordersCount: {
+            ttlTime: 0,
+            data: null
+          },
+          currentSupplier: {
+            ttlTime: 0,
+            data: null
+          },
+          areaChart: {
+            ttlTime: 0,
+            data: null
+          },
+          customerLastOrders: {
+            ttlTime: 0,
+            data: null
+          },
+          customerAds: {
+            ttlTime: 0,
+            data: null
+          },
+          customerLastTicket: {
+            ttlTime: 0,
+            data: null
+          },
+          customerInfo: {
+            ttlTime: 0,
+            data: null
+          },
+        }
+      default:
         return state;
     }
 };

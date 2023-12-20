@@ -121,13 +121,6 @@ const Notices1 = ({date,setParticularDateHandler}) => {
     }else{
       if(currentSupplier.data !== null && mounted){
         setSupplier(currentSupplier.data);
-        if(phoneNumber?.length < 1){
-          dispatch({
-            type: STORE_ADMIN_PHONENUMBER,
-            payload: currentSupplier.data.phoneNumber
-          })
-          localStorage.setItem("storeOwnerPhoneNumber",currentSupplier.data.phoneNumber)
-        }
       }
     } 
 

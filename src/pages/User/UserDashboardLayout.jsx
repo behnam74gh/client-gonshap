@@ -13,6 +13,7 @@ import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
+import { LEAVE_DASHBOARD } from "../../redux/Types/ttlDataTypes";
 import "../Admin/TemplateAdminDashboard.css";
 
 const UserDashboardLayout = ({ children }) => {
@@ -57,10 +58,11 @@ const UserDashboardLayout = ({ children }) => {
       setLoading(false);
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
+        dispatch({type: LEAVE_DASHBOARD});
         localStorage.removeItem("storeOwnerPhoneNumber");
         localStorage.removeItem('dashProductsConf');
         localStorage.removeItem('otherFilterDashPage');
-        history.push('/')
+        history.push('/');
       }
     }).catch(err => {
       setLoading(false);

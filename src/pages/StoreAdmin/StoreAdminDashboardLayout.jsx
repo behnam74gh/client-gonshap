@@ -16,6 +16,7 @@ import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { UPDATE_DASHBOARD_IMAGE, USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { db } from "../../util/indexedDB";
 import { VscLoading } from "react-icons/vsc";
+import { LEAVE_DASHBOARD } from "../../redux/Types/ttlDataTypes";
 import "../Admin/TemplateAdminDashboard.css";
 
 const StoreAdminDashboardLayout = ({ children }) => {
@@ -23,7 +24,7 @@ const StoreAdminDashboardLayout = ({ children }) => {
   const [storeId, setStoreId] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { userInfo, userImage,phoneNumber } = useSelector((state) => state.userSignin);
+  const { userInfo, userImage, phoneNumber } = useSelector((state) => state.userSignin);
   const dispatch = useDispatch();
 
   const history = useHistory();
@@ -109,6 +110,7 @@ const StoreAdminDashboardLayout = ({ children }) => {
       setLoading(false);
       if(res.status === 200){
         dispatch({type: USER_SIGNOUT});
+        dispatch({type: LEAVE_DASHBOARD});
         localStorage.removeItem("storeOwnerPhoneNumber");
         localStorage.removeItem('dashProductsConf');
         localStorage.removeItem('otherFilterDashPage');
