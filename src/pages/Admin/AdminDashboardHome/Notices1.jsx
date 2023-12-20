@@ -6,7 +6,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { toast } from "react-toastify";
 import { HiBadgeCheck } from "react-icons/hi";
 import { STORE_ADMIN_PHONENUMBER } from "../../../redux/Types/authTypes";
-import { CURRENT_SUPPLIER, ORDERS_COUNT, TASKS } from "../../../redux/Types/ttlDataTypes";
+import { AREA_CHART, CURRENT_SUPPLIER, ORDERS_COUNT, TASKS } from "../../../redux/Types/ttlDataTypes";
 import "./Notices.css";
 
 const Notices1 = ({date,setParticularDateHandler}) => {
@@ -140,6 +140,13 @@ const Notices1 = ({date,setParticularDateHandler}) => {
   const setDateHandler = (value) => {
     if (value instanceof DateObject) value = value.toDate();
     setParticularDateHandler(value);
+    dispatch({
+      type: AREA_CHART,
+      payload: {
+        ttlTime : 0,
+        data: null
+      }
+    });
   };
 
   return (

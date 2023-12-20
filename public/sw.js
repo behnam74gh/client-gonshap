@@ -1,6 +1,6 @@
 const self = this
 
-const cacheName = `bazarchak-static-v-${0.05}`
+const cacheName = `bazarchak-static-v-${0.07}`
 
 self.addEventListener('install', e => {
     e.waitUntil(
@@ -44,6 +44,7 @@ self.addEventListener('install', e => {
                     '/logo192.png',
                     '/favicon.ico',
                     '/manifest.json',
+                    '/static/media/pro-8.bc8a7bcbbc94f4a14d0e.png',
                     '/static/media/instalogo.36b647f014e2b2952a7b.png',
                     '/static/media/telegram_PNG11.fddf2a3ec74d13e1ef9f.png',
                     '/static/media/whatsapp-logo.ad253bf275e796b797e0.png',
@@ -56,6 +57,40 @@ self.addEventListener('install', e => {
                     '/static/js/src_pages_Supplier_SupplierIntroduce_jsx.chunk.js',
                     '/static/js/src_pages_CartPage_CartPage_jsx.chunk.js',
                     '/static/js/src_pages_MyFavorites_MyFavoritePage_jsx.chunk.js',
+                    '/static/js/src_pages_Advertise_AdvertisePage_jsx.chunk.js',
+                    '/static/js/vendors-node_modules_react-google-recaptcha_lib_esm_index_js.chunk.js',
+                    '/static/js/src_pages_Auth_Signin_jsx-src_components_UI_FormElement_Input_css.chunk.js',
+                    '/static/js/src_pages_Admin_Carousel_Carousels_css-src_pages_Admin_Product_Products_css.chunk.js',
+                    '/static/js/src_components_UI_FormElement_ImageUpload_css-src_components_UI_FormElement_Input_css.chunk.js',
+                    '/static/js/src_pages_StoreAdmin_StoreAdminDashboard_jsx.chunk.js',
+                    '/static/js/vendors-node_modules_react-icons_ti_index_esm_js.chunk.js',
+                    '/static/js/vendors-node_modules_react-icons_go_index_esm_js.chunk.js',
+                    '/static/js/src_pages_Admin_TemplateAdminDashboard_css-src_assets_images_pro-8_png.chunk.js',
+                    '/static/js/src_pages_StoreAdmin_StoreAdminDashboardLayout_jsx.chunk.js',
+                    '/static/js/vendors-node_modules_react-multi-date-picker_build_index_js.chunk.js',
+                    '/static/js/vendors-node_modules_recharts_es6_cartesian_CartesianGrid_js-node_modules_recharts_es6_chart_-a75dde.chunk.js',
+                    '/static/js/src_pages_Admin_AdminDashboardHome_AreaChart_jsx-src_pages_Admin_AdminDashboardHome_Notices1_jsx.chunk.js',
+                    '/static/js/src_pages_StoreAdmin_StoreDashboardHome_StoreDashboardHome_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_Orders_Orders_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_Product_Products_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_Product_ProductCreate_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_SubCategory_SubCategory_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_Brands_Brands_jsx.chunk.js',
+                    '/static/js/vendors-node_modules_react-colorful_dist_index_mjs.chunk.js',
+                    '/static/js/src_pages_Admin_Colors_Colors_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_ToDo_ToDoList_jsx.chunk.js',
+                    '/static/js/src_pages_User_Ticket_UserTickets_jsx-node_modules_react-icons_lib_esm_index_js.chunk.js',
+                    '/static/js/src_pages_Admin_Carousel_CarouselUpdate_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_UpdateProfileInfo_ChangeUserPassword_jsx.chunk.js',
+                    '/static/js/src_pages_User_UserDashboard_UserDashboard_jsx.chunk.js',
+                    '/static/js/src_pages_User_UserDashboardLayout_jsx.chunk.js',
+                    '/static/js/src_pages_User_UserDashboardHome_UserDashboardHome_jsx.chunk.js',
+                    '/static/js/src_pages_User_UserOrders_SingleOrder_SingleOrder_css.chunk.js',
+                    '/static/js/src_pages_User_UserOrders_ListOfUserOrders_jsx-node_modules_react-icons_lib_esm_index_js.chunk.js',
+                    '/static/js/src_pages_Admin_UpdateProfileInfo_UpdateProfileInfo_jsx.chunk.js',
+                    '/static/js/src_pages_Admin_UpdateProfileInfo_ChangeUserPassword_jsx-src_components_UI_FormElement_Input_css.chunk.js',
+                    '/static/js/src_pages_Compare_ComparePage_jsx.chunk.js',
+                    '/static/js/src_pages_Help_HelpPage_jsx.chunk.js'
                 ])
             })
     )

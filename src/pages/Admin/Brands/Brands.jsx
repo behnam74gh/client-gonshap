@@ -31,6 +31,7 @@ const Brands = () => {
   const [parents, setParents] = useState([]);
   const [activeCategory, setActiveCategory] = useState("");
   const [showSub, setShowSub] = useState(false);
+  const [progressCount, setProgressCount] = useState(0);
 
   const [formState, inputHandler] = useForm(
     {
@@ -112,7 +113,7 @@ const Brands = () => {
     if (e.target.files && e.target.files.length === 1) {
       pickedFile = await resizeFile(e.target.files[0]);
       if(pickedFile?.size > 500000){
-        toast.warning('سایز عکس بیشتر از 4 MB است')
+        toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
         return;
       }
       setFile(pickedFile);
@@ -190,7 +191,11 @@ const Brands = () => {
 
     setLoading(true);
     axios
-      .post("/create-brand", formData)
+      .post("/create-brand", formData, {
+        onUploadProgress: function(progressEvent){
+          setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+        }
+      })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -206,10 +211,10 @@ const Brands = () => {
       })
       .catch((err) => {
         setLoading(false);
-        if (typeof err.response.data.message === "object") {
+        if (err?.response && typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
         } else {
-          toast.error(err.response.data.message);
+          toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا مجددا تلاش فرمایید");
         }
       });
   };
@@ -324,13 +329,14 @@ const Brands = () => {
               <Button
                 type="submit"
                 disabled={
+                  loading ||
                   !formState.inputs.brandName.isValid ||
                   file === undefined ||
                   !parents.length
                   // !activeCategory.length
                 }
               >
-                {!loading ? "ثبت" : <VscLoading className="loader" />}
+                {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
               </Button>
             </form>
           )}

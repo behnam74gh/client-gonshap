@@ -50,6 +50,7 @@ const ProductUpdate = ({ history }) => {
   const [showFinallyPrice, setShowFinallyPrice] = useState(false);
   const [showSub, setShowSub] = useState(false);
   const [showBrand, setShowBrand] = useState(false);
+  const [progressCount, setProgressCount] = useState(0);
   const [formState, inputHandler] = useForm(
     {
       title: {
@@ -204,9 +205,8 @@ const ProductUpdate = ({ history }) => {
       let resizeddFiles = [];
       for (let i = 0; i < e.target.files.length; i++) {
         const resizedImage = await resizeFile(e.target.files[i]);
-        
         if(resizedImage.size > 500000){
-          toast.warning('حجم عکس بیشتر از 4 MB است')
+          toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
           return;
         }else{
           resizeddFiles.push(resizedImage);
@@ -351,6 +351,14 @@ const ProductUpdate = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if(files.length+oldPhotos < 1 || colors.length < 1 || values.brand === 'none' || values.countInStock < 1 || values.countInStock > 99 || values.factorPrice < 10000 || values.price < 10000 || values.finallyPrice < 10000){
+      toast.warning(
+        files.length+oldPhotos < 1 ? "عکسی برای محصول انتخاب نکرده اید" : colors.length < 1 ? "رنگ انتخاب نشده است" : values.brand === 'none' ? "برند انتخاب نشده است" :
+        values.countInStock < 1 ? "تعداد کالا را مشخص کنید" : values.factorPrice < 10000 ? "قیمت فاکتور کالا را چک کنید" : values.countInStock > 99 ? "تعداد کالا باید زیر 100 باشد" :
+        values.price < 10000 ? "قیمت فروش  کالا در بازار را چک کنید" : values.finallyPrice < 10000 && "قیمت نهایی کالا را چک کنید"
+      )
+      return;
+    }
     const activeColors = colors;
     const finallyColors = activeColors.map((c) => c._id);
 
@@ -385,7 +393,11 @@ const ProductUpdate = ({ history }) => {
 
     setLoading(true);
     axios
-      .put(`/product-update/${id}`, formData)
+      .put(`/product-update/${id}`, formData, {
+        onUploadProgress: function(progressEvent){
+          setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+        }
+      })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -395,10 +407,10 @@ const ProductUpdate = ({ history }) => {
       })
       .catch((err) => {
         setLoading(false);
-        if (typeof err.response.data.message === "object") {
+        if (err?.response && typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
         } else {
-          toast.error(err.response.data.message);
+          toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا تعداد عکس را کم کنید و مجددا تلاش فرمایید");
         }
       });
   };
@@ -741,8 +753,8 @@ const ProductUpdate = ({ history }) => {
             {values.details?.length > 0 && <div className="details_wrapper">
               {values.details.map((detail,i) => <div className="detail" key={i}><span>{detail.question}؟ {detail.answer}</span><span className="delete_img" onClick={() => deleteDetailHandler(i)}><TiDelete /></span></div>)}
             </div>}
-          <Button type="submit">
-            {!loading ? "ثبت" : <VscLoading className="loader" />}
+          <Button type="submit" disabled={loading || !formState.inputs.description.isValid || !formState.inputs.title.isValid}>
+            {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
           </Button>
           </form>
         </>

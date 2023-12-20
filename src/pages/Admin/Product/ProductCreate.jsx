@@ -45,6 +45,7 @@ const ProductCreate = ({history}) => {
   const [subLoading, setSubLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [brands, setBrands] = useState([]);
+  const [progressCount, setProgressCount] = useState(0);
 
   const [formState, inputHandler] = useForm(
     {
@@ -180,9 +181,8 @@ const ProductCreate = ({history}) => {
       let resizeddFiles = [];
       for (let i = 0; i < e.target.files.length; i++) {
         const resizedImage = await resizeFile(e.target.files[i]);
-        console.log('file-size : ',e.target.files[i].size, "---" ,resizedImage.size);
         if(resizedImage.size > 500000){
-          toast.warning('حجم عکس بیشتر از 4 MB است');
+          toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
           return;
         }else{
           resizeddFiles.push(resizedImage);
@@ -320,7 +320,14 @@ const ProductCreate = ({history}) => {
   //create-product-submit
   const submitHandler = (e) => {
     e.preventDefault();
-
+    if(files.length < 1 || colors.length < 1 || values.subcategory === 'none' || values.brand === 'none' || formState.inputs.countInStock.value < 1 || formState.inputs.factorPrice.value < 10000 || formState.inputs.price.value < 10000 || values.finallyPrice < 10000){
+      toast.warning(
+        files.length < 1 ? "عکسی برای محصول انتخاب نکرده اید" : colors.length < 1 ? "رنگ انتخاب نشده است" : values.subcategory === 'none' ? "برچسب کالا را تعیین کنید" : values.brand === 'none' ? "برند انتخاب نشده است" :
+        formState.inputs.countInStock.value < 1 ? "تعداد کالا را مشخص کنید" : formState.inputs.factorPrice.value < 10000 ? "قیمت فاکتور کالا را چک کنید" :
+        formState.inputs.price.value < 10000 ? "قیمت فروش  کالا در بازار را چک کنید" : values.finallyPrice < 10000 && "قیمت نهایی کالا را چک کنید"
+      )
+      return;
+    }
     const activeColors = colors;
     const finallyColors = activeColors.map((c) => c._id);
 
@@ -353,7 +360,11 @@ const ProductCreate = ({history}) => {
 
     setLoading(true);
     axios
-      .post("/product-create", formData)
+      .post("/product-create", formData, {
+        onUploadProgress: function(progressEvent){
+          setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+        }
+      })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -376,10 +387,10 @@ const ProductCreate = ({history}) => {
       })
       .catch((err) => {
         setLoading(false);
-        if (typeof err.response.data.message === "object") {
+        if (err?.response && typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
         } else {
-          toast.error(err.response.data.message);
+          toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا تعداد عکس را کم کنید و مجددا تلاش فرمایید");
         }
       });
   };
@@ -716,11 +727,11 @@ const ProductCreate = ({history}) => {
           {values.details?.length > 0 && <div className="details_wrapper">
             {values.details.map((detail,i) => <div className="detail" key={i}><span>{detail.question}؟ {detail.answer}</span><span className="delete_img" onClick={() => deleteDetailHandler(i)}><TiDelete /></span></div>)}
           </div>}
-          <Button type="submit" disabled={
+          <Button type="submit" disabled={loading || !formState.inputs.title.isValid || values.subcategory.length < 1 || values.brand.length < 1 ||
             !formState.inputs.description.isValid ||
             (role === 1 && !formState.inputs.hostId.isValid)
             }>
-            {!loading ? "ثبت" : <VscLoading className="loader" />}
+            {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
           </Button>
         </form>
       </div>

@@ -37,6 +37,7 @@ const CarouselUpdate = ({ history, match }) => {
   const [firstLoading, setFirstLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [regions, setRegions] = useState([]);
+  const [progressCount, setProgressCount] = useState(0);
 
   const { id } = match.params;
   const { userInfo: { role } } = useSelector(state => state.userSignin);
@@ -139,7 +140,7 @@ const CarouselUpdate = ({ history, match }) => {
         const resizedImage = await resizeFile(e.target.files[i]);
         
         if(resizedImage.size > 500000){
-          toast.warning('سایز عکس بیشتر از 4 MB است')
+          toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
           return;
         }else{
           resizeddFiles.push(resizedImage);
@@ -183,6 +184,14 @@ const CarouselUpdate = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
+    if(files.length+oldPhotos < 1 || values.longitude < 1 || values.latitude < 1 || values.title < 3 || values.title > 70 || values.storePhoneNumber < 1 || `${values.storePhoneNumber}`.length > 11 || values.address.length < 20){
+      toast.warning(
+        files.length+oldPhotos < 1 ? "عکسی برای بنر فروشگاه انتخاب نکرده اید" : values.longitude < 1 ? "مختصات لوکیشن نامعتبر است" : values.latitude < 1 ? "مختصات لوکیشن نامعتبر است" : `${values.storePhoneNumber}`.length > 11 ? "شماره تلفن فروشگاه نباید بیشتر از 11 رقم باشد" :
+        values.title < 3 ? "عنوان فروشگاه باید بیشتر از 2 کاراکتر باشد" : values.title > 70 ? "عنوان فروشگاه باید کمتر از 70 کاراکتر باشد" : values.storePhoneNumber < 1 ? "شماره تلفن فروشگاه نامعتبر است" : values.address.length < 20 && "نشانی فروشگاه باید بیشتر از 20 کاراکتر وارد شود"
+      )
+      return;
+    }
+
     const {
       region,
       title,
@@ -222,7 +231,11 @@ const CarouselUpdate = ({ history, match }) => {
 
     setLoading(true);
     axios
-      .put(`/supplier/update/${id}`, formData)
+      .put(`/supplier/update/${id}`, formData, {
+        onUploadProgress: function(progressEvent){
+          setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+        }
+      })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -234,15 +247,19 @@ const CarouselUpdate = ({ history, match }) => {
             }
           });
           toast.success(response.data.message);
-          history.goBack();
+          if(role === 1){
+            history.goBack();
+          }else{
+            history.push('/store-admin/dashboard/home')
+          }
         }
       })
       .catch((err) => {
         setLoading(false);
-        if (typeof err.response.data.message === "object") {
+        if (err?.response && typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
         } else {
-          toast.error(err.response.data.message);
+          toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا تعداد عکس را کم کنید و مجددا تلاش فرمایید");
         }
       });
   };
@@ -429,8 +446,8 @@ const CarouselUpdate = ({ history, match }) => {
           rows="12"
           onChange={(e) => changeInputHandler(e)}
         ></textarea>
-        <Button type="submit">
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
+        <Button type="submit" disabled={values.description.length < 10 || loading}>
+          {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
         </Button>
       </form>
     </div>

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { VscLoading } from "react-icons/vsc";
 import { Calendar, DateObject } from "react-multi-date-picker";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "../../../util/axios";
 import { useForm } from "../../../util/hooks/formHook";
 import {
@@ -14,13 +14,15 @@ import {
 import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
 import "./ToDo.css";
+import { TASKS } from "../../../redux/Types/ttlDataTypes";
 
 const ToDoCreate = () => {
   const [reRenderParent, setReRenderParent] = useState(true);
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState();
 
-  const {userInfo : {role}} = useSelector(state => state.userSignin)
+  const {userInfo : {role}} = useSelector(state => state.userSignin);
+  const dispatch = useDispatch();
 
   const [formState, inputHandler] = useForm(
     {
@@ -59,6 +61,14 @@ const ToDoCreate = () => {
           toast.success(response.data.message);
           setDate(null);
           setReRenderParent(false);
+
+          dispatch({
+            type: TASKS,
+            payload: {
+              ttlTime : 0,
+              data: null
+            }
+          });
         }
       })
       .catch((err) => {

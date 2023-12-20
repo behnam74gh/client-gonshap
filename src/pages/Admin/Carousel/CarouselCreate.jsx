@@ -27,6 +27,7 @@ const CarouselCreate = ({ history }) => {
   const [region, setRegion] = useState("");
   const [loading, setLoading] = useState(false);
   const [regions, setRegions] = useState([]);
+  const [progressCount, setProgressCount] = useState(0);
 
   const [formState, inputHandler] = useForm(
     {
@@ -123,7 +124,7 @@ const CarouselCreate = ({ history }) => {
         const resizedImage = await resizeFile(e.target.files[i]);
         
         if(resizedImage.size > 500000){
-          toast.warning('سایز عکس بیشتر از 4 MB است')
+          toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
           return;
         }else{
           resizeddFiles.push(resizedImage);
@@ -183,7 +184,11 @@ const CarouselCreate = ({ history }) => {
 
     setLoading(true);
     axios
-      .post("/supplier-store/create", formData)
+      .post("/supplier-store/create", formData, {
+        onUploadProgress: function(progressEvent){
+          setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+        }
+      })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -196,7 +201,7 @@ const CarouselCreate = ({ history }) => {
         if (typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
         } else {
-          toast.error(err.response.data.message);
+          toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا تعداد عکس را کم کنید و مجددا تلاش فرمایید");
         }
       });
   };
@@ -385,8 +390,8 @@ const CarouselCreate = ({ history }) => {
             VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
-        <Button type="submit" disabled={!formState.inputs.description.isValid}>
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
+        <Button type="submit" disabled={!formState.inputs.description.isValid || loading}>
+          {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
         </Button>
       </form>
     </div>

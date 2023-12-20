@@ -13,12 +13,17 @@ import axios from "../../../util/axios";
 import Button from "../../../components/UI/FormElement/Button";
 import Input from "../../../components/UI/FormElement/Input";
 import { resizeFile } from "../../../util/customFunctions";
+import { CUSTOMER_LAST_TICKETS } from "../../../redux/Types/ttlDataTypes";
+import { useDispatch } from "react-redux";
 
 const CreateTicket = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState();
   const [url, setUrl] = useState();
   const [ticketStatus, setTicketStatus] = useState("none");
+  const [progressCount, setProgressCount] = useState(0);
+
+  const dispatch = useDispatch();
 
   const defaultStatus = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
@@ -44,7 +49,7 @@ const CreateTicket = ({ history }) => {
     if (e.target.files && e.target.files.length === 1) {
       pickedFile = await resizeFile(e.target.files[0]);
       if(pickedFile?.size > 500000){
-        toast.warning('سایز عکس بیشتر از 4 MB است')
+        toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
         return;
       }
       setFile(pickedFile);
@@ -115,20 +120,31 @@ const CreateTicket = ({ history }) => {
 
     setLoading(true);
     axios
-      .post("/user/create/ticket", formData)
+      .post("/user/create/ticket", formData, {
+        onUploadProgress: function(progressEvent){
+          setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+        }
+      })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
           toast.success(response.data.message);
+          dispatch({
+            type: CUSTOMER_LAST_TICKETS,
+            payload: {
+              ttlTime : 0,
+              data: null
+            }
+          });
         }
         history.goBack();
       })
       .catch((err) => {
         setLoading(false);
-        if (typeof err.response.data.message === "object") {
+        if (err?.response && typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
         } else {
-          toast.error(err.response.data.message);
+          toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا مجددا تلاش فرمایید");
         }
       });
   };
@@ -199,7 +215,7 @@ const CreateTicket = ({ history }) => {
           type="submit"
           disabled={!formState.inputs.content.isValid || loading}
         >
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
+          {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
         </Button>
       </form>
     </div>

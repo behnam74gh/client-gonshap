@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { VscLoading } from "react-icons/vsc";
 import { TiDelete } from "react-icons/ti";
 import { toast } from "react-toastify";
@@ -17,13 +17,13 @@ import {
 import { useForm } from "../../../util/hooks/formHook";
 import defPro from "../../../assets/images/pro-8.png";
 import { getCookie, resizeFile } from '../../../util/customFunctions';
+import { CUSTOMER_INFO } from "../../../redux/Types/ttlDataTypes";
 import "../../../components/UI/FormElement/ImageUpload.css";
 import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
-import { CUSTOMER_INFO } from "../../../redux/Types/ttlDataTypes";
 
 const UpdateProfileInfo = ({ history }) => {
-  const [expired, setExpired] = useState(true);
+  const [expired, setExpired] = useState(false);
   const [captchaLoading, setCaptchaLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -31,6 +31,7 @@ const UpdateProfileInfo = ({ history }) => {
   const [deletedPhoto, setDeletedPhoto] = useState("");
   const [file, setFile] = useState();
   const [url, setUrl] = useState();
+  const [progressCount, setProgressCount] = useState(0);
   const [values, setValues] = useState({
     firstName: "",
     lastName: "",
@@ -56,11 +57,21 @@ const UpdateProfileInfo = ({ history }) => {
     false
   );
 
+  const { customerInfo } = useSelector(state => state.ttlDatas);
+
   const reCaptchaSiteKey = `${process.env.REACT_APP_RECAPTCHA_SITE_KEY}`;
 
   useEffect(() => {
-    setLoading(true);
-    axios
+    if(customerInfo !== null && Date.now() < customerInfo.ttlTime){
+      setValues({
+        firstName: customerInfo.data.firstName,
+        lastName: customerInfo.data.lastName,
+        address: customerInfo.data.address ? customerInfo.data.address : "",
+      });
+      customerInfo.data.image ? setOldPhoto(customerInfo.data.image) : setOldPhoto("");
+    }else{
+      setLoading(true);
+      axios
       .get("/get/current-user/info")
       .then((response) => {
         setLoading(false);
@@ -80,6 +91,7 @@ const UpdateProfileInfo = ({ history }) => {
         if (err.response && err.response.data.message)
           setErrorText(err.response.data.message);
       });
+    }    
   }, []);
 
   //image-picker-codes
@@ -94,7 +106,7 @@ const UpdateProfileInfo = ({ history }) => {
     if (e.target.files && e.target.files.length === 1) {
       pickedFile = await resizeFile(e.target.files[0]);
       if(pickedFile?.size > 500000){
-        toast.warning('سایز عکس بیشتر از 4 MB است')
+        toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
         return;
       }
       if (oldPhoto.length > 0) {
@@ -167,7 +179,11 @@ const UpdateProfileInfo = ({ history }) => {
     
     if (!expired) {
       axios
-        .put("/user/profile/update-info", formData)
+        .put("/user/profile/update-info", formData, {
+          onUploadProgress: function(progressEvent){
+            setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+          }
+        })
         .then((response) => {
           setLoading(false);
           if (response.data.success) {
@@ -207,10 +223,10 @@ const UpdateProfileInfo = ({ history }) => {
         })
         .catch((err) => {
           setLoading(false);
-          if (typeof err.response.data.message === "object") {
+          if (err?.response && typeof err.response.data.message === "object") {
             toast.error(err.response.data.message[0]);
           } else {
-            toast.error(err.response.data.message);
+            toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا مجددا تلاش فرمایید");
           }
         });
     }
@@ -329,7 +345,8 @@ const UpdateProfileInfo = ({ history }) => {
           disabled={ loading || captchaLoading || expired
           || !formState.inputs.firstName.isValid || !formState.inputs.lastName.isValid}
         >
-          {(captchaLoading || loading) ? <VscLoading className="loader" /> : "ثبت"}
+          {captchaLoading ? <VscLoading className="loader" /> :
+          loading ? <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span> : "ثبت"}
         </Button>
       </form>
     </div>

@@ -144,7 +144,7 @@ const SingleOrder = ({ order }) => {
                                   : "black",
                             }}
                             className="single_order_color tooltip"
-                            key={`${color._id}-${i}`}
+                            key={i}
                           >
                             <span className="tooltip_text">
                               {color.colorName}

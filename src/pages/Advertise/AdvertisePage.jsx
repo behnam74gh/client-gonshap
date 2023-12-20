@@ -21,7 +21,7 @@ const AdvertisePage = ({ match }) => {
   });
 
   const { slug } = match.params;
-
+  
   useEffect(() => {
     setLoading(true);
     axios
@@ -132,7 +132,7 @@ const AdvertisePage = ({ match }) => {
             </div>
             </div>
             <div className="store_carousel_wrapper">
-              {advertise?.photos?.length > 1 && (
+              {advertise?.photos?.length > 0 && (
                 <Slider {...setting}>
                   {advertise.photos.map((p, i) => (
                     <img

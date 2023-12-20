@@ -27,7 +27,7 @@ const StoreAdminDashboardLayout = ({ children }) => {
   const dispatch = useDispatch();
 
   const history = useHistory();
-
+  
   useEffect(() => {
     db.supplierList.toArray().then(items => {
       if(items.length > 0 && phoneNumber?.length > 0){
@@ -219,7 +219,7 @@ const StoreAdminDashboardLayout = ({ children }) => {
               <span className="sidebar-text-link">تیکت ها</span>
             </Link>
           </li>
-          <li
+         {storeId.length > 0 && <li
             onClick={() => setActiveRoute("ویرایش پنل")}
             className={activeRoute === "ویرایش پنل" ? "active" : ""}
           >
@@ -227,7 +227,7 @@ const StoreAdminDashboardLayout = ({ children }) => {
               <GoPlus />
               <span className="sidebar-text-link">ویرایش پنل</span>
             </Link>
-          </li>
+          </li>}
           <li
             onClick={() => setActiveRoute("تغییر رمزعبور")}
             className={activeRoute === "تغییر رمزعبور" ? "active" : ""}

@@ -30,6 +30,7 @@ const AdvertiseCreate = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [days, setDays] = useState("");
   const [dates, setDates] = useState([]);
+  const [progressCount, setProgressCount] = useState(0);
 
   const defaultLevels = [1, 2, 3, 4, 5];
   const defaultStatus = ["reserve", "active", "done", "cancel"];
@@ -104,7 +105,7 @@ const AdvertiseCreate = ({ history }) => {
         if(e.target.files[i].type.split("/")[1] !== "gif"){
           const resizedImage = await resizeFile(e.target.files[i]);
           if(resizedImage.size > 500000){
-            toast.warning('حجم عکس بیشتر از 4 MB است');
+          toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
             return;
           }else{
             resizeddFiles.push(resizedImage);
@@ -213,7 +214,11 @@ const AdvertiseCreate = ({ history }) => {
 
       setLoading(true);
       axios
-        .post("/advertise/create", formData)
+        .post("/advertise/create", formData, {
+          onUploadProgress: function(progressEvent){
+            setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+          }
+        })
         .then((response) => {
           setLoading(false);
           if (response.data.success) {
@@ -223,10 +228,10 @@ const AdvertiseCreate = ({ history }) => {
         })
         .catch((err) => {
           setLoading(false);
-          if (typeof err.response.data.message === "object") {
+          if (err?.response && typeof err.response.data.message === "object") {
             toast.error(err.response.data.message[0]);
           } else {
-            toast.error(err.response.data.message);
+            toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا تعداد عکس را کم کنید و مجددا تلاش فرمایید");
           }
         });
     } else {
@@ -489,7 +494,7 @@ const AdvertiseCreate = ({ history }) => {
             advertisesCost.length <= 5
           }
         >
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
+            {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
         </Button>
       </form>
     </div>

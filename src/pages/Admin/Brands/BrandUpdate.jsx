@@ -27,6 +27,7 @@ const BrandUpdate = ({ match, history }) => {
   const [url, setUrl] = useState();
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [progressCount, setProgressCount] = useState(0);
   const [values, setValues] = useState({
     brandName: "",
     parents: [],
@@ -97,7 +98,7 @@ const BrandUpdate = ({ match, history }) => {
     if (e.target.files && e.target.files.length === 1) {
       pickedFile = await resizeFile(e.target.files[0]);
       if(pickedFile?.size > 500000){
-        toast.warning('سایز عکس بیشتر از 4 MB است')
+        toast.warning('حجم عکس انتخاب شده بعد از تغییر اندازه توسط بازارچک، بیشتر از 500 KB است. لطفا حجم عکس را کمتر کنید');
         return;
       }
 
@@ -188,7 +189,11 @@ const BrandUpdate = ({ match, history }) => {
 
     setLoading(true);
     axios
-      .put(`/current-brand/update/${id}`, formData)
+      .put(`/current-brand/update/${id}`, formData, {
+        onUploadProgress: function(progressEvent){
+          setProgressCount(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))
+        }
+      })
       .then((response) => {
         setLoading(false);
         if (response.data.success) {
@@ -198,10 +203,10 @@ const BrandUpdate = ({ match, history }) => {
       })
       .catch((err) => {
         setLoading(false);
-        if (typeof err.response.data.message === "object") {
+        if (err?.response && typeof err.response.data.message === "object") {
           toast.error(err.response.data.message[0]);
         } else {
-          toast.error(err.response.data.message);
+          toast.error(err?.response?.data?.message || "اینترنت شما ضعیف است، لطفا مجددا تلاش فرمایید");
         }
       });
   };
@@ -350,7 +355,7 @@ const BrandUpdate = ({ match, history }) => {
             !values.backupFor
           }
         >
-          {!loading ? "ثبت" : <VscLoading className="loader" />}
+          {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
         </Button>
           </form>
         </>

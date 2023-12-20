@@ -31,7 +31,7 @@ const OrderStatus = () => {
             dispatch({
               type: CUSTOMER_LAST_ORDERS,
               payload: {
-                ttlTime : Date.now()+(1000*60*3),
+                ttlTime : Date.now()+(1000*60*60*24),
                 data: response.data.ordersCount
               }
             })

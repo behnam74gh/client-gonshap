@@ -26,7 +26,7 @@ const LastTicket = () => {
             dispatch({
               type: CUSTOMER_LAST_TICKETS,
               payload: {
-                ttlTime : Date.now()+(1000*60*5),
+                ttlTime : Date.now()+(1000*60*60*24),
                 data: response.data.lastTicket
               }
             });

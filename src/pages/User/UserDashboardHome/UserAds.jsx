@@ -26,7 +26,7 @@ const UserAds = () => {
                     dispatch({
                         type: CUSTOMER_ADS,
                         payload: {
-                            ttlTime : Date.now()+(1000*60*15),
+                            ttlTime : Date.now()+(1000*60*30),
                             data: res.data.userAds
                         }
                     })

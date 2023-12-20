@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import { VscLoading } from "react-icons/vsc";
 import defPic from "../../assets/images/def.jpg";
+import { CUSTOMER_LAST_ORDERS } from "../../redux/Types/ttlDataTypes";
 
 const CheckoutHistory = ({
   products,
@@ -46,6 +47,13 @@ const CheckoutHistory = ({
           emptyCartHandler();
           toast.success(response.data.message);
           setTimeout(() => {
+            dispatch({
+              type: CUSTOMER_LAST_ORDERS,
+              payload: {
+                ttlTime : 0,
+                data: null
+              }
+            })
             history.push("/user/dashboard");
            }, 100);
         }

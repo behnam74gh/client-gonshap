@@ -1,6 +1,6 @@
 {
+  "name": "",
   "short_name": "Bazarchak",
-  "name": "Bazarchak",
   "start_url": "/",
   "scope": ".",
   "display": "standalone",
