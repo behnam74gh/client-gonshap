@@ -43,6 +43,7 @@ const ProductUpdate = ({ history }) => {
   const [values, setValues] = useState(oldStates);
   const [colors, setColors] = useState([]);
   const [defColors, setDefColors] = useState([]);
+  const [colorLoading, setColorLoading] = useState(false);
   const [productLoading, setProductLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [subLoading, setSubLoading] = useState(false);
@@ -168,15 +169,18 @@ const ProductUpdate = ({ history }) => {
       });
   };
   const loadAllColors = () => {
+    setColorLoading(true);
     axios
       .get("/get-all-colors")
       .then((response) => {
+        setColorLoading(false);
         if (response.data.success) {
           setDefColors(response.data.colors);
           setError("");
         }
       })
       .catch((err) => {
+        setColorLoading(false);
         if (err.response) {
           setError(err.response.data.message);
         }
@@ -631,6 +635,7 @@ const ProductUpdate = ({ history }) => {
             onChange={(e) => changeInputHandler(e)}
           />
           <label className="auth-label">رنگ ها</label>
+          {colorLoading ? <VscLoading className="loader" /> : defColors?.length > 0 &&
           <select value="none" onChange={(e) => setColorsHandler(e.target.value)}>
             <option value="none">لطفا رنگ ها را انتخاب کنید</option>
             {defColors.length > 0 &&
@@ -639,7 +644,7 @@ const ProductUpdate = ({ history }) => {
                   {dc.colorName}
                 </option>
               ))}
-          </select>
+          </select>}
           {colors && colors.length > 0 && (
             <div className="image-upload__preview">
               {colors.map((c, i) => (

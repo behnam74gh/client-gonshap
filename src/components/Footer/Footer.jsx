@@ -161,7 +161,7 @@ const Footer = ({ companyInfo }) => {
       <div className="protection">
         <p className="font-sm">
           کلیه حقوق مادی و معنوی این سایت متعلق به
-          <strong className="mx-1 text-orange">{` ${companyTitle} `}</strong> می
+          <strong className="mx-1 text-orange">{` ${companyTitle || "بازارچک"} `}</strong> می
           باشد.
         </p>
       </div>

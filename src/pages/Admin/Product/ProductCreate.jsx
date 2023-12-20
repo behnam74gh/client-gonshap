@@ -41,6 +41,7 @@ const ProductCreate = ({history}) => {
   const [showFinallyPrice, setShowFinallyPrice] = useState(false);
   const [colors, setColors] = useState([]);
   const [defColors, setDefColors] = useState([]);
+  const [colorLoading, setColorLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [subLoading, setSubLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -140,15 +141,18 @@ const ProductCreate = ({history}) => {
   };
   
   const loadAllColors = () => {
+    setColorLoading(true);
     axios
       .get("/get-all-colors")
       .then((response) => {
+        setColorLoading(false);
         if (response.data.success) {
           setDefColors(response.data.colors);
           setErrorText("");
         }
       })
       .catch((err) => {
+        setColorLoading(false);
         if (err.response) {
           setErrorText(err.response.data.message);
         }
@@ -605,7 +609,7 @@ const ProductCreate = ({history}) => {
             ]}
           />
           <label className="auth-label">رنگ ها</label>
-          <select
+          {colorLoading ? <VscLoading className="loader" /> : defColors?.length > 0 && <select
             value="none"
             onChange={(e) => setColorsHandler(e.target.value)}
           >
@@ -617,7 +621,7 @@ const ProductCreate = ({history}) => {
                   {c.colorName}
                 </option>
               ))}
-          </select>
+          </select>}
           {colors && colors.length > 0 && (
             <div className="image-upload__preview">
               {colors.map((c, i) => (
