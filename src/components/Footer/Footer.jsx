@@ -84,21 +84,21 @@ const Footer = ({ companyInfo }) => {
           </div>
           {(instagramId || telegramId || whatsupId) && window.innerWidth > 780 && <span className="font-sm my-2">اطلاعیه های ما را دنبال کنید در :</span>}
           {(instagramId || telegramId || whatsupId) && <div className="company_social_icons">
-            {instagramId?.length > 0 && <a
-              href={`https://instagram.com/${instagramId}`}
-              target="_blank"
-              rel="noreferrer"
-              className="tooltip"
-            >
-              <span className="tooltip_text">{`اینستاگرامِ ${companyTitle}`}</span>
-              <img
-                src={InstagramLogo}
-                alt="instagram_id"
-                className="footer_social_icon"
-              />
-            </a>}
+          <a
+            href='https://www.instagram.com/bazarchak.ir/'
+            target="_blank"
+            rel="noreferrer"
+            className="tooltip"
+          >
+            <span className="tooltip_text">{`اینستاگرامِ ${companyTitle}`}</span>
+            <img
+              src={InstagramLogo}
+              alt="instagram_id"
+              className="footer_social_icon"
+            />
+          </a>
             {telegramId?.length > 0 && <a
-              href={`https://telegram.com/${telegramId}`}
+              href={`https://t.me/${telegramId}`}
               target="_blank"
               rel="noreferrer"
               className="tooltip"
@@ -111,7 +111,7 @@ const Footer = ({ companyInfo }) => {
               />
             </a>}
             {whatsupId?.length > 0 && <a
-              href={`https://whatsapp.com/${whatsupId}`}
+              href={`https://web.whatsapp.com/${whatsupId}`}
               target="_blank"
               rel="noreferrer"
               className="tooltip"
@@ -129,9 +129,9 @@ const Footer = ({ companyInfo }) => {
             <div className="nemads_wrapper">
               <h4>نمادهای اعتماد الکترونیک</h4>
               <div className="nemads">
-              {signENemad?.length > 0 && <a href={`https://www.${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
-              {signUnion?.length > 0 && <a href={`https://www.${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
-              {signMedia?.length > 0 && <a href={`https://www.${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
+              {signENemad?.length > 0 && <a href={`https://trustseal.enamad.ir/${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
+              {signUnion?.length > 0 && <a href={`https://www.ecunion.ir/${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
+              {signMedia?.length > 0 && <a href={`https://logo.samandehi.ir/${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
               </div>
             </div>
           )}
