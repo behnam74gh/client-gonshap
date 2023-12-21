@@ -96,7 +96,7 @@ const AdvertisePage = ({ match }) => {
               <span style={{marginLeft: "auto"}}>ما را دنبال کنید در : </span>
               {advertise?.instagramId?.length > 0 && <div>
                 <a
-                  href={`https://instagram.com/${advertise.instagramId}`}
+                  href={`https://www.instagram.com/${advertise.instagramId}`}
                   target="_blank"
                   rel="noreferrer"
                   title={advertise.title}
@@ -111,7 +111,7 @@ const AdvertisePage = ({ match }) => {
               </div>}
               {advertise?.telegramId?.length > 0 && <div>
                 <a
-                  href={`https://telegram.com/${advertise.telegramId}`}
+                  href={`https://t.me/${advertise.telegramId}`}
                   target="_blank"
                   rel="noreferrer"
                   title={advertise.title}
@@ -119,7 +119,7 @@ const AdvertisePage = ({ match }) => {
                 <img src={TelegramLogo} alt="telegram_id" style={{width: "25px",height: "25px"}} />
                 </a>
               </div>}
-              {advertise?.whatsupId?.length > 0 && <div>
+              {/* {advertise?.whatsupId?.length > 0 && <div>
                 <a
                   href={`https://whatsapp.com/${advertise.whatsupId}`}
                   target="_blank"
@@ -128,7 +128,7 @@ const AdvertisePage = ({ match }) => {
                 >
                 <img src={WhatsappLogo} alt="whatsapp_id" />
                 </a>
-              </div>}
+              </div>} */}
             </div>
             </div>
             <div className="store_carousel_wrapper">

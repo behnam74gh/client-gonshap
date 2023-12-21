@@ -9,9 +9,11 @@
 
 #sec8 .advertise1 {
   flex-basis: 50%;
+  align-self: center;
 }
 #sec8 .advertise2 {
   flex-basis: 50%;
+  align-self: center;
 }
 #sec8 img {
   border-radius: 10px;

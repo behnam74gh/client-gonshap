@@ -409,27 +409,29 @@ const CarouselUpdate = ({ history, match }) => {
           type="number"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label">آدرس اینستاگرام :</label>
+        <label className="auth-label">آدرس اینستاگرام : (فقط ادامه /https://www.instagram.com)</label>
         <input
           name="instagramId"
           value={values.instagramId}
+          placeholder="?/https://www.instagram.com"
           type="text"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label">آدرس تلگرام :</label>
+        <label className="auth-label">آدرس تلگرام : (فقط username حساب)</label>
         <input
           name="telegramId"
           value={values.telegramId}
+          placeholder="?/https://t.me"
           type="text"
           onChange={(e) => changeInputHandler(e)}
         />
-        <label className="auth-label">آدرس واتساپ :</label>
-        <input
+        {role === 1 && <label className="auth-label">آدرس واتساپ :</label>}
+        {role === 1 && <input
           name="whatsupId"
           value={values.whatsupId}
           type="text"
           onChange={(e) => changeInputHandler(e)}
-        />
+        />}
         {role === 1 && <label className="auth-label">تیک آبی :</label>}
         {role === 1 && <select
           name="authentic"

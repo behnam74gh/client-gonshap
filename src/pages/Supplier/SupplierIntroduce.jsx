@@ -248,7 +248,7 @@ const SupplierIntroduce = ({ match }) => {
                 <span style={{marginLeft: "auto"}}>ما را دنبال کنید در : </span>
                 {supplier?.instagramId?.length > 0 && <div>
                   <a
-                    href={`https://instagram.com/${supplier.instagramId}`}
+                    href={`https://www.instagram.com/${supplier.instagramId}`}
                     target="_blank"
                     rel="noreferrer"
                     title={supplier.title}
@@ -263,7 +263,7 @@ const SupplierIntroduce = ({ match }) => {
                 </div>}
                 {supplier?.telegramId?.length > 0 && <div>
                   <a
-                    href={`https://telegram.com/${supplier.telegramId}`}
+                    href={`https://t.me/${supplier.telegramId}`}
                     target="_blank"
                     rel="noreferrer"
                     title={supplier.title}
@@ -271,7 +271,7 @@ const SupplierIntroduce = ({ match }) => {
                   <img src={TelegramLogo} alt="telegram_id" style={{width: "25px",height: "25px"}} />
                   </a>
                 </div>}
-                {supplier?.whatsupId?.length > 0 && <div>
+                {/* {supplier?.whatsupId?.length > 0 && <div>
                   <a
                     href={`https://whatsapp.com/${supplier.whatsupId}`}
                     target="_blank"
@@ -280,7 +280,7 @@ const SupplierIntroduce = ({ match }) => {
                   >
                   <img src={WhatsappLogo} alt="whatsapp_id" />
                   </a>
-                </div>}
+                </div>} */}
               </div>}
 
               {isOnline && <div className="rating_btn_wrapper">

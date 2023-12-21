@@ -446,7 +446,6 @@ const AdvertiseCreate = ({ history }) => {
           validators={[
             VALIDATOR_MAXLENGTH(70),
             VALIDATOR_MINLENGTH(4),
-            VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
         <label className="auth-label">آدرس تلگرام :</label>
@@ -458,7 +457,6 @@ const AdvertiseCreate = ({ history }) => {
           validators={[
             VALIDATOR_MAXLENGTH(70),
             VALIDATOR_MINLENGTH(4),
-            VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
         <label className="auth-label">آدرس واتساپ :</label>

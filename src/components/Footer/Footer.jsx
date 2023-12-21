@@ -85,7 +85,7 @@ const Footer = ({ companyInfo }) => {
           {(instagramId || telegramId || whatsupId) && window.innerWidth > 780 && <span className="font-sm my-2">اطلاعیه های ما را دنبال کنید در :</span>}
           {(instagramId || telegramId || whatsupId) && <div className="company_social_icons">
           <a
-            href='https://www.instagram.com/bazarchak.ir/'
+            href='https://www.instagram.com/bazarchak.ir?igsh=MzNlNGNkZWQ4Mg=='
             target="_blank"
             rel="noreferrer"
             className="tooltip"
@@ -110,7 +110,7 @@ const Footer = ({ companyInfo }) => {
                 className="footer_social_icon"
               />
             </a>}
-            {whatsupId?.length > 0 && <a
+            {/* {whatsupId?.length > 0 && <a
               href={`https://web.whatsapp.com/${whatsupId}`}
               target="_blank"
               rel="noreferrer"
@@ -122,7 +122,7 @@ const Footer = ({ companyInfo }) => {
                 alt="whatsapp_id"
                 className="footer_social_icon"
               />
-            </a>}
+            </a>} */}
           </div>}
 
           {(signENemad || signUnion || signMedia) && (

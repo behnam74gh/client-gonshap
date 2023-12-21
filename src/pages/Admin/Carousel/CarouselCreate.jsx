@@ -350,7 +350,6 @@ const CarouselCreate = ({ history }) => {
           validators={[
             VALIDATOR_MAXLENGTH(70),
             VALIDATOR_MINLENGTH(4),
-            VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
         <label className="auth-label" htmlFor="telegramId">آدرس تلگرام :</label>
@@ -362,7 +361,6 @@ const CarouselCreate = ({ history }) => {
           validators={[
             VALIDATOR_MAXLENGTH(70),
             VALIDATOR_MINLENGTH(4),
-            VALIDATOR_SPECIAL_CHARACTERS(),
           ]}
         />
         <label className="auth-label" htmlFor="whatsupId">آدرس واتساپ :</label>
