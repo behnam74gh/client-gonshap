@@ -10,6 +10,8 @@ import { HiBadgeCheck } from "react-icons/hi";
 import { TiDelete } from "react-icons/ti";
 import Pagination from "../../../components/UI/Pagination/Pagination";
 import { RiSearchLine } from "react-icons/ri";
+import Modal from "../../../components/UI/Modal/Modal";
+import ModalStoreDetails from "./ModalStoreDetails";
 import "./Carousels.css";
 
 const Carousels = () => {
@@ -32,6 +34,13 @@ const Carousels = () => {
     order: "all",
     config: null
   });
+  const [open, setOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({});
+
+  const closeModalHandler = () => {
+    setOpen(false);
+    setModalContent({});
+  }
 
   const getCategoreis = () => {
     axios
@@ -204,6 +213,12 @@ const Carousels = () => {
       {gettingSuppliersError.length > 0 && (
         <p className="warning-message">{gettingSuppliersError}</p>
       )}
+
+      {modalContent?._id?.length > 0 && (
+        <Modal open={open} closeHandler={() => setOpen(false)}>
+          <ModalStoreDetails store={modalContent} closeModal={closeModalHandler} />
+        </Modal>
+      )}
       
       <div className="table-wrapper">
         
@@ -331,7 +346,10 @@ const Carousels = () => {
                       </div>  
                   </td>
                   <td className="font-sm">{s.owner}</td>
-                  <td className="font-sm">{s.phoneNumber}</td>
+                  <td className="font-sm text-blue cursor_pointer" onClick={() => {
+                    setModalContent(s);
+                    setOpen(true);
+                  }}>{s.phoneNumber}</td>
                   <td className="font-sm">{s.backupFor.name}</td>
                   <td className="font-sm">{s.storePhoneNumber}</td>
                   <td className="font-sm">{s.region.name}</td>

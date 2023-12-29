@@ -6,7 +6,7 @@ import { MdOutlinePhonelinkSetup} from 'react-icons/md'
 import { useHistory } from 'react-router-dom';
 import InstagramLogo from "../../assets/images/instalogo.png";
 import TelegramLogo from "../../assets/images/telegram_PNG11.png";
-import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
+// import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
 import Nemad1 from "../../assets/images/nemad-logo-1.png";
 import Nemad2 from "../../assets/images/nemad-logo-2.png";
 import Nemad3 from "../../assets/images/nemad-logo-3.png";
@@ -15,7 +15,7 @@ import "./Footer.css";
 
 const Footer = ({ companyInfo }) => {
   const [deferredPrompt,setDeferredPrompt] = useState(null);
-  const [alreadyInstalled,setAlreadyInstalled] = useState(false);
+  const [alreadyInstalled,setAlreadyInstalled] = useState(true);
   const history = useHistory();
   
   const {
@@ -36,6 +36,7 @@ const Footer = ({ companyInfo }) => {
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault()
       setDeferredPrompt(e)
+      setAlreadyInstalled(false)
     })
   }, [])
   

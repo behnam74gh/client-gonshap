@@ -23,7 +23,7 @@ import "../../../components/UI/FormElement/Input.css";
 import "./UpdateProfileInfo.css";
 
 const UpdateProfileInfo = ({ history }) => {
-  const [expired, setExpired] = useState(false);
+  const [expired, setExpired] = useState(true);
   const [captchaLoading, setCaptchaLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");

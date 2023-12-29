@@ -4,11 +4,12 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { TiMessages } from "react-icons/ti";
-import { GoPlus } from "react-icons/go";
+// import { GoPlus } from "react-icons/go";
 import { BsCardChecklist } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "../../util/axios";
+import { RiUserSettingsFill } from 'react-icons/ri';
 import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { toast } from "react-toastify";
@@ -86,7 +87,7 @@ const UserDashboardLayout = ({ children }) => {
             className="dashboard_photo"
           />
         </div>
-        <h3>
+        <h3 style={{marginBottom: "5px"}}>
           {userInfo && userInfo.firstName ? userInfo.firstName : "نام کاربری"}
         </h3>
         <ul id="side-nav-dashboard">
@@ -122,7 +123,7 @@ const UserDashboardLayout = ({ children }) => {
             className={activeRoute === "ویرایش پروفایل" ? "active" : ""}
           >
             <Link to="/user/dashboard/update/profile-info">
-              <GoPlus />
+              <RiUserSettingsFill />
               <span className="sidebar-text-link">ویرایش پروفایل</span>
             </Link>
           </li>

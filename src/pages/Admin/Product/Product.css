@@ -25,6 +25,20 @@
   right: -15px;
   cursor: pointer;
 }
+.number-of-order {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  background-color: #ffffff;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  border-radius: 50%;
+}
 .delete_img:hover svg {
   font-size: 20px;
   transition: all 0.3s ease-in-out;

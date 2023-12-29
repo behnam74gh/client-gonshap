@@ -4,7 +4,7 @@ import { FaSignOutAlt,FaProductHunt } from "react-icons/fa";
 import { MdDashboard,MdLabel } from "react-icons/md";
 import { RiLockPasswordFill,RiTodoLine } from "react-icons/ri";
 import { TiMessages } from "react-icons/ti";
-import { GoPlus } from "react-icons/go";
+// import { GoPlus } from "react-icons/go";
 import { SiBrandfolder } from "react-icons/si";
 import { IoColorPaletteSharp, IoCreateOutline } from "react-icons/io5";
 import { BsCardChecklist } from "react-icons/bs";
@@ -16,6 +16,7 @@ import UserDefaultPicture from "../../assets/images/pro-8.png";
 import { UPDATE_DASHBOARD_IMAGE, USER_SIGNOUT } from "../../redux/Types/authTypes";
 import { db } from "../../util/indexedDB";
 import { VscLoading } from "react-icons/vsc";
+import { RiSettings3Fill } from "react-icons/ri";
 import { LEAVE_DASHBOARD } from "../../redux/Types/ttlDataTypes";
 import "../Admin/TemplateAdminDashboard.css";
 
@@ -25,6 +26,8 @@ const StoreAdminDashboardLayout = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   const { userInfo, userImage, phoneNumber } = useSelector((state) => state.userSignin);
+  const { currentSupplier : { data } } = useSelector(state => state.ttlDatas);
+
   const dispatch = useDispatch();
 
   const history = useHistory();
@@ -138,8 +141,8 @@ const StoreAdminDashboardLayout = ({ children }) => {
             className="dashboard_photo"
           />
         </div>
-        <h3>
-          {userInfo && userInfo.firstName ? userInfo.firstName : "نام کاربری"}
+        <h3 style={{marginBottom: "5px"}}>
+          {data?.title?.length > 0 ? data.title : userInfo?.firstName ? userInfo.firstName : "نام کاربری"}
         </h3>
         <ul id="side-nav-dashboard">
           <li
@@ -228,7 +231,7 @@ const StoreAdminDashboardLayout = ({ children }) => {
             className={activeRoute === "ویرایش پنل" ? "active" : ""}
           >
             <Link to={`/store-admin/dashboard/carousel-update/${storeId}`}>
-              <GoPlus />
+              <RiSettings3Fill />
               <span className="sidebar-text-link">ویرایش پنل</span>
             </Link>
           </li>}

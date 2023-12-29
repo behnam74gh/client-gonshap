@@ -4,6 +4,7 @@ import { VscLoading } from "react-icons/vsc";
 import { toast } from "react-toastify";
 import axios from "../../../util/axios";
 import { 
+  VALIDATOR_MAXLENGTH,
   VALIDATOR_MINLENGTH,
   VALIDATOR_PASSWORD,
   VALIDATOR_REPEAT_PASSWORD,
@@ -102,7 +103,7 @@ const ChangeUserPassword = ({ history }) => {
           type="password"
           placeholder="مثال: 12Ab3a"
           onInput={inputHandler}
-          validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
+          validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6),VALIDATOR_MAXLENGTH(14)]}
         />
         <label className="auth-label">تکرار رمز عبور</label>
         <Input

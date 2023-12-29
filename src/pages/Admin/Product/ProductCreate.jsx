@@ -433,6 +433,9 @@ const ProductCreate = ({history}) => {
                   <span className="delete_img" onClick={() => removeImage(i)}>
                     <TiDelete />
                   </span>
+                  <span className="number-of-order">
+                    {i+1}
+                  </span>
                   <img src={url} alt="preview" />
                 </div>
               ))}

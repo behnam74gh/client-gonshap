@@ -9,6 +9,7 @@ import axios from "../../../util/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeFile } from "../../../util/customFunctions";
 import { CURRENT_SUPPLIER } from "../../../redux/Types/ttlDataTypes";
+import "../Product/Product.css";
 
 const oldStates = {
   region: "",
@@ -311,25 +312,32 @@ const CarouselUpdate = ({ history, match }) => {
           </div>
         </div>
         <div className="image-upload__preview">
-          {oldPhotos.length > 0 &&
-            oldPhotos.map((op, i) => (
-              <div className="preview_img_wrapper" key={i}>
-                <span className="delete_img" onClick={() => removeOldImage(i)}>
-                  <TiDelete />
-                </span>
-                <img
-                  src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${op}`}
-                  alt="preview"
-                />
-              </div>
-            ))}
+          
           {urls &&
             urls.map((url, i) => (
               <div className="preview_img_wrapper" key={i}>
                 <span className="delete_img" onClick={() => removeImage(i)}>
                   <TiDelete />
                 </span>
+                <span className="number-of-order">
+                  {i+1}
+                </span>
                 <img src={url} alt="preview" />
+              </div>
+            ))}
+          {oldPhotos.length > 0 &&
+            oldPhotos.map((op, i) => (
+              <div className="preview_img_wrapper" key={i}>
+                <span className="delete_img" onClick={() => removeOldImage(i)}>
+                  <TiDelete />
+                </span>
+                <span className="number-of-order">
+                  {i+1+urls.length}
+                </span>
+                <img
+                  src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${op}`}
+                  alt="preview"
+                />
               </div>
             ))}
         </div>

@@ -351,7 +351,7 @@ const ForgotPassword = ({ history }) => {
             type="password"
             placeholder="مثال: 12Ab3a"
             onInput={inputHandler}
-            validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
+            validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6),VALIDATOR_MAXLENGTH(14)]}
           />
           <label className="auth-label">تکرار رمز عبور</label>
           <Input

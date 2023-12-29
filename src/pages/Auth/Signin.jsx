@@ -186,7 +186,7 @@ const Signin = ({ history, location }) => {
           placeholder="مثال: 12Ab3a"
           onInput={inputHandler}
           focusHandler={() => setError("")}
-          validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6)]}
+          validators={[VALIDATOR_REQUIRE(),VALIDATOR_PASSWORD(),VALIDATOR_MINLENGTH(6),VALIDATOR_MAXLENGTH(14)]}
         />
         
         <label className="auth-label" id="saveInfo">
