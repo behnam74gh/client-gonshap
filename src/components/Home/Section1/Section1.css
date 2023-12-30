@@ -257,6 +257,7 @@
   }
   #sec1 {
     margin: 10px 0;
+    gap: 5px 0;
   }
 }
 @media (max-width: 390px) {

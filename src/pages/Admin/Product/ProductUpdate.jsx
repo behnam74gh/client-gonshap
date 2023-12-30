@@ -12,6 +12,7 @@ import Input from "../../../components/UI/FormElement/Input";
 import { VALIDATOR_MAXLENGTH, VALIDATOR_MINLENGTH, VALIDATOR_SPECIAL_CHARACTERS, VALIDATOR_SPECIAL_CHARACTERS_2 } from "../../../util/validators";
 import { resizeFile } from "../../../util/customFunctions";
 import "./Product.css";
+import { db } from "../../../util/indexedDB";
 
 const oldStates = {
   title: "",
@@ -177,9 +178,18 @@ const ProductUpdate = ({ history }) => {
         if (response.data.success) {
           setDefColors(response.data.colors);
           setError("");
+
+          db.colors.clear();
+          db.colors.bulkPut(response.data.colors);
         }
       })
       .catch((err) => {
+        db.colors.toArray().then(items => {
+          if(items.length > 0) {
+            setDefColors(items);
+            setError("");
+          }
+        });
         setColorLoading(false);
         if (err.response) {
           setError(err.response.data.message);
@@ -300,6 +310,7 @@ const ProductUpdate = ({ history }) => {
       return;
     }
     setSubLoading(true);
+    setShowBrand(false);
     axios
       .get(`/get/list-of-brands/by-parent/${e}`)
       .then((response) => {
@@ -427,7 +438,7 @@ const ProductUpdate = ({ history }) => {
         </div>
       ) : error.length > 0 ? (
         <h4 className="warning-message">{error}</h4>
-      ) : (
+      ) : values.title?.length > 0 ? (
         <>
           <div className="d-flex-around mb-2">
             <h4>
@@ -681,7 +692,7 @@ const ProductUpdate = ({ history }) => {
             id="attr1"
             element="input"
             type="text"
-            placeholder="مشخصات-1 :"
+            placeholder="ویژگی-1 :"
             onInput={inputHandler}
             defaultValue={values.attr1}
             validators={[
@@ -693,7 +704,7 @@ const ProductUpdate = ({ history }) => {
             id="attr2"
             element="input"
             type="text"
-            placeholder="مشخصات-2 :"
+            placeholder="ویژگی-2 :"
             onInput={inputHandler}
             defaultValue={values.attr2}
             validators={[
@@ -705,7 +716,7 @@ const ProductUpdate = ({ history }) => {
             id="attr3"
             element="input"
             type="text"
-            placeholder="مشخصات-3 :"
+            placeholder="ویژگی-3 :"
             onInput={inputHandler}
             defaultValue={values.attr3}
             validators={[
@@ -728,7 +739,7 @@ const ProductUpdate = ({ history }) => {
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
           />
-          <label className="auth-label">ویژگی های محصول :</label>
+          <label className="auth-label">مشخصات محصول :</label>
           <Input
             id="question"
             element="input"
@@ -770,6 +781,8 @@ const ProductUpdate = ({ history }) => {
           </Button>
           </form>
         </>
+      ) : (
+        <p className="warning-message">اطلاعات محصول دریافت نشد.. لطفا صفحه را رفرش کنید</p>
       )}
     </div>
   );

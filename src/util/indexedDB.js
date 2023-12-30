@@ -15,5 +15,6 @@ db.version(dbVersion).stores({
     subCategories: '_id',
     helps: '_id',
     productDetailes: '_id',
-    regions: '_id'
+    regions: '_id',
+    colors: '_id'
 })

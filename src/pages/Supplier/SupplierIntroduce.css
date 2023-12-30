@@ -289,6 +289,9 @@
   .info_box strong {
     font-size: 12px;
   }
+  .supplier_carousel_img {
+    max-height: 160px;
+  }
 }
 @media (max-width: 370px) {
   .info_box strong {

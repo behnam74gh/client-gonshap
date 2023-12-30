@@ -13,6 +13,7 @@ import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
 import ListOfSubcategories from "../../../components/AdminDashboardComponents/ListOfSubcategories";
 import "./SubCategory.css";
+import { db } from "../../../util/indexedDB";
 
 const SubCategory = () => {
   const [loading, setLoading] = useState(false);
@@ -51,7 +52,7 @@ const SubCategory = () => {
     axios
       .get("/get-all-subcategories")
       .then((response) => {
-        setSubsLoading(false)
+        setSubsLoading(false);
         if(role === 2 && supplierFor){
           const newSubs = response.data.subcategories.filter((s) => s.parent === supplierFor);
           setSubcategories(newSubs);
@@ -60,6 +61,13 @@ const SubCategory = () => {
         }
       })
       .catch((err) => {
+        db.subCategories.toArray().then(items => {
+          if(items.length > 0) {
+            const filteredSubs = items.filter(sub => sub.parent === supplierFor);
+            setSubcategories(filteredSubs);
+          }
+        });
+
         setSubsLoading(false)
         if (err.response) {
           toast.warning(err.response.data.message);

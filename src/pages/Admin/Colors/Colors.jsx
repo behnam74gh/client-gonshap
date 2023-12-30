@@ -13,6 +13,7 @@ import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
 import ListOfColors from "../../../components/AdminDashboardComponents/ListOfColors";
 import "./Colors.css";
+import { db } from "../../../util/indexedDB";
 
 const Colors = () => {
   const [colorsLoading, setColorsLoading] = useState(false);
@@ -41,9 +42,19 @@ const Colors = () => {
         if (response.data.success) {
           setColors(response.data.colors);
           setErrorText("");
+
+          db.colors.clear();
+          db.colors.bulkPut(response.data.colors);
         }
       })
       .catch((err) => {
+        db.colors.toArray().then(items => {
+          if(items.length > 0) {
+            setColors(items);
+            setErrorText("");
+          }
+        });
+
         setColorsLoading(false);
         if (err.response) {
           setErrorText(err.response.data.message);

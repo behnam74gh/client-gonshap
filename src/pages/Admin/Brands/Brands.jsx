@@ -16,6 +16,7 @@ import ListOfBrands from "../../../components/AdminDashboardComponents/ListOfBra
 import { resizeFile } from "../../../util/customFunctions";
 import "../Product/Product.css";
 import "./Brands.css";
+import { db } from "../../../util/indexedDB";
 
 const Brands = () => {
   const [createBrand, setCreateBrand] = useState(false);
@@ -60,22 +61,29 @@ const Brands = () => {
   };
 
   const loadAllBrands = () => {
-    setBrandsLoading(true)
+    setBrandsLoading(true);
     axios
       .get("/get-brands")
       .then((response) => {
-        setBrandsLoading(false)
+        setBrandsLoading(false);
         if (response.data.success) {
           if(role === 2){
             const currentBrands = response.data.brands.filter((b) => b.backupFor._id === supplierFor);
-            setBrands(currentBrands)
+            setBrands(currentBrands);
           }else{
             setBrands(response.data.brands);
           }
         }
       })
       .catch((err) => {
-        setBrandsLoading(false)
+        db.brands.toArray().then(items => {
+          if(items.length > 0){
+            const categoryBrands = items.filter((b) => b.backupFor._id === supplierFor);
+            setBrands(categoryBrands);
+          }
+        })
+
+        setBrandsLoading(false);
         if (err.response) {
           setErrorText(err.response.data.message);
         }
@@ -153,6 +161,15 @@ const Brands = () => {
         }
       })
       .catch((err) => {
+
+        db.subCategories.toArray().then(items => {
+          if(items.length > 0) {
+            const filteredSubs = items.filter(sub => sub.parent === supplierFor);
+            setSubcategories(filteredSubs);
+            setShowSub(true);
+          }
+        });
+
         if (err.response) {
           toast.error(err.response.data.message);
         }

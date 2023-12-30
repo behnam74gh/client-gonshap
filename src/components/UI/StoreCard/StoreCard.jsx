@@ -40,12 +40,12 @@ const StoreCard = ({item}) => {
         <strong className='store_title'>{item.title} {item.authentic && <HiBadgeCheck className="text-blue font-md mr-1" />}</strong>
         <span className='store_title'>نوع محصولات : {item.backupFor.name}</span>
         <span className='store_title'>مالک : {item.owner}</span>
-        <span className='store_title'><HiLocationMarker className='text-blue' /> {item.region.name}</span>
+        <span className='store_title'><HiLocationMarker className='text-blue' style={{marginTop: "-2px"}} /> {item.region.name}</span>
         <span className='store_title'>
           <BsFillCartCheckFill className={
               soldResult < 1 ? "text-silver" : "text-blue"
             } />
-          <span className="font-sm pt-1 mr-1">
+          <span className="font-sm mr-1" style={{paddingTop: "2px"}}>
             {soldResult}
             {item.soldCount > 999999 ? <span className='ml-1'>M</span> : item.soldCount > 999 && <span className='ml-1'>K</span>}
             <span className="text-mute mr-1">فروش</span>
@@ -57,7 +57,7 @@ const StoreCard = ({item}) => {
               ratingResult < 1 ? "text-silver font-md" : "text-orange font-md"
             }
           />
-          <span className="font-sm pt-1 mr-1">
+          <span className="font-sm mr-1" style={{paddingTop: "2px"}}>
             {ratingResult}
             {item.point > 999999 ? <span className='ml-1'>M</span> : item.point > 999 && <span className='ml-1'>K</span>}
             <span className="text-mute mr-1">امتیاز</span>

@@ -20,6 +20,7 @@ import Input from "../../../components/UI/FormElement/Input";
 import Button from "../../../components/UI/FormElement/Button";
 import { resizeFile } from "../../../util/customFunctions";
 import "./Product.css";
+import { db } from "../../../util/indexedDB";
 
 const ProductCreate = ({history}) => {
   const [reRenderParent, setReRenderParent] = useState(true);
@@ -109,21 +110,32 @@ const ProductCreate = ({history}) => {
   }, [reRenderParent]);
 
   const currentCategorysSubsHandler = () => {
-    setValues({...values,category: supplierFor})
-    axios
-      .get(`/category/subs/${supplierFor}`)
-      .then((response) => {
-          if (response.data.success) {
-            setSubcategories(response.data.subcategories);
-            setShowBrand(false);
-            setShowSub(true);
-          }
-      })
-      .catch((err) => {
-        if (err.response) {
-          toast.error(err.response.data.message);
+    setValues({...values,category: supplierFor});
+    setSubLoading(true);
+    axios.get(`/category/subs/${supplierFor}`)
+    .then((response) => {
+      setSubLoading(false);
+      if (response.data.success) {
+        setSubcategories(response.data.subcategories);
+        setShowBrand(false);
+        setShowSub(true);
+      }
+    })
+    .catch((err) => {
+      setSubLoading(false);
+      db.subCategories.toArray().then(items => {
+        if(items.length > 0) {
+          const filteredSubs = items.filter(sub => sub.parent === supplierFor);
+          setSubcategories(filteredSubs);
+          setShowBrand(false);
+          setShowSub(true);
         }
       });
+
+      if (err.response) {
+        toast.error(err.response.data.message);
+      }
+    });
   }
 
   const loadAllCategories = () => {
@@ -149,9 +161,18 @@ const ProductCreate = ({history}) => {
         if (response.data.success) {
           setDefColors(response.data.colors);
           setErrorText("");
+
+          db.colors.clear();
+          db.colors.bulkPut(response.data.colors);
         }
       })
       .catch((err) => {
+        db.colors.toArray().then(items => {
+          if(items.length > 0) {
+            setDefColors(items);
+            setErrorText("");
+          }
+        });
         setColorLoading(false);
         if (err.response) {
           setErrorText(err.response.data.message);
@@ -270,6 +291,7 @@ const ProductCreate = ({history}) => {
       return;
     }
     setSubLoading(true);
+    setShowBrand(false);
     axios
       .get(`/get/list-of-brands/by-parent/${e}`)
       .then((response) => {
@@ -654,7 +676,7 @@ const ProductCreate = ({history}) => {
             id="attr1"
             element="input"
             type="text"
-            placeholder="مشخصات-1 :"
+            placeholder="ویژگی-1 :"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
@@ -665,7 +687,7 @@ const ProductCreate = ({history}) => {
             id="attr2"
             element="input"
             type="text"
-            placeholder="مشخصات-2 :"
+            placeholder="ویژگی-2 :"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
@@ -676,7 +698,7 @@ const ProductCreate = ({history}) => {
             id="attr3"
             element="input"
             type="text"
-            placeholder="مشخصات-3 :"
+            placeholder="ویژگی-3 :"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
@@ -697,7 +719,7 @@ const ProductCreate = ({history}) => {
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
           />
-          <label className="auth-label">ویژگی های محصول :</label>
+          <label className="auth-label">مشخصات محصول :</label>
           <Input
             id="question"
             element="input"

@@ -71,8 +71,10 @@ const CarouselUpdate = ({ history, match }) => {
       });
   };
   useEffect(() => {
-    loadAllCategories();
-    loadAllRegions()
+    if(role === 1){
+      loadAllCategories();
+      loadAllRegions();
+    }
   }, []);
 
   useEffect(() => {

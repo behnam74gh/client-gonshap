@@ -113,7 +113,7 @@ const SupplierSlider = () => {
   return (
     <div id="supplier_wrapper">
       {loading ? (
-        <LoadingSkeleton NumHeight={window.innerWidth > 450 && 320} />
+        <LoadingSkeleton NumHeight={window.innerWidth > 450 ? 360 : 130} />
       ) : errorText.length > 0 ? (
         <p className="warning-message">{errorText}</p>
       ) : (
