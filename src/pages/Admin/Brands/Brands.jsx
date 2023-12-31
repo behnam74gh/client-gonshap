@@ -22,6 +22,7 @@ const Brands = () => {
   const [createBrand, setCreateBrand] = useState(false);
   const [loading, setLoading] = useState(false);
   const [brandsLoading, setBrandsLoading] = useState(false);
+  const [subsLoading, setSubsLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [brands, setBrands] = useState([]);
   const [file, setFile] = useState();
@@ -150,18 +151,20 @@ const Brands = () => {
       setShowSub(false);
       return;
     }
+    setSubsLoading(true);
     setParents([]);
     setActiveCategory(e);
     axios
       .get(`/category/subs/${e}`)
       .then((response) => {
+        setSubsLoading(false);
         if (response.data.success) {
           setSubcategories(response.data.subcategories);
           setShowSub(true);
         }
       })
       .catch((err) => {
-
+        setSubsLoading(false);
         db.subCategories.toArray().then(items => {
           if(items.length > 0) {
             const filteredSubs = items.filter(sub => sub.parent === supplierFor);
@@ -183,8 +186,9 @@ const Brands = () => {
     const oldParents = parents;
     let existingParent = oldParents.find((op) => op === e);
     if (existingParent) {
-      let updatedParents = oldParents.filter((oc) => oc !== e);
-      setParents(updatedParents);
+      // let updatedParents = oldParents.filter((oc) => oc !== e);
+      // setParents(updatedParents);
+      return toast.info('از قبل انتخاب شده است');
     } else {
       setParents([...parents, e]);
     }
@@ -285,10 +289,9 @@ const Brands = () => {
                   برچسب :
                 </label>
               )}
-              {showSub && (
+              {subsLoading ? <VscLoading className="loader" /> : showSub && (
                 <select
                   id="subcategory"
-                  multiple
                   onChange={(e) => setParentsHandler(e.target.value)}
                 >
                   <option value="none">برچسب را انتخاب کنید</option>
@@ -300,8 +303,8 @@ const Brands = () => {
                     ))}
                 </select>
               )}
-              {parents.length > 0 && (
-                <div className="image-upload__preview">
+              {parents?.length > 0 ? (
+                <div className="image-upload__preview my-2">
                   {parents.map((p) => (
                     <span className="color_wrapper bg-purple" key={p}>
                       {subcategories.find((s) => s._id === p).name}
@@ -314,7 +317,7 @@ const Brands = () => {
                     </span>
                   ))}
                 </div>
-              )}
+              ) : <p className="font-sm w-100 m-0 text-center">برچسبی را انتخاب نکرده اید</p>}
               <label className="auth-label">تصویر برند :</label>
               <div className="image-upload-wrapper">
                 <input

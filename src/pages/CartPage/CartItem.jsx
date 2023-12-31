@@ -173,10 +173,10 @@ const CartItem = ({ product }) => {
         {product.attr1?.length > 0 && <p className="my-0 font-sm text-mute">{product.attr1}</p>}
         {product.attr2?.length > 0 &&  <p className="my-0 font-sm text-mute">{product.attr2}</p>}
         {product.attr3?.length > 0 && <p className="my-0 font-sm text-mute">{product.attr3}</p>}
-        <span className="cart_item_discount_wrapper">
+        {/* <span className="cart_item_discount_wrapper">
           تخیف کالا :
           <span className="cart_item_discount">%{product.discount}</span>
-        </span>
+        </span> */}
       </div>
       <div className="item_price_wrapper">
         <div className="cart_item_price_wrapper">

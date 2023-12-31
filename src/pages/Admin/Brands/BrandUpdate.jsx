@@ -162,8 +162,9 @@ const BrandUpdate = ({ match, history }) => {
 
     let existingParent = oldParents.find((op) => op === e);
     if (existingParent) {
-      let updatedParents = oldParents.filter((oc) => oc !== e);
-      setValues({ ...values, parents: updatedParents });
+      // let updatedParents = oldParents.filter((oc) => oc !== e);
+      // setValues({ ...values, parents: updatedParents });
+      return toast.info('از قبل انتخاب شده است');
     } else {
       setValues({ ...values, parents: [...values.parents, e] });
     }
@@ -275,7 +276,6 @@ const BrandUpdate = ({ match, history }) => {
 
         <select
           id="subcategory"
-          multiple
           onChange={(e) => setParentsHandler(e.target.value)}
         >
           <option value="none">برچسب را انتخاب کنید</option>
@@ -287,8 +287,8 @@ const BrandUpdate = ({ match, history }) => {
             ))}
         </select>
 
-        {values.parents.length > 0 && (
-          <div className="image-upload__preview mt-3 mb-1">
+        {values.parents?.length > 0 ? (
+          <div className="image-upload__preview my-2">
             {values.parents.map((p) => (
               <span className="color_wrapper bg-purple" key={p}>
                 {subcategories &&
@@ -303,7 +303,7 @@ const BrandUpdate = ({ match, history }) => {
               </span>
             ))}
           </div>
-        )}
+        ) : <p className="font-sm w-100 m-0 text-center">برچسبی را انتخاب نکرده اید</p>}
         <div className="image-upload-wrapper mt-3">
           <input
             ref={filePickerRef}

@@ -77,6 +77,7 @@
   flex-flow: column wrap;
   justify-content: center;
   align-items: flex-start;
+  padding-top: 10px;
 }
 .cart_item_discount_wrapper {
   display: flex;
@@ -266,6 +267,16 @@
   }
   .item_rating_wrapper {
     top: 0;
+  }
+  .item_img_wrapper img {
+    margin: 15px 0;
+  }
+  .item_discount_wrapper {
+    bottom: -10px;
+  }
+  .out_of_countInStock {
+    right: 170%;
+    top: 140%;
   }
   .item_color_wrapper {
     padding: 0 10px;
