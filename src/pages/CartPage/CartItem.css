@@ -58,7 +58,9 @@
 .out_of_countInStock p {
   font-size: 14px;
   font-weight: 700;
-  color: red;
+  color: #ffffff;
+  background-color: red;
+  width: 100%;
   transform: rotate(-45deg);
 }
 .item_img_wrapper img {
@@ -261,6 +263,13 @@
     font-size: 12px;
     padding: 4px 8px;
     margin: 5px 0;
+  }
+  .cart_item_price_after_discount {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+  .cart_item_price_wrapper {
+    font-size: 10px;
   }
   .item_price_wrapper {
     padding: 10px 10px 0 0;

@@ -24,8 +24,8 @@ const Section14 = () => {
     longitude: null,
   });
   const [reRenderForm, setReRenderForm] = useState(true);
-  const isOnline = useSelector((state) => state.isOnline)
-
+  const { isOnline, userSignin : { userInfo } } = useSelector((state) => state)
+ 
   const [formState, inputHandler] = useForm({
     phoneNumber: {
       value: "",
@@ -131,7 +131,7 @@ const Section14 = () => {
       <div className="suggestion_wrapper">
         {reRenderForm && (
           <form className="auth-form" onSubmit={submitHandler}>
-            <h5 className="mt-0">پیشنهادات و انتقادات</h5> 
+            <h5 className="mt-0">پیشنهادات و انتقادات ( لطفا ابتدا عضو شوید )</h5> 
             <label className="auth-label">
               شماره تلفن همراه :<span className="need_to_fill">*</span>
             </label>
@@ -159,7 +159,7 @@ const Section14 = () => {
                 VALIDATOR_SPECIAL_CHARACTERS(),
               ]}
             />
-            <Button type="submit" disabled={loading || !formState.isValid}>
+            <Button type="submit" disabled={loading || !formState.isValid || userInfo?.userId?.length < 1 || userInfo.isBan}>
               {!loading ? "ارسال" : <VscLoading className="loader" />}
             </Button>
           </form>

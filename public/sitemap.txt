@@ -1,3 +1,8 @@
 https://www.bazarchak.ir/
 https://www.bazarchak.ir/shop
 https://www.bazarchak.ir/stores
+https://www.bazarchak.ir/cart
+https://www.bazarchak.ir/favorites
+https://www.bazarchak.ir/forgot-password
+https://www.bazarchak.ir/register
+https://www.bazarchak.ir/signin

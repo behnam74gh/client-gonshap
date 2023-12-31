@@ -72,11 +72,11 @@ const Section12 = () => {
 
   let accordionMinHeight;
   if(window.innerWidth < 451){
-    accordionMinHeight = `${(faqs.length*30)+28+10}px`;
+    accordionMinHeight = `${(faqs.length*30)+30+10}px`;
   }else if(window.innerWidth < 781){
-    accordionMinHeight = `${(faqs.length*40)+32+10}px`
+    accordionMinHeight = `${(faqs.length*40)+35+10}px`
   }else{
-    accordionMinHeight = `${(faqs.length*50)+40+26}px`;
+    accordionMinHeight = `${(faqs.length*50)+45+26}px`;
   }
 
   return (

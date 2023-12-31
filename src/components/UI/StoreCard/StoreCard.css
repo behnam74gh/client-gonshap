@@ -52,7 +52,7 @@
         width: 35%;
     }
     .store_card_img {
-        height: 65px;
+        height: 75px;
     }
 }
 @media (max-width: 365px) {
@@ -76,6 +76,9 @@
 @media (max-width: 340px) {
     .store_card_container {
         width: 130px;
+    }
+    .store_card_img {
+        height: 65px;
     }
 }
 

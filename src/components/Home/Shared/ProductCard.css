@@ -338,7 +338,7 @@
     margin-top: -5px;
   }
   .deleted_price{
-    font-size: 8px;
+    font-size: 10px;
     margin: 0;
   }
   .not_exist{
@@ -456,7 +456,7 @@
     width: 130px;
   }
   .product_info_box h3 {
-    font-size: 8px;
+    font-size: 10px;
   }
 }
 @media (max-width: 325px) {
@@ -469,11 +469,19 @@
   .product_info_box {
     min-height: 70px;
   }
+  .deleted_price {
+    font-size: 8px;
+    margin: 0;
+  }
+  .product_info_box span {
+    font-size: 8px;
+  }
 }
 @media (max-width: 300px) {
   .product_wrapper {
     width: 110px;
   }
+
   .supplier_products_wrapper {
     gap: 20px 5px;
   }
