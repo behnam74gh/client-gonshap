@@ -12,6 +12,7 @@
   width: 100%;
   overflow: hidden;
   word-break: break-word;
+  margin: 0;
 }
 .details_info_wrapper {
   display: flex;

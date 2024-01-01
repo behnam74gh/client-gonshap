@@ -32,7 +32,7 @@ const ProductCreate = ({history}) => {
     category: "",
     subcategory: "",
     brand: "",
-    sell: null,
+    sell: true,
     discount: "none",
     finallyPrice: "",
     details: []
@@ -515,7 +515,7 @@ const ProductCreate = ({history}) => {
               ))}
           </select>}
           {showSub && (
-            <label className="auth-label" htmlFor="subcategory">
+            <label className="auth-label">
               برچسب :
             </label>
           )}
@@ -540,7 +540,7 @@ const ProductCreate = ({history}) => {
           )}
           
           {showBrand && (
-            <label className="auth-label" htmlFor="brand">
+            <label className="auth-label">
               برند :
             </label>
           )}
@@ -612,13 +612,13 @@ const ProductCreate = ({history}) => {
             <input type="number" value={values.finallyPrice} disabled />
           )}
 
-          <label className="auth-label">فروش :</label>
+          <label className="auth-label">وضعیت فروش :</label>
           <select
+            value={values.sell}
             onChange={(e) => setValues({ ...values, sell: e.target.value })}
           >
-            <option>لطفا وضعیت فروش را مشخص کنید</option>
             <option value={true}>ارائه میشود</option>
-            <option value={false}>ارائه نمیشود</option>
+            <option value={false}>دیگر ارائه نمیشود</option>
           </select>
           <label className="auth-label">تعداد کالا :</label>
           <Input

@@ -1,6 +1,6 @@
 const self = this
 
-const cacheName = `bazarchak-static-v-${1.00}`
+const cacheName = `bazarchak-static-v-${1.01}`
 
 self.addEventListener('install', e => {
     e.waitUntil(

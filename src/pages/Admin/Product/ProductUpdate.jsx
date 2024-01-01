@@ -553,7 +553,7 @@ const ProductUpdate = ({ history }) => {
               ))}
           </select>}
           {showSub && (
-            <label className="auth-label" htmlFor="subcategory">
+            <label className="auth-label">
               برچسب :
             </label>
           )}
@@ -577,7 +577,7 @@ const ProductUpdate = ({ history }) => {
             </select>
           )}
           {showBrand && (
-            <label className="auth-label" htmlFor="brand">
+            <label className="auth-label">
               برند :
             </label>
           )}
@@ -635,15 +635,14 @@ const ProductUpdate = ({ history }) => {
           {showFinallyPrice && (
             <input type="number" value={values.finallyPrice} disabled />
           )}
-          <label className="auth-label">فروش :</label>
+          <label className="auth-label">وضعیت فروش :</label>
           <select
             name="sell"
             value={values.sell}
             onChange={(e) => changeInputHandler(e)}
           >
-            <option>لطفا وضعیت فروش را مشخص کنید</option>
             <option value={true}>ارائه میشود</option>
-            <option value={false}>ارائه نمیشود</option>
+            <option value={false}>دیگر ارائه نمیشود</option>
           </select>
           <label className="auth-label">تعداد کالا :</label>
           <input
