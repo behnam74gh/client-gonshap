@@ -269,6 +269,17 @@ ul {
   margin-right: 8px;
   margin-left: 8px;
 }
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    appearance: none; 
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
 .tooltip {
   position: relative;
   display: block;

@@ -395,7 +395,8 @@ const CarouselUpdate = ({ history, match }) => {
         <input
           name="storePhoneNumber"
           value={values.storePhoneNumber}
-          type="text"
+          type="number"
+          inputMode="numeric"
           onChange={(e) => changeInputHandler(e)}
         />
         <label className="auth-label">آدرس فروشگاه :</label>
@@ -410,6 +411,7 @@ const CarouselUpdate = ({ history, match }) => {
           name="longitude"
           value={values.longitude}
           type="number"
+          inputMode="numeric"
           onChange={(e) => changeInputHandler(e)}
         />
         <label className="auth-label">مختصات محل فروشگاه (latitude) :</label>
@@ -417,6 +419,7 @@ const CarouselUpdate = ({ history, match }) => {
           name="latitude"
           value={values.latitude}
           type="number"
+          inputMode="numeric"
           onChange={(e) => changeInputHandler(e)}
         />
         <label className="auth-label">آدرس اینستاگرام : (فقط ادامه /https://www.instagram.com)</label>

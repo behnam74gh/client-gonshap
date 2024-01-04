@@ -101,8 +101,8 @@
 }
 
 .subcategorylink {
-  width: 70px;
-  padding: 4px 0;
+  min-width: 70px;
+  padding: 4px;
   font-size: 10px;
   background-color: var(--thirdColorPalete);
   border-radius: 100px;

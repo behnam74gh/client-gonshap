@@ -559,18 +559,19 @@ const ProductCreate = ({history}) => {
               <option value="none">برند را انتخاب کنید</option>
               {brands &&
                 brands.length > 0 &&
-                brands.map((b, i) => (
+                brands.map((b) => (
                   <option key={b._id} value={b._id}>
                     {b.brandName}
                   </option>
                 ))}
             </select>
           )}
-          <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}> قیمت فاکتور کالا (تومان) : </label>
           <Input
             id="factorPrice"
             element="input"
             type="number"
+            inputMode="numeric"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(10),
@@ -584,6 +585,7 @@ const ProductCreate = ({history}) => {
             id="price"
             element="input"
             type="number"
+            inputMode="numeric"
             onInput={inputHandler}
             focusHandler={clearFinallyPriceHandler}
             validators={[
@@ -625,6 +627,7 @@ const ProductCreate = ({history}) => {
             id="countInStock"
             element="input"
             type="number"
+            inputMode="numeric"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MIN(1),

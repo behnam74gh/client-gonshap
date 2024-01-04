@@ -11,14 +11,14 @@ import "./SupplierProducts.css";
 const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
   const [subcategories, setSubcategories] = useState([]);
   const [activeSub, setActiveSub] = useState(
-    JSON.parse(localStorage.getItem("gonshapSupplierActiveSub")) || ""
+    JSON.parse(localStorage.getItem("gonshapSupplierActiveSub")) || "all"
   );
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("gonshapSupplierPageNumber")) || 1
     );
-  const [perPage] = useState(window.innerWidth < 450 ? 18 : 32);
+  const [perPage] = useState(window.innerWidth < 450 ? 20 : 40);
   const [firstLoad, setFirstLoad] = useState(true);
   const [activeOrder, setActiveOrder] = useState(
     JSON.parse(localStorage.getItem("bazarchakSupplierActiveorder")) || "createdAt"
@@ -84,11 +84,11 @@ const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
   }, [backupFor]);
 
   useEffect(() => {
-    if (!activeSub.length > 0 || firstLoad) {
+    if (items.length > 0) {
       return;
     }
 
-    if(!firstLoad && items.length < 1){
+    if(items.length < 1){
       setLoading(true);
       axios
       .post("/find/suppliers-products/by-subcategory", {
@@ -141,7 +141,8 @@ const SupplierProducts = ({ backupFor,ownerPhoneNumber }) => {
         </p>
         {subcategories.length > 0 && navigator.onLine &&
           <select value={activeSub} onChange={(e) => switchSubcategoryHandler(e.target.value)}>
-          {subcategories.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
+            <option value='all'>همه محصولات</option>
+            {subcategories.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
           </select>
         }
         {subcategories.length > 0 && navigator.onLine &&

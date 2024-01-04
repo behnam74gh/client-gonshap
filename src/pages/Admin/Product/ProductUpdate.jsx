@@ -602,11 +602,12 @@ const ProductUpdate = ({ history }) => {
                 ))}
             </select>
           )}
-          <label className="auth-label"> قیمت فاکتور کالا (تومان) : </label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}> قیمت فاکتور کالا (تومان) : </label>
           <input
             name="factorPrice"
             value={values.factorPrice}
             type="number"
+            inputMode="numeric"
             onChange={(e) => changeInputHandler(e)}
           />
           <label className="auth-label"> قیمت فروش کالا در بازار (تومان) : </label>
@@ -614,6 +615,7 @@ const ProductUpdate = ({ history }) => {
             name="price"
             value={values.price}
             type="number"
+            inputMode="numeric"
             onFocus={clearFinallyPriceHandler}
             onChange={(e) => changeInputHandler(e)}
           />
@@ -649,6 +651,7 @@ const ProductUpdate = ({ history }) => {
             name="countInStock"
             value={values.countInStock}
             type="number"
+            inputMode="numeric"
             onChange={(e) => changeInputHandler(e)}
           />
           <label className="auth-label">رنگ ها</label>

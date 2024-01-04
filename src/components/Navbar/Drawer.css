@@ -29,6 +29,7 @@
   flex: 30%;
   display: flex;
   flex-flow: column wrap;
+  gap: 6px 0;
 }
 .drawer-items li {
   padding: 7px 0;

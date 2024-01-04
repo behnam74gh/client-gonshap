@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaHome } from "react-icons/fa";
+// import { FaHome } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowDown } from "react-icons/md";
 import { Link,useLocation } from "react-router-dom";
@@ -126,12 +126,12 @@ const Drawer = (props) => {
           </div>
 
           <div className="drawer-main-wrapper">
-            <ul className="drawer-items">
-              <li onClick={props.backdropClick}>
+            <ul className="drawer-items pt-2">
+              {/* <li onClick={props.backdropClick}>
                 <Link to="/">
                   <FaHome className="text-blue" style={{verticalAlign: "bottom"}} />
                 </Link>
-              </li>
+              </li> */}
               <li onClick={props.backdropClick}>
                 <Link to="/shop" onClick={() => pathname !== "/shop" && items.length < 1 && dispatch(
                 searchByUserFilter({

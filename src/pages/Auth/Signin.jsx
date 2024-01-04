@@ -166,7 +166,8 @@ const Signin = ({ history, location }) => {
         <Input
           id="phoneNumber"
           element="input"
-          type="text"
+          type="number"
+          inputMode="numeric"
           placeholder="مثال: 5683***0911"
           onInput={inputHandler}
           validators={[

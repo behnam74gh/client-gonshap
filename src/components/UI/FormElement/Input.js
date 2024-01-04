@@ -62,6 +62,7 @@ const Input = (props) => {
         placeholder={props.placeholder}
         disabled={props.disabled}
         onFocus={props.focusHandler}
+        inputMode={props.inputMode}
         value={inputState.value}
         className={!inputState.isValid && inputState.errMessages.length > 0 ? "wrong-data" : inputState.isValid ? "correct-data" : null}
       />

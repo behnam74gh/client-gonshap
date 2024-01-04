@@ -25,7 +25,7 @@ const ShopPage = () => {
   const [page, setPage] = useState(
     JSON.parse(localStorage.getItem("gonshapPageNumber")) || 1
   );
-  const [perPage] = useState(window.innerWidth < 450 ? 20 : 40);
+  const [perPage] = useState(window.innerWidth < 450 ? 24 : 48);
   const [activeOrder, setActiveOrder] = useState("createdAt");
   const [activeCategory, setActiveCategory] = useState("none");
   const [activeSubcategory, setActiveSubcategory] = useState("none");
@@ -390,6 +390,8 @@ const ShopPage = () => {
         })
       );
       setActiveOrder("createdAt")
+      localStorage.removeItem("gonshapPageNumber");
+      setPage(1);
       return;
     }
     

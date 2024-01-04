@@ -258,7 +258,8 @@ const Register = ({ history }) => {
           <Input
             id="phoneNumber"
             element="input"
-            type="text"
+            type="number"
+            inputMode="numeric"
             placeholder="مثال: 5683***0911"
             onInput={inputHandler}
             disabled={phoneNumIsValid}
@@ -298,7 +299,8 @@ const Register = ({ history }) => {
           <Input
             id="authCode"
             element="input"
-            type="text"
+            type="number"
+            inputMode="numeric"
             placeholder="مثال: 145464"
             onInput={inputHandler}
             disabled={authCodeIsValid}

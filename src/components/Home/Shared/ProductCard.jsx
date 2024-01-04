@@ -125,7 +125,7 @@ const ProductCard = ({ product, showSold, showReviews }) => {
       <div className="product_info_box">
         <Link to={`/product/details/${_id}`} onClick={cacheProductDetailsHandler}>
           <h3 className={`${window.innerWidth < 450 && (showReviews || showSold) ? "has_Second_att" : "my-0"}`}>
-            {title.length > 22 ? `${title.substring(0,22)}...` : title}
+            {title.length > 22 ? `${title.substring(0,27)}...` : title}
           </h3>
         </Link>
 
