@@ -19,7 +19,7 @@ const RecentViews = ({productId,numberOfSlides,setNumberOfSlides}) => {
   const {ref, inView} = useInView({threshold: 0});
 
   useEffect(() => {
-    if (userInfo?.userId?.length > 0 && navigator.onLine && inView && !isViewed && oldProductId !== productId) {
+    if (inView && !isViewed && oldProductId !== productId) {
       setRecentLoading(true);
       axios
         .put(`/current-user/recent-views/upgrade/${userInfo.userId}`, {
@@ -51,10 +51,10 @@ const RecentViews = ({productId,numberOfSlides,setNumberOfSlides}) => {
         setIsviewed(true);
     }
 
-    return () => {
-      setIsviewed(false);
-      setNumberOfSlides(4);
-    }
+    // return () => {
+    //   setIsviewed(false);
+    //   setNumberOfSlides(window.innerWidth > 450 ? 4 : 2);
+    // }
   }, [productId, userInfo,setNumberOfSlides,inView]);
 
   
@@ -67,7 +67,7 @@ const RecentViews = ({productId,numberOfSlides,setNumberOfSlides}) => {
     autoplaySpeed: 2000,
     pauseOnHover: true,
   };
-
+ 
   let showIt = recentViews.length > 0 && navigator.onLine;
   return (
     <div ref={ref} style={{minHeight: showIt ? "150px" : "0"}} className="list_of_products">

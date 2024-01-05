@@ -249,7 +249,7 @@ const Product = ({ match }) => {
               }
             </div>
             <Section6 />
-            <RecentViews numberOfSlides={numberOfSlides} productId={productId} setNumberOfSlides={setNumberOfSlides} />
+            {userInfo.userId?.length > 0 && navigator.onLine && <RecentViews numberOfSlides={numberOfSlides} productId={productId} setNumberOfSlides={setNumberOfSlides} />}
           </React.Fragment>
         )
       )}

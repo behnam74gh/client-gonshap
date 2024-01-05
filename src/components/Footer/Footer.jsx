@@ -126,16 +126,16 @@ const Footer = ({ companyInfo }) => {
             </a>} */}
           </div>}
 
-          {(signENemad || signUnion || signMedia) && (
-            <div className="nemads_wrapper">
-              <h4>نمادهای اعتماد الکترونیک</h4>
-              <div className="nemads">
-              {signENemad?.length > 0 && <a href={`https://trustseal.enamad.ir/${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>}
-              {signUnion?.length > 0 && <a href={`https://www.ecunion.ir/${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
-              {signMedia?.length > 0 && <a href={`https://logo.samandehi.ir/${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
-              </div>
+          <div className="nemads_wrapper">
+            <h4>نمادهای اعتماد الکترونیک</h4>
+            <div className="nemads">
+            <a referrerpolicy='origin' target='_blank' rel="noreferrer" href='https://trustseal.enamad.ir/?id=434070&Code=4LUbtktlssz1gwxm3ZFUt22D8YKzRDne'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=434070&Code=4LUbtktlssz1gwxm3ZFUt22D8YKzRDne' alt='' style={{cursor: "pointer"}} Code='4LUbtktlssz1gwxm3ZFUt22D8YKzRDne' /></a>
+            {/* {signENemad?.length > 0 && <a href={`https://trustseal.enamad.ir/${signENemad}`} target="_blank" rel="noreferrer" title="enemad"><img src={Nemad1} alt="nemad_1" className="footer_nemad_img" /></a>} */}
+            {signUnion?.length > 0 && <a href={`https://www.ecunion.ir/${signUnion}`} target="_blank" rel="noreferrer" title="union"><img src={Nemad2} alt="nemad_2" className="footer_nemad_img" /></a>}
+            {signMedia?.length > 0 && <a href={`https://logo.samandehi.ir/${signMedia}`} target="_blank" rel="noreferrer" title="media"><img src={Nemad3} alt="nemad_3" className="footer_nemad_img" /></a>}
             </div>
-          )}
+          </div>
+          
         </div>
         
       </section>
