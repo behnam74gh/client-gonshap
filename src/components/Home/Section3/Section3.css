@@ -94,6 +94,7 @@
 @media (max-width: 450px) {
   .list_of_products h2 {
     font-size: 12px;
+    margin-bottom: 0;
   }
   .column_item {
     margin: 0;
@@ -142,6 +143,6 @@
 
 @media (max-width: 360px) {
   .custom_slider, .custom_slider .slick-list {
-    padding: 10px 0 6px;
+    padding: 14px 0 6px;
   }
 }

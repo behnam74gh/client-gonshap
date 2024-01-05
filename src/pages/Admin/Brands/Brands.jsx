@@ -105,10 +105,10 @@ const Brands = () => {
   }, []);
 
   useEffect(() => {
-    if(role === 2){
+    if(role === 2 && createBrand){
       setCategoryHandler(supplierFor)
     }
-  },[role,supplierFor])
+  },[role,supplierFor,createBrand])
 
   //image-picker-codes
   const filePickerRef = useRef();

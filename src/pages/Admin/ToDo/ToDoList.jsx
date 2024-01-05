@@ -44,7 +44,8 @@ const ToDoList = () => {
         .then((response) => {
           if (response.data.success) {
             toast.success(response.data.message);
-            setTodaysDate(new Date(todaysDate));
+            const newTasks = tasks.filter(item => item._id !== id);
+            setTasks(newTasks);
           }
         })
         .catch((err) => {

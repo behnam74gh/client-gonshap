@@ -105,10 +105,11 @@ const ToDoCreate = () => {
               locale="fa"
               calendar="persian"
               className="calendar-margin"
+              minDate={new Date()}
             />
           </div>
           <div className="d-flex-center-center">
-            <Button type="submit" disabled={!formState.isValid}>
+            <Button type="submit" disabled={!formState.isValid || !date}>
               {!loading ? "ثبت" : <VscLoading className="loader" />}
             </Button>
           </div>

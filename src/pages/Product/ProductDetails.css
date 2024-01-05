@@ -434,6 +434,12 @@ svg.hovered path.star {
   }
 }
 @media (max-width: 370px) {
+  .product_info_wrapper .info_wrapper .question_info {
+    flex: 32%;
+  }
+  .product_info_wrapper .info_wrapper .answer_info {
+    flex: 68%;
+  }
   .rating_compare_wrapper {
     gap: 50px;
   }

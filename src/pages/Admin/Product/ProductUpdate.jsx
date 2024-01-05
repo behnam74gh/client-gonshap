@@ -577,7 +577,7 @@ const ProductUpdate = ({ history }) => {
             </select>
           )}
           {showBrand && (
-            <label className="auth-label">
+            <label className="auth-label" style={{display: "block", marginTop: "15px"}}>
               برند :
             </label>
           )}
@@ -610,7 +610,7 @@ const ProductUpdate = ({ history }) => {
             inputMode="numeric"
             onChange={(e) => changeInputHandler(e)}
           />
-          <label className="auth-label"> قیمت فروش کالا در بازار (تومان) : </label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}> قیمت فروش کالا در بازار (تومان) : </label>
           <input
             name="price"
             value={values.price}
@@ -619,7 +619,7 @@ const ProductUpdate = ({ history }) => {
             onFocus={clearFinallyPriceHandler}
             onChange={(e) => changeInputHandler(e)}
           />
-          <label className="auth-label">میزان تخفیف :</label>
+          <label className="auth-label"  style={{display: "block", marginTop: "15px"}}>میزان تخفیف :</label>
           <select
             value={values.discount}
             onChange={(e) => setFinallyPrice(e.target.value)}
@@ -632,12 +632,12 @@ const ProductUpdate = ({ history }) => {
             ))}
           </select>
           {showFinallyPrice && (
-            <label className="auth-label"> قیمت نهایی :</label>
+            <label className="auth-label" style={{display: "block", marginTop: "15px"}}> قیمت نهایی :</label>
           )}
           {showFinallyPrice && (
             <input type="number" value={values.finallyPrice} disabled />
           )}
-          <label className="auth-label">وضعیت فروش :</label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}>وضعیت فروش :</label>
           <select
             name="sell"
             value={values.sell}
@@ -646,7 +646,7 @@ const ProductUpdate = ({ history }) => {
             <option value={true}>ارائه میشود</option>
             <option value={false}>دیگر ارائه نمیشود</option>
           </select>
-          <label className="auth-label">تعداد کالا :</label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}>تعداد کالا :</label>
           <input
             name="countInStock"
             value={values.countInStock}
@@ -654,7 +654,7 @@ const ProductUpdate = ({ history }) => {
             inputMode="numeric"
             onChange={(e) => changeInputHandler(e)}
           />
-          <label className="auth-label">رنگ ها</label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}>رنگ ها</label>
           {colorLoading ? <VscLoading className="loader" /> : defColors?.length > 0 &&
           <select value="none" onChange={(e) => setColorsHandler(e.target.value)}>
             <option value="none">لطفا رنگ ها را انتخاب کنید</option>
@@ -694,7 +694,7 @@ const ProductUpdate = ({ history }) => {
             id="attr1"
             element="input"
             type="text"
-            placeholder="ویژگی-1 :"
+            placeholder="ویژگی-1 (اجباری):"
             onInput={inputHandler}
             defaultValue={values.attr1}
             validators={[
@@ -741,7 +741,7 @@ const ProductUpdate = ({ history }) => {
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
           />
-          <label className="auth-label">مشخصات محصول :</label>
+          <label className="auth-label">مشخصات محصول (جهت مقایسه):</label>
           <Input
             id="question"
             element="input"

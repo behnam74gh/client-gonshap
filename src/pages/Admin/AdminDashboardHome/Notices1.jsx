@@ -197,7 +197,8 @@ const Notices1 = ({date,setParticularDateHandler}) => {
         calendar="persian"
         locale="fa"
         calendarPosition="bottom-right"
-        style={{ height: "40px" }}         
+        style={{ height: "40px" }}   
+        maxDate={new Date()}      
       />
     </div>
   );

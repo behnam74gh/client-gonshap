@@ -281,7 +281,7 @@ const ProductDetails = ({
             </strong>
           </div>
           <div className="info_wrapper text-purple">
-            <strong className="question_info">قیمت فروش در بازارچک : </strong>
+            <strong className="question_info">قیمت نهایی فروش : </strong>
             <strong className="answer_info">
               <strong className="mx-1">
                 {finallyPrice.toLocaleString("fa-IR")}
@@ -324,7 +324,7 @@ const ProductDetails = ({
               <strong className="mx-1">{sold}</strong>عدد
             </strong>
           </div>
-          <div className="info_wrapper colors_wrapper">
+          <div className="info_wrapper w-100">
             <span className="question_info">رنگ ها : </span>
             <div className="answer_info">
               {colors.length > 0 &&
@@ -351,7 +351,7 @@ const ProductDetails = ({
             </Link>
           </div>}
           <div className="info_wrapper_Attr">
-            <strong className="my-1">ویژگی های محصول: </strong>
+            {(attr1?.length > 0 || attr2?.length > 0 || attr3?.length > 0) && <strong className="my-1">ویژگی های محصول: </strong>}
             <ul className="attr_wrapper">
               {attr1?.length > 0 && <li className="font-sm">{attr1}</li>}
               {attr2?.length > 0 && <li className="font-sm">{attr2}</li>}

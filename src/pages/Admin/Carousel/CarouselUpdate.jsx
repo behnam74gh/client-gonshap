@@ -9,6 +9,9 @@ import axios from "../../../util/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeFile } from "../../../util/customFunctions";
 import { CURRENT_SUPPLIER } from "../../../redux/Types/ttlDataTypes";
+import Input from "../../../components/UI/FormElement/Input";
+import { VALIDATOR_CONSTANTNUMBER, VALIDATOR_MAXLENGTH, VALIDATOR_MINLENGTH, VALIDATOR_NUMBER, VALIDATOR_SPECIAL_CHARACTERS } from "../../../util/validators";
+import { useForm } from "../../../util/hooks/formHook";
 import "../Product/Product.css";
 
 const oldStates = {
@@ -39,6 +42,35 @@ const CarouselUpdate = ({ history, match }) => {
   const [loading, setLoading] = useState(false);
   const [regions, setRegions] = useState([]);
   const [progressCount, setProgressCount] = useState(0);
+  const [formState, inputHandler] = useForm(
+    {
+      title: {
+        value: "",
+        isValid: false,
+      },
+      storePhoneNumber: {
+        value: "",
+        isValid: false,
+      },
+      address: {
+        value: "",
+        isValid: false,
+      },
+      description: {
+        value: "",
+        isValid: false,
+      },
+      instagramId: {
+        value: "",
+        isValid: true,
+      },
+      telegramId: {
+        value: "",
+        isValid: true,
+      },
+    },
+    false
+  );
 
   const { id } = match.params;
   const { userInfo: { role } } = useSelector(state => state.userSignin);
@@ -197,31 +229,29 @@ const CarouselUpdate = ({ history, match }) => {
 
     const {
       region,
-      title,
-      storePhoneNumber,
       backupFor,
-      address,
       longitude,
       latitude,
-      description,
-      phoneNumber
+      phoneNumber,
+      authentic,
+      whatsupId
     } = values;
 
     const formData = new FormData();
 
     formData.append("region", region);
-    formData.append("title", title);
-    formData.append("storePhoneNumber", storePhoneNumber);
+    formData.append("title", formState.inputs.title.value);
+    formData.append("storePhoneNumber", formState.inputs.storePhoneNumber.value);
     formData.append("phoneNumber", phoneNumber);
     formData.append("backupFor", backupFor);
-    formData.append("address", address);
+    formData.append("address", formState.inputs.address.value);
     formData.append("longitude", longitude);
     formData.append("latitude", latitude);
-    formData.append("instagramId", values.instagramId);
-    formData.append("telegramId", values.telegramId);
-    formData.append("whatsupId", values.whatsupId);
-    formData.append("authentic", values.authentic);
-    formData.append("description", description);
+    formData.append("instagramId", formState.inputs.instagramId.value);
+    formData.append("telegramId", formState.inputs.telegramId.value);
+    formData.append("whatsupId", whatsupId);
+    formData.append("authentic", authentic);
+    formData.append("description", formState.inputs.description.value);
 
     formData.append("deletedPhotos", deletedPhotos);
     formData.append("oldPhotos", oldPhotos);
@@ -362,11 +392,17 @@ const CarouselUpdate = ({ history, match }) => {
         <label className="auth-label">
           عنوان فروشگاه :
         </label>
-        <input
-          name="title"
-          value={values.title}
-          type="text"
-          onChange={(e) => changeInputHandler(e)}
+        <Input
+         id="title"
+         element="input"
+         type="text"
+         onInput={inputHandler}
+         defaultValue={values.title}
+         validators={[
+          VALIDATOR_MAXLENGTH(70),
+          VALIDATOR_MINLENGTH(3),
+          VALIDATOR_SPECIAL_CHARACTERS(),
+         ]}
         />
         {role === 1 && <label className="auth-label">شماره تلفن مالک :</label>}
         {role === 1 && <input
@@ -392,19 +428,30 @@ const CarouselUpdate = ({ history, match }) => {
             ))}
         </select>}
         <label className="auth-label">شماره تلفن فروشگاه :</label>
-        <input
-          name="storePhoneNumber"
-          value={values.storePhoneNumber}
+        <Input
+          id="storePhoneNumber"
+          element="input"
           type="number"
           inputMode="numeric"
-          onChange={(e) => changeInputHandler(e)}
+          defaultValue={values.storePhoneNumber}
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(11),
+            VALIDATOR_CONSTANTNUMBER(),
+          ]}
         />
         <label className="auth-label">آدرس فروشگاه :</label>
-        <input
-          name="address"
-          value={values.address}
+        <Input
+          id="address"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
+          defaultValue={values.address}
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(150),
+            VALIDATOR_MINLENGTH(20),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
         />
         <label className="auth-label">مختصات محل فروشگاه (longitude) :</label>
         <input
@@ -423,20 +470,30 @@ const CarouselUpdate = ({ history, match }) => {
           onChange={(e) => changeInputHandler(e)}
         />
         <label className="auth-label">آدرس اینستاگرام : (فقط ادامه /https://www.instagram.com)</label>
-        <input
-          name="instagramId"
-          value={values.instagramId}
-          placeholder="?/https://www.instagram.com"
+        <Input
+          id="instagramId"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
+          defaultValue={values.instagramId}
+          placeholder="?/https://www.instagram.com"
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(70),
+            VALIDATOR_MINLENGTH(4),
+          ]}
         />
         <label className="auth-label">آدرس تلگرام : (فقط username حساب)</label>
-        <input
-          name="telegramId"
-          value={values.telegramId}
-          placeholder="?/https://t.me"
+        <Input
+          id="telegramId"
+          element="input"
           type="text"
-          onChange={(e) => changeInputHandler(e)}
+          onInput={inputHandler}
+          defaultValue={values.telegramId}
+          placeholder="?/https://t.me"
+          validators={[
+            VALIDATOR_MAXLENGTH(70),
+            VALIDATOR_MINLENGTH(4),
+          ]}
         />
         {role === 1 && <label className="auth-label">آدرس واتساپ :</label>}
         {role === 1 && <input
@@ -454,13 +511,20 @@ const CarouselUpdate = ({ history, match }) => {
           <option value={true}>داشته باشد</option>
           <option value={false}>نداشته باشد</option>
         </select>}
-        <textarea
+        <Input
+          id="description"
+          element="textarea"
           type="text"
-          name="description"
-          value={values.description}
-          rows="12"
-          onChange={(e) => changeInputHandler(e)}
-        ></textarea>
+          placeholder="توضیحات"
+          defaultValue={values.description}
+          rows={12}
+          onInput={inputHandler}
+          validators={[
+            VALIDATOR_MAXLENGTH(10000),
+            VALIDATOR_MINLENGTH(10),
+            VALIDATOR_SPECIAL_CHARACTERS(),
+          ]}
+        />
         <Button type="submit" disabled={values.description.length < 10 || loading}>
           {!loading ? "ثبت" : <span className="d-flex-center-center" style={{gap: "0 5px"}}>% {progressCount} <VscLoading className="loader" /></span>}
         </Button>

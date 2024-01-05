@@ -540,7 +540,7 @@ const ProductCreate = ({history}) => {
           )}
           
           {showBrand && (
-            <label className="auth-label">
+            <label className="auth-label" style={{display: "block", marginTop: "15px"}}>
               برند :
             </label>
           )}
@@ -595,7 +595,7 @@ const ProductCreate = ({history}) => {
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
           />
-          <label className="auth-label">میزان تخفیف :</label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}>میزان تخفیف :</label>
           <select
             value={values.discount}
             onChange={(e) => setFinallyPrice(e.target.value)}
@@ -614,7 +614,7 @@ const ProductCreate = ({history}) => {
             <input type="number" value={values.finallyPrice} disabled />
           )}
 
-          <label className="auth-label">وضعیت فروش :</label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}>وضعیت فروش :</label>
           <select
             value={values.sell}
             onChange={(e) => setValues({ ...values, sell: e.target.value })}
@@ -622,7 +622,7 @@ const ProductCreate = ({history}) => {
             <option value={true}>ارائه میشود</option>
             <option value={false}>دیگر ارائه نمیشود</option>
           </select>
-          <label className="auth-label">تعداد کالا :</label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}>تعداد کالا :</label>
           <Input
             id="countInStock"
             element="input"
@@ -636,7 +636,7 @@ const ProductCreate = ({history}) => {
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
           />
-          <label className="auth-label">رنگ ها</label>
+          <label className="auth-label" style={{display: "block", marginTop: "15px"}}>رنگ ها</label>
           {colorLoading ? <VscLoading className="loader" /> : defColors?.length > 0 && <select
             value="none"
             onChange={(e) => setColorsHandler(e.target.value)}
@@ -679,7 +679,7 @@ const ProductCreate = ({history}) => {
             id="attr1"
             element="input"
             type="text"
-            placeholder="ویژگی-1 :"
+            placeholder="ویژگی-1 (اجباری):"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(60),
@@ -722,12 +722,12 @@ const ProductCreate = ({history}) => {
               VALIDATOR_SPECIAL_CHARACTERS_2(),
             ]}
           />
-          <label className="auth-label">مشخصات محصول :</label>
+          <label className="auth-label">مشخصات محصول (جهت مقایسه) :</label>
           <Input
             id="question"
             element="input"
             type="text"
-            placeholder="بخش اول"
+            placeholder="متن سوال"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(100),
@@ -738,7 +738,7 @@ const ProductCreate = ({history}) => {
             id="answer"
             element="input"
             type="text"
-            placeholder="بخش دوم"
+            placeholder="متن جواب"
             onInput={inputHandler}
             validators={[
               VALIDATOR_MAXLENGTH(100),

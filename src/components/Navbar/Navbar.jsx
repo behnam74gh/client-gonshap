@@ -104,7 +104,7 @@ const Navbar = (props) => {
                     </span>
                     <span onClick={signoutHandler}>
                       <RiLogoutBoxRLine />
-                      {loading ? <VscLoading className="loader" /> : "خروج از حساب"}
+                      {loading ? <VscLoading className="loader" style={{marginRight: "15px"}} /> : "خروج از حساب"}
                     </span>
                   </div>
                 </div>

@@ -84,7 +84,7 @@ const Comments = ({postId,category,commentList}) => {
         جهت ثبت دیدگاه، ابتدا
       <strong onClick={goSigninHandler} className="text-blue mx-1" style={{cursor: "pointer"}}>وارد حساب  </strong> شوید
       </span>}
-      {reRenderComponent && userInfo?.isBan === false && (
+      {(reRenderComponent && userInfo?.isBan === false) && (
         <form className="auth-form" onSubmit={submitCommentHandler}>
           <label className="auth-label">
             دیدگاه شما :
@@ -105,14 +105,14 @@ const Comments = ({postId,category,commentList}) => {
             type="submit"
             disabled={
               !formState.inputs.commentContent.isValid ||
-              loading
+              loading || !userInfo.userId
             }
           >
             {loading ? (
               <VscLoading className="loader" />
-            ) : userInfo?.userId && (
+            ) : userInfo?.userId ? (
               "ثبت دیدگاه"
-            )}
+            ) : "وارد حساب شوید"}
           </Button>
         </form>
       )}

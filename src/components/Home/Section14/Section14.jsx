@@ -160,7 +160,7 @@ const Section14 = () => {
               ]}
             />
             <Button type="submit" disabled={loading || !formState.isValid || userInfo?.userId?.length < 1 || userInfo.isBan}>
-              {!loading ? "ارسال" : <VscLoading className="loader" />}
+              {loading ? <VscLoading className="loader" /> : userInfo?.userId?.length < 1 ? "ابتدا عضو شوید" : "ارسال"}
             </Button>
           </form>
         )}

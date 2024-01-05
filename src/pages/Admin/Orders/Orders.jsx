@@ -429,6 +429,7 @@ const Orders = () => {
                   calendar="persian"
                   range
                   locale="fa"
+                  maxDate={new Date()}
                   calendarPosition="bottom-right"
                   style={{ height: window.innerWidth > 450 ? "40px" : "30px" }}         
                 />
