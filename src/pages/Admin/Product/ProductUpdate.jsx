@@ -764,7 +764,7 @@ const ProductUpdate = ({ history }) => {
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
             />
-            <Button type="button" 
+            <Button type="button"  style={{marginRight: "auto"}}
               onClick={appendDetailHandler}
               disabled={
                 !formState.inputs.answer.isValid || !formState.inputs.question.isValid ||

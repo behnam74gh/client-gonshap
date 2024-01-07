@@ -77,7 +77,7 @@
   border: 1px solid var(--firstColorPalete);
   padding: 15px;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: row wrap;
   align-items: flex-start;
   gap: 10px;
   border-radius: 4px;

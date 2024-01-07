@@ -6,14 +6,18 @@ import axios from "../../../util/axios";
 
 const ModalStoreDetails = ({store,closeModal}) => {
   const [loading, setLoading] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState(store.phoneNumber || null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     setLoading(true);
     axios
-      .put(`/supplier/update/owner-phone-number/${store._id}`, {phoneNumber})
+      .put(`/supplier/update/owner-phone-number/${store._id}`, {
+        phoneNumber,
+        oldAdminPhoneNumber: store.phoneNumber,
+        backupFor: store.backupFor._id
+      })
       .then(res => {
         setLoading(false);
         if(res.data.success){
@@ -40,8 +44,10 @@ const ModalStoreDetails = ({store,closeModal}) => {
           <input
             name="phoneNumber"
             value={phoneNumber}
-            type="text"
             onChange={(e) => setPhoneNumber(e.target.value)}
+            type="number"
+            inputMode="numeric"
+            placeholder="شماره مدیر فروشگاه جدید را وارد کنید"
           />
           <Button type="submit" disabled={phoneNumber?.length < 10 || loading}>
             {!loading ? "ثبت" : <VscLoading className="loader" />}

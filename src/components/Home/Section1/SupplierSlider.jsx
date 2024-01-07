@@ -135,7 +135,7 @@ const SupplierSlider = () => {
                   src={`${process.env.REACT_APP_GONSHAP_IMAGES_URL}/${s.photos[0]}`}
                   alt={s.title}
                   className="supplier_img"
-                  loading="lazy"
+                  // loading="lazy"
                 />
               </Link>
             ))}

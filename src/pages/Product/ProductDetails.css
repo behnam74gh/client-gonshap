@@ -381,6 +381,7 @@ svg.hovered path.star {
     font-size: 16px;
     padding: 10px 0;
     font-weight: 600;
+    color: #ffffff;
   }
   .rating_btn_wrapper {
     flex: 30%;

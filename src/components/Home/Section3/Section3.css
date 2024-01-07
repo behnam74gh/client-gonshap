@@ -57,7 +57,7 @@
 .custom_slider,
 .custom_slider .slick-list {
   width: 100% !important;
-  padding: 10px 0 5px;
+  padding: 14px 0 5px;
 }
 .custom_slider .slick-list .slick-track {
   direction: rtl;

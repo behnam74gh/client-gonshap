@@ -745,7 +745,7 @@ const ProductCreate = ({history}) => {
               VALIDATOR_SPECIAL_CHARACTERS(),
             ]}
           />
-          <Button type="button" 
+          <Button type="button" style={{marginRight: "auto"}}
             disabled={
               !formState.inputs.answer.isValid || !formState.inputs.question.isValid ||
               formState.inputs.answer.value.length === 0 ||

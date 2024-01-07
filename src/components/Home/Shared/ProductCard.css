@@ -193,6 +193,7 @@
   position: absolute;
   left: 4px;
   top: 4px;
+  gap: 0 4px;
 }
 .products_icons_wrapper span {
   margin: 2px;
@@ -408,6 +409,7 @@
   }
   .products_icons_wrapper {
     top: 2px;
+    gap: 0 2px;
   }
   .single_skeleton {
     height: 180px;

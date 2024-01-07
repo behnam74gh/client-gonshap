@@ -250,7 +250,7 @@ footer {
   }
   .install_app {
     bottom: 50%;
-    top: 54%;
+    top: 55%;
   }
   .store_section {
     bottom: 50%;
@@ -349,7 +349,7 @@ footer {
     font-size: 10px;
   }
   .install_app,.store_section {
-    right: 2px;
+    right: 1px;
   }
 }
 @media (max-width: 365px) {

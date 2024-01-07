@@ -16,7 +16,7 @@ const initialState = {
       firstName: savedInfoData?.firstName || "",
       userId: savedInfoData?.userId || "",
       role: savedInfoData?.role || null,
-      isBan: savedInfoData?.isBan || null,
+      isBan: savedInfoData?.isBan !== (null || undefined) ? savedInfoData.isBan : null,
       supplierFor: savedInfoData?.supplierFor || null,
       csrfToken: savedInfoData?.csrfToken || null
     },

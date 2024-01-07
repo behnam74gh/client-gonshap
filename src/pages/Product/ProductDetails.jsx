@@ -379,6 +379,7 @@ const ProductDetails = ({
                 className={`d-flex-center-center ${!sell && "disabledBtn"}`}
                 onClick={addToCartHandler}
                 disabled={!sell}
+                style={{background : !inCart && window.innerWidth < 600 && "var(--firstColorPalete)", color: inCart && window.innerWidth < 600 && "var(--firstColorPalete)"}}
               >
                 {inCart ? "حذف از سبد" : "افزودن به سبد"}
                 {inCart ? (
