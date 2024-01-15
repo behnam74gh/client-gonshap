@@ -83,7 +83,7 @@ const Footer = ({ companyInfo }) => {
               <span className="font-sm">{address}</span>
             </div>}
           </div>
-          {(instagramId || telegramId || whatsupId) && window.innerWidth > 780 && <span className="font-sm my-2">اطلاعیه های ما را دنبال کنید در :</span>}
+          {(instagramId || telegramId || whatsupId) && <span className="font-sm my-2">اطلاعیه های ما را دنبال کنید در :</span>}
           {(instagramId || telegramId || whatsupId) && <div className="company_social_icons">
           <a
             href='https://www.instagram.com/bazarchak.ir?igsh=MzNlNGNkZWQ4Mg=='

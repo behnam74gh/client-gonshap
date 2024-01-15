@@ -30,7 +30,7 @@ const Product = ({ match }) => {
   const [numberOfSlides, setNumberOfSlides] = useState(4);
   const [secondNumberOfSlides, setSecondNumberOfSlides] = useState(4);
   const [starValue, setStarValue] = useState({
-    star: 0,
+    star: 1,
     productId: "",
   });
 
@@ -173,8 +173,8 @@ const Product = ({ match }) => {
         setRatingLoading(false);
         if (response.data.success) {
           dispatch({ type: CLOSE_STAR_RATING_MODAL });
-          toast.info("از توجه شما متشکریم ،مدیریت بازارچک!");
-          loadCurrentProduct();
+          toast.info("از توجه شما متشکریم ،مدیریت بازارچک");
+          // loadCurrentProduct();
         }
       })
       .catch((err) => {
@@ -229,7 +229,7 @@ const Product = ({ match }) => {
               productDetails={product.details}
             />
             <div style={{minHeight: showIt ? "150px" : "0",marginBottom: "10px"}} className="list_of_products">
-              {showIt && <h4 className="w-100 text-center mt-0">محصولات مشابه</h4>}
+              {showIt && <h4 className="w-100 text-center my-0">محصولات مشابه</h4>}
               {
                 releatedLoading ? (
                   <LoadingSkeletonCard

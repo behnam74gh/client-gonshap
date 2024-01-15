@@ -99,7 +99,7 @@
 }
 .products_subcategory_btn {
   padding: 4px 16px;
-  background-color: var(--thirdColorPalete);
+  background-color: var(--firstColorPalete);
   border-radius: 4px;
   color: #ffffff;
   margin: 8px 0;
@@ -156,7 +156,7 @@ svg.hovered path.star {
   padding: 4px 0;
 }
 .cart_btn_wrapper button {
-  background-color: var(--secondColorPalete);
+  background-color: var(--firstColorPalete);
   border: none;
   outline: none;
   width: 100%;
@@ -164,7 +164,7 @@ svg.hovered path.star {
   border-radius: 4px;
   font: inherit;
   font-size: 14px;
-  color: var(--firstColorPalete);
+  color: #ffffff;
   cursor: pointer;
 }
 .favorite_btn_wrapper {
@@ -176,7 +176,7 @@ svg.hovered path.star {
   padding: 4px 0;
 }
 .favorite_btn_wrapper button {
-  background-color: var(--firstColorPalete);
+  background-color: var(--thirdColorPalete);
   border: none;
   outline: none;
   width: 100%;
@@ -196,7 +196,7 @@ svg.hovered path.star {
   padding: 4px 10px;
 }
 .rating_btn_wrapper button {
-  background-color: var(--thirdColorPalete);
+  background-color: var(--secondColorPalete);
   border: none;
   outline: none;
   width: 100%;

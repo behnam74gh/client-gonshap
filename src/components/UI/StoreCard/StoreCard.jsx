@@ -38,7 +38,7 @@ const StoreCard = ({item}) => {
         />
         <div className='store_card_info'>
         <strong className='store_title'>{item.title} {item.authentic && <HiBadgeCheck className="text-blue font-md mr-1" />}</strong>
-        <span className='store_title'>نوع محصولات : {item.backupFor.name}</span>
+        <span className='store_title'>نوع محصول : {item.backupFor.name}</span>
         <span className='store_title'>مالک : {item.owner}</span>
         <span className='store_title'><HiLocationMarker className='text-blue' style={{marginTop: "-2px"}} /> {item.region.name}</span>
         <span className='store_title'>

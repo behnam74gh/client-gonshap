@@ -26,6 +26,7 @@ import { db } from "../../util/indexedDB";
 import { UPDATE_ALL_BRANDS } from "../../redux/Types/shopProductsTypes";
 import { CLEAR_SUPPLIER_PRODUCTS } from "../../redux/Types/supplierProductsTypes";
 import { VscLoading } from "react-icons/vsc";
+import { POP_STORE_ITEM } from "../../redux/Types/supplierItemTypes";
 
 const ProductDetails = ({
   product,
@@ -182,8 +183,10 @@ const ProductDetails = ({
   };
 
   const goToStoreHandler = () => {
+    dispatch({type: POP_STORE_ITEM});
     dispatch({type: CLEAR_SUPPLIER_PRODUCTS});
     localStorage.removeItem("gonshapSupplierActiveSub");
+    localStorage.removeItem("bazarchakSupplierActiveorder");
     localStorage.removeItem("gonshapSupplierPageNumber");
   }
 
@@ -235,12 +238,12 @@ const ProductDetails = ({
 
         <Modal
           open={ratingModal.modalOpen}
-          closeHandler={() => dispatch({ type: CLOSE_STAR_RATING_MODAL })}
+          closeHandler={() => !ratingLoading && dispatch({ type: CLOSE_STAR_RATING_MODAL })}
         >
           <div className="rating_modal_wrapper">
             <FaTimesCircle
               className="close_Rating_modal"
-              onClick={() => dispatch({ type: CLOSE_STAR_RATING_MODAL })}
+              onClick={() => !ratingLoading && dispatch({ type: CLOSE_STAR_RATING_MODAL })}
             />
             <div className="rating_stars_wrapper">
               <StarRating

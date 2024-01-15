@@ -8,7 +8,7 @@ import SupplierProducts from "./SupplierProducts";
 import defPic from "../../assets/images/pro-8.png";
 import InstagramLogo from "../../assets/images/instalogo.png";
 import TelegramLogo from "../../assets/images/telegram_PNG11.png";
-import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
+// import WhatsappLogo from "../../assets/images/whatsapp-logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosStar } from "react-icons/io";
 import { useHistory } from "react-router-dom";
@@ -25,6 +25,7 @@ import "../Advertise/AdvertisePage.css"
 import "../Product/ProductDetails.css"
 import "../../pages/Admin/CommentsList/CommentsList.css";
 import "./SupplierIntroduce.css";
+import { PUSH_STORE_ITEM } from "../../redux/Types/supplierItemTypes";
 
 const SupplierIntroduce = ({ match }) => {
   const [loading, setLoading] = useState(false);
@@ -75,6 +76,7 @@ const SupplierIntroduce = ({ match }) => {
           });
 
           setErrorText("");
+          dispatch({type: PUSH_STORE_ITEM,payload: thisSupplier});
         }
       })
       .catch((err) => {

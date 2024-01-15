@@ -13,7 +13,7 @@ const LoadingAd = () => {
   return (
       <Skeleton
         count={1}
-        height={windowInnerWidth < 450 ? 80 : 160}
+        height={windowInnerWidth < 450 ? 80 : 180}
         style={{width: "100%",borderRadius: "10px"}}
       />
   );

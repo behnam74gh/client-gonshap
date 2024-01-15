@@ -366,10 +366,10 @@ const ProductUpdate = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if(files.length+oldPhotos < 1 || colors.length < 1 || values.brand === 'none' || values.countInStock < 1 || values.countInStock > 99 || values.factorPrice < 10000 || values.price < 10000 || values.finallyPrice < 10000){
+    if(files.length+oldPhotos < 1 || colors.length < 1 || values.brand === 'none' || values.countInStock > 99 || values.factorPrice < 10000 || values.price < 10000 || values.finallyPrice < 10000){
       toast.warning(
         files.length+oldPhotos < 1 ? "عکسی برای محصول انتخاب نکرده اید" : colors.length < 1 ? "رنگ انتخاب نشده است" : values.brand === 'none' ? "برند انتخاب نشده است" :
-        values.countInStock < 1 ? "تعداد کالا را مشخص کنید" : values.factorPrice < 10000 ? "قیمت فاکتور کالا را چک کنید" : values.countInStock > 99 ? "تعداد کالا باید زیر 100 باشد" :
+        values.factorPrice < 10000 ? "قیمت فاکتور کالا را چک کنید" : values.countInStock > 99 ? "تعداد کالا باید زیر 100 باشد" :
         values.price < 10000 ? "قیمت فروش  کالا در بازار را چک کنید" : values.finallyPrice < 10000 && "قیمت نهایی کالا را چک کنید"
       )
       return;
@@ -656,7 +656,7 @@ const ProductUpdate = ({ history }) => {
           />
           <label className="auth-label" style={{display: "block", marginTop: "15px"}}>رنگ ها</label>
           {colorLoading ? <VscLoading className="loader" /> : defColors?.length > 0 &&
-          <select value="none" onChange={(e) => setColorsHandler(e.target.value)}>
+          <select value="none" onChange={(e) => setColorsHandler(e.target.value)} className="my-2">
             <option value="none">لطفا رنگ ها را انتخاب کنید</option>
             {defColors.length > 0 &&
               defColors.map((dc, i) => (
