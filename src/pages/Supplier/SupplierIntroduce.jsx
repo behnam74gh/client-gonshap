@@ -36,7 +36,7 @@ const SupplierIntroduce = ({ match }) => {
     longitude: null,
   });
   const [starValue, setStarValue] = useState({
-    star: 0,
+    star: 1,
     storeId: "",
   });
   const [lastVote,setLastVote] = useState(0)
